@@ -32,19 +32,15 @@
       min-height: 100vh;
     }
 
-    /* === LOADING SCREEN === */
     #loading {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: var(--bg-deep);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      transition: opacity 0.8s ease-out, visibility 0.8s;
+      transition: opacity 0.8s ease, visibility 0.8s;
     }
 
     #loading.hidden { opacity: 0; visibility: hidden; }
@@ -60,16 +56,14 @@
     }
 
     @keyframes pulse-glow {
-      0%, 100% { opacity: 0.6; text-shadow: 0 0 10px var(--neon-cyan); }
+      0%, 100% { opacity: 0.6; }
       50% { opacity: 1; text-shadow: 0 0 40px var(--neon-cyan); }
     }
 
-    /* === NAVIGATION === */
     .cyber-nav {
       position: fixed;
+      inset-inline: 0;
       top: 0;
-      left: 0;
-      right: 0;
       z-index: 100;
       display: flex;
       justify-content: space-between;
@@ -93,7 +87,6 @@
       text-shadow: 0 0 20px var(--neon-cyan);
     }
 
-    /* === HERO SECTION === */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -181,10 +174,8 @@
       margin-top: 0.5rem;
     }
 
-    /* === SERVICES SECTION === */
-    .services {
+    .section {
       padding: 8rem 8%;
-      position: relative;
     }
 
     .section-title {
@@ -203,108 +194,78 @@
       font-size: 1.1rem;
     }
 
-    .services-grid {
+    .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
     }
 
-    .service-card {
+    .card {
       background: rgba(13, 26, 45, 0.6);
       border: 1px solid rgba(0, 255, 204, 0.2);
       padding: 2.5rem;
       transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
     }
 
-    .service-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.1), transparent);
-      transition: left 0.5s ease;
-    }
-
-    .service-card:hover::before { left: 100%; }
-
-    .service-card:hover {
+    .card:hover {
       border-color: rgba(0, 255, 204, 0.5);
       transform: translateY(-10px);
       box-shadow: 0 20px 40px rgba(0, 255, 204, 0.1);
     }
 
-    .service-icon {
+    .card-icon {
       font-size: 2.5rem;
       margin-bottom: 1.5rem;
-      display: inline-block;
-      animation: float-icon 3s ease-in-out infinite;
     }
 
-    @keyframes float-icon {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .service-card h3 {
+    .card h3 {
       font-family: var(--font-display);
       font-size: 1.2rem;
       margin-bottom: 1rem;
       color: var(--text-primary);
     }
 
-    .service-card p {
+    .card p {
       color: var(--text-secondary);
       line-height: 1.7;
-      font-size: 0.95rem;
     }
 
-    /* === MISSION SECTION === */
-    .mission {
-      padding: 8rem 8%;
+    /* Honors section */
+    .honors {
       background: rgba(13, 26, 45, 0.3);
     }
 
-    .mission-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 3rem;
+    .honor-badge {
+      background: rgba(0, 255, 204, 0.05);
+      border: 1px solid rgba(0, 255, 204, 0.3);
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
     }
 
-    .mission-card {
-      background: rgba(13, 26, 45, 0.6);
-      border: 1px solid rgba(0, 255, 204, 0.2);
-      padding: 3rem;
-      transition: all 0.4s ease;
+    .honor-badge:hover {
+      background: rgba(0, 255, 204, 0.1);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
     }
 
-    .mission-card:hover {
-      border-color: rgba(0, 255, 204, 0.5);
-      transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 255, 204, 0.1);
-    }
-
-    .mission-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .mission-card h3 {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
+    .honor-icon {
+      font-size: 3rem;
       margin-bottom: 1rem;
+    }
+
+    .honor-badge h4 {
+      font-family: var(--font-display);
+      font-size: 1rem;
       color: var(--text-primary);
+      margin-bottom: 0.5rem;
     }
 
-    .mission-card p {
-      color: var(--text-secondary);
-      line-height: 1.8;
+    .honor-badge span {
+      font-size: 0.85rem;
+      color: var(--neon-cyan);
     }
 
-    /* === FOOTER === */
     .footer {
       padding: 3rem 8%;
       background: rgba(10, 15, 28, 0.9);
@@ -324,7 +285,6 @@
       font-size: 0.8rem;
     }
 
-    /* === SCANLINES === */
     .scanlines {
       position: fixed;
       inset: 0;
@@ -339,17 +299,13 @@
       );
     }
 
-    /* === RESPONSIVE === */
     @media (max-width: 768px) {
-      .cyber-nav, .hero, .services, .mission {
+      .cyber-nav, .hero, .section {
         padding-left: 1rem;
         padding-right: 1rem;
       }
       .hero-title { font-size: 2rem; }
-      .hero-stats, .services-grid, .mission-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
+      .hero-stats, .grid { grid-template-columns: 1fr; gap: 2rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -400,58 +356,105 @@
     </div>
   </section>
 
-  <section class="services">
+  <section class="section">
     <h2 class="section-title">核心服务</h2>
     <p class="section-subtitle">以尖端科技赋能金融创新</p>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">🏗️</div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-icon">🏗️</div>
         <h3>项目管理</h3>
-        <p>专业的金融科技项目管理服务，确保项目按时高质量交付</p>
+        <p>专业的金融科技项目管理服务</p>
       </div>
-      <div class="service-card">
-        <div class="service-icon">💳</div>
-        <h3>零售信贷解决方案</h3>
-        <p>端到端的零售信贷系统，支持全流程业务数字化转型</p>
+      <div class="card">
+        <div class="card-icon">💳</div>
+        <h3>零售信贷</h3>
+        <p>端到端的零售信贷系统解决方案</p>
       </div>
-      <div class="service-card">
-        <div class="service-icon">🔗</div>
+      <div class="card">
+        <div class="card-icon">🔗</div>
         <h3>供应链金融</h3>
-        <p>基于区块链技术的供应链金融平台，提升融资效率</p>
+        <p>基于区块链的供应链金融平台</p>
       </div>
-      <div class="service-card">
-        <div class="service-icon">⛓️</div>
+      <div class="card">
+        <div class="card-icon">⛓️</div>
         <h3>区块链技术</h3>
-        <p>企业级区块链解决方案，赋能金融业务创新</p>
+        <p>企业级区块链解决方案</p>
       </div>
-      <div class="service-card">
-        <div class="service-icon">📱</div>
+      <div class="card">
+        <div class="card-icon">📱</div>
         <h3>金融科技应用</h3>
-        <p>移动端金融应用开发，提供便捷的金融服务体验</p>
+        <p>移动端金融应用开发</p>
       </div>
-      <div class="service-card">
-        <div class="service-icon">☁️</div>
+      <div class="card">
+        <div class="card-icon">☁️</div>
         <h3>大数据与AI</h3>
-        <p>人工智能与大数据分析，驱动智能决策</p>
+        <p>人工智能与大数据分析</p>
       </div>
     </div>
   </section>
 
-  <section class="mission">
+  <section class="section honors">
+    <h2 class="section-title">荣誉资质</h2>
+    <p class="section-subtitle">专业认证 · 值得信赖</p>
+    <div class="grid">
+      <div class="honor-badge">
+        <div class="honor-icon">🏆</div>
+        <h4>国家高新技术企业</h4>
+        <span>高新技术企业认证</span>
+      </div>
+      <div class="honor-badge">
+        <div class="honor-icon">🎖️</div>
+        <h4>深圳市跨国公司总部</h4>
+        <span>第一批认定企业</span>
+      </div>
+      <div class="honor-badge">
+        <div class="honor-icon">⭐</div>
+        <h4>AAA级信用企业</h4>
+        <span>信用评级最高等级</span>
+      </div>
+      <div class="honor-badge">
+        <div class="honor-icon">🛡️</div>
+        <h4>ISO9001认证</h4>
+        <span>质量管理体系认证</span>
+      </div>
+      <div class="honor-badge">
+        <div class="honor-icon">🔒</div>
+        <h4>ISO27001认证</h4>
+        <span>信息安全管理体系</span>
+      </div>
+      <div class="honor-badge">
+        <div class="honor-icon">⚙️</div>
+        <h4>ISO20000认证</h4>
+        <span>IT服务管理体系</span>
+      </div>
+      <div class="honor-badge">
+        <div class="honor-icon">💎</div>
+        <h4>深圳市专精特新</h4>
+        <span>专精特新中小企业</span>
+      </div>
+      <div class="honor-badge">
+        <div class="honor-icon">🌐</div>
+        <h4>深圳市金融科技协会</h4>
+        <span>会员单位</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <h2 class="section-title">愿景·使命·文化</h2>
-    <div class="mission-grid">
-      <div class="mission-card">
-        <div class="mission-icon">🎯</div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-icon">🎯</div>
         <h3>愿景</h3>
         <p>成为区域领先的金融科技平台</p>
       </div>
-      <div class="mission-card">
-        <div class="mission-icon">🚀</div>
+      <div class="card">
+        <div class="card-icon">🚀</div>
         <h3>使命</h3>
         <p>以尖端科技赋能客户</p>
       </div>
-      <div class="mission-card">
-        <div class="mission-icon">💡</div>
+      <div class="card">
+        <div class="card-icon">💡</div>
         <h3>文化</h3>
         <p>客户至上 · 开放协作<br>敏捷创新 · 专业高效</p>
       </div>
