@@ -10,24 +10,31 @@
   <style>
     :root {
       --bg-deep: #0a0f1c;
+      --bg-surface: #0d1a2d;
       --neon-cyan: #00ffcc;
       --neon-magenta: #ff00aa;
       --neon-blue: #00ccff;
       --text-primary: #e0e8ff;
       --text-secondary: #8a9acc;
+      --font-display: 'Clash Display', 'Inter', system-ui, sans-serif;
+      --font-body: 'Satoshi', 'Segoe UI', system-ui, sans-serif;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: 'Satoshi', sans-serif;
+      font-family: var(--font-body);
       background: var(--bg-deep);
       color: var(--text-primary);
       overflow-x: hidden;
       min-height: 100vh;
     }
 
-    /* Loading screen */
+    /* === LOADING SCREEN === */
     #loading {
       position: fixed;
       top: 0;
@@ -39,27 +46,68 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      animation: fadeOut 1s ease-out 2s forwards;
+      transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
     }
 
-    @keyframes fadeOut {
-      to { opacity: 0; pointer-events: none; }
+    #loading.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .loader-content {
+      text-align: center;
     }
 
     .loader-logo {
-      font-family: 'Clash Display', sans-serif;
-      font-size: 2rem;
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
       color: var(--neon-cyan);
-      text-shadow: 0 0 20px var(--neon-cyan);
-      animation: pulse 2s ease-in-out infinite;
+      text-shadow: 
+        0 0 10px var(--neon-cyan),
+        0 0 20px var(--neon-cyan),
+        0 0 40px var(--neon-cyan);
+      animation: pulse-glow 2s ease-in-out infinite;
+      letter-spacing: 0.2em;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.5; text-shadow: 0 0 20px var(--neon-cyan); }
-      50% { opacity: 1; text-shadow: 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-cyan); }
+    .loader-bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(0, 255, 204, 0.2);
+      margin: 2rem auto;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Navigation */
+    .loader-bar::after {
+      content: '';
+      position: absolute;
+      left: -50%;
+      width: 50%;
+      height: 100%;
+      background: var(--neon-cyan);
+      animation: loading-slide 1.5s ease-in-out infinite;
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { 
+        opacity: 0.6;
+        text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+      }
+      50% { 
+        opacity: 1;
+        text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan), 0 0 60px var(--neon-cyan);
+      }
+    }
+
+    @keyframes loading-slide {
+      0% { left: -50%; }
+      100% { left: 100%; }
+    }
+
+    /* === NAVIGATION === */
     .cyber-nav {
       position: fixed;
       top: 0;
@@ -73,14 +121,27 @@
       background: rgba(10, 15, 28, 0.9);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .cyber-nav.scrolled {
+      padding: 1rem 4rem;
+      background: rgba(10, 15, 28, 0.95);
+      box-shadow: 0 4px 20px rgba(0, 255, 204, 0.1);
     }
 
     .nav-logo {
-      font-family: 'Clash Display', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--text-primary);
       letter-spacing: 0.1em;
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo:hover {
+      color: var(--neon-cyan);
+      text-shadow: 0 0 20px var(--neon-cyan);
     }
 
     .nav-logo .accent {
@@ -88,13 +149,14 @@
       text-shadow: 0 0 20px var(--neon-cyan);
     }
 
-    /* Hero Section */
+    /* === HERO SECTION === */
     .hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
       padding: 0 8%;
       position: relative;
+      overflow: hidden;
     }
 
     .hero-bg {
@@ -109,14 +171,69 @@
       pointer-events: none;
     }
 
+    .hero-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+
+    .hero-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: var(--neon-cyan);
+      border-radius: 50%;
+      animation: float-particle 8s ease-in-out infinite;
+      box-shadow: 0 0 6px var(--neon-cyan);
+    }
+
+    @keyframes float-particle {
+      0%, 100% { 
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+      }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { 
+        transform: translateY(-100vh) translateX(20px);
+        opacity: 0;
+      }
+    }
+
     .hero-content {
       flex: 1;
       z-index: 10;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fade-in-up 1s ease-out 2.2s forwards;
+    }
+
+    @keyframes fade-in-up {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .hero-title {
-      font-family: 'Clash Display', sans-serif;
-      font-size: 4rem;
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 6vw, 5rem);
       font-weight: 700;
       line-height: 1.1;
       margin-bottom: 2rem;
@@ -125,13 +242,26 @@
     .hero-title .main {
       display: block;
       color: var(--text-primary);
-      letter-spacing: 0.1em;
+      letter-spacing: 0.15em;
+      animation: glitch-text 3s ease-in-out infinite;
     }
 
     .hero-title .accent {
       display: block;
       color: var(--neon-cyan);
-      text-shadow: 0 0 30px var(--neon-cyan);
+      text-shadow: 
+        0 0 10px var(--neon-cyan),
+        0 0 20px var(--neon-cyan),
+        0 0 40px var(--neon-cyan);
+      letter-spacing: 0.2em;
+    }
+
+    @keyframes glitch-text {
+      0%, 90%, 100% { transform: translateX(0); }
+      92% { transform: translateX(-2px); }
+      94% { transform: translateX(2px); }
+      96% { transform: translateX(-1px); }
+      98% { transform: translateX(1px); }
     }
 
     .hero-subtitle {
@@ -140,24 +270,45 @@
       margin-bottom: 3rem;
       max-width: 600px;
       line-height: 1.8;
+      opacity: 0;
+      animation: fade-in 1s ease-out 2.5s forwards;
+    }
+
+    @keyframes fade-in {
+      to { opacity: 1; }
     }
 
     .hero-stats {
       display: flex;
       gap: 4rem;
       margin-top: 4rem;
+      flex-wrap: wrap;
     }
 
     .stat-item {
       text-align: left;
+      opacity: 0;
+      animation: fade-in 0.8s ease-out forwards;
     }
 
+    .stat-item:nth-child(1) { animation-delay: 2.8s; }
+    .stat-item:nth-child(2) { animation-delay: 3s; }
+    .stat-item:nth-child(3) { animation-delay: 3.2s; }
+
     .stat-number {
-      font-family: 'Clash Display', sans-serif;
+      font-family: var(--font-display);
       font-size: 2.5rem;
       font-weight: 700;
       color: var(--neon-cyan);
       text-shadow: 0 0 20px var(--neon-cyan);
+      transition: all 0.3s ease;
+    }
+
+    .stat-item:hover .stat-number {
+      text-shadow: 
+        0 0 20px var(--neon-cyan),
+        0 0 40px var(--neon-cyan);
+      transform: scale(1.05);
     }
 
     .stat-label {
@@ -166,15 +317,24 @@
       margin-top: 0.5rem;
     }
 
-    /* Mission Section */
+    /* === MISSION SECTION === */
     .mission {
       padding: 8rem 8%;
       position: relative;
     }
 
+    .mission-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      text-align: center;
+      color: var(--neon-cyan);
+      margin-bottom: 3rem;
+      text-shadow: 0 0 30px var(--neon-cyan);
+    }
+
     .mission-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 3rem;
     }
 
@@ -182,23 +342,48 @@
       background: rgba(13, 26, 45, 0.6);
       border: 1px solid rgba(0, 255, 204, 0.2);
       padding: 3rem;
-      transition: all 0.3s ease;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mission-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .mission-card:hover::before {
+      left: 100%;
     }
 
     .mission-card:hover {
       border-color: rgba(0, 255, 204, 0.5);
       transform: translateY(-10px);
-      box-shadow: 0 20px 40px rgba(0, 255, 204, 0.1);
+      box-shadow: 
+        0 20px 40px rgba(0, 255, 204, 0.1),
+        0 0 20px rgba(0, 255, 204, 0.05);
     }
 
     .mission-icon {
       font-size: 2.5rem;
-      color: var(--neon-cyan);
       margin-bottom: 1.5rem;
+      display: inline-block;
+      animation: float-icon 3s ease-in-out infinite;
+    }
+
+    @keyframes float-icon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     .mission-card h3 {
-      font-family: 'Clash Display', sans-serif;
+      font-family: var(--font-display);
       font-size: 1.3rem;
       margin-bottom: 1rem;
       color: var(--text-primary);
@@ -209,7 +394,7 @@
       line-height: 1.8;
     }
 
-    /* Footer */
+    /* === FOOTER === */
     .footer {
       padding: 3rem 8%;
       background: rgba(10, 15, 28, 0.9);
@@ -218,8 +403,9 @@
     }
 
     .footer-text {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-family: var(--font-display);
     }
 
     .footer-copyright {
@@ -228,24 +414,84 @@
       font-size: 0.8rem;
     }
 
-    @media (max-width: 1024px) {
-      .hero-title { font-size: 2.5rem; }
-      .mission-grid { grid-template-columns: 1fr; }
-      .hero-stats { flex-wrap: wrap; gap: 2rem; }
+    /* === SCANLINES EFFECT === */
+    .scanlines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 255, 204, 0.01) 2px,
+        rgba(0, 255, 204, 0.01) 4px
+      );
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .cyber-nav {
+        padding: 1rem 2rem;
+      }
+      
+      .hero {
+        padding: 0 1rem;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-stats {
+        gap: 2rem;
+      }
+      
+      .stat-number {
+        font-size: 2rem;
+      }
+      
+      .mission {
+        padding: 4rem 1rem;
+      }
+      
+      .mission-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    /* === ACCESSIBILITY === */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
     }
   </style>
 </head>
 <body>
   <div id="loading">
-    <div class="loader-logo">KBIGHT</div>
+    <div class="loader-content">
+      <div class="loader-logo">KBIGHT</div>
+      <div class="loader-bar"></div>
+    </div>
   </div>
 
-  <nav class="cyber-nav">
+  <div class="scanlines"></div>
+
+  <nav class="cyber-nav" id="navbar">
     <div class="nav-logo">KAI<span class="accent">TECH</span></div>
   </nav>
 
   <section class="hero">
     <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-particles" id="particles"></div>
     <div class="hero-content">
       <h1 class="hero-title">
         <span class="main">开泰科技</span>
@@ -273,7 +519,7 @@
   </section>
 
   <section class="mission">
-    <h2 style="font-family: 'Clash Display', sans-serif; font-size: 2.5rem; text-align: center; color: var(--neon-cyan); margin-bottom: 3rem;">愿景·使命·文化</h2>
+    <h2 class="mission-title">愿景·使命·文化</h2>
     <div class="mission-grid">
       <div class="mission-card">
         <div class="mission-icon">🎯</div>
@@ -295,7 +541,37 @@
 
   <footer class="footer">
     <div class="footer-text">开泰远景信息科技有限公司</div>
-    <div class="footer-copyright">© 2025 KTech Fintech. All rights reserved.</div>
+    <div class="footer-copyright">© 2026 KTech Fintech. All rights reserved.</div>
   </footer>
+
+  <script>
+    // Loading screen
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loading').classList.add('hidden');
+      }, 2000);
+    });
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    // Create particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 8 + 's';
+      particle.style.animationDuration = (5 + Math.random() * 5) + 's';
+      particlesContainer.appendChild(particle);
+    }
+  </script>
 </body>
 </html>
