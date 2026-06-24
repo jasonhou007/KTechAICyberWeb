@@ -3,33 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>开泰科技 - KBight Fintech</title>
+  <meta name="description" content="开泰远景信息科技有限公司 - 专注于金融科技创新，提供项目管理、零售信贷、供应链金融、区块链技术等解决方案。">
+  <meta name="keywords" content="开泰科技,KBight,金融科技,区块链,供应链金融,零售信贷">
+  <meta name="author" content="开泰远景信息科技有限公司">
+  <meta name="theme-color" content="#00ffcc">
+  <title>开泰科技 - KBight Fintech | 金融科技创新</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#0a0f1c;--bg-s:#0d1a2d;--cyan:#00ffcc;--txt:#e0e8ff;--txt2:#8a9acc;--font-d:'Clash Display',system-ui,sans-serif;--font-b:'Satoshi',system-ui,sans-serif}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth}
+    html{scroll-behavior:smooth;scroll-padding-top:80px}
     body{font-family:var(--font-b);background:var(--bg);color:var(--txt);min-height:100vh;line-height:1.6}
     #loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .8s,visibility .8s}
-    #loading.hidden{opacity:0;visibility:hidden}
+    #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
     .loader-logo{font-family:var(--font-d);font-size:3rem;font-weight:700;color:var(--cyan);text-shadow:0 0 20px var(--cyan);animation:pulse 2s ease-in-out infinite;letter-spacing:.2em}
     @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1;text-shadow:0 0 40px var(--cyan),0 0 60px var(--cyan)}}
-    .nav{position:fixed;inset-inline:0;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.5rem 4rem;background:rgba(10,15,28,.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,204,.2);transition:all .3s}
+    .nav{position:fixed;inset-inline:0;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.5rem 4rem;background:rgba(10,15,28,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,204,.2);transition:all .3s;will-change:transform,padding}
     .nav.scrolled{padding:1rem 4rem;box-shadow:0 4px 20px rgba(0,255,204,.1)}
-    .nav-logo{font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:var(--txt);letter-spacing:.1em;text-decoration:none;transition:all .3s}
+    .nav-logo{font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:var(--txt);letter-spacing:.1em;text-decoration:none;transition:color .3s}
     .nav-logo:hover{color:var(--cyan);text-shadow:0 0 20px var(--cyan)}
     .nav-logo .accent{color:var(--cyan);text-shadow:0 0 20px var(--cyan)}
     .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{color:var(--txt2);text-decoration:none;font-size:.9rem;transition:color .3s;position:relative}
-    .nav-links a:hover{color:var(--cyan)}
-    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s}
-    .nav-links a:hover::after{width:100%}
-    .hero{min-height:100vh;display:flex;align-items:center;padding:0 8%;position:relative}
+    .nav-links a{color:var(--txt2);text-decoration:none;font-size:.9rem;transition:color .3s;position:relative;padding:.25rem 0}
+    .nav-links a:hover,.nav-links a:focus{color:var(--cyan);outline:none}
+    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--cyan);transition:width .3s}
+    .nav-links a:hover::after,.nav-links a:focus::after{width:100%}
+    .hero{min-height:100vh;display:flex;align-items:center;padding:0 8%;position:relative;overflow:hidden}
     .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,255,204,.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 50%,rgba(255,0,170,.1) 0%,transparent 50%)}
     .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,204,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,204,.03) 1px,transparent 1px);background-size:50px 50px}
-    .hero-content{flex:1;z-index:10}
+    .hero-content{flex:1;z-index:10;position:relative}
     .hero-title{font-family:var(--font-d);font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.1;margin-bottom:2rem}
     .hero-title .main{display:block;color:var(--txt);letter-spacing:.15em;animation:glitch 3s ease-in-out infinite}
     @keyframes glitch{0%,90%,100%{transform:translateX(0)}92%{transform:translateX(-2px)}94%{transform:translateX(2px)}96%{transform:translateX(-1px)}98%{transform:translateX(1px)}}
@@ -37,19 +41,19 @@
     .hero-subtitle{font-size:1.2rem;color:var(--txt2);margin-bottom:3rem;max-width:600px;line-height:1.8}
     .hero-stats{display:flex;gap:4rem;margin-top:4rem;flex-wrap:wrap}
     .stat-item{text-align:left}
-    .stat-number{font-family:var(--font-d);font-size:2.5rem;font-weight:700;color:var(--cyan);text-shadow:0 0 20px var(--cyan);transition:transform .3s}
+    .stat-number{font-family:var(--font-d);font-size:2.5rem;font-weight:700;color:var(--cyan);text-shadow:0 0 20px var(--cyan);transition:transform .3s;will-transform:transform}
     .stat-item:hover .stat-number{transform:scale(1.05)}
     .stat-label{font-size:.9rem;color:var(--txt2);margin-top:.5rem}
-    .section{padding:8rem 8%}
+    .section{padding:8rem 8%;position:relative}
     .section-title{font-family:var(--font-d);font-size:2.5rem;text-align:center;color:var(--cyan);margin-bottom:1rem;text-shadow:0 0 30px var(--cyan)}
     .section-subtitle{text-align:center;color:var(--txt2);margin-bottom:4rem;font-size:1.1rem}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
-    .card{background:rgba(13,26,45,.6);border:1px solid rgba(0,255,204,.2);padding:2.5rem;transition:all .4s;position:relative;overflow:hidden}
+    .card{background:rgba(13,26,45,.6);border:1px solid rgba(0,255,204,.2);padding:2.5rem;transition:all .4s;position:relative;overflow:hidden;will-change:transform,border-color,box-shadow}
     .card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,204,.1),transparent);transition:left .6s}
     .card:hover::before{left:100%}
     .card:hover{border-color:rgba(0,255,204,.5);transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,255,204,.15)}
-    .card-icon{font-size:2.5rem;margin-bottom:1.5rem;display:inline-block}
-    .card:hover .card-icon{transform:scale(1.1) rotate(5deg);transition:transform .3s}
+    .card-icon{font-size:2.5rem;margin-bottom:1.5rem;display:inline-block;transition:transform .3s}
+    .card:hover .card-icon{transform:scale(1.1) rotate(5deg)}
     .card h3{font-family:var(--font-d);font-size:1.2rem;margin-bottom:1rem;color:var(--txt)}
     .card p{color:var(--txt2);line-height:1.7}
     .honors{background:rgba(13,26,45,.3)}
@@ -70,7 +74,7 @@
     .footer-text{color:var(--txt);font-size:1rem;font-family:var(--font-d)}
     .footer-copyright{margin-top:1rem;color:var(--txt2);font-size:.8rem}
     .scanlines{position:fixed;inset:0;pointer-events:none;z-index:1000;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,204,.01) 2px,rgba(0,255,204,.01) 4px)}
-    .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+    .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;will-change:opacity,transform}
     .fade-in.visible{opacity:1;transform:translateY(0)}
     @media(max-width:768px){
       .nav,.hero,.section{padding-left:1rem;padding-right:1rem}
@@ -82,64 +86,174 @@
   </style>
 </head>
 <body>
-  <div id="loading"><div class="loader-logo">KBIGHT</div></div>
-  <div class="scanlines"></div>
+  <div id="loading" aria-hidden="true"><div class="loader-logo">KBIGHT</div></div>
+  <div class="scanlines" aria-hidden="true"></div>
   <nav class="nav" id="navbar">
     <a href="#" class="nav-logo">KAI<span class="accent">TECH</span></a>
-    <ul class="nav-links"><li><a href="#services">服务</a></li><li><a href="#honors">荣誉</a></li><li><a href="#contact">联系</a></li></ul>
+    <ul class="nav-links">
+      <li><a href="#services">服务</a></li>
+      <li><a href="#honors">荣誉</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
   </nav>
-  <section class="hero">
-    <div class="hero-bg"></div><div class="hero-grid"></div>
-    <div class="hero-content">
-      <h1 class="hero-title"><span class="main">开泰科技</span><span class="accent">KBIGHT FINTECH</span></h1>
-      <p class="hero-subtitle">开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。</p>
-      <div class="hero-stats">
-        <div class="stat-item"><div class="stat-number">2020</div><div class="stat-label">成立年份</div></div>
-        <div class="stat-item"><div class="stat-number">3亿</div><div class="stat-label">注册资本（元）</div></div>
-        <div class="stat-item"><div class="stat-number">20+</div><div class="stat-label">建设项目</div></div>
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="main">开泰科技</span>
+          <span class="accent">KBIGHT FINTECH</span>
+        </h1>
+        <p class="hero-subtitle">开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number">2020</div>
+            <div class="stat-label">成立年份</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">3亿</div>
+            <div class="stat-label">注册资本（元）</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">建设项目</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
-  <section class="section" id="services">
-    <div class="fade-in"><h2 class="section-title">核心服务</h2><p class="section-subtitle">以尖端科技赋能金融创新</p></div>
-    <div class="grid">
-      <div class="card fade-in"><div class="card-icon">🏗️</div><h3>项目管理</h3><p>专业的金融科技项目管理服务</p></div>
-      <div class="card fade-in"><div class="card-icon">💳</div><h3>零售信贷</h3><p>端到端的零售信贷系统解决方案</p></div>
-      <div class="card fade-in"><div class="card-icon">🔗</div><h3>供应链金融</h3><p>基于区块链的供应链金融平台</p></div>
-      <div class="card fade-in"><div class="card-icon">⛓️</div><h3>区块链技术</h3><p>企业级区块链解决方案</p></div>
-      <div class="card fade-in"><div class="card-icon">📱</div><h3>金融科技应用</h3><p>移动端金融应用开发</p></div>
-      <div class="card fade-in"><div class="card-icon">☁️</div><h3>大数据与AI</h3><p>人工智能与大数据分析</p></div>
-    </div>
-  </section>
-  <section class="section honors" id="honors">
-    <div class="fade-in"><h2 class="section-title">荣誉资质</h2><p class="section-subtitle">专业认证 · 值得信赖</p></div>
-    <div class="grid">
-      <div class="honor-badge fade-in"><div class="honor-icon">🏆</div><h4>国家高新技术企业</h4><span>高新技术企业认证</span></div>
-      <div class="honor-badge fade-in"><div class="honor-icon">🎖️</div><h4>深圳市跨国公司总部</h4><span>第一批认定企业</span></div>
-      <div class="honor-badge fade-in"><div class="honor-icon">⭐</div><h4>AAA级信用企业</h4><span>信用评级最高等级</span></div>
-      <div class="honor-badge fade-in"><div class="honor-icon">🛡️</div><h4>ISO9001认证</h4><span>质量管理体系认证</span></div>
-      <div class="honor-badge fade-in"><div class="honor-icon">🔒</div><h4>ISO27001认证</h4><span>信息安全管理体系</span></div>
-      <div class="honor-badge fade-in"><div class="honor-icon">⚙️</div><h4>ISO20000认证</h4><span>IT服务管理体系</span></div>
-      <div class="honor-badge fade-in"><div class="honor-icon">💎</div><h4>深圳市专精特新</h4><span>专精特新中小企业</span></div>
-      <div class="honor-badge fade-in"><div class="honor-icon">🌐</div><h4>深圳市金融科技协会</h4><span>会员单位</span></div>
-    </div>
-  </section>
-  <section class="section">
-    <div class="fade-in"><h2 class="section-title">愿景·使命·文化</h2></div>
-    <div class="grid">
-      <div class="card fade-in"><div class="card-icon">🎯</div><h3>愿景</h3><p>成为区域领先的金融科技平台</p></div>
-      <div class="card fade-in"><div class="card-icon">🚀</div><h3>使命</h3><p>以尖端科技赋能客户</p></div>
-      <div class="card fade-in"><div class="card-icon">💡</div><h3>文化</h3><p>客户至上 · 开放协作<br>敏捷创新 · 专业高效</p></div>
-    </div>
-  </section>
-  <section class="section contact" id="contact">
-    <div class="fade-in"><h2 class="section-title">联系我们</h2><p class="section-subtitle">期待与您合作</p></div>
-    <div class="contact-grid">
-      <div class="contact-item fade-in"><div class="contact-icon">📍</div><h4>公司地址</h4><p>深圳市罗湖区</p></div>
-      <div class="contact-item fade-in"><div class="contact-icon">📧</div><h4>电子邮箱</h4><p>contact@ktech.fintech</p></div>
-      <div class="contact-item fade-in"><div class="contact-icon">🌐</div><h4>官方网站</h4><p>www.kaitai.tech</p></div>
-    </div>
-  </section>
+    </section>
+    <section class="section" id="services">
+      <div class="fade-in">
+        <h2 class="section-title">核心服务</h2>
+        <p class="section-subtitle">以尖端科技赋能金融创新</p>
+      </div>
+      <div class="grid">
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">🏗️</div>
+          <h3>项目管理</h3>
+          <p>专业的金融科技项目管理服务</p>
+        </article>
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">💳</div>
+          <h3>零售信贷</h3>
+          <p>端到端的零售信贷系统解决方案</p>
+        </article>
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">🔗</div>
+          <h3>供应链金融</h3>
+          <p>基于区块链的供应链金融平台</p>
+        </article>
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">⛓️</div>
+          <h3>区块链技术</h3>
+          <p>企业级区块链解决方案</p>
+        </article>
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">📱</div>
+          <h3>金融科技应用</h3>
+          <p>移动端金融应用开发</p>
+        </article>
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">☁️</div>
+          <h3>大数据与AI</h3>
+          <p>人工智能与大数据分析</p>
+        </article>
+      </div>
+    </section>
+    <section class="section honors" id="honors">
+      <div class="fade-in">
+        <h2 class="section-title">荣誉资质</h2>
+        <p class="section-subtitle">专业认证 · 值得信赖</p>
+      </div>
+      <div class="grid">
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">🏆</div>
+          <h4>国家高新技术企业</h4>
+          <span>高新技术企业认证</span>
+        </div>
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">🎖️</div>
+          <h4>深圳市跨国公司总部</h4>
+          <span>第一批认定企业</span>
+        </div>
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">⭐</div>
+          <h4>AAA级信用企业</h4>
+          <span>信用评级最高等级</span>
+        </div>
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">🛡️</div>
+          <h4>ISO9001认证</h4>
+          <span>质量管理体系认证</span>
+        </div>
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">🔒</div>
+          <h4>ISO27001认证</h4>
+          <span>信息安全管理体系</span>
+        </div>
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">⚙️</div>
+          <h4>ISO20000认证</h4>
+          <span>IT服务管理体系</span>
+        </div>
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">💎</div>
+          <h4>深圳市专精特新</h4>
+          <span>专精特新中小企业</span>
+        </div>
+        <div class="honor-badge fade-in">
+          <div class="honor-icon" aria-hidden="true">🌐</div>
+          <h4>深圳市金融科技协会</h4>
+          <span>会员单位</span>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="fade-in">
+        <h2 class="section-title">愿景·使命·文化</h2>
+      </div>
+      <div class="grid">
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">🎯</div>
+          <h3>愿景</h3>
+          <p>成为区域领先的金融科技平台</p>
+        </article>
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">🚀</div>
+          <h3>使命</h3>
+          <p>以尖端科技赋能客户</p>
+        </article>
+        <article class="card fade-in">
+          <div class="card-icon" aria-hidden="true">💡</div>
+          <h3>文化</h3>
+          <p>客户至上 · 开放协作<br>敏捷创新 · 专业高效</p>
+        </article>
+      </div>
+    </section>
+    <section class="section contact" id="contact">
+      <div class="fade-in">
+        <h2 class="section-title">联系我们</h2>
+        <p class="section-subtitle">期待与您合作</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-item fade-in">
+          <div class="contact-icon" aria-hidden="true">📍</div>
+          <h4>公司地址</h4>
+          <p>深圳市罗湖区</p>
+        </div>
+        <div class="contact-item fade-in">
+          <div class="contact-icon" aria-hidden="true">📧</div>
+          <h4>电子邮箱</h4>
+          <p>contact@ktech.fintech</p>
+        </div>
+        <div class="contact-item fade-in">
+          <div class="contact-icon" aria-hidden="true">🌐</div>
+          <h4>官方网站</h4>
+          <p>www.kaitai.tech</p>
+        </div>
+      </div>
+    </section>
+  </main>
   <footer class="footer">
     <div class="footer-text">开泰远景信息科技有限公司</div>
     <div class="footer-copyright">© 2026 KTech Fintech. All rights reserved.</div>
@@ -147,8 +261,9 @@
   <script>
     const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
     window.addEventListener('load',()=>setTimeout(()=>$('#loading').classList.add('hidden'),2000));
-    window.addEventListener('scroll',()=>{const n=$('#navbar');window.scrollY>50?n.classList.add('scrolled'):n.classList.remove('scrolled')});
-    const observer=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.classList.add('visible')})},{threshold:.1});
+    const handleScroll=()=>{const n=$('#navbar');window.scrollY>50?n.classList.add('scrolled'):n.classList.remove('scrolled')};
+    window.addEventListener('scroll',handleScroll,{passive:!0});
+    const observer=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
     $$('.fade-in').forEach(e=>observer.observe(e));
   </script>
 </body>
