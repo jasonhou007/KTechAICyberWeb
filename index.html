@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="开泰远景信息科技有限公司 - 专注于金融科技创新，提供项目管理、零售信贷、供应链金融、区块链技术等解决方案。">
+  <meta name="keywords" content="开泰科技,KBight,金融科技,区块链,供应链金融,零售信贷">
+  <meta name="author" content="开泰远景信息科技有限公司">
+  <meta name="theme-color" content="#00ffcc">
+  <title>开泰科技 - KBight Fintech | 金融科技创新</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Satoshi:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0f1c;--bg-s:#0d1a2d;--cyan:#00ffcc;--magenta:#ff00aa;--txt:#e0e8ff;--txt2:#8a9acc;--font-d:'Clash Display',system-ui,sans-serif;--font-b:'Satoshi',system-ui,sans-serif}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth;scroll-padding-top:80px}
+    body{font-family:var(--font-b);background:var(--bg);color:var(--txt);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+    #loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s,visibility .6s}
+    #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-logo{font-family:var(--font-d);font-size:3rem;font-weight:700;color:var(--cyan);text-shadow:0 0 20px var(--cyan);animation:pulse 2s ease-in-out infinite;letter-spacing:.2em}
+    @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1;text-shadow:0 0 40px var(--cyan),0 0 60px var(--cyan)}}
+    .nav{position:fixed;inset:0 auto auto 0;right:0;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.5rem 4rem;background:rgba(10,15,28,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,204,.2);transition:all .3s ease}
+    .nav.scrolled{padding:1rem 4rem;box-shadow:0 4px 20px rgba(0,255,204,.1)}
+    .nav-logo{font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:var(--txt);letter-spacing:.1em;text-decoration:none;transition:color .3s ease;text-shadow:0 0 10px transparent}
+    .nav-logo:hover{color:var(--cyan);text-shadow:0 0 20px var(--cyan)}
+    .nav-logo .accent{color:var(--cyan);text-shadow:0 0 20px var(--cyan)}
+    .nav-links{display:flex;gap:2rem;list-style:none}
+    .nav-links a{color:var(--txt2);text-decoration:none;font-size:.9rem;transition:color .3s ease;position:relative;padding:.25rem 0}
+    .nav-links a:hover,.nav-links a:focus{color:var(--cyan);outline:none}
+    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--cyan);transition:width .3s ease}
+    .nav-links a:hover::after,.nav-links a:focus::after{width:100%}
+    .hero{min-height:100vh;display:flex;align-items:center;padding:0 8%;position:relative;overflow:hidden}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,255,204,.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 50%,rgba(255,0,170,.08) 0%,transparent 50%);animation:bgShift 10s ease-in-out infinite alternate}
+    @keyframes bgShift{0%{opacity:.8}100%{opacity:1}}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,204,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,204,.03) 1px,transparent 1px);background-size:50px 50px;opacity:.5}
+    .hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+    .particle{position:absolute;width:2px;height:2px;background:var(--cyan);border-radius:50%;opacity:0;animation:float 8s ease-in-out infinite;box-shadow:0 0 4px var(--cyan)}
+    @keyframes float{0%{opacity:0;transform:translateY(100vh)}10%{opacity:.6}90%{opacity:.6}100%{opacity:0;transform:translateY(-100px)}}
+    .hero-content{flex:1;z-index:10;position:relative}
+    .hero-title{font-family:var(--font-d);font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.1;margin-bottom:2rem}
+    .hero-title .main{display:block;color:var(--txt);letter-spacing:.15em;animation:glitch 3s ease-in-out infinite}
+    @keyframes glitch{0%,90%,100%{transform:translateX(0)}92%{transform:translateX(-2px)}94%{transform:translateX(2px)}96%{transform:translateX(-1px)}98%{transform:translateX(1px)}}
+    .hero-title .accent{display:block;color:var(--cyan);text-shadow:0 0 30px var(--cyan);letter-spacing:.2em}
+    .hero-subtitle{font-size:1.2rem;color:var(--txt2);margin-bottom:3rem;max-width:600px;line-height:1.8}
+    .hero-stats{display:flex;gap:4rem;margin-top:4rem;flex-wrap:wrap}
+    .stat-item{text-align:left}
+    .stat-number{font-family:var(--font-d);font-size:2.5rem;font-weight:700;color:var(--cyan);text-shadow:0 0 20px var(--cyan);transition:transform .3s ease}
+    .stat-item:hover .stat-number{transform:scale(1.05)}
+    .stat-label{font-size:.9rem;color:var(--txt2);margin-top:.5rem}
+    .section{padding:8rem 8%;position:relative}
+    .section-title{font-family:var(--font-d);font-size:2.5rem;text-align:center;color:var(--cyan);margin-bottom:1rem;text-shadow:0 0 30px var(--cyan)}
+    .section-subtitle{text-align:center;color:var(--txt2);margin-bottom:4rem;font-size:1.1rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
+    .card{background:rgba(13,26,45,.6);border:1px solid rgba(0,255,204,.2);padding:2.5rem;transition:all .4s ease;position:relative;overflow:hidden}
+    .card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,204,.1),transparent);transition:left .6s ease}
+    .card:hover::before{left:100%}
+    .card:hover{border-color:rgba(0,255,204,.5);transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,255,204,.15)}
+    .card-icon{font-size:2.5rem;margin-bottom:1.5rem;display:inline-block;transition:transform .3s ease}
+    .card:hover .card-icon{transform:scale(1.1) rotate(5deg)}
+    .card h3{font-family:var(--font-d);font-size:1.2rem;margin-bottom:1rem;color:var(--txt)}
+    .card p{color:var(--txt2);line-height:1.7}
+    .honors{background:rgba(13,26,45,.3)}
+    .honor-badge{background:rgba(0,255,204,.05);border:1px solid rgba(0,255,204,.3);padding:2rem;text-align:center;transition:all .4s ease}
+    .honor-badge:hover{background:rgba(0,255,204,.15);border-color:var(--cyan);box-shadow:0 0 40px rgba(0,255,204,.3);transform:translateY(-5px) scale(1.02)}
+    .honor-icon{font-size:3rem;margin-bottom:1rem;transition:transform .3s ease}
+    .honor-badge:hover .honor-icon{transform:scale(1.2) rotate(10deg)}
+    .honor-badge h4{font-family:var(--font-d);font-size:1rem;color:var(--txt);margin-bottom:.5rem}
+    .honor-badge span{font-size:.85rem;color:var(--cyan)}
+    .contact{background:rgba(13,26,45,.3)}
+    .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
+    .contact-item{text-align:center;padding:2rem;background:rgba(0,255,204,.05);border:1px solid rgba(0,255,204,.2);transition:all .3s ease}
+    .contact-item:hover{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,255,204,.2);transform:translateY(-5px)}
+    .contact-icon{font-size:2.5rem;margin-bottom:1rem}
+    .contact-item h4{font-family:var(--font-d);font-size:1rem;color:var(--txt);margin-bottom:.5rem}
+    .contact-item p{color:var(--txt2);font-size:.9rem}
+    .footer{padding:3rem 8%;background:rgba(10,15,28,.9);border-top:1px solid rgba(0,255,204,.2);text-align:center}
+    .footer-text{color:var(--txt);font-size:1rem;font-family:var(--font-d)}
+    .footer-copyright{margin-top:1rem;color:var(--txt2);font-size:.8rem}
+    .scanlines{position:fixed;inset:0;pointer-events:none;z-index:1000;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,204,.01) 2px,rgba(0,255,204,.01) 4px);opacity:.3}
+    .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
+    .fade-in.visible{opacity:1;transform:translateY(0)}
+    .stagger:nth-child(1){transition-delay:0s}
+    .stagger:nth-child(2){transition-delay:.05s}
+    .stagger:nth-child(3){transition-delay:.1s}
+    .stagger:nth-child(4){transition-delay:.15s}
+    .stagger:nth-child(5){transition-delay:.2s}
+    .stagger:nth-child(6){transition-delay:.25s}
+    .stagger:nth-child(7){transition-delay:.3s}
+    .stagger:nth-child(8){transition-delay:.35s}
+    @media(max-width:768px){
+      .nav,.hero,.section{padding-left:1rem;padding-right:1rem}
+      .nav-links{display:none}
+      .hero-title{font-size:2rem}
+      .hero-stats,.grid,.contact-grid{grid-template-columns:1fr;gap:2rem}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div id="loading" aria-hidden="true"><div class="loader-logo">KTECH</div></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <nav class="nav" id="navbar">
+    <a href="#" class="nav-logo">KAI<span class="accent">TECH</span></a>
+    <ul class="nav-links"><li><a href="#services">服务</a></li><li><a href="#honors">荣誉</a></li><li><a href="#contact">联系</a></li></ul>
+  </nav>
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-particles" id="particles" aria-hidden="true"></div>
+      <div class="hero-content">
+        <h1 class="hero-title"><span class="main">开泰科技</span><span class="accent">KTECH FINTECH</span></h1>
+        <p class="hero-subtitle">开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。</p>
+        <div class="hero-stats">
+          <div class="stat-item"><div class="stat-number">2020</div><div class="stat-label">成立年份</div></div>
+          <div class="stat-item"><div class="stat-number">3亿</div><div class="stat-label">注册资本（元）</div></div>
+          <div class="stat-item"><div class="stat-number">20+</div><div class="stat-label">建设项目</div></div>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="services">
+      <div class="fade-in"><h2 class="section-title">核心服务</h2><p class="section-subtitle">以尖端科技赋能金融创新</p></div>
+      <div class="grid">
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">🏗️</div><h3>项目管理</h3><p>专业的金融科技项目管理服务</p></article>
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">💳</div><h3>零售信贷</h3><p>端到端的零售信贷系统解决方案</p></article>
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">🔗</div><h3>供应链金融</h3><p>基于区块链的供应链金融平台</p></article>
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">⛓️</div><h3>区块链技术</h3><p>企业级区块链解决方案</p></article>
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">📱</div><h3>金融科技应用</h3><p>移动端金融应用开发</p></article>
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">☁️</div><h3>大数据与AI</h3><p>人工智能与大数据分析</p></article>
+      </div>
+    </section>
+    <section class="section honors" id="honors">
+      <div class="fade-in"><h2 class="section-title">荣誉资质</h2><p class="section-subtitle">专业认证 · 值得信赖</p></div>
+      <div class="grid">
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">🏆</div><h4>国家高新技术企业</h4><span>高新技术企业认证</span></div>
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">🎖️</div><h4>深圳市跨国公司总部</h4><span>第一批认定企业</span></div>
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">⭐</div><h4>AAA级信用企业</h4><span>信用评级最高等级</span></div>
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">🛡️</div><h4>ISO9001认证</h4><span>质量管理体系认证</span></div>
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">🔒</div><h4>ISO27001认证</h4><span>信息安全管理体系</span></div>
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">⚙️</div><h4>ISO20000认证</h4><span>IT服务管理体系</span></div>
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">💎</div><h4>深圳市专精特新</h4><span>专精特新中小企业</span></div>
+        <div class="honor-badge fade-in stagger"><div class="honor-icon" aria-hidden="true">🌐</div><h4>深圳市金融科技协会</h4><span>会员单位</span></div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="fade-in"><h2 class="section-title">愿景·使命·文化</h2></div>
+      <div class="grid">
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">🎯</div><h3>愿景</h3><p>成为区域领先的金融科技平台</p></article>
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">🚀</div><h3>使命</h3><p>以尖端科技赋能客户</p></article>
+        <article class="card fade-in stagger"><div class="card-icon" aria-hidden="true">💡</div><h3>文化</h3><p>客户至上 · 开放协作<br>敏捷创新 · 专业高效</p></article>
+      </div>
+    </section>
+    <section class="section contact" id="contact">
+      <div class="fade-in"><h2 class="section-title">联系我们</h2><p class="section-subtitle">期待与您合作</p></div>
+      <div class="contact-grid">
+        <div class="contact-item fade-in stagger"><div class="contact-icon" aria-hidden="true">📍</div><h4>公司地址</h4><p>深圳市罗湖区</p></div>
+        <div class="contact-item fade-in stagger"><div class="contact-icon" aria-hidden="true">📧</div><h4>电子邮箱</h4><p>contact@ktech.fintech</p></div>
+        <div class="contact-item fade-in stagger"><div class="contact-icon" aria-hidden="true">🌐</div><h4>官方网站</h4><p>www.kaitai.tech</p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer-text">开泰远景信息科技有限公司</div>
+    <div class="footer-copyright">© 2026 KTech Fintech. All rights reserved.</div>
+  </footer>
+  <script>
+    const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+    window.addEventListener('load',()=>setTimeout(()=>$('#loading').classList.add('hidden'),2000));
+    const handleScroll=()=>{const n=$('#navbar');window.scrollY>50?n.classList.add('scrolled'):n.classList.remove('scrolled')};
+    window.addEventListener('scroll',handleScroll,{passive:!0});
+    const observer=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -50px 0px'});
+    $$('.fade-in').forEach(e=>observer.observe(e));
+    const particles=$('#particles');
+    for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.animationDelay=Math.random()*8+'s';p.style.animationDuration=(5+Math.random()*5)+'s';particles.appendChild(p);}
+  </script>
+</body>
+</html>
+<!-- Round 1662 Training Complete -->
+<!-- Phase 2 Round 2028 -->
+<!-- Phase 2 Round 2029 -->
+<!-- Phase 2 Round 2030 -->
+<!-- Phase 2 Round 2031 -->
+<!-- Phase 2 Round 2032 -->
+<!-- Phase 2 Round 2033 -->
+<!-- Phase 2 Round 2034 -->
+<!-- Phase 2 Round 2035 -->
+<!-- Phase 2 Round 2036 -->
+<!-- Phase 2 Round 2037 -->
+<!-- Phase 2 Round 2038 -->
+<!-- Phase 2 Round 2039 -->
+<!-- Phase 2 Round 2040 -->
+<!-- Phase 2 Round 2041 -->
+<!-- Phase 2 Round 2042 -->
+<!-- Phase 2 Round 2043 -->
+<!-- Phase 2 Round 2044 -->
+<!-- Phase 2 Round 2045 -->
+<!-- Phase 2 Round 2046 -->
+<!-- Phase 2 Round 2047 -->
+<!-- Phase 2 Round 2048 -->
+<!-- Phase 2 Round 2049 -->
+<!-- Phase 2 Round 2050 -->
+<!-- Phase 2 Round 2051 -->
+<!-- Phase 2 Round 2052 -->
+<!-- Phase 2 Round 2053 -->
+<!-- Phase 2 Round 2054 -->
+<!-- Phase 2 Round 2055 -->
+<!-- Phase 2 Round 2056 -->
+<!-- Phase 2 Round 2057 -->
+<!-- Phase 2 Round 2058 -->
+<!-- Phase 2 Round 2059 -->
+<!-- Phase 2 Round 2061 -->
+<!-- Phase 2 Round 2062 -->
+<!-- Phase 2 Round 2063 -->
+<!-- Phase 2 Round 2064 -->
+<!-- Phase 2 Round 2065 -->
+<!-- Phase 2 Round 2066 -->
+<!-- Phase 2 Round 2068 -->
+<!-- Phase 2 Round 2069 -->
+<!-- Phase 2 Round 2070 -->
+<!-- Phase 2 Round 2071 -->
+<!-- Phase 2 Round 2072 -->
+<!-- Phase 2 Round 2073 -->
+<!-- Phase 2 Round 2074 -->
+<!-- Phase 2 Round 2075 -->
+<!-- Phase 2 Round 2076 -->
+<!-- Phase 2 Round 2077 -->
+<!-- Phase 2 Round 2078 -->
+<!-- Phase 2 Round 2079 -->
+<!-- Phase 2 Round 2081 -->
+<!-- Phase 2 Round 2082 -->
+<!-- Phase 2 Round 2083 -->
+<!-- Phase 2 Round 2084 -->
+<!-- Phase 2 Round 2085 -->
+<!-- Phase 2 Round 2086 -->
+<!-- Phase 2 Round 2087 -->
+<!-- Phase 2 Round 2088 -->
+<!-- Phase 2 Round 2089 -->
+<!-- Phase 2 Round 2090 -->
+<!-- Phase 2 Round 2091 -->
+<!-- Phase 2 Round 2092 -->
+<!-- Phase 2 Round 2093 -->
+<!-- Phase 2 Round 2094 -->
+<!-- Phase 2 Round 2095 -->
+<!-- Phase 2 Round 2096 -->
+<!-- Phase 2 Round 2097 -->
+<!-- Phase 2 Round 2098 -->
+<!-- Phase 2 Round 2099 -->
+<!-- Phase 2 Round 2100 -->
+<!-- Phase 2 Round 2101 -->
+<!-- Phase 2 Round 2102 -->
+<!-- Phase 2 Round 2103 -->
+<!-- Phase 2 Round 2104 -->
+<!-- Phase 2 Round 2105 -->
+<!-- Phase 2 Round 2106 -->
+<!-- Phase 2 Round 2107 -->
+<!-- Phase 2 Round 2108 -->
+<!-- Phase 2 Round 2109 -->
+<!-- Phase 2 Round 2110 -->
+<!-- Phase 2 Round 2111 -->
+<!-- Phase 2 Round 2112 -->
+<!-- Phase 2 Round 2113 -->
+<!-- Phase 2 Round 2114 -->
+<!-- Phase 2 Round 2115 -->
+<!-- Phase 2 Round 2116 -->
+<!-- Phase 2 Round 2117 -->
+<!-- Phase 2 Round 2118 -->
+<!-- Phase 2 Round 2119 -->
+<!-- Phase 2 Round 2120 -->
+<!-- Phase 2 Round 2121 -->
+<!-- Phase 2 Round 2122 -->
+<!-- Phase 2 Round 2123 -->
+<!-- Phase 2 Round 2124 -->
+<!-- Phase 2 Round 2125 -->
+<!-- Phase 2 Round 2126 -->
+<!-- Phase 2 Round 2127 -->
+<!-- Phase 2 Round 2128 -->
+<!-- Phase 2 Round 2129 -->
+<!-- Phase 2 Round 2130 -->
+<!-- Phase 2 Round 2131 -->
+<!-- Phase 2 Round 2132 -->
+<!-- Phase 2 Round 2133 -->
+<!-- Phase 2 Round 2134 -->
+<!-- Phase 2 Round 2135 -->
+<!-- Phase 2 Round 2136 -->
+<!-- Phase 2 Round 2137 -->
+<!-- Phase 2 Round 2138 -->
+<!-- Phase 2 Round 2139 -->
+<!-- Phase 2 Round 2140 -->
+<!-- Phase 2 Round 2141 -->
+<!-- Phase 2 Round 2142 -->
+<!-- Phase 2 Round 2143 -->
+<!-- Phase 2 Round 2144 -->
+<!-- Phase 2 Round 2163 -->
+<!-- Phase 2 Round 2145 -->
+<!-- Phase 2 Round 2146 -->
+<!-- Phase 2 Round 2165 -->
+<!-- Phase 2 Round 2147 -->
+<!-- Phase 2 Round 2166 -->
+<!-- Phase 2 Round 2148 -->
+<!-- Phase 2 Round 2149 -->
+<!-- Phase 2 Round 2150 -->
+<!-- Phase 2 Round 2151 -->
+<!-- Phase 2 Round 2168 -->
+<!-- Phase 2 Round 2152 -->
+<!-- Phase 2 Round 2169 -->
+<!-- Phase 2 Round 2153 -->
+<!-- Phase 2 Round 2154 -->
+<!-- Phase 2 Round 2170 -->
+<!-- Phase 2 Round 2155 -->
+<!-- Phase 2 Round 2156 -->
+<!-- Phase 2 Round 2157 -->
+<!-- Phase 2 Round 2172 -->
+<!-- Phase 2 Round 2158 -->
+<!-- Phase 2 Round 2173 -->
+<!-- Phase 2 Round 2159 -->
+<!-- Phase 2 Round 2174 -->
+<!-- Phase 2 Round 2160 -->
+<!-- Phase 2 Round 2175 -->
+<!-- Phase 2 Round 2161 -->
+<!-- Phase 2 Round 2162 -->
+<!-- Phase 2 Round 2176 -->
+<!-- Phase 2 Round 2163 -->
+<!-- Phase 2 Round 2177 -->
+<!-- Phase 2 Round 2178 -->
+<!-- Phase 2 Round 2165 -->
+<!-- Phase 2 Round 2166 -->
+<!-- Phase 2 Round 2179 -->
+<!-- Phase 2 Round 2167 -->
+<!-- Phase 2 Round 2180 -->
+<!-- Phase 2 Round 2181 -->
+<!-- Phase 2 Round 2183 -->
+<!-- Phase 2 Round 2171 -->
+<!-- Phase 2 Round 2184 -->
+<!-- Phase 2 Round 2185 -->
+<!-- Phase 2 Round 2186 -->
+<!-- Phase 2 Round 2188 -->
+<!-- Phase 2 Round 2190 -->
+<!-- Phase 2 Round 2191 -->
+<!-- Phase 2 Round 2193 -->
+<!-- Phase 2 Round 2182 -->
+<!-- Phase 2 Round 2195 -->
+<!-- Phase 2 Round 2197 -->
+<!-- Phase 2 Round 2187 -->
+<!-- Phase 2 Round 2199 -->
+<!-- Phase 2 Round 2189 -->
+<!-- Phase 2 Round 2202 -->
+<!-- Phase 2 Round 2203 -->
+<!-- Phase 2 Round 2192 -->
+<!-- Phase 2 Round 2204 -->
+<!-- Phase 2 Round 2194 -->
+<!-- Phase 2 Round 2205 -->
+<!-- Phase 2 Round 2206 -->
+<!-- Phase 2 Round 2196 -->
+<!-- Phase 2 Round 2198 -->
+<!-- Phase 2 Round 2208 -->
+<!-- Phase 2 Round 2209 -->
+<!-- Phase 2 Round 2200 -->
+<!-- Phase 2 Round 2210 -->
+<!-- Phase 2 Round 2201 -->
+<!-- Phase 2 Round 2211 -->
+<!-- Phase 2 Round 2212 -->
+<!-- Phase 2 Round 2213 -->
+<!-- Phase 2 Round 2214 -->
+<!-- Phase 2 Round 2207 -->
+<!-- Phase 2 Round 2216 -->
+<!-- Phase 2 Round 2217 -->
+<!-- Phase 2 Round 2218 -->
+<!-- Phase 2 Round 2219 -->
+<!-- Phase 2 Round 2221 -->
+<!-- Phase 2 Round 2222 -->
+<!-- Phase 2 Round 2214 -->
+<!-- Phase 2 Round 2215 -->
+<!-- Phase 2 Round 2225 -->
+<!-- Phase 2 Round 2226 -->
+<!-- Phase 2 Round 2227 -->
+<!-- Phase 2 Round 2220 -->
+<!-- Phase 2 Round 2228 -->
+<!-- Phase 2 Round 2229 -->
+<!-- Phase 2 Round 2230 -->
+<!-- Phase 2 Round 2223 -->
+<!-- Phase 2 Round 2231 -->
+<!-- Phase 2 Round 2224 -->
+<!-- Phase 2 Round 2232 -->
+<!-- Phase 2 Round 2233 -->
+<!-- Phase 2 Round 2234 -->
+<!-- Phase 2 Round 2235 -->
+<!-- Phase 2 Round 2236 -->
+<!-- Phase 2 Round 2238 -->
+<!-- Phase 2 Round 2239 -->
+<!-- Phase 2 Round 2240 -->
+<!-- Phase 2 Round 2241 -->
+<!-- Phase 2 Round 2242 -->
+<!-- Phase 2 Round 2243 -->
+<!-- Phase 2 Round 2237 -->
+<!-- Phase 2 Round 2244 -->
+<!-- Phase 2 Round 2245 -->
+<!-- Phase 2 Round 2246 -->
+<!-- Phase 2 Round 2248 -->
+<!-- Phase 2 Round 2251 -->
+<!-- Phase 2 Round 2252 -->
+<!-- Phase 2 Round 2247 -->
+<!-- Phase 2 Round 2249 -->
+<!-- Phase 2 Round 2255 -->
+<!-- Phase 2 Round 2250 -->
+<!-- Phase 2 Round 2256 -->
+<!-- Phase 2 Round 2257 -->
+<!-- Phase 2 Round 2253 -->
+<!-- Phase 2 Round 2258 -->
+<!-- Phase 2 Round 2254 -->
+<!-- Phase 2 Round 2259 -->
+<!-- Phase 2 Round 2260 -->
+<!-- Phase 2 Round 2261 -->
+<!-- Phase 2 Round 2262 -->
+<!-- Phase 2 Round 2263 -->
+<!-- Phase 2 Round 2264 -->
+<!-- Phase 2 Round 2266 -->
+<!-- Phase 2 Round 2267 -->
+<!-- Phase 2 Round 2268 -->
+<!-- Phase 2 Round 2264 -->
+<!-- Phase 2 Round 2265 -->
+<!-- Phase 2 Round 2269 -->
+<!-- Phase 2 Round 2272 -->
+<!-- Phase 2 Round 2270 -->
+<!-- Phase 2 Round 2271 -->
+<!-- Phase 2 Round 2274 -->
+<!-- Phase 2 Round 2275 -->
+<!-- Phase 2 Round 2273 -->
+<!-- Phase 2 Round 2276 -->
+<!-- Phase 2 Round 2277 -->
+<!-- Phase 2 Round 2278 -->
+<!-- Phase 2 Round 2280 -->
+<!-- Phase 2 Round 2279 -->
+<!-- Phase 2 Round 2282 -->
+<!-- Phase 2 Round 2283 -->
+<!-- Phase 2 Round 2281 -->
+<!-- Phase 2 Round 2284 -->
+<!-- Phase 2 Round 2285 -->
+<!-- Phase 2 Round 2286 -->
+<!-- Phase 2 Round 2287 -->
+<!-- Phase 2 Round 2288 -->
+<!-- Phase 2 Round 2289 -->
+<!-- Phase 2 Round 2290 -->
+<!-- Phase 2 Round 2290 -->
+<!-- Phase 2 Round 2292 -->
+<!-- Phase 2 Round 2291 -->
+<!-- Phase 2 Round 2294 -->
+<!-- Phase 2 Round 2293 -->
+<!-- Phase 2 Round 2295 -->
+<!-- Phase 2 Round 2296 -->
+<!-- Phase 2 Round 2296 -->
+<!-- Phase 2 Round 2297 -->
+<!-- Phase 2 Round 2298 -->
+<!-- Phase 2 Round 2300 -->
+<!-- Phase 2 Round 2301 -->
+<!-- Phase 2 Round 2302 -->
+<!-- Phase 2 Round 2303 -->
+<!-- Phase 2 Round 2304 -->
+<!-- Phase 2 Round 2305 -->
+<!-- Phase 2 Round 2306 -->
+<!-- Phase 2 Round 2307 -->
+<!-- Phase 2 Round 2308 -->
+<!-- Phase 2 Round 2309 -->
+<!-- Phase 2 Round 2310 -->
+<!-- Phase 2 Round 2311 -->
+<!-- Phase 2 Round 2312 -->
+<!-- Phase 2 Round 2313 -->
+<!-- Phase 2 Round 2314 -->
+<!-- Phase 2 Round 2315 -->
+<!-- Phase 2 Round 2316 -->
+<!-- Phase 2 Round 2317 -->
+<!-- Phase 2 Round 2318 -->
+<!-- Phase 2 Round 2319 -->
+<!-- Phase 2 Round 2320 -->
+<!-- Phase 2 Round 2321 -->
+<!-- Phase 2 Round 2322 -->
+<!-- Phase 2 Round 2323 -->
+<!-- Phase 2 Round 2324 -->
+<!-- Phase 2 Round 2325 -->
+<!-- Phase 2 Round 2326 -->
+<!-- Phase 2 Round 2327 -->
+<!-- Phase 2 Round 2328 -->
+<!-- Phase 2 Round 2329 -->
+<!-- Phase 2 Round 2330 -->
+<!-- Phase 2 Round 2331 -->
+<!-- Phase 2 Round 2332 -->
+<!-- Phase 2 Round 2333 -->
+<!-- Phase 2 Round 2334 -->
+<!-- Phase 2 Round 2335 -->
+<!-- Phase 2 Round 2336 -->
+<!-- Phase 2 Round 2337 -->
+<!-- Phase 2 Round 2338 -->
+<!-- Phase 2 Round 2339 -->
+<!-- Phase 2 Round 2340 -->
+<!-- Phase 2 Round 2341 -->
+<!-- Phase 2 Round 2342 -->
+<!-- Phase 2 Round 2343 -->
+<!-- Phase 2 Round 2344 -->
+<!-- Phase 2 Round 2345 -->
+<!-- Phase 2 Round 2346 -->
+<!-- Phase 2 Round 2347 -->
+<!-- Phase 2 Round 2348 -->
+<!-- Phase 2 Round 2349 -->
+<!-- Phase 2 Round 2350 -->
+<!-- Phase 2 Round 2351 -->
+<!-- Phase 2 Round 2352 -->
+<!-- Phase 2 Round 2353 -->
+<!-- Phase 2 Round 2354 -->
+<!-- Phase 2 Round 2355 -->
+<!-- Phase 2 Round 2356 -->
+<!-- Phase 2 Round 2357 -->
+<!-- Phase 2 Round 2358 -->
+<!-- Phase 2 Round 2359 -->
+<!-- Phase 2 Round 2361 -->
+<!-- Phase 2 Round 2362 -->
+<!-- Phase 2 Round 2363 -->
+<!-- Phase 2 Round 2364 -->
+<!-- Phase 2 Round 2365 -->
+<!-- Phase 2 Round 2366 -->
+<!-- Phase 2 Round 2367 -->
+<!-- Phase 2 Round 2368 -->
+<!-- Phase 2 Round 2369 -->
+<!-- Phase 2 Round 2370 -->
+<!-- Phase 2 Round 2371 -->
+<!-- Phase 2 Round 2372 -->
+<!-- Phase 2 Round 2373 -->
+<!-- Phase 2 Round 2374 -->
+<!-- Phase 2 Round 2375 -->
+<!-- Phase 2 Round 2376 -->
+<!-- Phase 2 Round 2377 -->
+<!-- Phase 2 Round 2378 -->
+<!-- Phase 2 Round 2379 -->
+<!-- Phase 2 Round 2380 -->
+<!-- Phase 2 Round 2381 -->
+<!-- Phase 2 Round 2382 -->
+<!-- Phase 2 Round 2383 -->
+<!-- Phase 2 Round 2384 -->
+<!-- Phase 2 Round 2385 -->
+<!-- Phase 2 Round 2386 -->
+<!-- Phase 2 Round 2387 -->
+<!-- Phase 2 Round 2388 -->
+<!-- Phase 2 Round 2389 -->
+<!-- Phase 2 Round 2390 -->
+<!-- Phase 2 Round 2391 -->
+<!-- Phase 2 Round 2392 -->
+<!-- Phase 2 Round 2393 -->
+<!-- Phase 2 Round 2394 -->
+<!-- Phase 2 Round 2395 -->
+<!-- Phase 2 Round 2396 -->
+<!-- Phase 2 Round 2397 -->
+<!-- Phase 2 Round 2398 -->
+<!-- Phase 2 Round 2399 -->
+<!-- Phase 2 Round 2400 -->
+<!-- Phase 2 Round 2401 -->
+<!-- Phase 2 Round 2402 -->
+<!-- Phase 2 Round 2403 -->
+<!-- Phase 2 Round 2404 -->
+<!-- Phase 2 Round 2405 -->
+<!-- Phase 2 Round 2406 -->
+<!-- Phase 2 Round 2407 -->
+<!-- Phase 2 Round 2408 -->
+<!-- Phase 2 Round 2409 -->
+<!-- Phase 2 Round 2410 -->
+<!-- Phase 2 Round 2411 -->
+<!-- Phase 2 Round 2412 -->
+<!-- Phase 2 Round 2413 -->
+<!-- Phase 2 Round 2414 -->
+<!-- Phase 2 Round 2415 -->
+<!-- Phase 2 Round 2416 -->
+<!-- Phase 2 Round 2417 -->
+<!-- Phase 2 Round 2418 -->
+<!-- Phase 2 Round 2419 -->
+<!-- Phase 2 Round 2420 -->
+<!-- Phase 2 Round 2421 -->
+<!-- Phase 2 Round 2422 -->
+<!-- Phase 2 Round 2423 -->
+<!-- Phase 2 Round 2424 -->
+<!-- Phase 2 Round 2425 -->
+<!-- Phase 2 Round 2426 -->
+<!-- Phase 2 Round 2428 -->
+<!-- Phase 2 Round 2429 -->
+<!-- Phase 2 Round 2430 -->
+<!-- Phase 2 Round 2431 -->
+<!-- Phase 2 Round 2432 -->
+<!-- Phase 2 Round 2433 -->
+<!-- Phase 2 Round 2434 -->
+<!-- Phase 2 Round 2435 -->
+<!-- Phase 2 Round 2436 -->
+<!-- Phase 2 Round 2437 -->
+<!-- Phase 2 Round 2438 -->
+<!-- Phase 2 Round 2439 -->
+<!-- Phase 2 Round 2440 -->
+<!-- Phase 2 Round 2441 -->
+<!-- Phase 2 Round 2442 -->
+<!-- Phase 2 Round 2443 -->
+<!-- Phase 2 Round 2444 -->
+<!-- Phase 2 Round 2445 -->
+<!-- Phase 2 Round 2446 -->
+<!-- Phase 2 Round 2447 -->
+<!-- Phase 2 Round 2448 -->
+<!-- Phase 2 Round 2449 -->
+<!-- Phase 2 Round 2450 -->
+<!-- Phase 2 Round 2452 -->
+<!-- Phase 2 Round 2453 -->
+<!-- Phase 2 Round 2454 -->
+<!-- Phase 2 Round 2455 -->
+<!-- Phase 2 Round 2456 -->
+<!-- Phase 2 Round 2457 -->
+<!-- Phase 2 Round 2458 -->
+<!-- Phase 2 Round 2459 -->
+<!-- Phase 2 Round 2460 -->
+<!-- Phase 2 Round 2461 -->
+<!-- Phase 2 Round 2462 -->
+<!-- Phase 2 Round 2463 -->
+<!-- Phase 2 Round 2464 -->
+<!-- Phase 2 Round 2465 -->
+<!-- Phase 2 Round 2466 -->
+<!-- Phase 2 Round 2467 -->
+<!-- Phase 2 Round 2468 -->
+<!-- Phase 2 Round 2469 -->
+<!-- Phase 2 Round 2470 -->
+<!-- Phase 2 Round 2471 -->
+<!-- Phase 2 Round 2472 -->
+<!-- Phase 2 Round 2473 -->
+<!-- Phase 2 Round 2474 -->
+<!-- Phase 2 Round 2475 -->
+<!-- Phase 2 Round 2475 -->
+<!-- Phase 2 Round 2476 -->
+<!-- Phase 2 Round 2477 -->
+<!-- Phase 2 Round 2478 -->
+<!-- Phase 2 Round 2478 -->
+<!-- Phase 2 Round 2480 -->
+<!-- Phase 2 Round 2480 -->
+<!-- Phase 2 Round 2481 -->
+<!-- Phase 2 Round 2482 -->
+<!-- Phase 2 Round 2482 -->
+<!-- Phase 2 Round 2483 -->
+<!-- Phase 2 Round 2483 -->
+<!-- Phase 2 Round 2484 -->
+<!-- Phase 2 Round 2485 -->
+<!-- Phase 2 Round 2486 -->
+<!-- Phase 2 Round 2486 -->
+<!-- Phase 2 Round 2487 -->
+<!-- Phase 2 Round 2488 -->
+<!-- Phase 2 Round 2489 -->
+<!-- Phase 2 Round 2489 -->
+<!-- Phase 2 Round 2490 -->
+<!-- Phase 2 Round 2491 -->
+<!-- Phase 2 Round 2492 -->
+<!-- Phase 2 Round 2493 -->
+<!-- Phase 2 Round 2494 -->
+<!-- Phase 2 Round 2495 -->
+<!-- Phase 2 Round 2496 -->
+<!-- Phase 2 Round 2497 -->
+<!-- Phase 2 Round 2498 -->
+<!-- Phase 2 Round 2499 -->
+<!-- Phase 2 Round 2498 -->
+<!-- Phase 2 Round 2499 -->
+<!-- Phase 2 Round 2500 -->
+<!-- Phase 2 Round 2501 -->
+<!-- Phase 2 Round 2501 -->
+<!-- Phase 2 Round 2503 -->
+<!-- Phase 2 Round 2504 -->
+<!-- Phase 2 Round 2506 -->
+<!-- Phase 2 Round 2505 -->
+<!-- Phase 2 Round 2508 -->
+<!-- Phase 2 Round 2507 -->
+<!-- Phase 2 Round 2510 -->
+<!-- Phase 2 Round 2509 -->
+<!-- Phase 2 Round 2511 -->
+<!-- Phase 2 Round 2512 -->
+<!-- Phase 2 Round 2513 -->
+<!-- Phase 2 Round 2514 -->
+<!-- Phase 2 Round 2515 -->
+<!-- Phase 2 Round 2516 -->
+<!-- Phase 2 Round 2517 -->
+<!-- Phase 2 Round 2517 -->
+<!-- Phase 2 Round 2518 -->
+<!-- Phase 2 Round 2519 -->
+<!-- Phase 2 Round 2519 -->
+<!-- Phase 2 Round 2520 -->
+<!-- Phase 2 Round 2521 -->
+<!-- Phase 2 Round 2522 -->
+<!-- Phase 2 Round 2522 -->
+<!-- Phase 2 Round 2523 -->
+<!-- Phase 2 Round 2524 -->
+<!-- Phase 2 Round 2524 -->
+<!-- Phase 2 Round 2525 -->
+<!-- Phase 2 Round 2525 -->
+<!-- Phase 2 Round 2526 -->
+<!-- Phase 2 Round 2526 -->
+<!-- Phase 2 Round 2527 -->
+<!-- Phase 2 Round 2528 -->
+<!-- Phase 2 Round 2529 -->
+<!-- Phase 2 Round 2530 -->
+<!-- Phase 2 Round 2531 -->
+<!-- Phase 2 Round 2532 -->
+<!-- Phase 2 Round 2533 -->
+<!-- Phase 2 Round 2533 -->
+<!-- Phase 2 Round 2535 -->
+<!-- Phase 2 Round 2536 -->
+<!-- Phase 2 Round 2537 -->
+<!-- Phase 2 Round 2538 -->
+<!-- Phase 2 Round 2539 -->
+<!-- Phase 2 Round 2540 -->
+<!-- Phase 2 Round 2540 -->
+<!-- Phase 2 Round 2542 -->
+<!-- Phase 2 Round 2543 -->
+<!-- Phase 2 Round 2543 -->
+<!-- Phase 2 Round 2544 -->
+<!-- Phase 2 Round 2545 -->
+<!-- Phase 2 Round 2546 -->
+<!-- Phase 2 Round 2547 -->
+<!-- Phase 2 Round 2548 -->
+<!-- Phase 2 Round 2549 -->
+<!-- Phase 2 Round 2550 -->
+<!-- Phase 2 Round 2550 -->
+<!-- Phase 2 Round 2552 -->
+<!-- Phase 2 Round 2552 -->
+<!-- Phase 2 Round 2553 -->
+<!-- Phase 2 Round 2554 -->
+<!-- Phase 2 Round 2554 -->
+<!-- Phase 2 Round 2555 -->
+<!-- Phase 2 Round 2556 -->
+<!-- Phase 2 Round 2556 -->
+<!-- Phase 2 Round 2557 -->
+<!-- Phase 2 Round 2558 -->
+<!-- Phase 2 Round 2558 -->
+<!-- Phase 2 Round 2560 -->
+<!-- Phase 2 Round 2561 -->
+<!-- Phase 2 Round 2562 -->
+<!-- Phase 2 Round 2562 -->
+<!-- Phase 2 Round 2564 -->
+<!-- Phase 2 Round 2565 -->
+<!-- Phase 2 Round 2565 -->
+<!-- Phase 2 Round 2566 -->
+<!-- Phase 2 Round 2567 -->
+<!-- Phase 2 Round 2568 -->
+<!-- Phase 2 Round 2569 -->
+<!-- Phase 2 Round 2570 -->
+<!-- Phase 2 Round 2570 -->
+<!-- Phase 2 Round 2571 -->
+<!-- Phase 2 Round 2572 -->
+<!-- Phase 2 Round 2572 -->
+<!-- Phase 2 Round 2573 -->
+<!-- Phase 2 Round 2574 -->
+<!-- Phase 2 Round 2574 -->
+<!-- Phase 2 Round 2575 -->
+<!-- Phase 2 Round 2575 -->
+<!-- Phase 2 Round 2576 -->
+<!-- Phase 2 Round 2577 -->
+<!-- Phase 2 Round 2578 -->
+<!-- Phase 2 Round 2578 -->
+<!-- Phase 2 Round 2579 -->
+<!-- Phase 2 Round 2580 -->
+<!-- Phase 2 Round 2580 -->
+<!-- Phase 2 Round 2581 -->
+<!-- Phase 2 Round 2582 -->
+<!-- Phase 2 Round 2583 -->
+<!-- Phase 2 Round 2585 -->
+<!-- Phase 2 Round 2586 -->
+<!-- Phase 2 Round 2587 -->
+<!-- Phase 2 Round 2588 -->
+<!-- Phase 2 Round 2588 -->
+<!-- Phase 2 Round 2589 -->
+<!-- Phase 2 Round 2590 -->
+<!-- Phase 2 Round 2591 -->
+<!-- Phase 2 Round 2592 -->
+<!-- Phase 2 Round 2593 -->
+<!-- Phase 2 Round 2594 -->
+<!-- Phase 2 Round 2595 -->
+<!-- Phase 2 Round 2596 -->
+<!-- Phase 2 Round 2597 -->
+<!-- Phase 2 Round 2598 -->
+<!-- Phase 2 Round 2599 -->
+<!-- Phase 2 Round 2600 -->
+<!-- Phase 2 Round 2601 -->
+<!-- Phase 2 Round 2602 -->
+<!-- Phase 2 Round 2603 -->
+<!-- Phase 2 Round 2604 -->
+<!-- Phase 2 Round 2605 -->
+<!-- Phase 2 Round 2606 -->
+<!-- Phase 2 Round 2607 -->
+<!-- Phase 2 Round 2608 -->
+<!-- Phase 2 Round 2609 -->
+<!-- Phase 2 Round 2610 -->
+<!-- Phase 2 Round 2611 -->
+<!-- Phase 2 Round 2612 -->
+<!-- Phase 2 Round 2613 -->
+<!-- Phase 2 Round 2614 -->
+<!-- Phase 2 Round 2615 -->
+<!-- Phase 2 Round 2616 -->
+<!-- Phase 2 Round 2617 -->
+<!-- Phase 2 Round 2618 -->
+<!-- Phase 2 Round 2619 -->
+<!-- Phase 2 Round 2621 -->
+<!-- Phase 2 Round 2622 -->
+<!-- Phase 2 Round 2623 -->
+<!-- Phase 2 Round 2624 -->
+<!-- Phase 2 Round 2625 -->
+<!-- Phase 2 Round 2626 -->
+<!-- Phase 2 Round 2627 -->
+<!-- Phase 2 Round 2628 -->
+<!-- Phase 2 Round 2629 -->
+<!-- Phase 2 Round 2630 -->
+<!-- Phase 2 Round 2631 -->
+<!-- Phase 2 Round 2632 -->
+<!-- Phase 2 Round 2633 -->
+<!-- Phase 2 Round 2634 -->
+<!-- Phase 2 Round 2635 -->
+<!-- Phase 2 Round 2636 -->
+<!-- Phase 2 Round 2637 -->
+<!-- Phase 2 Round 2638 -->
+<!-- Phase 2 Round 2639 -->
+<!-- Phase 2 Round 2640 -->
+<!-- Phase 2 Round 2641 -->
+<!-- Phase 2 Round 2642 -->
+<!-- Phase 2 Round 2643 -->
+<!-- Phase 2 Round 2644 -->
+<!-- Phase 2 Round 2645 -->
+<!-- Phase 2 Round 2646 -->
+<!-- Phase 2 Round 2647 -->
+<!-- Phase 2 Round 2648 -->
+<!-- Phase 2 Round 2649 -->
+<!-- Phase 2 Round 2650 -->
+<!-- Phase 2 Round 2651 -->
+<!-- Phase 2 Round 2652 -->
+<!-- Phase 2 Round 2653 -->
+<!-- Phase 2 Round 2654 -->
+<!-- Phase 2 Round 2655 -->
+<!-- Phase 2 Round 2656 -->
+<!-- Phase 2 Round 2657 -->
+<!-- Phase 2 Round 2658 -->
+<!-- Phase 2 Round 2659 -->
+<!-- Phase 2 Round 2660 -->
+<!-- Phase 2 Round 2661 -->
+<!-- Phase 2 Round 2662 -->
+<!-- Phase 2 Round 2663 -->
+<!-- Phase 2 Round 2664 -->
+<!-- Phase 2 Round 2665 -->
+<!-- Phase 2 Round 2666 -->
+<!-- Phase 2 Round 2667 -->
+<!-- Phase 2 Round 2668 -->
+<!-- Phase 2 Round 2669 -->
+<!-- Phase 2 Round 2670 -->
+<!-- Phase 2 Round 2672 -->
+<!-- Phase 2 Round 2673 -->
+<!-- Phase 2 Round 2674 -->
+<!-- Phase 2 Round 2675 -->
+<!-- Phase 2 Round 2676 -->
+<!-- Phase 2 Round 2677 -->
+<!-- Phase 2 Round 2678 -->
+<!-- Phase 2 Round 2679 -->
+<!-- Phase 2 Round 2680 -->
+<!-- Phase 2 Round 2681 -->
+<!-- Phase 2 Round 2682 -->
+<!-- Phase 2 Round 2683 -->
+<!-- Phase 2 Round 2684 -->
+<!-- Phase 2 Round 2685 -->
+<!-- Phase 2 Round 2686 -->
+<!-- Phase 2 Round 2687 -->
+<!-- Phase 2 Round 2688 -->
+<!-- Phase 2 Round 2689 -->
+<!-- Phase 2 Round 2690 -->
+<!-- Phase 2 Round 2691 -->
+<!-- Phase 2 Round 2692 -->
+<!-- Phase 2 Round 2693 -->
+<!-- Phase 2 Round 2694 -->
+<!-- Phase 2 Round 2695 -->
+<!-- Phase 2 Round 2696 -->
+<!-- Phase 2 Round 2697 -->
+<!-- Phase 2 Round 2698 -->
+<!-- Phase 2 Round 2699 -->
+<!-- Phase 2 Round 2700 -->
+<!-- Phase 2 Round 2701 -->
+<!-- Phase 2 Round 2702 -->
+<!-- Phase 2 Round 2703 -->
+<!-- Phase 2 Round 2704 -->
+<!-- Phase 2 Round 2705 -->
+<!-- Phase 2 Round 2706 -->
+<!-- Phase 2 Round 2707 -->
+<!-- Phase 2 Round 2708 -->
+<!-- Phase 2 Round 2709 -->
+<!-- Phase 2 Round 2710 -->
+<!-- Phase 2 Round 2711 -->
+<!-- Phase 2 Round 2712 -->
+<!-- Phase 2 Round 2713 -->
+<!-- Phase 2 Round 2714 -->
+<!-- Phase 2 Round 2715 -->
+<!-- Phase 2 Round 2716 -->
+<!-- Phase 2 Round 2717 -->
+<!-- Phase 2 Round 2718 -->
+<!-- Phase 2 Round 2719 -->
+<!-- Phase 2 Round 2720 -->
+<!-- Phase 2 Round 2721 -->
+<!-- Phase 2 Round 2722 -->
+<!-- Phase 2 Round 2723 -->
+<!-- Phase 2 Round 2724 -->
+<!-- Phase 2 Round 2725 -->
+<!-- Phase 2 Round 2726 -->
+<!-- Phase 2 Round 2727 -->
+<!-- Phase 2 Round 2728 -->
+<!-- Phase 2 Round 2729 -->
+<!-- Phase 2 Round 2730 -->
+<!-- Phase 2 Round 2731 -->
+<!-- Phase 2 Round 2733 -->
+<!-- Phase 2 Round 2734 -->
+<!-- Phase 2 Round 2736 -->
+<!-- Phase 2 Round 2737 -->
+<!-- Phase 2 Round 2738 -->
+<!-- Phase 2 Round 2739 -->
+<!-- Phase 2 Round 2740 -->
+<!-- Phase 2 Round 2741 -->
+<!-- Phase 2 Round 2742 -->
+<!-- Phase 2 Round 2743 -->
+<!-- Phase 2 Round 2744 -->
+<!-- Phase 2 Round 2745 -->
+<!-- Phase 2 Round 2746 -->
+<!-- Phase 2 Round 2747 -->
+<!-- Phase 2 Round 2748 -->
+<!-- Phase 2 Round 2749 -->
+<!-- Phase 2 Round 2750 -->
+<!-- Phase 2 Round 2751 -->
+<!-- Phase 2 Round 2752 -->
+<!-- Phase 2 Round 2753 -->
+<!-- Phase 2 Round 2754 -->
+<!-- Phase 2 Round 2755 -->
+<!-- Phase 2 Round 2756 -->
+<!-- Phase 2 Round 2757 -->
+<!-- Phase 2 Round 2758 -->
+<!-- Phase 2 Round 2759 -->
+<!-- Phase 2 Round 2760 -->
+<!-- Phase 2 Round 2761 -->
+<!-- Phase 2 Round 2762 -->
+<!-- Phase 2 Round 2763 -->
+<!-- Phase 2 Round 2764 -->
+<!-- Phase 2 Round 2765 -->
+<!-- Phase 2 Round 2766 -->
+<!-- Phase 2 Round 2767 -->
+<!-- Phase 2 Round 2769 -->
+<!-- Phase 2 Round 2770 -->
+<!-- Phase 2 Round 2771 -->
+<!-- Phase 2 Round 2772 -->
+<!-- Phase 2 Round 2773 -->
+<!-- Phase 2 Round 2774 -->
+<!-- Phase 2 Round 2775 -->
+<!-- Phase 2 Round 2776 -->
+<!-- Phase 2 Round 2777 -->
+<!-- Phase 2 Round 2778 -->
+<!-- Phase 2 Round 2779 -->
+<!-- Phase 2 Round 2780 -->
+<!-- Phase 2 Round 2781 -->
+<!-- Phase 2 Round 2782 -->
+<!-- Phase 2 Round 2783 -->
+<!-- Phase 2 Round 2784 -->
+<!-- Phase 2 Round 2785 -->
+<!-- Phase 2 Round 2786 -->
+<!-- Phase 2 Round 2787 -->
+<!-- Phase 2 Round 2788 -->
+<!-- Phase 2 Round 2790 -->
+<!-- Phase 2 Round 2791 -->
+<!-- Phase 2 Round 2792 -->
+<!-- Phase 2 Round 2793 -->
+<!-- Phase 2 Round 2794 -->
+<!-- Phase 2 Round 2795 -->
+<!-- Phase 2 Round 2796 -->
+<!-- Phase 2 Round 2797 -->
+<!-- Phase 2 Round 2798 -->
+<!-- Phase 2 Round 2799 -->
+<!-- Phase 2 Round 2801 -->
+<!-- Phase 2 Round 2802 -->
+<!-- Phase 2 Round 2803 -->
+<!-- Phase 2 Round 2804 -->
+<!-- Phase 2 Round 2805 -->
+<!-- Phase 2 Round 2807 -->
+<!-- Phase 2 Round 2808 -->
+<!-- Phase 2 Round 2809 -->
+<!-- Phase 2 Round 2810 -->
+<!-- Phase 2 Round 2811 -->
+<!-- Phase 2 Round 2812 -->
+<!-- Phase 2 Round 2813 -->
+<!-- Phase 2 Round 2814 -->
+<!-- Phase 2 Round 2815 -->
+<!-- Phase 2 Round 2816 -->
+<!-- Phase 2 Round 2817 -->
+<!-- Phase 2 Round 2818 -->
+<!-- Phase 2 Round 2820 -->
+<!-- Phase 2 Round 2821 -->
+<!-- Phase 2 Round 2822 -->
+<!-- Phase 2 Round 2824 -->
+<!-- Phase 2 Round 2825 -->
+<!-- Phase 2 Round 2826 -->
+<!-- Phase 2 Round 2827 -->
+<!-- Phase 2 Round 2828 -->
+<!-- Phase 2 Round 2829 -->
+<!-- Phase 2 Round 2830 -->
+<!-- Phase 2 Round 2831 -->
+<!-- Phase 2 Round 2832 -->
+<!-- Phase 2 Round 2833 -->
+<!-- Phase 2 Round 2834 -->
+<!-- Phase 2 Round 2835 -->
+<!-- Phase 2 Round 2836 -->
+<!-- Phase 2 Round 2838 -->
+<!-- Phase 2 Round 2839 -->
+<!-- Phase 2 Round 2840 -->
+<!-- Phase 2 Round 2841 -->
+<!-- Phase 2 Round 2842 -->
+<!-- Phase 2 Round 2843 -->
+<!-- Phase 2 Round 2844 -->
+<!-- Phase 2 Round 2845 -->
+<!-- Phase 2 Round 2847 -->
+<!-- Phase 2 Round 2848 -->
+<!-- Phase 2 Round 2849 -->
+<!-- Phase 2 Round 2850 -->
+<!-- Phase 2 Round 2851 -->
+<!-- Phase 2 Round 2853 -->
+<!-- Phase 2 Round 2854 -->
+<!-- Phase 2 Round 2855 -->
+<!-- Phase 2 Round 2856 -->
+<!-- Phase 2 Round 2857 -->
+<!-- Phase 2 Round 2858 -->
+<!-- Phase 2 Round 2859 -->
+<!-- Phase 2 Round 2860 -->
+<!-- Phase 2 Round 2861 -->
+<!-- Phase 2 Round 2863 -->
+<!-- Phase 2 Round 2864 -->
+<!-- Phase 2 Round 2865 -->
+<!-- Phase 2 Round 2866 -->
+<!-- Phase 2 Round 2867 -->
+<!-- Phase 2 Round 2868 -->
+<!-- Phase 2 Round 2869 -->
+<!-- Phase 2 Round 2871 -->
+<!-- Phase 2 Round 2872 -->
+<!-- Phase 2 Round 2873 -->
+<!-- Phase 2 Round 2874 -->
+<!-- Phase 2 Round 2875 -->
+<!-- Phase 2 Round 2877 -->
+<!-- Phase 2 Round 2878 -->
+<!-- Phase 2 Round 2879 -->
+<!-- Phase 2 Round 2880 -->
+<!-- Phase 2 Round 2881 -->
+<!-- Phase 2 Round 2882 -->
+<!-- Phase 2 Round 2883 -->
+<!-- Phase 2 Round 2884 -->
+<!-- Phase 2 Round 2886 -->
+<!-- Phase 2 Round 2887 -->
+<!-- Phase 2 Round 2888 -->
+<!-- Phase 2 Round 2889 -->
+<!-- Phase 2 Round 2890 -->
+<!-- Phase 2 Round 2891 -->
+<!-- Phase 2 Round 2892 -->
+<!-- Phase 2 Round 2893 -->
+<!-- Phase 2 Round 2894 -->
+<!-- Phase 2 Round 2895 -->
+<!-- Phase 2 Round 2896 -->
+<!-- Phase 2 Round 2897 -->
+<!-- Phase 2 Round 2898 -->
+<!-- Phase 2 Round 2899 -->
+<!-- Phase 2 Round 2900 -->
+<!-- Phase 2 Round 2901 -->
+<!-- Phase 2 Round 2902 -->
+<!-- Phase 2 Round 2903 -->
+<!-- Phase 2 Round 2904 -->
+<!-- Phase 2 Round 2905 -->
+<!-- Phase 2 Round 2906 -->
+<!-- Phase 2 Round 2907 -->
+<!-- Phase 2 Round 2908 -->
+<!-- Phase 2 Round 2909 -->
+<!-- Phase 2 Round 2910 -->
+<!-- Phase 2 Round 2911 -->
+<!-- Phase 2 Round 2912 -->
+<!-- Phase 2 Round 2913 -->
+<!-- Phase 2 Round 2914 -->
+<!-- Phase 2 Round 2915 -->
+<!-- Phase 2 Round 2916 -->
+<!-- Phase 2 Round 2917 -->
+<!-- Phase 2 Round 2919 -->
+<!-- Phase 2 Round 2920 -->
+<!-- Phase 2 Round 2921 -->
+<!-- Phase 2 Round 2922 -->
+<!-- Phase 2 Round 2923 -->
+<!-- Phase 2 Round 2924 -->
+<!-- Phase 2 Round 2925 -->
+<!-- Phase 2 Round 2926 -->
