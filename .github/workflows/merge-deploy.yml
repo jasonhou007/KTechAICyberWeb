@@ -79,3 +79,111 @@ jobs:
               Merged by @${{ github.actor }} at ${new Date().toISOString()}
               `.trim()
             })
+
+      - name: Update GitHub Project ticket status
+        if: github.event.pull_request.number
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const projectNumber = 5;
+            const statusName = "Done";
+            const issueNumber = context.payload.pull_request.number;
+
+            // Find project items for this issue
+            const query = `query($owner: String!, $projectNumber: Int!) {
+              repositoryOwner(login: $owner) {
+                projectV2(number: $projectNumber) {
+                  id
+                  items(first: 100) {
+                    nodes {
+                      id
+                      content {
+                        ... on Issue {
+                          number
+                        }
+                      }
+                      status {
+                        id
+                        name
+                      }
+                    }
+                  }
+                  fieldOptions(first: 100) {
+                    nodes {
+                      ... on ProjectV2SingleSelectFieldConfiguration {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }`;
+
+            const variables = {
+              owner: context.repo.owner,
+              projectNumber: projectNumber
+            };
+
+            const result = await github.graphql(query, variables);
+            const project = result.repositoryOwner.projectV2;
+
+            // Find the item for this issue
+            const item = project.items.nodes.find(
+              node => node.content?.number === issueNumber
+            );
+
+            if (!item) {
+              console.log(`No project item found for issue #${issueNumber}`);
+              return;
+            }
+
+            // Find the status field and its options
+            const statusField = project.fieldOptions.nodes.find(
+              field => field.name?.toLowerCase() === "status"
+            );
+
+            if (!statusField) {
+              console.log("No status field found in project");
+              return;
+            }
+
+            // Find the target status ID
+            const statusOption = statusField.options.find(
+              option => option.name === statusName
+            );
+
+            if (!statusOption) {
+              console.log(`Status '${statusName}' not found. Available:`, statusField.options.map(o => o.name));
+              return;
+            }
+
+            // Update the item status
+            const mutation = `mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $value: String) {
+              updateProjectV2ItemFieldValue(
+                input: {
+                  projectId: $projectId
+                  itemId: $itemId
+                  fieldId: $fieldId
+                  value: $value
+                }
+              ) {
+                projectV2Item {
+                  id
+                }
+              }
+            }`;
+
+            await github.graphql(mutation, {
+              projectId: project.id,
+              itemId: item.id,
+              fieldId: statusField.id,
+              value: statusOption.id
+            });
+
+            console.log(`✓ Updated ticket #${issueNumber} status to '${statusName}'`);
