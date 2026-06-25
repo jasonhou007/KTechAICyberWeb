@@ -1,0 +1,81 @@
+name: Auto-Deploy on Merge
+
+# Deploy to production when PR is merged to main
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Only run if PR was merged (not just closed)
+  check-merged:
+    runs-on: ubuntu-latest
+    outputs:
+      should_deploy: ${{ steps.check.outputs.merged }}
+    steps:
+      - name: Check if PR was merged
+        id: check
+        run: |
+          if [[ "${{ github.event.pull_request.merged }}" == "true" ]]; then
+            echo "merged=true" >> $GITHUB_OUTPUT
+            echo "✓ PR was merged, proceeding with deployment"
+          else
+            echo "merged=false" >> $GITHUB_OUTPUT
+            echo "✗ PR was closed without merging, skipping deployment"
+          fi
+
+  deploy:
+    needs: check-merged
+    if: needs.check-merged.outputs.should_deploy == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Comment deployment status
+        if: github.event.pull_request.number
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.payload.pull_request.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `
+              ## 🚀 Deployment Complete
+
+              **Environment:** Production (GitHub Pages)
+              **URL:** ${{ steps.deployment.outputs.page_url }}
+
+              Merged by @${{ github.actor }} at ${new Date().toISOString()}
+              `.trim()
+            })
