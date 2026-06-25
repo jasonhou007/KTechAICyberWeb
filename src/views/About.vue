@@ -1,20 +1,34 @@
 <template>
   <div class="about">
     <section class="about-hero" aria-labelledby="about-heading">
-      <h1 id="about-heading" class="page-title">ABOUT <span class="accent">KTECH</span></h1>
-      <p class="page-subtitle">Innovating at the intersection of AI and humanity</p>
+      <h1 id="about-heading" class="page-title">{{ t('about.title') }}</h1>
+      <p class="page-subtitle">{{ t('about.subtitle') }}</p>
     </section>
     <main class="about-content" aria-labelledby="mission-heading">
       <article class="content-block">
-        <h2 id="mission-heading">Our Mission</h2>
-        <p>KTech is dedicated to building transformative AI solutions that push the boundaries of what's possible.</p>
+        <h2 id="mission-heading">{{ t('about.mission.heading') }}</h2>
+        <p>{{ t('about.mission.description') }}</p>
       </article>
       <dl class="stats-grid">
-        <div class="stat-item" v-for="stat in stats" :key="stat.label">
-          <dt class="sr-only">{{ stat.label }}</dt>
+        <div class="stat-item">
+          <dt class="sr-only">{{ t('about.stats.projects.label') }}</dt>
           <dd>
-            <div class="stat-value">{{ stat.value }}</div>
-            <div class="stat-label">{{ stat.label }}</div>
+            <div class="stat-value">{{ t('about.stats.projects.value') }}</div>
+            <div class="stat-label">{{ t('about.stats.projects.label') }}</div>
+          </dd>
+        </div>
+        <div class="stat-item">
+          <dt class="sr-only">{{ t('about.stats.commitment.label') }}</dt>
+          <dd>
+            <div class="stat-value">{{ t('about.stats.commitment.value') }}</div>
+            <div class="stat-label">{{ t('about.stats.commitment.label') }}</div>
+          </dd>
+        </div>
+        <div class="stat-item">
+          <dt class="sr-only">{{ t('about.stats.innovation.label') }}</dt>
+          <dd>
+            <div class="stat-value">{{ t('about.stats.innovation.value') }}</div>
+            <div class="stat-label">{{ t('about.stats.innovation.label') }}</div>
           </dd>
         </div>
       </dl>
@@ -23,15 +37,26 @@
 </template>
 
 <script>
+import { onMounted } from 'vue'
+import { useLanguage, initLanguage } from '../i18n'
+
 export default {
   name: 'About',
-  data() {
+  setup() {
+    // Initialize language on component mount
+    onMounted(() => {
+      initLanguage()
+    })
+
+    const { t, loadCurrentTranslations } = useLanguage()
+
+    // Load translations
+    onMounted(async () => {
+      await loadCurrentTranslations()
+    })
+
     return {
-      stats: [
-        { value: '50+', label: 'Projects' },
-        { value: '100%', label: 'Commitment' },
-        { value: '24/7', label: 'Innovation' }
-      ]
+      t
     }
   }
 }

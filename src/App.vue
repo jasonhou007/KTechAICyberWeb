@@ -10,10 +10,11 @@
     />
 
     <nav class="cyber-nav">
-      <div class="nav-logo">KTECH<span class="accent">.AI</span></div>
+      <div class="nav-logo">{{ t('nav.logo') }}</div>
       <div class="nav-links">
-        <router-link to="/">Home</router-link>
-        <router-link to="/about">About</router-link>
+        <router-link to="/">{{ t('nav.home') }}</router-link>
+        <router-link to="/about">{{ t('nav.about') }}</router-link>
+        <LanguageSwitcher />
       </div>
     </nav>
     <main class="main-content">
@@ -21,10 +22,10 @@
     </main>
     <footer class="cyber-footer">
       <div class="footer-content">
-        <div class="footer-text">© 2025 KTech AI. All systems operational.</div>
+        <div class="footer-text">{{ t('footer.copyright') }}</div>
         <div class="footer-status">
           <span class="status-dot"></span>
-          <span>ONLINE</span>
+          <span>{{ t('footer.status') }}</span>
         </div>
       </div>
     </footer>
@@ -32,15 +33,32 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useHead } from '@vueuse/head'
 import { getRouteMeta, getStructuredData } from './utils/seo'
+import { useLanguage, initLanguage } from './i18n'
+import LanguageSwitcher from './components/LanguageSwitcher.vue'
 
 export default {
   name: 'App',
+  components: {
+    LanguageSwitcher
+  },
   setup() {
     const route = useRoute()
+
+    // Initialize language on app mount
+    onMounted(() => {
+      initLanguage()
+    })
+
+    const { t, loadCurrentTranslations } = useLanguage()
+
+    // Load translations
+    onMounted(async () => {
+      await loadCurrentTranslations()
+    })
 
     const currentMeta = computed(() => getRouteMeta(route))
     const structuredData = computed(() => getStructuredData(route))
@@ -88,7 +106,8 @@ export default {
     }))
 
     return {
-      structuredData
+      structuredData,
+      t
     }
   }
 }

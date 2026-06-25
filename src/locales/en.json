@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "logo": "KTECH.AI"
+  },
+  "footer": {
+    "copyright": "© 2025 KTech AI. All systems operational.",
+    "status": "ONLINE"
+  },
+  "home": {
+    "title": "KTech AI",
+    "subtitle": "Cyberpunk Intelligence Systems",
+    "hero": {
+      "heading": "Next Generation AI",
+      "description": "Building the future of artificial intelligence with cutting-edge technology and cyberpunk aesthetics."
+    },
+    "stats": {
+      "uptime": {
+        "label": "Uptime",
+        "value": "99.9%"
+      },
+      "requests": {
+        "label": "Requests",
+        "value": "1M+"
+      },
+      "latency": {
+        "label": "Latency",
+        "value": "50ms"
+      }
+    },
+    "features": {
+      "heading": "Key Features",
+      "ai": {
+        "title": "AI Models",
+        "description": "Advanced neural networks powered by state-of-the-art transformers"
+      },
+      "realtime": {
+        "title": "Real-time",
+        "description": "Lightning-fast responses with our optimized infrastructure"
+      },
+      "secure": {
+        "title": "Secure",
+        "description": "Enterprise-grade security with quantum-resistant encryption"
+      }
+    },
+    "cta": {
+      "button": "Get Started",
+      "ariaLabel": "Get started with KTech AI"
+    }
+  },
+  "about": {
+    "title": "ABOUT KTECH",
+    "subtitle": "Innovating at the intersection of AI and humanity",
+    "mission": {
+      "heading": "Our Mission",
+      "description": "KTech is dedicated to building transformative AI solutions that push the boundaries of what's possible."
+    },
+    "stats": {
+      "projects": {
+        "label": "Projects",
+        "value": "50+"
+      },
+      "commitment": {
+        "label": "Commitment",
+        "value": "100%"
+      },
+      "innovation": {
+        "label": "Innovation",
+        "value": "24/7"
+      }
+    }
+  },
+  "language": {
+    "switch": "Switch Language",
+    "en": "English",
+    "zh": "中文"
+  }
+}

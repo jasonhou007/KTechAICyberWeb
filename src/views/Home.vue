@@ -8,37 +8,37 @@
     <main class="content">
       <!-- Header with neon glow -->
       <header class="cyber-header">
-        <h1 class="neon-text glitch-text" data-text="KTech AI">
-          KTech AI
+        <h1 class="neon-text glitch-text" :data-text="t('home.title')">
+          {{ t('home.title') }}
         </h1>
-        <p class="subtitle">Cyberpunk Intelligence Systems</p>
+        <p class="subtitle">{{ t('home.subtitle') }}</p>
       </header>
 
       <!-- Hero section -->
       <section class="hero" aria-labelledby="hero-heading">
         <div class="cyber-card">
-          <h2 id="hero-heading">Next Generation AI</h2>
-          <p>Building the future of artificial intelligence with cutting-edge technology and cyberpunk aesthetics.</p>
+          <h2 id="hero-heading">{{ t('home.hero.heading') }}</h2>
+          <p>{{ t('home.hero.description') }}</p>
           <dl class="stats">
             <div class="stat">
-              <dt class="sr-only">System Uptime</dt>
+              <dt class="sr-only">{{ t('home.stats.uptime.label') }}</dt>
               <dd>
-                <span class="stat-value neon-text">99.9%</span>
-                <span class="stat-label">Uptime</span>
+                <span class="stat-value neon-text">{{ t('home.stats.uptime.value') }}</span>
+                <span class="stat-label">{{ t('home.stats.uptime.label') }}</span>
               </dd>
             </div>
             <div class="stat">
-              <dt class="sr-only">Total Requests</dt>
+              <dt class="sr-only">{{ t('home.stats.requests.label') }}</dt>
               <dd>
-                <span class="stat-value neon-text">1M+</span>
-                <span class="stat-label">Requests</span>
+                <span class="stat-value neon-text">{{ t('home.stats.requests.value') }}</span>
+                <span class="stat-label">{{ t('home.stats.requests.label') }}</span>
               </dd>
             </div>
             <div class="stat">
-              <dt class="sr-only">Response Latency</dt>
+              <dt class="sr-only">{{ t('home.stats.latency.label') }}</dt>
               <dd>
-                <span class="stat-value neon-text">50ms</span>
-                <span class="stat-label">Latency</span>
+                <span class="stat-value neon-text">{{ t('home.stats.latency.value') }}</span>
+                <span class="stat-label">{{ t('home.stats.latency.label') }}</span>
               </dd>
             </div>
           </dl>
@@ -47,28 +47,28 @@
 
       <!-- Features grid -->
       <section class="features" aria-labelledby="features-heading">
-        <h2 id="features-heading" class="sr-only">Key Features</h2>
+        <h2 id="features-heading" class="sr-only">{{ t('home.features.heading') }}</h2>
         <article class="feature-card">
           <div class="feature-icon neon-border" role="img" aria-label="AI Robot Icon">🤖</div>
-          <h3>AI Models</h3>
-          <p>Advanced neural networks powered by state-of-the-art transformers</p>
+          <h3>{{ t('home.features.ai.title') }}</h3>
+          <p>{{ t('home.features.ai.description') }}</p>
         </article>
         <article class="feature-card">
           <div class="feature-icon neon-border" role="img" aria-label="Lightning Bolt Icon">⚡</div>
-          <h3>Real-time</h3>
-          <p>Lightning-fast responses with our optimized infrastructure</p>
+          <h3>{{ t('home.features.realtime.title') }}</h3>
+          <p>{{ t('home.features.realtime.description') }}</p>
         </article>
         <article class="feature-card">
           <div class="feature-icon neon-border" role="img" aria-label="Lock Icon">🔒</div>
-          <h3>Secure</h3>
-          <p>Enterprise-grade security with quantum-resistant encryption</p>
+          <h3>{{ t('home.features.secure.title') }}</h3>
+          <p>{{ t('home.features.secure.description') }}</p>
         </article>
       </section>
 
       <!-- CTA Button -->
       <nav class="cta" aria-label="Call to action">
-        <button class="cyber-button neon-border" aria-label="Get started with KTech AI">
-          <span>Get Started</span>
+        <button class="cyber-button neon-border" :aria-label="t('home.cta.ariaLabel')">
+          <span>{{ t('home.cta.button') }}</span>
         </button>
       </nav>
     </main>
@@ -77,8 +77,19 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useLanguage, initLanguage } from '../i18n'
 
+// Initialize language on component mount
 onMounted(() => {
+  initLanguage()
+})
+
+const { t, loadCurrentTranslations } = useLanguage()
+
+// Load translations
+onMounted(async () => {
+  await loadCurrentTranslations()
+
   // Add entrance animations
   document.querySelectorAll('.feature-card').forEach((card, index) => {
     card.style.animationDelay = `${index * 0.1}s`
