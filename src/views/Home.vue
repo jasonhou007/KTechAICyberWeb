@@ -1,119 +1,351 @@
 <template>
   <div class="home">
-    <section class="hero">
-      <div class="hero-content">
-        <h1 class="hero-title">
-          <span class="title-line">WELCOME TO</span>
-          <span class="title-line title-accent">KTECH AI</span>
+    <!-- Animated background grid -->
+    <div class="grid-bg"></div>
+    <div class="grid-bg grid-bg-2"></div>
+
+    <!-- Main content -->
+    <div class="content">
+      <!-- Header with neon glow -->
+      <header class="cyber-header">
+        <h1 class="neon-text glitch-text" data-text="KTech AI">
+          KTech AI
         </h1>
-        <p class="hero-subtitle">Building the future, one innovation at a time</p>
-        <div class="hero-cta">
-          <button class="cyber-btn">EXPLORE</button>
-          <button class="cyber-btn cyber-btn-secondary">CONNECT</button>
+        <p class="subtitle">Cyberpunk Intelligence Systems</p>
+      </header>
+
+      <!-- Hero section -->
+      <section class="hero">
+        <div class="cyber-card">
+          <h2>Next Generation AI</h2>
+          <p>Building the future of artificial intelligence with cutting-edge technology and cyberpunk aesthetics.</p>
+          <div class="stats">
+            <div class="stat">
+              <span class="stat-value neon-text">99.9%</span>
+              <span class="stat-label">Uptime</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value neon-text">1M+</span>
+              <span class="stat-label">Requests</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value neon-text">50ms</span>
+              <span class="stat-label">Latency</span>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="hero-visual">
-        <div class="grid-circle"></div>
-        <div class="grid-circle"></div>
-        <div class="grid-circle"></div>
-      </div>
-    </section>
-    <section class="features">
-      <h2 class="section-title">CAPABILITIES</h2>
-      <div class="feature-grid">
-        <div class="feature-card" v-for="i in 3" :key="i">
-          <div class="feature-icon">◈</div>
-          <h3>Module {{ i }}</h3>
-          <p>Advanced AI systems integration</p>
+      </section>
+
+      <!-- Features grid -->
+      <section class="features">
+        <div class="feature-card">
+          <div class="feature-icon neon-border">🤖</div>
+          <h3>AI Models</h3>
+          <p>Advanced neural networks powered by state-of-the-art transformers</p>
         </div>
+        <div class="feature-card">
+          <div class="feature-icon neon-border">⚡</div>
+          <h3>Real-time</h3>
+          <p>Lightning-fast responses with our optimized infrastructure</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon neon-border">🔒</div>
+          <h3>Secure</h3>
+          <p>Enterprise-grade security with quantum-resistant encryption</p>
+        </div>
+      </section>
+
+      <!-- CTA Button -->
+      <div class="cta">
+        <button class="cyber-button neon-border">
+          <span>Get Started</span>
+        </button>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
-<script>
-export default { name: 'Home' }
+<script setup>
+import { ref, onMounted } from 'vue'
+
+onMounted(() => {
+  // Add entrance animations
+  document.querySelectorAll('.feature-card').forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.1}s`
+  })
+})
 </script>
 
 <style scoped>
-.hero {
-  min-height: 80vh; display: flex; align-items: center; padding: 0 5%;
+.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  color: #00ff88;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated grid background */
+.grid-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 20s linear infinite;
+}
+
+.grid-bg-2 {
+  background-image:
+    linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100px 100px;
+  animation: gridMove 30s linear infinite reverse;
+}
+
+@keyframes gridMove {
+  0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+  100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Header styles */
+.cyber-header {
+  margin-bottom: 4rem;
+}
+
+h1 {
+  font-size: 5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  margin: 0;
+  text-shadow:
+    0 0 10px #00ff88,
+    0 0 20px #00ff88,
+    0 0 30px #00ff88,
+    0 0 40px #00ff88;
+  animation: neonPulse 2s ease-in-out infinite alternate;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  color: #00ffff;
+  margin-top: 1rem;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+/* Glitch effect */
+.glitch-text {
   position: relative;
 }
-.hero-content { flex: 1; z-index: 2; }
-.hero-title {
-  font-family: 'Orbitron', monospace; font-size: 4rem; font-weight: 900;
-  line-height: 1.1; margin-bottom: 1.5rem;
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
 }
-.title-line { display: block; color: #e0e0e0; letter-spacing: 0.2em; }
-.title-accent {
-  color: #00f0ff; text-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+
+.glitch-text::before {
+  color: #ff00ff;
+  animation: glitch 0.3s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
-.hero-subtitle {
-  font-family: 'Rajdhani', sans-serif; font-size: 1.3rem; color: #888;
-  letter-spacing: 0.15em; margin-bottom: 3rem;
+
+.glitch-text::after {
+  color: #00ffff;
+  animation: glitch 0.3s infinite reverse;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
-.hero-cta { display: flex; gap: 1.5rem; }
-.cyber-btn {
-  font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 600;
-  padding: 1rem 2rem; background: transparent; border: 2px solid #00f0ff;
-  color: #00f0ff; cursor: pointer; letter-spacing: 0.2em;
-  transition: all 0.3s ease; position: relative; overflow: hidden;
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
 }
-.cyber-btn:hover {
-  background: rgba(0, 240, 255, 0.1);
-  box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
-  transform: translateY(-2px);
+
+/* Neon pulse animation */
+@keyframes neonPulse {
+  from {
+    text-shadow:
+      0 0 10px #00ff88,
+      0 0 20px #00ff88,
+      0 0 30px #00ff88;
+  }
+  to {
+    text-shadow:
+      0 0 20px #00ff88,
+      0 0 30px #00ff88,
+      0 0 40px #00ff88,
+      0 0 50px #00ff88,
+      0 0 60px #00ff88;
+  }
 }
-.cyber-btn-secondary { border-color: #ff006e; color: #ff006e; }
-.cyber-btn-secondary:hover {
-  background: rgba(255, 0, 110, 0.1);
-  box-shadow: 0 0 30px rgba(255, 0, 110, 0.4);
+
+/* Card styles */
+.cyber-card {
+  background: rgba(26, 26, 46, 0.8);
+  border: 2px solid #00ff88;
+  border-radius: 10px;
+  padding: 3rem;
+  box-shadow:
+    0 0 20px rgba(0, 255, 136, 0.3),
+    inset 0 0 20px rgba(0, 255, 136, 0.1);
+  margin-bottom: 3rem;
 }
-.hero-visual { flex: 1; position: relative; height: 500px; }
-.grid-circle {
-  position: absolute; border: 2px solid rgba(0, 240, 255, 0.3);
-  border-radius: 50%; animation: rotate 20s linear infinite;
+
+.cyber-card h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: #00ff88;
+  text-shadow: 0 0 10px #00ff88;
 }
-.grid-circle:nth-child(1) {
-  width: 300px; height: 300px; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+
+.cyber-card p {
+  font-size: 1.2rem;
+  color: #00ffff;
+  line-height: 1.8;
 }
-.grid-circle:nth-child(2) {
-  width: 200px; height: 200px; top: 50%; left: 50%;
-  transform: translate(-50%, -50%); animation-direction: reverse;
+
+/* Stats */
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+  gap: 2rem;
 }
-.grid-circle:nth-child(3) {
-  width: 100px; height: 100px; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
+
+.stat {
+  text-align: center;
 }
-@keyframes rotate {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to { transform: translate(-50%, -50%) rotate(360deg); }
+
+.stat-value {
+  display: block;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
-.features { padding: 5rem 5%; }
-.section-title {
-  font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 700;
-  color: #00f0ff; letter-spacing: 0.3em; text-align: center; margin-bottom: 3rem;
+
+.stat-label {
+  font-size: 1rem;
+  color: #00ffff;
 }
-.feature-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
 }
+
 .feature-card {
-  background: rgba(0, 240, 255, 0.05);
-  border: 1px solid rgba(0, 240, 255, 0.2);
-  padding: 2rem; text-align: center; transition: all 0.3s ease;
+  background: rgba(26, 26, 46, 0.6);
+  border: 1px solid #00ff88;
+  border-radius: 10px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
 }
+
 .feature-card:hover {
-  background: rgba(0, 240, 255, 0.1);
-  border-color: rgba(0, 240, 255, 0.5);
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
 }
-.feature-icon { font-size: 2rem; color: #00f0ff; margin-bottom: 1rem; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feature-icon {
+  font-size: 3rem;
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+}
+
 .feature-card h3 {
-  font-family: 'Orbitron', monospace; font-size: 1.2rem;
-  margin-bottom: 0.5rem; color: #e0e0e0;
+  color: #00ff88;
+  margin-bottom: 0.5rem;
 }
-.feature-card p { font-family: 'Rajdhani', sans-serif; color: #888; }
+
+.feature-card p {
+  color: #00ffff;
+  font-size: 0.9rem;
+}
+
+/* Button */
+.cyber-button {
+  background: rgba(0, 255, 136, 0.1);
+  color: #00ff88;
+  border: 2px solid #00ff88;
+  padding: 1rem 3rem;
+  font-size: 1.2rem;
+  font-family: inherit;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cyber-button:hover {
+  background: rgba(0, 255, 136, 0.2);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+  transform: scale(1.05);
+}
+
+/* Neon border effect */
+.neon-border {
+  box-shadow:
+    0 0 5px #00ff88,
+    0 0 10px #00ff88,
+    inset 0 0 5px rgba(0, 255, 136, 0.2);
+}
+
+.neon-text {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 { font-size: 3rem; }
+  .stats { flex-direction: column; }
+  .features { grid-template-columns: 1fr; }
+}
 </style>
