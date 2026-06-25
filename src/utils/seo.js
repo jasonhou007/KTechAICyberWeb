@@ -44,6 +44,12 @@ export function getRouteMeta(route) {
       description: '了解开泰远景信息科技有限公司的愿景、使命和文化。我们致力于成为区域领先的金融科技平台。',
       ogImage: `${SITE_URL}/og-image-about.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-about.jpg`
+    },
+    '/news': {
+      title: 'News & Updates - KTech | KBight Fintech',
+      description: 'Stay updated with the latest news, insights, and updates from KTech. Company announcements, industry insights, technology updates, and events.',
+      ogImage: `${SITE_URL}/og-image-news.jpg`,
+      twitterImage: `${SITE_URL}/twitter-image-news.jpg`
     }
   }
 
@@ -199,6 +205,11 @@ export function getSitemapRoutes() {
       path: '/about',
       changefreq: 'monthly',
       priority: 0.8
+    },
+    {
+      path: '/news',
+      changefreq: 'daily',
+      priority: 0.9
     }
   ]
 }

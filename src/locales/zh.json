@@ -2,56 +2,111 @@
   "nav": {
     "home": "首页",
     "about": "关于",
+    "news": "新闻",
     "logo": "KTECH.AI"
   },
   "footer": {
-    "copyright": "© 2025 KTech AI。所有系统运行正常。",
+    "copyright": "© 2025 KTech AI. 所有系统正常运行。",
     "status": "在线"
   },
   "home": {
     "title": "KTech AI",
     "subtitle": "赛博朋克智能系统",
     "hero": {
-      "title": "下一代人工智能",
+      "heading": "下一代人工智能",
       "description": "运用尖端技术和赛博朋克美学，构建人工智能的未来。"
     },
     "stats": {
-      "uptime": "正常运行时间",
-      "requests": "请求数量",
-      "latency": "响应延迟"
+      "uptime": {
+        "label": "正常运行时间",
+        "value": "99.9%"
+      },
+      "requests": {
+        "label": "请求数",
+        "value": "100万+"
+      },
+      "latency": {
+        "label": "响应延迟",
+        "value": "50毫秒"
+      }
     },
     "features": {
+      "heading": "核心功能",
       "ai": {
         "title": "AI 模型",
         "description": "由最先进的transformer技术驱动的先进神经网络"
       },
       "realtime": {
-        "title": "实时响应",
-        "description": "通过优化的基础设施实现闪电般的快速响应"
+        "title": "实时处理",
+        "description": "通过优化的基础设施实现闪电般快速的响应"
       },
       "secure": {
         "title": "安全可靠",
-        "description": "具有抗量子加密功能的企业级安全保护"
+        "description": "企业级安全，采用抗量子加密技术"
       }
     },
-    "cta": "开始使用"
+    "cta": {
+      "button": "立即开始",
+      "ariaLabel": "开始使用 KTech AI"
+    }
   },
   "about": {
-    "title": "关于",
-    "titleAccent": "KTECH",
-    "subtitle": "在人工智能与人类的交汇处创新",
+    "title": "关于 KTECH",
+    "subtitle": "在人工智能与人类交汇处创新",
     "mission": {
-      "title": "我们的使命",
-      "description": "KTech 致力于构建变革性的 AI 解决方案，不断突破可能的边界。"
+      "heading": "我们的使命",
+      "description": "KTech 致力于构建变革性的 AI 解决方案，不断突破可能性的边界。"
     },
     "stats": {
-      "projects": "项目",
-      "commitment": "承诺",
-      "innovation": "创新"
+      "projects": {
+        "label": "项目",
+        "value": "50+"
+      },
+      "commitment": {
+        "label": "承诺",
+        "value": "100%"
+      },
+      "innovation": {
+        "label": "创新",
+        "value": "24/7"
+      }
     }
   },
   "language": {
-    "button": "语言",
-    "switch": "切换语言"
+    "switch": "切换语言",
+    "en": "English",
+    "zh": "中文"
+  },
+  "a11y": {
+    "skipLink": "跳转到主要内容",
+    "navLabel": "主导航",
+    "mainLabel": "主要内容",
+    "loadingLabel": "加载中",
+    "languageExpanded": "语言菜单已展开",
+    "languageCollapsed": "语言菜单已收起",
+    "loadingProgress": "加载进度",
+    "pageChange": "页面已更改为",
+    "languageChanged": "语言已更改为"
+  },
+  "news": {
+    "title": "新闻动态",
+    "subtitle": "KTech 最新资讯",
+    "categories": {
+      "all": "全部",
+      "company": "公司新闻",
+      "industry": "行业洞察",
+      "technology": "技术更新",
+      "events": "活动资讯"
+    },
+    "filter": "按分类筛选",
+    "loadMore": "加载更多",
+    "noNews": "暂无新闻",
+    "readMore": "阅读更多",
+    "backToNews": "返回新闻",
+    "relatedArticles": "相关文章",
+    "publishedOn": "发布于",
+    "by": "作者",
+    "share": "分享这篇文章",
+    "breadcrumb": "首页 > 新闻"
   }
 }
