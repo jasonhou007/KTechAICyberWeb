@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "home": "首页",
+    "about": "关于",
+    "logo": "KTECH.AI"
+  },
+  "footer": {
+    "copyright": "© 2025 KTech AI。所有系统运行正常。",
+    "status": "在线"
+  },
+  "home": {
+    "title": "KTech AI",
+    "subtitle": "赛博朋克智能系统",
+    "hero": {
+      "title": "下一代人工智能",
+      "description": "运用尖端技术和赛博朋克美学，构建人工智能的未来。"
+    },
+    "stats": {
+      "uptime": "正常运行时间",
+      "requests": "请求数量",
+      "latency": "响应延迟"
+    },
+    "features": {
+      "ai": {
+        "title": "AI 模型",
+        "description": "由最先进的transformer技术驱动的先进神经网络"
+      },
+      "realtime": {
+        "title": "实时响应",
+        "description": "通过优化的基础设施实现闪电般的快速响应"
+      },
+      "secure": {
+        "title": "安全可靠",
+        "description": "具有抗量子加密功能的企业级安全保护"
+      }
+    },
+    "cta": "开始使用"
+  },
+  "about": {
+    "title": "关于",
+    "titleAccent": "KTECH",
+    "subtitle": "在人工智能与人类的交汇处创新",
+    "mission": {
+      "title": "我们的使命",
+      "description": "KTech 致力于构建变革性的 AI 解决方案，不断突破可能的边界。"
+    },
+    "stats": {
+      "projects": "项目",
+      "commitment": "承诺",
+      "innovation": "创新"
+    }
+  },
+  "language": {
+    "button": "语言",
+    "switch": "切换语言"
+  }
+}

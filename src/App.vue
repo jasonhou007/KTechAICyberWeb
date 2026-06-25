@@ -1,77 +1,82 @@
 <template>
-  <div id="app">
-    <!-- JSON-LD Structured Data -->
-    <component
-      v-for="(schema, index) in structuredData"
-      :key="index"
-      :is="'script'"
-      type="application/ld+json"
-      v-text="JSON.stringify(schema)"
-    />
-
-    <!-- Loading Screen -->
-    <LoadingScreen />
-
-    <!-- Scanlines Effect -->
-    <Scanlines />
-
-    <!-- Main Navigation -->
-    <Header />
-
-    <!-- Main Content -->
-    <main>
+  <div class="app">
+    <nav class="cyber-nav">
+      <div class="nav-logo">{{ t('nav.logo') }}</div>
+      <div class="nav-links">
+        <router-link to="/">{{ t('nav.home') }}</router-link>
+        <router-link to="/about">{{ t('nav.about') }}</router-link>
+        <LanguageSwitcher />
+      </div>
+    </nav>
+    <main class="main-content">
       <router-view />
     </main>
-
-    <!-- Footer -->
-    <Footer />
+    <footer class="cyber-footer">
+      <div class="footer-content">
+        <div class="footer-text">{{ t('footer.copyright') }}</div>
+        <div class="footer-status">
+          <span class="status-dot"></span>
+          <span>{{ t('footer.status') }}</span>
+        </div>
+      </div>
+    </footer>
   </div>
 </template>
 
 <script setup>
-/**
- * @component App
- * @description Root application component with SEO and structured layout
- *
- * @example
- * <App />
- */
+import { onMounted } from 'vue'
+import { useLanguage } from './composables/useLanguage'
+import LanguageSwitcher from './components/LanguageSwitcher.vue'
 
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useHead } from '@vueuse/head'
-import { getRouteMeta, getStructuredData } from './utils/seo'
+const { initLanguage, t } = useLanguage()
 
-import Header from './components/Header.vue'
-import Footer from './components/Footer.vue'
-import LoadingScreen from './components/LoadingScreen.vue'
-import Scanlines from './components/Scanlines.vue'
-
-const route = useRoute()
-
-const currentMeta = computed(() => getRouteMeta(route))
-const structuredData = computed(() => getStructuredData(route))
-
-// Update head meta tags reactively
-useHead(() => ({
-  title: currentMeta.value.title,
-  meta: currentMeta.value.meta,
-  link: currentMeta.value.link
-}))
+onMounted(() => {
+  initLanguage()
+})
 </script>
 
-<style>
-@import './assets/styles/main.css';
-</style>
-
 <style scoped>
-#app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+.cyber-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.5rem 3rem; background: rgba(10, 10, 15, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  position: sticky; top: 0; z-index: 100;
 }
-
-main {
-  flex: 1;
+.nav-logo {
+  font-family: 'Orbitron', monospace; font-size: 1.5rem; font-weight: 700;
+  color: #e0e0e0; letter-spacing: 0.2em;
+}
+.nav-logo .accent { color: #00f0ff; }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 500;
+  color: #e0e0e0; text-decoration: none; text-transform: uppercase;
+  letter-spacing: 0.15em; padding: 0.5rem 1rem;
+  border: 1px solid transparent; transition: all 0.3s ease;
+}
+.nav-links a:hover {
+  color: #00f0ff; border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+}
+.nav-links a.router-link-active {
+  color: #00f0ff; border-color: rgba(0, 240, 255, 0.5);
+}
+.main-content { flex: 1; }
+.cyber-footer {
+  padding: 2rem 3rem; background: rgba(10, 10, 15, 0.8);
+  border-top: 1px solid rgba(0, 240, 255, 0.2);
+}
+.footer-content { display: flex; justify-content: space-between; align-items: center; }
+.footer-text { font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; color: #888; }
+.footer-status { display: flex; align-items: center; gap: 0.5rem; }
+.status-dot {
+  width: 8px; height: 8px; background: #00f0ff; border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 10px #00f0ff; }
+  50% { opacity: 0.3; box-shadow: none; }
 }
 </style>

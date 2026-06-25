@@ -1,0 +1,57 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "logo": "KTECH.AI"
+  },
+  "footer": {
+    "copyright": "© 2025 KTech AI. All systems operational.",
+    "status": "ONLINE"
+  },
+  "home": {
+    "title": "KTech AI",
+    "subtitle": "Cyberpunk Intelligence Systems",
+    "hero": {
+      "title": "Next Generation AI",
+      "description": "Building the future of artificial intelligence with cutting-edge technology and cyberpunk aesthetics."
+    },
+    "stats": {
+      "uptime": "Uptime",
+      "requests": "Requests",
+      "latency": "Latency"
+    },
+    "features": {
+      "ai": {
+        "title": "AI Models",
+        "description": "Advanced neural networks powered by state-of-the-art transformers"
+      },
+      "realtime": {
+        "title": "Real-time",
+        "description": "Lightning-fast responses with our optimized infrastructure"
+      },
+      "secure": {
+        "title": "Secure",
+        "description": "Enterprise-grade security with quantum-resistant encryption"
+      }
+    },
+    "cta": "Get Started"
+  },
+  "about": {
+    "title": "ABOUT",
+    "titleAccent": "KTECH",
+    "subtitle": "Innovating at the intersection of AI and humanity",
+    "mission": {
+      "title": "Our Mission",
+      "description": "KTech is dedicated to building transformative AI solutions that push the boundaries of what's possible."
+    },
+    "stats": {
+      "projects": "Projects",
+      "commitment": "Commitment",
+      "innovation": "Innovation"
+    }
+  },
+  "language": {
+    "button": "Language",
+    "switch": "Switch Language"
+  }
+}
