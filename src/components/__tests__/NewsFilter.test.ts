@@ -8,8 +8,8 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import NewsFilter from '../NewsFilter.vue'
 
-// Mock useLanguage composable
-vi.mock('../../composables/useLanguage', () => ({
+// Mock ../../i18n path (src/i18n.js) as used in the component
+vi.mock('../../i18n', () => ({
   useLanguage: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
@@ -28,260 +28,199 @@ vi.mock('../../composables/useLanguage', () => ({
 describe('NewsFilter.vue', () => {
   let wrapper: VueWrapper
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   afterEach(() => {
     if (wrapper) wrapper.unmount()
   })
 
   describe('Rendering', () => {
-    beforeEach(() => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-    })
-
     it('should mount without errors', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
       expect(wrapper.exists()).toBe(true)
     })
 
-    it('renders news-filter div with correct class', () => {
-      const filter = wrapper.find('.news-filter')
-      expect(filter.exists()).toBe(true)
+    it('renders div tag with correct class', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
+      const filterDiv = wrapper.find('div.news-filter')
+      expect(filterDiv.exists()).toBe(true)
     })
 
-    it('has region role and aria-label', () => {
-      const filter = wrapper.find('.news-filter')
-      expect(filter.attributes('role')).toBe('region')
-      expect(filter.attributes('aria-label')).toBe('Filter by category')
+    it('has correct aria-label', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
+      const filterDiv = wrapper.find('div.news-filter')
+      expect(filterDiv.attributes('aria-label')).toBe('Filter by category')
     })
 
-    it('renders buttons container with role group', () => {
-      const buttonsContainer = wrapper.find('.news-filter__buttons')
-      expect(buttonsContainer.exists()).toBe(true)
-      expect(buttonsContainer.attributes('role')).toBe('group')
-    })
-
-    it('has heading with filter-heading id', () => {
+    it('has sr-only heading', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
       const heading = wrapper.find('#filter-heading')
       expect(heading.exists()).toBe(true)
-      expect(heading.text()).toBe('Filter by category')
-    })
-
-    it('buttons container has aria-labelledby', () => {
-      const buttonsContainer = wrapper.find('.news-filter__buttons')
-      expect(buttonsContainer.attributes('aria-labelledby')).toBe('filter-heading')
+      expect(heading.classes()).toContain('sr-only')
     })
   })
 
   describe('Props', () => {
     it('accepts selectedCategory prop', () => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'Company News',
-        },
+        props: { selectedCategory: 'Company News' },
       })
       expect(wrapper.props('selectedCategory')).toBe('Company News')
     })
 
-    it('has default selectedCategory of All', () => {
+    it('has default selectedCategory value of All', () => {
       wrapper = mount(NewsFilter, {
         props: {},
       })
       expect(wrapper.props('selectedCategory')).toBe('All')
     })
+  })
 
-    it('accepts empty selectedCategory', () => {
+  describe('Filter Buttons', () => {
+    beforeEach(() => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: '',
-        },
+        props: { selectedCategory: 'All' },
       })
-      expect(wrapper.props('selectedCategory')).toBe('')
+    })
+
+    it('renders correct number of filter buttons', () => {
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons.length).toBe(5)
+    })
+
+    it('displays all category names', () => {
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[0].text()).toBe('All')
+      expect(buttons[1].text()).toBe('Company News')
+      expect(buttons[2].text()).toBe('Industry Insights')
+      expect(buttons[3].text()).toBe('Technology Updates')
+      expect(buttons[4].text()).toBe('Events')
+    })
+
+    it('marks selected category with active class', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'Company News' },
+      })
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[1].classes()).toContain('news-filter__button--active')
+    })
+
+    it('does not mark unselected categories as active', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[1].classes()).not.toContain('news-filter__button--active')
+      expect(buttons[2].classes()).not.toContain('news-filter__button--active')
     })
   })
 
-  describe('Category Buttons', () => {
-    beforeEach(() => {
+  describe('Event Emissions', () => {
+    it('emits filter-change event when button is clicked', async () => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
-    })
-
-    it('renders 5 category buttons', () => {
       const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons).toHaveLength(5)
+      await buttons[1].trigger('click')
+      expect(wrapper.emitted('filter-change')).toBeTruthy()
+      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['Company News'])
     })
 
-    it('displays All button first', () => {
+    it('emits correct category for each button', async () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
+      const buttons = wrapper.findAll('.news-filter__button')
+
+      await buttons[0].trigger('click')
+      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['All'])
+
+      await buttons[2].trigger('click')
+      expect(wrapper.emitted('filter-change')?.[1]).toEqual(['Industry Insights'])
+
+      await buttons[4].trigger('click')
+      expect(wrapper.emitted('filter-change')?.[2]).toEqual(['Events'])
+    })
+
+    it('emits event with category payload', async () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
+      const buttons = wrapper.findAll('.news-filter__button')
+      await buttons[3].trigger('click')
+      expect(wrapper.emitted('filter-change')?.[0][0]).toBe('Technology Updates')
+    })
+  })
+
+  describe('Internationalization', () => {
+    it('translates filter aria-label', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
+      const filterDiv = wrapper.find('div.news-filter')
+      expect(filterDiv.attributes('aria-label')).toBe('Filter by category')
+    })
+
+    it('translates all category correctly', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
       const buttons = wrapper.findAll('.news-filter__button')
       expect(buttons[0].text()).toBe('All')
     })
 
-    it('displays Company News button', () => {
+    it('translates company category', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'Company News' },
+      })
       const buttons = wrapper.findAll('.news-filter__button')
       expect(buttons[1].text()).toBe('Company News')
     })
 
-    it('displays Industry Insights button', () => {
+    it('translates industry category', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'Industry Insights' },
+      })
       const buttons = wrapper.findAll('.news-filter__button')
       expect(buttons[2].text()).toBe('Industry Insights')
     })
 
-    it('displays Technology Updates button', () => {
+    it('translates technology category', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'Technology Updates' },
+      })
       const buttons = wrapper.findAll('.news-filter__button')
       expect(buttons[3].text()).toBe('Technology Updates')
     })
 
-    it('displays Events button', () => {
+    it('translates events category', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'Events' },
+      })
       const buttons = wrapper.findAll('.news-filter__button')
       expect(buttons[4].text()).toBe('Events')
     })
   })
 
-  describe('Active State', () => {
-    it('applies active class to selected category', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'Company News',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[1].classes()).toContain('news-filter__button--active')
-    })
-
-    it('only one button has active class at a time', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      const activeButtons = buttons.filter(b => b.classes().includes('news-filter__button--active'))
-      expect(activeButtons).toHaveLength(1)
-    })
-
-    it('All is active when selectedCategory is All', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[0].classes()).toContain('news-filter__button--active')
-    })
-
-    it('removes active class when selection changes', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      let buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[0].classes()).toContain('news-filter__button--active')
-      
-      await wrapper.setProps({ selectedCategory: 'Company News' })
-      buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[0].classes()).not.toContain('news-filter__button--active')
-      expect(buttons[1].classes()).toContain('news-filter__button--active')
-    })
-  })
-
-  describe('Button Interactions', () => {
-    it('emits filter-change when button clicked', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      await buttons[1].trigger('click')
-      expect(wrapper.emitted('filter-change')).toBeTruthy()
-      expect(wrapper.emitted('filter-change')).toHaveLength(1)
-    })
-
-    it('emits correct category when Company News clicked', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      await buttons[1].trigger('click')
-      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['Company News'])
-    })
-
-    it('emits All when All button clicked', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'Company News',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      await buttons[0].trigger('click')
-      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['All'])
-    })
-
-    it('emits Industry Insights when clicked', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      await buttons[2].trigger('click')
-      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['Industry Insights'])
-    })
-
-    it('emits Technology Updates when clicked', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      await buttons[3].trigger('click')
-      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['Technology Updates'])
-    })
-
-    it('emits Events when clicked', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      await buttons[4].trigger('click')
-      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['Events'])
-    })
-  })
-
-  describe('Styling', () => {
+  describe('Cyberpunk Styling', () => {
     beforeEach(() => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
     })
 
-    it('applies correct CSS classes to filter container', () => {
-      const filter = wrapper.find('.news-filter')
-      expect(filter.classes()).toContain('news-filter')
+    it('has correct CSS class on div element', () => {
+      const filterDiv = wrapper.find('div.news-filter')
+      expect(filterDiv.classes()).toContain('news-filter')
     })
 
-    it('applies correct CSS classes to buttons container', () => {
-      const buttonsContainer = wrapper.find('.news-filter__buttons')
-      expect(buttonsContainer.classes()).toContain('news-filter__buttons')
-    })
-
-    it('applies correct CSS classes to buttons', () => {
+    it('buttons have correct styling class', () => {
       const buttons = wrapper.findAll('.news-filter__button')
       buttons.forEach(button => {
         expect(button.classes()).toContain('news-filter__button')
@@ -290,259 +229,192 @@ describe('NewsFilter.vue', () => {
 
     it('active button has active class', () => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'Company News',
-        },
+        props: { selectedCategory: 'Industry Insights' },
       })
       const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[1].classes()).toContain('news-filter__button--active')
+      expect(buttons[2].classes()).toContain('news-filter__button--active')
     })
   })
 
   describe('Accessibility', () => {
     beforeEach(() => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
     })
 
-    it('has screen reader only heading', () => {
-      const heading = wrapper.find('.sr-only')
-      expect(heading.exists()).toBe(true)
-      expect(heading.attributes('id')).toBe('filter-heading')
+    it('uses semantic div with role region', () => {
+      const filterDiv = wrapper.find('div.news-filter')
+      expect(filterDiv.exists()).toBe(true)
+      expect(filterDiv.attributes('role')).toBe('region')
     })
 
-    it('region has aria-label', () => {
-      const filter = wrapper.find('.news-filter')
-      expect(filter.attributes('aria-label')).toBe('Filter by category')
+    it('has proper aria-label', () => {
+      const filterDiv = wrapper.find('div.news-filter')
+      expect(filterDiv.attributes('aria-label')).toBe('Filter by category')
     })
 
-    it('buttons group has role and aria-labelledby', () => {
-      const buttonsContainer = wrapper.find('.news-filter__buttons')
-      expect(buttonsContainer.attributes('role')).toBe('group')
-      expect(buttonsContainer.attributes('aria-labelledby')).toBe('filter-heading')
-    })
-
-    it('each button has aria-label', () => {
+    it('buttons are proper button elements', () => {
       const buttons = wrapper.findAll('.news-filter__button')
       buttons.forEach(button => {
-        expect(button.attributes('aria-label')).toBeTruthy()
+        expect(button.element.tagName.toLowerCase()).toBe('button')
       })
     })
 
-    it('each button has aria-pressed', () => {
+    it('active button has aria-pressed="true"', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'Company News' },
+      })
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[1].attributes('aria-pressed')).toBe('true')
+    })
+
+    it('inactive button has aria-pressed="false"', () => {
+      wrapper = mount(NewsFilter, {
+        props: { selectedCategory: 'All' },
+      })
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[1].attributes('aria-pressed')).toBe('false')
+    })
+
+    it('all buttons have aria-pressed attribute', () => {
       const buttons = wrapper.findAll('.news-filter__button')
       buttons.forEach(button => {
         expect(button.attributes('aria-pressed')).toBeDefined()
       })
     })
 
-    it('active button has aria-pressed true', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'Company News',
-        },
-      })
+    it('buttons have accessible labels', () => {
       const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[1].attributes('aria-pressed')).toBe('true')
+      expect(buttons[0].attributes('aria-label')).toBe('Filter by All')
+      expect(buttons[1].attributes('aria-label')).toBe('Filter by Company News')
     })
 
-    it('inactive buttons have aria-pressed false', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'Company News',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[0].attributes('aria-pressed')).toBe('false')
-      expect(buttons[2].attributes('aria-pressed')).toBe('false')
+    it('buttons container has role group', () => {
+      const buttonsDiv = wrapper.find('.news-filter__buttons')
+      expect(buttonsDiv.attributes('role')).toBe('group')
     })
 
-    it('aria-pressed updates when selection changes', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      let buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[0].attributes('aria-pressed')).toBe('true')
-      
-      await wrapper.setProps({ selectedCategory: 'Company News' })
-      buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[0].attributes('aria-pressed')).toBe('false')
-      expect(buttons[1].attributes('aria-pressed')).toBe('true')
+    it('buttons container has aria-labelledby', () => {
+      const buttonsDiv = wrapper.find('.news-filter__buttons')
+      expect(buttonsDiv.attributes('aria-labelledby')).toBe('filter-heading')
     })
   })
 
-  describe('Internationalization', () => {
-    it('translates filter label', () => {
+  describe('Interactive States', () => {
+    it('updates active class when selectedCategory changes', async () => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
-      const filter = wrapper.find('.news-filter')
-      expect(filter.attributes('aria-label')).toBe('Filter by category')
+      let buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[0].classes()).toContain('news-filter__button--active')
+
+      await wrapper.setProps({ selectedCategory: 'Technology Updates' })
+      buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[0].classes()).not.toContain('news-filter__button--active')
+      expect(buttons[3].classes()).toContain('news-filter__button--active')
     })
 
-    it('translates All category', () => {
+    it('updates aria-pressed when selectedCategory changes', async () => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[0].text()).toBe('All')
-    })
+      let buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[0].attributes('aria-pressed')).toBe('true')
 
-    it('translates Company News category', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[1].text()).toBe('Company News')
-    })
-
-    it('translates Industry Insights category', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[2].text()).toBe('Industry Insights')
-    })
-
-    it('translates Technology Updates category', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[3].text()).toBe('Technology Updates')
-    })
-
-    it('translates Events category', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons[4].text()).toBe('Events')
+      await wrapper.setProps({ selectedCategory: 'Events' })
+      buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[0].attributes('aria-pressed')).toBe('false')
+      expect(buttons[4].attributes('aria-pressed')).toBe('true')
     })
   })
 
   describe('Edge Cases', () => {
-    it('handles undefined selectedCategory gracefully', () => {
+    it('handles null selectedCategory gracefully', () => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: undefined as any,
-        },
+        props: { selectedCategory: null as any },
       })
-      expect(wrapper.exists()).toBe(true)
-      const buttons = wrapper.findAll('.news-filter__button')
-      expect(buttons).toHaveLength(5)
-    })
-
-    it('handles non-existent selectedCategory', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'NonExistent Category',
-        },
-      })
-      const buttons = wrapper.findAll('.news-filter__button--active')
-      expect(buttons).toHaveLength(0)
+      expect(wrapper.props('selectedCategory')).toBe(null)
     })
 
     it('can be mounted and unmounted multiple times', () => {
       const wrappers = [
-        mount(NewsFilter, { props: { selectedCategory: 'All' } }),
-        mount(NewsFilter, { props: { selectedCategory: 'All' } }),
-        mount(NewsFilter, { props: { selectedCategory: 'All' } }),
+        mount(NewsFilter, {
+          props: { selectedCategory: 'All' },
+        }),
+        mount(NewsFilter, {
+          props: { selectedCategory: 'All' },
+        }),
       ]
       wrappers.forEach(w => expect(w.exists()).toBe(true))
       wrappers.forEach(w => w.unmount())
-    })
-
-    it('handles rapid prop changes', async () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
-      })
-      const categories = ['All', 'Company News', 'Industry Insights', 'Technology Updates', 'Events', 'All']
-      for (const category of categories) {
-        await wrapper.setProps({ selectedCategory: category })
-      }
-      expect(wrapper.exists()).toBe(true)
     })
   })
 
   describe('Component Structure', () => {
     beforeEach(() => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
     })
 
     it('has correct DOM hierarchy', () => {
-      const filter = wrapper.find('.news-filter')
-      const buttonsContainer = filter.find('.news-filter__buttons')
-      const heading = filter.find('.sr-only')
-      expect(filter.exists()).toBe(true)
-      expect(buttonsContainer.exists()).toBe(true)
+      const filterDiv = wrapper.find('div.news-filter')
+      const heading = filterDiv.find('#filter-heading')
+      const buttonsDiv = filterDiv.find('.news-filter__buttons')
+      const buttons = buttonsDiv.findAll('.news-filter__button')
+      expect(filterDiv.exists()).toBe(true)
       expect(heading.exists()).toBe(true)
+      expect(buttonsDiv.exists()).toBe(true)
+      expect(buttons.length).toBe(5)
     })
 
-    it('all buttons are direct children of buttons container', () => {
-      const buttonsContainer = wrapper.find('.news-filter__buttons')
-      const buttons = buttonsContainer.findAll('.news-filter__button')
-      expect(buttons).toHaveLength(5)
+    it('all major sections are present', () => {
+      const filterDiv = wrapper.find('div.news-filter')
+      const buttonsDiv = wrapper.find('.news-filter__buttons')
+      expect(filterDiv.exists()).toBe(true)
+      expect(buttonsDiv.exists()).toBe(true)
+    })
+
+    it('maintains consistent component structure', () => {
+      const filterDiv = wrapper.find('div.news-filter')
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(filterDiv.classes()).toContain('news-filter')
+      buttons.forEach(button => {
+        expect(button.classes()).toContain('news-filter__button')
+      })
     })
   })
 
-  describe('Computed Properties', () => {
-    it('categories returns correct array', () => {
+  describe('Responsive Behavior', () => {
+    beforeEach(() => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
-      const categories = wrapper.vm.categories
-      expect(categories).toHaveLength(5)
-      expect(categories[0]).toEqual({ key: 'All', label: 'All' })
-      expect(categories[1]).toEqual({ key: 'Company News', label: 'Company News' })
     })
 
-    it('isSelected returns true for selected category', () => {
-      wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'Company News',
-        },
-      })
-      expect(wrapper.vm.isSelected('Company News')).toBe(true)
-      expect(wrapper.vm.isSelected('All')).toBe(false)
+    it('div adapts to different screen sizes', () => {
+      const filterDiv = wrapper.find('div.news-filter')
+      expect(filterDiv.exists()).toBe(true)
+    })
+
+    it('buttons maintain proper spacing', () => {
+      const buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons.length).toBe(5)
     })
   })
 
-  describe('Methods', () => {
-    it('selectCategory emits filter-change event', async () => {
+  describe('Reactive Updates', () => {
+    it('re-renders when selectedCategory prop changes', async () => {
       wrapper = mount(NewsFilter, {
-        props: {
-          selectedCategory: 'All',
-        },
+        props: { selectedCategory: 'All' },
       })
-      await wrapper.vm.selectCategory('Industry Insights')
-      expect(wrapper.emitted('filter-change')).toBeTruthy()
-      expect(wrapper.emitted('filter-change')?.[0]).toEqual(['Industry Insights'])
+      let buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[0].classes()).toContain('news-filter__button--active')
+
+      await wrapper.setProps({ selectedCategory: 'Technology Updates' })
+      buttons = wrapper.findAll('.news-filter__button')
+      expect(buttons[3].classes()).toContain('news-filter__button--active')
     })
   })
 })

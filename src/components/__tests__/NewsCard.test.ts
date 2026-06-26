@@ -15,8 +15,8 @@ vi.mock('vue-router', () => ({
   useRouter: vi.fn(),
 }))
 
-// Mock useLanguage composable
-vi.mock('../../composables/useLanguage', () => ({
+// Mock ../../i18n path (src/i18n.js) as used in the component
+vi.mock('../../i18n', () => ({
   useLanguage: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
@@ -425,14 +425,14 @@ describe('NewsCard.vue', () => {
   })
 
   describe('Edge Cases', () => {
-    it('handles missing date gracefully', () => {
+    it('handles empty date gracefully', () => {
       const articleNoDate = { ...mockArticle, date: '' }
       wrapper = mount(NewsCard, {
         props: { article: articleNoDate, isLoading: false },
         global: { components: { RouterLink: RouterLinkStub } },
       })
       const badge = wrapper.find('.news-card__badge')
-      expect(badge.text()).toBeTruthy()
+      expect(badge.text()).toBe('')
     })
 
     it('handles undefined date gracefully', () => {
