@@ -199,5 +199,71 @@
     "ktechNews": "KTech News",
     "kbtgNews": "KBTG News",
     "learnMore": "Learn more"
+  },
+  "services": {
+    "pm": {
+      "title": "Project and Program Management",
+      "subtitle": "Transform your vision into reality with expert project leadership",
+      "overview": {
+        "title": "Our Approach",
+        "content": "We deliver end-to-end project management services using proven methodologies and cutting-edge tools. From initial planning to successful delivery, our experienced team ensures your projects stay on track, on budget, and aligned with your strategic objectives."
+      },
+      "capabilities": {
+        "title": "Our Capabilities",
+        "agile": {
+          "title": "Agile & Scrum",
+          "description": "Iterative development with sprint planning, daily standups, and continuous improvement cycles"
+        },
+        "waterfall": {
+          "title": "Waterfall",
+          "description": "Traditional sequential approach with clear milestones and structured phases for regulated industries"
+        },
+        "hybrid": {
+          "title": "Hybrid Methods",
+          "description": "Flexible approach combining Agile's adaptability with Waterfall's predictability"
+        },
+        "risk": {
+          "title": "Risk Management",
+          "description": "Proactive identification, assessment, and mitigation of project risks throughout the lifecycle"
+        }
+      },
+      "process": {
+        "title": "Our Process",
+        "discovery": {
+          "title": "Discovery",
+          "description": "Understanding requirements, defining scope, and establishing clear objectives"
+        },
+        "planning": {
+          "title": "Planning",
+          "description": "Creating detailed roadmaps, resource allocation, and timeline development"
+        },
+        "execution": {
+          "title": "Execution",
+          "description": "Implementation with continuous monitoring, stakeholder communication, and progress tracking"
+        },
+        "delivery": {
+          "title": "Delivery",
+          "description": "Quality assurance, user acceptance testing, and seamless deployment"
+        },
+        "support": {
+          "title": "Support",
+          "description": "Post-launch support, performance optimization, and continuous improvement"
+        }
+      },
+      "features": {
+        "title": "Key Features",
+        "sprint": "Sprint Planning & Execution",
+        "velocity": "Velocity Tracking & Analytics",
+        "reporting": "Stakeholder Reporting Dashboards",
+        "collaboration": "Collaborative Tools Integration",
+        "tracking": "Real-time Progress Tracking",
+        "compliance": "Compliance & Documentation"
+      },
+      "cta": {
+        "title": "Ready to Transform Your Projects?",
+        "subtitle": "Let's discuss how our project management expertise can drive your success",
+        "button": "Request Consultation"
+      }
+    }
   }
 }

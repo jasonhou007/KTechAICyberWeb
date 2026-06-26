@@ -1,12 +1,19 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import { createRouter, createWebHistory } from 'vue-router'
 import App from './App.vue'
-import Home from './views/Home.vue'
-import About from './views/About.vue'
+
+// Lazy load route components for code splitting
+const Home = () => import('./views/Home.vue')
+const About = () => import('./views/About.vue')
+const Services = () => import('./views/Services.vue')
+const ServiceProjectManagement = () => import('./views/ServiceProjectManagement.vue')
 
 const routes = [
   { path: '/', component: Home },
-  { path: '/about', component: About }
+  { path: '/about', component: About },
+  { path: '/services', component: Services },
+  { path: '/services/project-management', component: ServiceProjectManagement }
 ]
 
 const router = createRouter({
@@ -15,5 +22,7 @@ const router = createRouter({
 })
 
 const app = createApp(App)
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
 app.mount('#app')
