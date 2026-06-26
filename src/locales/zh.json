@@ -108,5 +108,102 @@
     "by": "作者",
     "share": "分享这篇文章",
     "breadcrumb": "首页 > 新闻"
+  },
+  "services": {
+    "backToServices": "返回服务",
+    "breadcrumb": "首页 > 服务",
+    "relatedServices": "相关服务",
+    "supplyChainFinance": {
+      "title": "供应链金融解决方案",
+      "subtitle": "为供应链优化提供全面的金融服务",
+      "hero": {
+        "heading": "供应链金融解决方案",
+        "description": "通过创新的金融解决方案，为企业赋能，实现供应链优化和业务增长。"
+      },
+      "overview": {
+        "heading": "服务概述",
+        "description": "我们的供应链金融解决方案提供全面的金融服务，旨在优化现金流、降低风险并提高整个供应链生态系统的效率。"
+      },
+      "features": {
+        "heading": "核心功能",
+        "workingCapital": {
+          "title": "营运资金优化",
+          "description": "通过创新的融资方案最大化流动性，改善现金流并减少营运资金约束。"
+        },
+        "riskManagement": {
+          "title": "风险管理",
+          "description": "先进的风险评估和缓解策略，保护您的业务免受供应链中断的影响。"
+        },
+        "digitalPlatform": {
+          "title": "数字平台",
+          "description": "简化的数字体验，提供实时可见性和自动化流程，实现高效运营。"
+        },
+        "flexibleFinancing": {
+          "title": "灵活融资",
+          "description": "量身定制的融资方案，满足多样化的业务需求，提供具有竞争力的利率和条款。"
+        },
+        "supplierNetwork": {
+          "title": "供应商网络",
+          "description": "访问庞大的供应商网络，优化付款条款并加强合作关系。"
+        },
+        "analytics": {
+          "title": "高级分析",
+          "description": "数据驱动的洞察和预测性分析，为明智决策和战略规划提供支持。"
+        }
+      },
+      "benefits": {
+        "heading": "优势",
+        "cashFlow": {
+          "title": "改善现金流",
+          "description": "加速应收账款并优化付款时机，实现更好的流动性管理。"
+        },
+        "riskReduction": {
+          "title": "降低风险",
+          "description": "通过全面的风险评估和管理工具，缓解供应链风险。"
+        },
+        "efficiency": {
+          "title": "提高效率",
+          "description": "通过自动化流程和数字工作流集成简化运营。"
+        },
+        "costSavings": {
+          "title": "节约成本",
+          "description": "通过优化的融资条款和改进的供应商谈判降低运营成本。"
+        }
+      },
+      "process": {
+        "heading": "实施流程",
+        "assessment": {
+          "step": "01",
+          "title": "评估",
+          "description": "分析您当前的供应链结构，确定优化机会。"
+        },
+        "solution": {
+          "step": "02",
+          "title": "方案设计",
+          "description": "根据您的业务需求开发定制化的融资解决方案。"
+        },
+        "integration": {
+          "step": "03",
+          "title": "集成",
+          "description": "与您现有系统和工作流程无缝集成。"
+        },
+        "deployment": {
+          "step": "04",
+          "title": "部署",
+          "description": "推出解决方案并提供全面的培训和支持。"
+        },
+        "optimization": {
+          "step": "05",
+          "title": "优化",
+          "description": "持续监控和优化性能，实现最大价值。"
+        }
+      },
+      "cta": {
+        "heading": "转型您的供应链",
+        "description": "准备好通过创新的金融解决方案优化您的供应链了吗？",
+        "button": "请求咨询",
+        "ariaLabel": "请求供应链金融咨询"
+      }
+    }
   }
 }
