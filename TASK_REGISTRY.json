@@ -1,0 +1,1067 @@
+{
+  "last_sync": "2026-06-26T20:32:24.129021Z",
+  "project": {
+    "owner": "jasonhou007",
+    "repo": "KTechAICyberWeb",
+    "project_number": 5
+  },
+  "tickets": {
+    "1": {
+      "issue_number": 1,
+      "title": "Build a Cyber style of KTech office web",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.873008",
+      "local_path": "projects/kttech-cyber/tickets/1/"
+    },
+    "8": {
+      "issue_number": 8,
+      "title": "FEAT-001: Setup Vitest Unit Testing Framework",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "agent": "subagent",
+      "branch": null,
+      "pr_number": null,
+      "created_at": "2026-06-25T20:00:00Z",
+      "completed_at": "2026-06-25T23:30:15.436557",
+      "local_path": "projects/kttech-cyber/tickets/8/"
+    },
+    "9": {
+      "issue_number": 9,
+      "title": "FEAT-002: Implement Responsive Mobile Navigation",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.882458",
+      "ready_at": "2026-06-26T13:35:00.000000",
+      "started_at": "2026-06-26T14:00:00.000000",
+      "completed_at": "2026-06-26T14:30:00.000000",
+      "local_path": "projects/kttech-cyber/tickets/9/",
+      "agent": "devagent-pipeline-9",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "10": {
+      "issue_number": 10,
+      "title": "Setup Jest Unit Testing Framework",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.890897",
+      "ready_at": "2026-06-26T22:00:00.000000Z",
+      "completed_at": "2026-06-26T22:05:00.000000Z",
+      "close_reason": "duplicate",
+      "local_path": "projects/kttech-cyber/tickets/10/"
+    },
+    "11": {
+      "issue_number": 11,
+      "title": "FEAT-003: Create Services Page Component",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.898416",
+      "ready_at": "2026-06-26T09:00:00.000000",
+      "started_at": "2026-06-26T09:30:00.000000",
+      "completed_at": "2026-06-26T10:15:00.000000",
+      "local_path": "projects/kttech-cyber/tickets/11/",
+      "agent": "devagent-pipeline-11",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "12": {
+      "issue_number": 12,
+      "title": "Refactor Monolithic index.html into Vue Component Structure",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.843616",
+      "local_path": "projects/kttech-cyber/tickets/12/",
+      "agent": "agent-12",
+      "started_at": "2026-06-25T22:44:44.766411",
+      "branch": "autodev-12",
+      "pr_number": "32",
+      "completed_at": "2026-06-25T23:30:15.443747"
+    },
+    "13": {
+      "issue_number": 13,
+      "title": "FEAT-004: Implement Contact Form with Validation",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.905193",
+      "local_path": "projects/kttech-cyber/tickets/13/",
+      "ready_at": "2026-06-26T09:28:24.995403000Z",
+      "started_at": "2026-06-26T16:30:00.000000Z",
+      "completed_at": "2026-06-26T17:15:00.000000Z",
+      "agent": "devagent-pipeline-13",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "14": {
+      "issue_number": 14,
+      "title": "Implement Playwright E2E Testing Suite",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.864877",
+      "local_path": "projects/kttech-cyber/tickets/14/",
+      "agent": "agent-14",
+      "started_at": "2026-06-26T00:04:11.671017",
+      "pr_number": 37,
+      "completed_at": "2026-06-25T23:55:17.959007"
+    },
+    "15": {
+      "issue_number": 15,
+      "title": "FEAT-005: Implement Theme Toggle (Dark/Light Mode)",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.912216",
+      "ready_at": "2026-06-26T09:00:00.000000",
+      "started_at": "2026-06-26T10:35:00.000000",
+      "completed_at": "2026-06-26T10:45:00.000000",
+      "local_path": "projects/kttech-cyber/tickets/15/",
+      "agent": "devagent-pipeline-15",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "16": {
+      "issue_number": 16,
+      "title": "Setup GitHub Actions CI/CD Pipeline",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.921052",
+      "local_path": "projects/kttech-cyber/tickets/16/",
+      "completed_at": "2026-06-25T23:30:15.468416"
+    },
+    "17": {
+      "issue_number": 17,
+      "title": "FEAT-006: Add Loading Skeleton States",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.855275",
+      "local_path": "projects/kttech-cyber/tickets/17/",
+      "agent": "agent-17",
+      "started_at": "2026-06-25T22:45:27.385724",
+      "branch": "autodev-17",
+      "pr_number": "33",
+      "completed_at": "2026-06-25T23:30:15.455533"
+    },
+    "18": {
+      "issue_number": 18,
+      "title": "Optimize Core Web Vitals Performance Metrics",
+      "status": "Backlog",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.929272",
+      "local_path": "projects/kttech-cyber/tickets/18/"
+    },
+    "19": {
+      "issue_number": 19,
+      "title": "Implement WCAG 2.1 AA Accessibility Compliance",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.936114",
+      "local_path": "projects/kttech-cyber/tickets/19/",
+      "completed_at": "2026-06-25T23:30:15.482304"
+    },
+    "20": {
+      "issue_number": 20,
+      "title": "FEAT-007: Performance Optimization and Bundle Analysis",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.943637",
+      "ready_at": "2026-06-26T22:30:00.000000Z",
+      "started_at": "2026-06-27T00:27:00.000000Z",
+      "completed_at": "2026-06-27T02:15:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/20/",
+      "agent": "devagent-pipeline-20",
+      "note": "Bundle analysis completed - 211KB total size, excellent optimization"
+    },
+    "21": {
+      "issue_number": 21,
+      "title": "Implement SEO Optimization and Meta Tags",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.949616",
+      "local_path": "projects/kttech-cyber/tickets/21/",
+      "completed_at": "2026-06-25T23:30:15.488703"
+    },
+    "22": {
+      "issue_number": 22,
+      "title": "Setup Pinia State Management for Application State",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.954814",
+      "local_path": "projects/kttech-cyber/tickets/22/",
+      "ready_at": "2026-06-26T10:14:37.427620000Z",
+      "started_at": "2026-06-26T17:00:00.000000Z",
+      "completed_at": "2026-06-26T18:45:00.000000Z",
+      "agent": "devagent-pipeline-22",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "23": {
+      "issue_number": 23,
+      "title": "FEAT-008: Add Accessibility Improvements (WCAG 2.1 AA)",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.961192",
+      "local_path": "projects/kttech-cyber/tickets/23/",
+      "agent": "prompt-based-agent-23",
+      "started_at": "2026-06-26T00:41:18.979171",
+      "completed_at": "2026-06-26T00:59:26.856615",
+      "review_status": "warning"
+    },
+    "24": {
+      "issue_number": 24,
+      "title": "FEAT-009: Setup CI/CD Pipeline with GitHub Actions",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T22:26:35.967148",
+      "ready_at": "2026-06-26T21:30:00.000000Z",
+      "completed_at": "2026-06-26T22:05:00.000000Z",
+      "close_reason": "duplicate",
+      "local_path": "projects/kttech-cyber/tickets/24/"
+    },
+    "25": {
+      "issue_number": 25,
+      "title": "FEAT-010: Implement SEO Optimization and Meta Tags",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "agent": "seo-agent-25",
+      "agent_id": "a1b860ace6f4ef401",
+      "branch": "autodev-25-seo-optimization",
+      "pr_number": "27",
+      "created_at": "2026-06-25T22:15:00Z",
+      "started_at": "2026-06-25T22:27:04.107930",
+      "completed_at": "2026-06-25T23:30:15.438070",
+      "local_path": "projects/kttech-cyber/tickets/25/"
+    },
+    "26": {
+      "issue_number": 26,
+      "title": "FEAT-011: Create About Page with Cyberpunk Style",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T22:26:35.973090",
+      "local_path": "projects/kttech-cyber/tickets/26/",
+      "ready_at": "2026-06-26T10:56:18.590055000Z",
+      "started_at": "2026-06-26T10:56:23.970526000Z",
+      "agent": "devagent-pipeline-26",
+      "completed_at": "2026-06-26T10:57:40.042752000Z",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      },
+      "pr_number": 64,
+      "branch": "autodev-26-about-page"
+    },
+    "28": {
+      "issue_number": 28,
+      "title": "FEAT-012: Implement Language Switcher (English/Chinese) with English as Default",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T23:30:15.450435",
+      "local_path": "projects/kttech-cyber/tickets/28/",
+      "agent": "N/A",
+      "started_at": "2026-06-26T00:04:11.670394",
+      "completed_at": "2026-06-26T00:04:01.778613",
+      "branch": "autodev-17-v2",
+      "pr_number": 38
+    },
+    "29": {
+      "issue_number": 29,
+      "title": "FEAT-013: Implement News and Updates Section",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T23:30:15.494782",
+      "local_path": "projects/kttech-cyber/tickets/29/",
+      "agent": "prompt-based-agent-29",
+      "started_at": "2026-06-26T07:11:56.762352",
+      "completed_at": "2026-06-26T07:28:08.651139",
+      "review_status": "warning"
+    },
+    "30": {
+      "issue_number": 30,
+      "title": "FEAT-014: Language Switcher Component - EN/中文 Toggle with Default English",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-25T23:30:15.501440",
+      "local_path": "projects/kttech-cyber/tickets/30/",
+      "ready_at": "2026-06-26T07:48:44.875941",
+      "completed_at": "2026-06-26T07:49:39.889063",
+      "close_reason": "duplicate"
+    },
+    "31": {
+      "issue_number": 31,
+      "title": "FEAT-015: News Section Component - KTech News and KBTG News Cards",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T23:30:15.506697",
+      "local_path": "projects/kttech-cyber/tickets/31/",
+      "ready_at": "2026-06-26T10:59:39.867436000Z",
+      "started_at": "2026-06-26T13:20:26.923965000Z",
+      "agent": "devagent-pipeline-31",
+      "completed_at": "2026-06-26T13:21:39.063041000Z",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      },
+      "pr_number": 65,
+      "branch": "autodev-31-news-section"
+    },
+    "34": {
+      "issue_number": 34,
+      "title": "FEAT-016: Navigation Dropdown Menus - About Us, News, Our Business, Join Us",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T23:30:15.512238",
+      "local_path": "projects/kttech-cyber/tickets/34/",
+      "ready_at": "2026-06-26T10:42:24.768117000Z",
+      "started_at": "2026-06-26T10:42:38.114339000Z",
+      "agent": "devagent-pipeline-34",
+      "completed_at": "2026-06-26T10:45:12.856245000Z",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      },
+      "pr_number": 62,
+      "branch": "autodev-34-navigation-dropdowns"
+    },
+    "35": {
+      "issue_number": 35,
+      "title": "FEAT-017: Service Detail Page - Project and Program Management",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-25T23:30:15.520151",
+      "local_path": "projects/kttech-cyber/tickets/35/",
+      "ready_at": "2026-06-26T13:22:40.444845000Z",
+      "started_at": "2026-06-26T13:22:47.463723000Z",
+      "completed_at": "2026-06-26T21:25:00.000000Z",
+      "agent": "devagent-pipeline-35",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      },
+      "branch": "autodev-35-service-pm-page",
+      "pr_number": 67
+    },
+    "36": {
+      "issue_number": 36,
+      "title": "TEST-001: Hero Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T00:00:14.718831",
+      "local_path": "projects/kttech-cyber/tickets/36/",
+      "ready_at": "2026-06-26T10:52:23.947974000Z",
+      "started_at": "2026-06-26T10:52:38.580901000Z",
+      "agent": "devagent-pipeline-36",
+      "completed_at": "2026-06-26T10:54:28.760970000Z",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      },
+      "pr_number": 63,
+      "branch": "autodev-36-hero-tests"
+    },
+    "39": {
+      "issue_number": 39,
+      "title": "FEAT-018: Service Detail Page - Retail Lending Solution (数字零售贷款平台)",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:15:00.000000Z",
+      "started_at": "2026-06-26T23:50:00.000000Z",
+      "completed_at": "2026-06-26T23:57:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/39/",
+      "agent": "devagent-pipeline-39",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "40": {
+      "issue_number": 40,
+      "title": "TEST-002: Services Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:25:00.000000Z",
+      "started_at": "2026-06-27T02:20:00.000000Z",
+      "completed_at": "2026-06-27T02:55:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/40/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-40-services-tests",
+      "pr_number": 90,
+      "test_results": {
+        "total_tests": 43,
+        "passed": 43,
+        "failed": 0
+      },
+      "evaluation_score": 100,
+      "security_status": "APPROVED",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "41": {
+      "issue_number": 41,
+      "title": "TEST-003: Honors Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:25:00.000000Z",
+      "started_at": "2026-06-27T02:10:00.000000Z",
+      "completed_at": "2026-06-27T02:15:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/41/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-41-honors-tests",
+      "pr_number": 80,
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "42": {
+      "issue_number": 42,
+      "title": "TEST-004: Contact Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:25:00.000000Z",
+      "started_at": "2026-06-27T02:55:00.000000Z",
+      "completed_at": "2026-06-27T03:00:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/42/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-42-contact-tests",
+      "pr_number": 92,
+      "test_results": {
+        "total_tests": 49,
+        "passed": 49,
+        "failed": 0
+      },
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "43": {
+      "issue_number": 43,
+      "title": "TEST-005: Footer Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T07:48:44.875950",
+      "ready_at": "2026-06-26T07:48:44.875951",
+      "local_path": "projects/kttech-cyber/tickets/43/",
+      "started_at": "2026-06-26T07:49:54.342934",
+      "agent": "devagent-auto-43",
+      "completed_at": "2026-06-26T07:56:52.356633",
+      "review_status": "warning",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "44": {
+      "issue_number": 44,
+      "title": "TEST-006: Header Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T07:57:43.489562",
+      "ready_at": "2026-06-26T07:57:43.489569",
+      "local_path": "projects/kttech-cyber/tickets/44/",
+      "started_at": "2026-06-26T07:57:51.049460",
+      "agent": "devagent-auto-44",
+      "completed_at": "2026-06-26T08:01:48.615464",
+      "review_status": "warning",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "45": {
+      "issue_number": 45,
+      "title": "TEST-007: Home View Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:25:00.000000Z",
+      "started_at": "2026-06-27T02:10:00.000000Z",
+      "completed_at": "2026-06-27T02:14:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/45/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-45-home-view-tests"
+    },
+    "46": {
+      "issue_number": 46,
+      "title": "TEST-008: About View Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-46-about-view-tests",
+      "pr_number": null,
+      "created_at": "2026-06-26T14:00:00Z",
+      "started_at": "2026-06-26T14:30:00Z",
+      "completed_at": "2026-06-26T14:58:55.425999Z",
+      "local_path": "projects/kttech-cyber/tickets/46/"
+    },
+    "47": {
+      "issue_number": 47,
+      "title": "FEAT-019: Service Detail Page - Supply Chain Finance Solution",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:15:00.000000Z",
+      "completed_at": "2026-06-26T14:48:23.000000Z",
+      "close_reason": "completed",
+      "local_path": "projects/kttech-cyber/tickets/47/"
+    },
+    "48": {
+      "issue_number": 48,
+      "title": "FEAT-020: Service Detail Page - Blockchain",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:15:00.000000Z",
+      "started_at": "2026-06-26T23:58:00.000000Z",
+      "completed_at": "2026-06-26T23:02:53.919950Z",
+      "local_path": "projects/kttech-cyber/tickets/48/",
+      "agent": "kttech-dev-agent",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      },
+      "pr_number": 72,
+      "branch": "autodev-48-blockchain-service-page"
+    },
+    "49": {
+      "issue_number": 49,
+      "title": "FEAT-021: Service Detail Page - Mobile App (移动应用)",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:15:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/49/",
+      "completed_at": "2026-06-26T15:01:52.314297Z",
+      "branch": "autodev-49-mobile-app-page"
+    },
+    "50": {
+      "issue_number": 50,
+      "title": "FEAT-022: News Page - KTech News and KBTG News List",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:10:00.000000Z",
+      "started_at": "2026-06-26T23:59:30.000000Z",
+      "completed_at": "2026-06-27T00:01:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/50/",
+      "agent": "devagent-pipeline-50",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "51": {
+      "issue_number": 51,
+      "title": "FEAT-023: Contact Page - Contact Form and Company Information",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:10:00.000000Z",
+      "started_at": "2026-06-27T00:02:00.000000Z",
+      "completed_at": "2026-06-27T00:04:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/51/",
+      "agent": "devagent-pipeline-51",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "52": {
+      "issue_number": 52,
+      "title": "FEAT-024: Join Us Page - Recruitment and Career Opportunities",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:10:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/52/",
+      "updated_at": "2026-06-26T15:00:13.628Z",
+      "completed_at": "2026-06-26T15:00:13.629Z",
+      "branch": "autodev-52-join-us-page"
+    },
+    "55": {
+      "issue_number": 55,
+      "title": "FEAT-025: Position List Page - Job Openings and Career Opportunities",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:10:00.000000Z",
+      "started_at": "2026-06-27T00:05:00.000000Z",
+      "completed_at": "2026-06-27T00:15:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/55/",
+      "agent": "devagent-pipeline-55",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "56": {
+      "issue_number": 56,
+      "title": "TEST-009: Join Us Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:20:00.000000Z",
+      "started_at": "2026-06-27T00:17:00.000000Z",
+      "completed_at": "2026-06-27T00:20:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/56/",
+      "agent": "devagent-pipeline-56",
+      "note": "JoinUs component created as part of this ticket"
+    },
+    "57": {
+      "issue_number": 57,
+      "title": "TEST-010: Position List Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:20:00.000000Z",
+      "started_at": "2026-06-27T00:21:00.000000Z",
+      "completed_at": "2026-06-27T00:26:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/57/",
+      "agent": "devagent-pipeline-57",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "58": {
+      "issue_number": 58,
+      "title": "TEST-011: News Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:20:00.000000Z",
+      "started_at": "2026-06-27T02:10:00.000000Z",
+      "completed_at": "2026-06-27T02:13:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/58/",
+      "agent": "kttech-dev-agent",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      },
+      "test_results": {
+        "total_tests": 62,
+        "passed": 62,
+        "failed": 0,
+        "coverage": "N/A"
+      },
+      "evaluation_score": 88,
+      "security_status": "APPROVED",
+      "branch": "autodev-58-news-tests"
+    },
+    "59": {
+      "issue_number": 59,
+      "title": "TEST-012: Navigation Dropdown Menus Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T05:33:02.000000",
+      "ready_at": "2026-06-26T14:45:00.000000",
+      "started_at": "2026-06-26T15:00:00.000000",
+      "local_path": "projects/kttech-cyber/tickets/59/",
+      "agent": "devagent-pipeline-59",
+      "completed_at": "2026-06-26T16:30:00.000000",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "60": {
+      "issue_number": 60,
+      "title": "TEST-013: News Section Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:20:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/60/",
+      "completed_at": "2026-06-26T15:21:08.376Z",
+      "branch": "autodev-60-news-tests",
+      "pr_number": 75,
+      "agent": "kttech-dev-agent"
+    },
+    "61": {
+      "issue_number": 61,
+      "title": "FEAT-026: Home Page - Hero Section and Features Grid with Cyberpunk Style",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:10:00.000000Z",
+      "completed_at": "2026-06-27T00:16:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/61/",
+      "note": "Already implemented in src/views/Home.vue"
+    },
+    "66": {
+      "issue_number": 66,
+      "title": "TEST-014: Language Switcher Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "CLOSED",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-66-language-switcher-tests",
+      "pr_number": 70,
+      "created_at": "2026-06-26T22:00:00.000000Z",
+      "ready_at": "2026-06-26T22:20:00.000000Z",
+      "started_at": "2026-06-26T22:40:00.000000Z",
+      "completed_at": "2026-06-26T14:51:45.846633Z",
+      "local_path": "projects/kttech-cyber/tickets/66/"
+    },
+    "68": {
+      "issue_number": 68,
+      "title": "TEST-015: Hero Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T23:45:00.000000Z",
+      "ready_at": "2026-06-26T23:15:00.000000Z",
+      "started_at": "2026-06-27T02:10:00.000000Z",
+      "completed_at": "2026-06-27T02:50:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/68/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-68-hero-tests",
+      "test_results": {
+        "total_tests": 41,
+        "passed": 41,
+        "failed": 0
+      },
+      "evaluation_score": 100,
+      "security_status": "APPROVED",
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "71": {
+      "issue_number": 71,
+      "title": "TEST-016: Culture Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T23:10:00.000000Z",
+      "ready_at": "2026-06-26T23:20:00.000000Z",
+      "started_at": "2026-06-27T02:10:00.000000Z",
+      "completed_at": "2026-06-27T02:13:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/71/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-71-culture-tests"
+    },
+    "78": {
+      "issue_number": 78,
+      "title": "TEST-018: CTA Section Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-26T23:40:00.000000Z",
+      "ready_at": "2026-06-26T23:40:00.000000Z",
+      "started_at": "2026-06-27T02:10:00.000000Z",
+      "completed_at": "2026-06-27T02:13:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/78/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-78-cta-section-tests",
+      "pr_number": 81
+    },
+    "79": {
+      "issue_number": 79,
+      "title": "TEST-019: Features Grid Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T01:10:00.000000Z",
+      "ready_at": "2026-06-27T01:10:00.000000Z",
+      "started_at": "2026-06-27T02:10:00.000000Z",
+      "completed_at": "2026-06-27T02:16:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/79/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-79-features-grid-tests",
+      "pr_number": 82
+    },
+    "83": {
+      "issue_number": 83,
+      "title": "TEST-020: Home View Comprehensive Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T02:25:00.000000Z",
+      "ready_at": "2026-06-27T02:25:00.000000Z",
+      "started_at": "2026-06-27T03:10:00.000000Z",
+      "completed_at": "2026-06-27T03:20:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/83/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-83-home-view-tests",
+      "pr_number": 94,
+      "test_results": {
+        "total_tests": 90,
+        "passed": 90,
+        "failed": 0,
+        "coverage_statements": "95.83%",
+        "coverage_branches": "100%",
+        "coverage_lines": "95.65%"
+      },
+      "evaluation_score": 95.83,
+      "security_status": "APPROVED"
+    },
+    "84": {
+      "issue_number": 84,
+      "title": "FEAT-027: Service Detail Page - Big Data & AI (大数据与人工智能)",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T02:30:00.000000Z",
+      "ready_at": "2026-06-27T02:30:00.000000Z",
+      "started_at": "2026-06-27T03:30:00.000000Z",
+      "completed_at": "2026-06-27T03:45:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/84/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-84-big-data-service",
+      "pr_number": null,
+      "agents_executed": {
+        "planner": true,
+        "coder": true,
+        "security": true,
+        "evaluator": true
+      }
+    },
+    "85": {
+      "issue_number": 85,
+      "title": "FEAT-028: Service Detail Pages Routing Integration",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T02:31:00.000000Z",
+      "ready_at": "2026-06-27T02:31:00.000000Z",
+      "started_at": "2026-06-27T10:00:00.000000Z",
+      "completed_at": "2026-06-27T10:30:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/85/",
+      "agent": "kttech-dev-agent",
+      "branch": "autodev-84-big-data-service",
+      "commit_message": "#85 Add service detail pages routing integration"
+    },
+    "86": {
+      "issue_number": 86,
+      "title": "TEST-021: Big Data Service Component Unit Tests - TDD with Vitest",
+      "status": "Done",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T02:32:00.000000Z",
+      "ready_at": "2026-06-27T02:32:00.000000Z",
+      "started_at": "2026-06-27T04:10:00.000000Z",
+      "completed_at": "2026-06-27T04:12:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/86/",
+      "pr_number": 101,
+      "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/101",
+      "branch": "autodev-86-bigdata-tests"
+    },
+    "87": {
+      "issue_number": 87,
+      "title": "FEAT-029: Privacy Policy Page with GDPR Compliance",
+      "status": "Backlog",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T02:33:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/87/"
+    },
+    "88": {
+      "issue_number": 88,
+      "title": "FEAT-030: Terms of Service Page",
+      "status": "Backlog",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T02:34:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/88/"
+    },
+    "89": {
+      "issue_number": 89,
+      "title": "TEST-022: Footer Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T02:40:00.000000Z",
+      "ready_at": "2026-06-27T02:40:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/89/"
+    },
+    "91": {
+      "issue_number": 91,
+      "title": "TEST-023: SkipLink Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T03:00:00.000000Z",
+      "ready_at": "2026-06-27T03:00:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/91/"
+    },
+    "93": {
+      "issue_number": 93,
+      "title": "TEST-024: NewsCard Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T03:10:00.000000Z",
+      "ready_at": "2026-06-27T03:10:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/93/"
+    },
+    "95": {
+      "issue_number": 95,
+      "title": "TEST-025: InitialLoadingScreen Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T03:15:00.000000Z",
+      "ready_at": "2026-06-27T03:15:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/95/"
+    },
+    "96": {
+      "issue_number": 96,
+      "title": "TEST-026: LoadingScreen Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T03:20:00.000000Z",
+      "ready_at": "2026-06-27T03:20:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/96/"
+    },
+    "97": {
+      "issue_number": 97,
+      "title": "TEST-027: FadeIn Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T03:25:00.000000Z",
+      "ready_at": "2026-06-27T03:25:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/97/"
+    },
+    "98": {
+      "issue_number": 98,
+      "title": "TEST-028: NewsList Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T03:35:00.000000Z",
+      "ready_at": "2026-06-27T03:35:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/98/"
+    },
+    "100": {
+      "issue_number": 100,
+      "title": "TEST-029: NewsFilter Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "created_at": "2026-06-27T04:05:00.000000Z",
+      "ready_at": "2026-06-27T04:05:00.000000Z",
+      "local_path": "projects/kttech-cyber/tickets/100/"
+    },
+    "102": {
+      "issue_number": 102,
+      "title": "TEST-030: SkeletonCard Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "labels": [
+        "enhancement",
+        "Ready"
+      ],
+      "created_at": "2026-06-26T20:22:19.405080Z",
+      "ready_at": "2026-06-26T20:22:19.405080Z",
+      "local_path": "projects/kttech-cyber/tickets/102/",
+      "priority": "MEDIUM-HIGH",
+      "category": "test",
+      "description": "Unit tests for SkeletonCard.vue component - core loading utility"
+    },
+    "103": {
+      "issue_number": 103,
+      "title": "TEST-031: LanguageSwitcher Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "labels": [
+        "enhancement",
+        "Ready"
+      ],
+      "created_at": "2026-06-26T20:30:48.942559Z",
+      "ready_at": "2026-06-26T20:30:48.942559Z",
+      "local_path": "projects/kttech-cyber/tickets/103/",
+      "priority": "HIGH",
+      "category": "test",
+      "description": "Unit tests for LanguageSwitcher.vue component - core i18n utility"
+    },
+    "104": {
+      "issue_number": 104,
+      "title": "TEST-032: Scanlines Component Unit Tests - TDD with Vitest",
+      "status": "Ready",
+      "github_state": "OPEN",
+      "labels": [
+        "enhancement",
+        "Ready"
+      ],
+      "created_at": "2026-06-26T20:32:24.129021Z",
+      "ready_at": "2026-06-26T20:32:24.129021Z",
+      "local_path": "projects/kttech-cyber/tickets/104/",
+      "priority": "MEDIUM-HIGH",
+      "category": "test",
+      "description": "Unit tests for Scanlines.vue component - cyberpunk visual effect"
+    }
+  },
+  "status_flow": {
+    "New": [
+      "Backlog"
+    ],
+    "Backlog": [
+      "Ready"
+    ],
+    "Ready": [
+      "InProgress",
+      "Done"
+    ],
+    "InProgress": [
+      "Done",
+      "Ready"
+    ],
+    "Done": []
+  },
+  "summary": {
+    "total": 67,
+    "by_status": {
+      "Done": 51,
+      "Ready": 13,
+      "Backlog": 3,
+      "InProgress": 0
+    }
+  }
+}
