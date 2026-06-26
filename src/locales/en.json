@@ -6,7 +6,7 @@
     "logo": "KTECH.AI"
   },
   "footer": {
-    "copyright": "© 2025 KTech AI. All systems operational.",
+    "copyright": "\u00a9 2025 KTech AI. All systems operational.",
     "status": "ONLINE"
   },
   "home": {
@@ -75,7 +75,7 @@
   "language": {
     "switch": "Switch Language",
     "en": "English",
-    "zh": "中文"
+    "zh": "\u4e2d\u6587"
   },
   "a11y": {
     "skipLink": "Skip to main content",
@@ -108,5 +108,102 @@
     "by": "By",
     "share": "Share this article",
     "breadcrumb": "Home > News"
+  },
+  "services": {
+    "backToServices": "Back to Services",
+    "breadcrumb": "Home > Services",
+    "relatedServices": "Related Services",
+    "supplyChainFinance": {
+      "title": "Supply Chain Finance Solution",
+      "subtitle": "Comprehensive financial services for supply chain optimization",
+      "hero": {
+        "heading": "Supply Chain Finance Solution",
+        "description": "Empowering businesses with innovative financial solutions for supply chain optimization and growth."
+      },
+      "overview": {
+        "heading": "Service Overview",
+        "description": "Our Supply Chain Finance Solution provides comprehensive financial services designed to optimize cash flow, reduce risk, and enhance efficiency across your entire supply chain ecosystem."
+      },
+      "features": {
+        "heading": "Key Features",
+        "workingCapital": {
+          "title": "Working Capital Optimization",
+          "description": "Maximize liquidity through innovative financing solutions that improve cash flow and reduce working capital constraints."
+        },
+        "riskManagement": {
+          "title": "Risk Management",
+          "description": "Advanced risk assessment and mitigation strategies to protect your business from supply chain disruptions."
+        },
+        "digitalPlatform": {
+          "title": "Digital Platform",
+          "description": "Streamlined digital experience with real-time visibility and automated processes for efficient operations."
+        },
+        "flexibleFinancing": {
+          "title": "Flexible Financing",
+          "description": "Tailored financing options to meet diverse business needs with competitive rates and terms."
+        },
+        "supplierNetwork": {
+          "title": "Supplier Network",
+          "description": "Access to extensive supplier networks with optimized payment terms and strengthened relationships."
+        },
+        "analytics": {
+          "title": "Advanced Analytics",
+          "description": "Data-driven insights and predictive analytics for informed decision-making and strategic planning."
+        }
+      },
+      "benefits": {
+        "heading": "Benefits",
+        "cashFlow": {
+          "title": "Improved Cash Flow",
+          "description": "Accelerate receivables and optimize payment timing for better liquidity management."
+        },
+        "riskReduction": {
+          "title": "Reduced Risk",
+          "description": "Mitigate supply chain risks through comprehensive risk assessment and management tools."
+        },
+        "efficiency": {
+          "title": "Enhanced Efficiency",
+          "description": "Streamline operations with automated processes and digital workflow integration."
+        },
+        "costSavings": {
+          "title": "Cost Savings",
+          "description": "Reduce operational costs through optimized financing terms and improved supplier negotiations."
+        }
+      },
+      "process": {
+        "heading": "Implementation Process",
+        "assessment": {
+          "step": "01",
+          "title": "Assessment",
+          "description": "Analyze your current supply chain structure and identify optimization opportunities."
+        },
+        "solution": {
+          "step": "02",
+          "title": "Solution Design",
+          "description": "Develop customized financing solutions tailored to your business requirements."
+        },
+        "integration": {
+          "step": "03",
+          "title": "Integration",
+          "description": "Seamlessly integrate with your existing systems and workflows."
+        },
+        "deployment": {
+          "step": "04",
+          "title": "Deployment",
+          "description": "Launch the solution with comprehensive training and support."
+        },
+        "optimization": {
+          "step": "05",
+          "title": "Optimization",
+          "description": "Continuously monitor and optimize performance for maximum value."
+        }
+      },
+      "cta": {
+        "heading": "Transform Your Supply Chain",
+        "description": "Ready to optimize your supply chain with innovative financing solutions?",
+        "button": "Request Consultation",
+        "ariaLabel": "Request a consultation for supply chain finance"
+      }
+    }
   }
 }
