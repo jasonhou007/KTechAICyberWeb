@@ -108,5 +108,67 @@
     "by": "作者",
     "share": "分享这篇文章",
     "breadcrumb": "首页 > 新闻"
+  },
+  "mobileApp": {
+    "title": "移动应用",
+    "hero": {
+      "title": "移动",
+      "accent": "应用",
+      "subtitle": "为金融科技行业提供专业的移动解决方案，打造安全直观的数字体验",
+      "tag1": "iOS & Android",
+      "tag2": "安全可靠",
+      "tag3": "用户友好"
+    },
+    "overview": {
+      "title": "概述",
+      "description": "我们的移动应用开发服务专注于创建安全、高性能的金融科技解决方案，满足数字银行和金融服务的不断发展的需求。",
+      "card1Title": "跨平台",
+      "card1Desc": "在 iOS 和 Android 上实现原生性能，统一代码库",
+      "card2Title": "银行级安全",
+      "card2Desc": "多因素认证、加密和合规性",
+      "card3Title": "优化性能",
+      "card3Desc": "快速加载时间和流畅的用户体验"
+    },
+    "features": {
+      "title": "核心功能",
+      "feature1Title": "安全认证",
+      "feature1Desc": "生物识别认证、PIN码和多因素安全保护",
+      "feature2Title": "实时通知",
+      "feature2Desc": "交易、审批和账户更新的即时提醒",
+      "feature3Title": "交易管理",
+      "feature3Desc": "无缝转账、支付和金融操作",
+      "feature4Title": "账户仪表板",
+      "feature4Desc": "余额、历史记录和分析的综合视图",
+      "feature5Title": "生物识别集成",
+      "feature5Desc": "Face ID、指纹和安全生物识别验证",
+      "feature6Title": "离线模式",
+      "feature6Desc": "无互联网连接时可用基本功能"
+    },
+    "benefits": {
+      "title": "选择我们的理由",
+      "description": "我们的移动解决方案将尖端技术与以用户为中心的设计相结合，提供卓越的金融科技体验。",
+      "benefit1": "在金融科技移动开发方面拥有 proven track record",
+      "benefit2": "符合国际安全标准",
+      "benefit3": "快速的开发和部署周期",
+      "benefit4": "24/7 技术支持和维护",
+      "benefit5": "可扩展的架构以支持不断增长的用户群",
+      "benefit6": "定期更新和功能增强"
+    },
+    "cta": {
+      "title": "准备好构建您的移动解决方案了吗？",
+      "description": "联系我们，讨论我们如何将您的金融科技移动应用变为现实。",
+      "button": "开始"
+    },
+    "related": {
+      "title": "相关服务"
+    }
+  },
+  "services": {
+    "projectManagement": "项目管理",
+    "retailCredit": "零售信贷",
+    "supplyChain": "供应链金融",
+    "blockchain": "区块链",
+    "fintechApp": "金融科技应用",
+    "bigData": "大数据与AI"
   }
 }

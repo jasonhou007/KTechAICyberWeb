@@ -6,7 +6,7 @@
     "logo": "KTECH.AI"
   },
   "footer": {
-    "copyright": "© 2025 KTech AI. All systems operational.",
+    "copyright": "\u00a9 2025 KTech AI. All systems operational.",
     "status": "ONLINE"
   },
   "home": {
@@ -75,7 +75,7 @@
   "language": {
     "switch": "Switch Language",
     "en": "English",
-    "zh": "中文"
+    "zh": "\u4e2d\u6587"
   },
   "a11y": {
     "skipLink": "Skip to main content",
@@ -108,5 +108,67 @@
     "by": "By",
     "share": "Share this article",
     "breadcrumb": "Home > News"
+  },
+  "mobileApp": {
+    "title": "Mobile App",
+    "hero": {
+      "title": "Mobile",
+      "accent": "Application",
+      "subtitle": "Professional mobile solutions for the fintech industry, delivering secure and intuitive digital experiences",
+      "tag1": "iOS & Android",
+      "tag2": "Secure",
+      "tag3": "User-Friendly"
+    },
+    "overview": {
+      "title": "Overview",
+      "description": "Our mobile application development services focus on creating secure, high-performance fintech solutions that meet the evolving needs of digital banking and financial services.",
+      "card1Title": "Cross-Platform",
+      "card1Desc": "Native performance on iOS and Android with unified codebase",
+      "card2Title": "Bank-Grade Security",
+      "card2Desc": "Multi-factor authentication, encryption, and compliance",
+      "card3Title": "Optimized Performance",
+      "card3Desc": "Fast loading times and smooth user experience"
+    },
+    "features": {
+      "title": "Core Features",
+      "feature1Title": "Secure Authentication",
+      "feature1Desc": "Biometric authentication, PIN codes, and multi-factor security",
+      "feature2Title": "Real-Time Notifications",
+      "feature2Desc": "Instant alerts for transactions, approvals, and account updates",
+      "feature3Title": "Transaction Management",
+      "feature3Desc": "Seamless transfers, payments, and financial operations",
+      "feature4Title": "Account Dashboard",
+      "feature4Desc": "Comprehensive view of balances, history, and analytics",
+      "feature5Title": "Biometric Integration",
+      "feature5Desc": "Face ID, fingerprint, and secure biometric verification",
+      "feature6Title": "Offline Mode",
+      "feature6Desc": "Basic functionality available without internet connection"
+    },
+    "benefits": {
+      "title": "Why Choose Us",
+      "description": "Our mobile solutions combine cutting-edge technology with user-centric design to deliver exceptional fintech experiences.",
+      "benefit1": "Proven track record in fintech mobile development",
+      "benefit2": "Compliance with international security standards",
+      "benefit3": "Rapid development and deployment cycles",
+      "benefit4": "24/7 technical support and maintenance",
+      "benefit5": "Scalable architecture for growing user bases",
+      "benefit6": "Regular updates and feature enhancements"
+    },
+    "cta": {
+      "title": "Ready to Build Your Mobile Solution?",
+      "description": "Contact us to discuss how we can bring your fintech mobile application to life.",
+      "button": "Get Started"
+    },
+    "related": {
+      "title": "Related Services"
+    }
+  },
+  "services": {
+    "projectManagement": "Project Management",
+    "retailCredit": "Retail Credit",
+    "supplyChain": "Supply Chain Finance",
+    "blockchain": "Blockchain",
+    "fintechApp": "Fintech App",
+    "bigData": "Big Data & AI"
   }
 }
