@@ -8,73 +8,72 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import ServiceBigData from '../ServiceBigData.vue'
 
-// Mock composables
+// Mock useLanguage composable
+const mockTranslations = {
+  'bigData.hero.title': 'Big Data & AI Solutions',
+  'bigData.hero.subtitle': 'Transform Your Business with Intelligent Data Analytics',
+  'bigData.hero.description': 'Harness the power of artificial intelligence and big data analytics to drive innovation, optimize operations, and unlock new opportunities for growth.',
+  'bigData.features.title': 'Core Capabilities',
+  'bigData.features.aiLearning': 'Deep Learning & AI',
+  'bigData.features.aiLearningDesc': 'Advanced neural networks for pattern recognition and predictive modeling',
+  'bigData.features.dataAnalytics': 'Big Data Analytics',
+  'bigData.features.dataAnalyticsDesc': 'Process and analyze massive datasets in real-time',
+  'bigData.features.machineLearning': 'Machine Learning',
+  'bigData.features.machineLearningDesc': 'Custom ML models for business intelligence and automation',
+  'bigData.features.cloudComputing': 'Cloud Computing',
+  'bigData.features.cloudComputingDesc': 'Scalable cloud infrastructure for data processing',
+  'bigData.features.predictiveAnalytics': 'Predictive Analytics',
+  'bigData.features.predictiveAnalyticsDesc': 'Forecast trends and make data-driven decisions',
+  'bigData.features.dataSecurity': 'Data Security',
+  'bigData.features.dataSecurityDesc': 'Enterprise-grade security for sensitive information',
+  'bigData.capabilities.title': 'Technical Expertise',
+  'bigData.capabilities.dataProcessing': 'Data Processing & Engineering',
+  'bigData.capabilities.dataProcessingDesc': 'End-to-end data pipeline solutions for processing petabytes of information',
+  'bigData.capabilities.aiModels': 'AI Model Development',
+  'bigData.capabilities.aiModelsDesc': 'Custom artificial intelligence models tailored to your business needs',
+  'bigData.capabilities.naturalLanguage': 'Natural Language Processing',
+  'bigData.capabilities.naturalLanguageDesc': 'Advanced NLP for sentiment analysis, chatbots, and document processing',
+  'bigData.capabilities.computerVision': 'Computer Vision',
+  'bigData.capabilities.computerVisionDesc': 'Image recognition and visual analytics for automated inspection',
+  'bigData.useCases.title': 'Industry Solutions',
+  'bigData.useCases.fintech': 'Financial Services',
+  'bigData.useCases.fintechDesc': 'Risk assessment, fraud detection, and automated trading systems',
+  'bigData.useCases.fintechBenefit1': 'Real-time fraud detection',
+  'bigData.useCases.fintechBenefit2': 'Credit risk assessment',
+  'bigData.useCases.fintechBenefit3': 'Algorithmic trading',
+  'bigData.useCases.manufacturing': 'Manufacturing',
+  'bigData.useCases.manufacturingDesc': 'Predictive maintenance, quality control, and supply chain optimization',
+  'bigData.useCases.manufacturingBenefit1': 'Equipment monitoring',
+  'bigData.useCases.manufacturingBenefit2': 'Quality assurance',
+  'bigData.useCases.manufacturingBenefit3': 'Process optimization',
+  'bigData.useCases.healthcare': 'Healthcare',
+  'bigData.useCases.healthcareDesc': 'Patient diagnostics, drug discovery, and personalized treatment plans',
+  'bigData.useCases.healthcareBenefit1': 'Medical imaging analysis',
+  'bigData.useCases.healthcareBenefit2': 'Patient outcome prediction',
+  'bigData.useCases.healthcareBenefit3': 'Drug development acceleration',
+  'bigData.stats.title': 'Performance Metrics',
+  'bigData.stats.uptime': 'System Uptime',
+  'bigData.stats.records': 'Records Processed',
+  'bigData.stats.latency': 'Processing Latency',
+  'bigData.stats.models': 'AI Models Deployed',
+  'bigData.cta.title': 'Ready to Transform Your Data?',
+  'bigData.cta.description': "Let's discuss how our Big Data & AI solutions can drive your business forward.",
+  'bigData.cta.primary': 'Contact Us',
+  'bigData.cta.secondary': 'Learn More',
+  'bigData.seo.title': 'Big Data & AI Solutions - KTech Fintech',
+  'bigData.seo.description': 'Enterprise-grade big data analytics and artificial intelligence solutions.'
+}
+
 vi.mock('../../composables/useLanguage', () => ({
-  useLanguage: () => ({
-    t: (key: string) => {
-      const translations: Record<string, string> = {
-        'bigData.hero.title': 'Big Data & AI Solutions',
-        'bigData.hero.subtitle': 'Transform Your Business with Intelligent Data Analytics',
-        'bigData.hero.description': 'Harness the power of artificial intelligence and big data analytics to drive innovation, optimize operations, and unlock new opportunities for growth.',
-        'bigData.features.title': 'Core Capabilities',
-        'bigData.features.aiLearning': 'Deep Learning & AI',
-        'bigData.features.aiLearningDesc': 'Advanced neural networks for pattern recognition and predictive modeling',
-        'bigData.features.dataAnalytics': 'Big Data Analytics',
-        'bigData.features.dataAnalyticsDesc': 'Process and analyze massive datasets in real-time',
-        'bigData.features.machineLearning': 'Machine Learning',
-        'bigData.features.machineLearningDesc': 'Custom ML models for business intelligence and automation',
-        'bigData.features.cloudComputing': 'Cloud Computing',
-        'bigData.features.cloudComputingDesc': 'Scalable cloud infrastructure for data processing',
-        'bigData.features.predictiveAnalytics': 'Predictive Analytics',
-        'bigData.features.predictiveAnalyticsDesc': 'Forecast trends and make data-driven decisions',
-        'bigData.features.dataSecurity': 'Data Security',
-        'bigData.features.dataSecurityDesc': 'Enterprise-grade security for sensitive information',
-        'bigData.capabilities.title': 'Technical Expertise',
-        'bigData.capabilities.dataProcessing': 'Data Processing & Engineering',
-        'bigData.capabilities.dataProcessingDesc': 'End-to-end data pipeline solutions for processing petabytes of information',
-        'bigData.capabilities.aiModels': 'AI Model Development',
-        'bigData.capabilities.aiModelsDesc': 'Custom artificial intelligence models tailored to your business needs',
-        'bigData.capabilities.naturalLanguage': 'Natural Language Processing',
-        'bigData.capabilities.naturalLanguageDesc': 'Advanced NLP for sentiment analysis, chatbots, and document processing',
-        'bigData.capabilities.computerVision': 'Computer Vision',
-        'bigData.capabilities.computerVisionDesc': 'Image recognition and visual analytics for automated inspection',
-        'bigData.useCases.title': 'Industry Solutions',
-        'bigData.useCases.fintech': 'Financial Services',
-        'bigData.useCases.fintechDesc': 'Risk assessment, fraud detection, and automated trading systems',
-        'bigData.useCases.fintechBenefit1': 'Real-time fraud detection',
-        'bigData.useCases.fintechBenefit2': 'Credit risk assessment',
-        'bigData.useCases.fintechBenefit3': 'Algorithmic trading',
-        'bigData.useCases.manufacturing': 'Manufacturing',
-        'bigData.useCases.manufacturingDesc': 'Predictive maintenance, quality control, and supply chain optimization',
-        'bigData.useCases.manufacturingBenefit1': 'Equipment monitoring',
-        'bigData.useCases.manufacturingBenefit2': 'Quality assurance',
-        'bigData.useCases.manufacturingBenefit3': 'Process optimization',
-        'bigData.useCases.healthcare': 'Healthcare',
-        'bigData.useCases.healthcareDesc': 'Patient diagnostics, drug discovery, and personalized treatment plans',
-        'bigData.useCases.healthcareBenefit1': 'Medical imaging analysis',
-        'bigData.useCases.healthcareBenefit2': 'Patient outcome prediction',
-        'bigData.useCases.healthcareBenefit3': 'Drug development acceleration',
-        'bigData.stats.title': 'Performance Metrics',
-        'bigData.stats.uptime': 'System Uptime',
-        'bigData.stats.records': 'Records Processed',
-        'bigData.stats.latency': 'Processing Latency',
-        'bigData.stats.models': 'AI Models Deployed',
-        'bigData.cta.title': 'Ready to Transform Your Data?',
-        'bigData.cta.description': "Let's discuss how our Big Data & AI solutions can drive your business forward.",
-        'bigData.cta.primary': 'Contact Us',
-        'bigData.cta.secondary': 'Learn More',
-        'bigData.seo.title': 'Big Data & AI Solutions - KTech Fintech',
-        'bigData.seo.description': 'Enterprise-grade big data analytics and artificial intelligence solutions.'
-      }
-      return translations[key] || key
-    }
-  }
+  useLanguage: vi.fn(() => ({
+    t: (key: string) => mockTranslations[key] || key
+  }))
 }))
 
 vi.mock('../../composables/useSkeleton', () => ({
-  useSkeleton: () => ({
+  useSkeleton: vi.fn(() => ({
     isLoading: false
-  })
+  }))
 }))
 
 describe('ServiceBigData Component', () => {
@@ -335,10 +334,13 @@ describe('ServiceBigData Component', () => {
 
   describe('Loading State', () => {
     it('should render skeleton when loading', async () => {
-      // Mock isLoading to true
       const { useSkeleton } = await import('../../composables/useSkeleton')
-      vi.mocked(useSkeleton).mockReturnValue({
-        isLoading: true
+      const mockSkeleton = vi.spyOn(await import('../../composables/useSkeleton'), 'useSkeleton')
+      mockSkeleton.mockReturnValue({
+        isLoading: true,
+        isVisible: false,
+        target: null,
+        hasLoaded: false
       })
 
       const loadingWrapper = mount(ServiceBigData, {
@@ -352,6 +354,8 @@ describe('ServiceBigData Component', () => {
       expect(loadingWrapper.find('.skeleton-container').exists()).toBe(true)
       expect(loadingWrapper.find('.skeleton-hero').exists()).toBe(true)
       expect(loadingWrapper.findAll('.skeleton-card').length).toBe(3)
+
+      mockSkeleton.mockRestore()
     })
   })
 
