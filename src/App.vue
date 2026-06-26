@@ -18,6 +18,7 @@
         <router-link to="/">{{ t('nav.home') }}</router-link>
         <router-link to="/about">{{ t('nav.about') }}</router-link>
         <router-link to="/news">{{ t('nav.news') }}</router-link>
+        <router-link to="/contact">{{ t('nav.contact') }}</router-link>
         <LanguageSwitcher />
       </div>
     </nav>
