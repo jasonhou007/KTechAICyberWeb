@@ -1,11 +1,36 @@
 {
   "nav": {
     "home": "首页",
+    "services": "服务",
     "about": "关于",
-    "logo": "KTECH.AI"
+    "contact": "联系我们",
+    "logo": "KTECH.AI",
+    "aboutUs": "关于我们",
+    "news": "新闻",
+    "ourBusiness": "我们的业务",
+    "joinUs": "加入我们",
+    "aboutKTech": "关于 KTech",
+    "ourGroup": "我们的团队",
+    "ktechNews": "KTech 新闻",
+    "kbtgNews": "KBTG 新闻",
+    "projectManagement": "项目与计划管理",
+    "retailLending": "零售信贷解决方案",
+    "supplyChainFinance": "供应链金融解决方案",
+    "blockchain": "区块链",
+    "mobileApp": "移动应用",
+    "positionList": "职位列表",
+    "dropdown": {
+      "open": "打开菜单",
+      "close": "关闭菜单"
+    },
+    "menu": {
+      "open": "打开菜单",
+      "close": "关闭菜单",
+      "label": "导航菜单"
+    }
   },
   "footer": {
-    "copyright": "© 2025 KTech AI。所有系统运行正常。",
+    "copyright": "© 2026 KTech Fintech。保留所有权利。",
     "status": "在线"
   },
   "home": {
@@ -53,5 +78,74 @@
   "language": {
     "button": "语言",
     "switch": "切换语言"
+  },
+  "theme": {
+    "toggle": "切换主题",
+    "current": "暗色",
+    "dark": "暗色",
+    "light": "亮色"
+  },
+  "services": {
+    "title": "服务",
+    "subtitle": "为现代企业提供综合解决方案",
+    "cta": "联系我们",
+    "items": {
+      "projectManagement": {
+        "title": "项目管理",
+        "description": "采用敏捷/Scrum方法论，配备先进协作工具和里程碑跟踪",
+        "features": {
+          "sprint": "冲刺计划与执行",
+          "velocity": "速度跟踪与分析",
+          "reporting": "利益相关者报告仪表板"
+        }
+      },
+      "retailCredit": {
+        "title": "零售信贷",
+        "description": "风险评估、贷款管理和智能信贷评分系统",
+        "features": {
+          "underwriting": "自动化承保流程",
+          "analytics": "投资组合分析与洞察",
+          "compliance": "监管合规报告"
+        }
+      },
+      "supplyChain": {
+        "title": "供应链金融",
+        "description": "贸易融资解决方案，优化营运资金",
+        "features": {
+          "tracking": "实时货物跟踪",
+          "currency": "多币种支持",
+          "mitigation": "风险缓解策略"
+        }
+      },
+      "blockchain": {
+        "title": "区块链解决方案",
+        "description": "智能合约、分布式账本平台和去中心化应用开发",
+        "features": {
+          "contracts": "智能合约开发",
+          "consensus": "自定义共识机制",
+          "trails": "不可变审计追踪"
+        }
+      }
+    }
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "取得联系",
+    "form": {
+      "name": "姓名",
+      "email": "邮箱",
+      "subject": "主题",
+      "message": "留言",
+      "submit": "发送留言",
+      "submitting": "发送中...",
+      "validation": {
+        "nameRequired": "姓名必填（至少2个字符）",
+        "emailRequired": "请输入有效的邮箱地址",
+        "subjectRequired": "主题必填（至少3个字符）",
+        "messageRequired": "留言必填（至少10个字符）"
+      },
+      "success": "留言发送成功！我们会尽快回复您。",
+      "error": "发送留言失败，请重试。"
+    }
   }
 }

@@ -1,11 +1,36 @@
 {
   "nav": {
     "home": "Home",
+    "services": "Services",
     "about": "About",
-    "logo": "KTECH.AI"
+    "contact": "Contact",
+    "logo": "KTECH.AI",
+    "aboutUs": "About Us",
+    "news": "News",
+    "ourBusiness": "Our Business",
+    "joinUs": "Join Us",
+    "aboutKTech": "About KTech",
+    "ourGroup": "Our group",
+    "ktechNews": "KTech News",
+    "kbtgNews": "KBTG News",
+    "projectManagement": "Project and Program Management",
+    "retailLending": "Retail Lending Solution",
+    "supplyChainFinance": "Supply Chain Finance Solution",
+    "blockchain": "Blockchain",
+    "mobileApp": "Mobile App",
+    "positionList": "Position List",
+    "dropdown": {
+      "open": "Open menu",
+      "close": "Close menu"
+    },
+    "menu": {
+      "open": "Open menu",
+      "close": "Close menu",
+      "label": "Navigation menu"
+    }
   },
   "footer": {
-    "copyright": "© 2025 KTech AI. All systems operational.",
+    "copyright": "© 2026 KTech Fintech. All rights reserved.",
     "status": "ONLINE"
   },
   "home": {
@@ -53,5 +78,74 @@
   "language": {
     "button": "Language",
     "switch": "Switch Language"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "current": "Dark",
+    "dark": "Dark",
+    "light": "Light"
+  },
+  "services": {
+    "title": "SERVICES",
+    "subtitle": "Comprehensive solutions for modern enterprises",
+    "cta": "Get In Touch",
+    "items": {
+      "projectManagement": {
+        "title": "Project Management",
+        "description": "Agile/Scrum methodologies with advanced collaboration tools and milestone tracking",
+        "features": {
+          "sprint": "Sprint planning & execution",
+          "velocity": "Velocity tracking & analytics",
+          "reporting": "Stakeholder reporting dashboards"
+        }
+      },
+      "retailCredit": {
+        "title": "Retail Credit",
+        "description": "Risk assessment, loan management, and intelligent credit scoring systems",
+        "features": {
+          "underwriting": "Automated underwriting processes",
+          "analytics": "Portfolio analytics & insights",
+          "compliance": "Regulatory compliance reporting"
+        }
+      },
+      "supplyChain": {
+        "title": "Supply Chain Finance",
+        "description": "Trade finance solutions with working capital optimization",
+        "features": {
+          "tracking": "Real-time shipment tracking",
+          "currency": "Multi-currency support",
+          "mitigation": "Risk mitigation strategies"
+        }
+      },
+      "blockchain": {
+        "title": "Blockchain Solutions",
+        "description": "Smart contracts, DLT platforms, and decentralized application development",
+        "features": {
+          "contracts": "Smart contract development",
+          "consensus": "Custom consensus mechanisms",
+          "trails": "Immutable audit trails"
+        }
+      }
+    }
+  },
+  "contact": {
+    "title": "CONTACT",
+    "subtitle": "Get in Touch",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "validation": {
+        "nameRequired": "Name is required (min 2 characters)",
+        "emailRequired": "Valid email is required",
+        "subjectRequired": "Subject is required (min 3 characters)",
+        "messageRequired": "Message is required (min 10 characters)"
+      },
+      "success": "Message sent successfully! We'll get back to you soon.",
+      "error": "Failed to send message. Please try again."
+    }
   }
 }
