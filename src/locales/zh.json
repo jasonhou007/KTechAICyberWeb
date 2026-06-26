@@ -62,12 +62,58 @@
     "cta": "开始使用"
   },
   "about": {
-    "title": "关于",
-    "titleAccent": "KTECH",
-    "subtitle": "在人工智能与人类的交汇处创新",
+    "pageTitle": "关于",
+    "pageTitleAccent": "KTECH",
+    "pageSubtitle": "在人工智能与人类的交汇处创新",
+    "whoWeAre": {
+      "title": "我们是谁",
+      "companyName": "开泰视讯信息技术有限公司",
+      "companyInfo": "2020年6月成立于深圳市罗湖区",
+      "parentCompany": "母公司",
+      "parentInfo": "泰国开泰银行通过开泰视讯有限公司",
+      "capital": "注册资本",
+      "capitalAmount": "3亿元人民币",
+      "services": "我们的服务",
+      "servicesList": "区块链、大数据、人工智能"
+    },
+    "achievements": {
+      "title": "我们的成就",
+      "iso9001": "质量管理体系认证",
+      "iso27001": "信息安全管理体系认证",
+      "iso20000": "IT服务管理体系认证",
+      "firstMnc": "深圳首家跨国公司总部",
+      "firstFintech": "首家外资银行金融科技公司",
+      "projects": "完成20+个关键信息系统项目"
+    },
+    "vision": {
+      "title": "我们的愿景",
+      "description": "成为地区领先的金融科技平台"
+    },
     "mission": {
       "title": "我们的使命",
-      "description": "KTech 致力于构建变革性的 AI 解决方案，不断突破可能的边界。"
+      "description": "用尖端技术赋能客户"
+    },
+    "culture": {
+      "title": "我们的文化",
+      "customer": "以客户为中心",
+      "collaboration": "开放协作",
+      "agile": "敏捷创新",
+      "professional": "专业高效"
+    },
+    "serviceProvider": {
+      "title": "实施服务提供商",
+      "service1": {
+        "title": "区域扩展",
+        "description": "提供先进解决方案助力KBank区域扩展"
+      },
+      "service2": {
+        "title": "中国-KBank连接",
+        "description": "将中国金融科技解决方案连接到KBank数字化需求"
+      },
+      "service3": {
+        "title": "数字创新",
+        "description": "贡献创新解决方案强化KBank数字化领导地位"
+      }
     },
     "stats": {
       "projects": "项目",

@@ -62,12 +62,58 @@
     "cta": "Get Started"
   },
   "about": {
-    "title": "ABOUT",
-    "titleAccent": "KTECH",
-    "subtitle": "Innovating at the intersection of AI and humanity",
+    "pageTitle": "ABOUT",
+    "pageTitleAccent": "KTECH",
+    "pageSubtitle": "Innovating at the intersection of AI and humanity",
+    "whoWeAre": {
+      "title": "Who We Are",
+      "companyName": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd.",
+      "companyInfo": "Established in June 2020, Luohu District, Shenzhen",
+      "parentCompany": "Parent Company",
+      "parentInfo": "KASIKORNBANK (Thailand) via KASIKORN VISION Co., Ltd.",
+      "capital": "Registered Capital",
+      "capitalAmount": "300 million yuan",
+      "services": "Our Services",
+      "servicesList": "Blockchain, Big Data, Artificial Intelligence"
+    },
+    "achievements": {
+      "title": "Our Achievements",
+      "iso9001": "Quality Management System",
+      "iso27001": "Information Security Management",
+      "iso20000": "IT Service Management",
+      "firstMnc": "First MNC HQ in Shenzhen",
+      "firstFintech": "First Foreign Bank Fintech",
+      "projects": "20+ Key Projects Completed"
+    },
+    "vision": {
+      "title": "Our Vision",
+      "description": "A Regional Leading Fintech Platform"
+    },
     "mission": {
       "title": "Our Mission",
-      "description": "KTech is dedicated to building transformative AI solutions that push the boundaries of what's possible."
+      "description": "Empower Customers with Cutting-edge Technology"
+    },
+    "culture": {
+      "title": "Our Culture",
+      "customer": "Customer Centricity",
+      "collaboration": "Openness & Collaboration",
+      "agile": "Agile & Innovation",
+      "professional": "Professionalism & Efficiency"
+    },
+    "serviceProvider": {
+      "title": "Implementation Service Provider",
+      "service1": {
+        "title": "Regional Expansion",
+        "description": "Deliver advanced solution to enable KBank regional expansion"
+      },
+      "service2": {
+        "title": "China-KBank Connection",
+        "description": "Connect fintech solutions from China to KBank digitalization needs"
+      },
+      "service3": {
+        "title": "Digital Innovation",
+        "description": "Contribute innovative solutions to reinforce KBank digitalization leadership"
+      }
     },
     "stats": {
       "projects": "Projects",
