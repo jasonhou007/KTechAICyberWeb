@@ -3,6 +3,7 @@
     "home": "Home",
     "about": "About",
     "news": "News",
+    "contact": "Contact",
     "logo": "KTECH.AI"
   },
   "footer": {
@@ -108,5 +109,249 @@
     "by": "By",
     "share": "Share this article",
     "breadcrumb": "Home > News"
+  },
+  "contact": {
+    "title": "Contact",
+    "titleAccent": "Us",
+    "subtitle": "Get in touch with KTech",
+    "breadcrumb": "Home > Contact",
+    "form": {
+      "title": "Send us a message",
+      "name": "Name",
+      "namePlaceholder": "Enter your name",
+      "phone": "Phone",
+      "phonePlaceholder": "Enter your phone number",
+      "company": "Company",
+      "companyPlaceholder": "Enter your company name",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email",
+      "submit": "Send Message",
+      "submitting": "Sending...",
+      "privacy": "By submitting this form, you agree to our Privacy Policy",
+      "success": "Message sent successfully! We'll get back to you soon.",
+      "error": "Please fill in all required fields correctly.",
+      "validation": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email address",
+        "phoneRequired": "Phone number is required",
+        "companyRequired": "Company name is required"
+      }
+    },
+    "info": {
+      "title": "Contact Information",
+      "address": "Address",
+      "addressValue": "Luohu District, Shenzhen, China",
+      "email": "Email",
+      "emailValue": "contact@ktech.fintech",
+      "phone": "Phone",
+      "phoneValue": "+86 755 8888 8888",
+      "wechat": "WeChat",
+      "wechatValue": "KTechOfficial",
+      "social": "Follow Us"
+    },
+    "demo": {
+      "title": "Request a Demo",
+      "description": "Experience our cutting-edge AI solutions firsthand. Our team will provide a personalized demo tailored to your business needs.",
+      "consultant": "Designated Pre-sale Consultant",
+      "solution": "Professional Solution Design",
+      "consulting": "Free Business Consulting",
+      "button": "Schedule Demo"
+    }
+  },
+  "joinUs": {
+    "title": "Join",
+    "titleAccent": "Us",
+    "subtitle": "Build the future with us. Join our team of innovators and shape the next generation of AI technology.",
+    "cta": {
+      "button": "View Open Positions",
+      "ariaLabel": "View open positions"
+    },
+    "culture": {
+      "title": "Our Culture",
+      "description": "We foster a culture of innovation, collaboration, and continuous learning. At KTech, every team member contributes to our mission of advancing AI technology.",
+      "innovation": {
+        "title": "Innovation First",
+        "description": "We embrace cutting-edge technology and push the boundaries of what's possible with AI."
+      },
+      "teamwork": {
+        "title": "Collaborative Spirit",
+        "description": "Great things are built together. We believe in diverse perspectives and inclusive teamwork."
+      },
+      "creativity": {
+        "title": "Creative Freedom",
+        "description": "We encourage creative thinking and provide the freedom to explore new ideas and solutions."
+      },
+      "growth": {
+        "title": "Continuous Growth",
+        "description": "Your growth matters. We offer learning opportunities and career advancement pathways."
+      }
+    },
+    "benefits": {
+      "title": "Benefits & Perks",
+      "competitive": {
+        "title": "Competitive Salary",
+        "description": "Industry-leading compensation packages based on experience and market standards."
+      },
+      "development": {
+        "title": "Professional Development",
+        "description": "Continuous learning opportunities, conferences, workshops, and skill enhancement programs."
+      },
+      "balance": {
+        "title": "Work-Life Balance",
+        "description": "Flexible working arrangements and supportive environment for personal well-being."
+      },
+      "health": {
+        "title": "Health Insurance",
+        "description": "Comprehensive health coverage including medical, dental, and vision insurance."
+      },
+      "activities": {
+        "title": "Team Activities",
+        "description": "Regular team building events, hackathons, and social gatherings to foster connections."
+      },
+      "career": {
+        "title": "Career Growth",
+        "description": "Clear career progression paths with mentorship and internal mobility opportunities."
+      }
+    },
+    "positions": {
+      "title": "Open Positions",
+      "subtitle": "Explore our current openings and find your place in our team.",
+      "viewDetails": "View Details",
+      "viewAria": "View details for {title} position",
+      "viewAll": "View All Positions"
+    },
+    "process": {
+      "title": "Application Process",
+      "step1": {
+        "title": "Apply Online",
+        "description": "Submit your application through our portal with your resume and cover letter."
+      },
+      "step2": {
+        "title": "Initial Screening",
+        "description": "Our team reviews your application and contacts shortlisted candidates for initial discussion."
+      },
+      "step3": {
+        "title": "Interviews",
+        "description": "Meet with our team members to discuss your skills, experience, and mutual fit."
+      },
+      "step4": {
+        "title": "Welcome Aboard",
+        "description": "Receive an offer and join our team to start building the future together."
+      }
+    },
+    "contact": {
+      "title": "Get In Touch",
+      "description": "Have questions about working at KTech? We'd love to hear from you.",
+      "email": "careers@ktech.ai"
+    }
+  },
+  "blockchain": {
+    "breadcrumb": "Blockchain Services",
+    "hero": {
+      "title": "BLOCKCHAIN",
+      "accent": "SERVICES",
+      "subtitle": "Revolutionary distributed ledger technology for secure, transparent, and efficient business operations"
+    },
+    "overview": {
+      "title": "Blockchain Technology Overview",
+      "description": "KTech provides cutting-edge blockchain solutions that transform how businesses operate. Our distributed ledger technology ensures transparency, security, and efficiency in all transactions.",
+      "detail": "From smart contracts to supply chain tracking, we deliver customized blockchain implementations that drive innovation and trust in your business ecosystem."
+    },
+    "features": {
+      "title": "Technical Capabilities",
+      "distributed": {
+        "title": "Distributed Ledger",
+        "description": "Decentralized database maintained by multiple nodes, ensuring data integrity and preventing single points of failure."
+      },
+      "security": {
+        "title": "Advanced Security",
+        "description": "Cryptographic protection and immutable records that safeguard your data against tampering and unauthorized access."
+      },
+      "efficiency": {
+        "title": "Smart Contracts",
+        "description": "Self-executing contracts with predefined conditions, automating processes and reducing operational costs."
+      },
+      "traceability": {
+        "title": "Complete Traceability",
+        "description": "End-to-end tracking of transactions and assets, providing full visibility into your supply chain and business processes."
+      }
+    },
+    "benefits": {
+      "title": "Business Benefits",
+      "trust": {
+        "title": "Enhanced Trust",
+        "description": "Build trust with stakeholders through transparent, verifiable transactions that cannot be altered."
+      },
+      "cost": {
+        "title": "Reduced Costs",
+        "description": "Eliminate intermediaries and streamline operations, significantly reducing transaction and administrative costs."
+      },
+      "speed": {
+        "title": "Faster Processing",
+        "description": "Real-time transaction processing and automated workflows accelerate business operations and decision-making."
+      }
+    },
+    "cta": {
+      "title": "Ready to Transform Your Business?",
+      "description": "Explore how our blockchain solutions can revolutionize your operations and drive sustainable growth.",
+      "button": "Contact Us",
+      "ariaLabel": "Contact us about blockchain services"
+    }
+  },
+  "positions": {
+    "title": "Job Openings",
+    "subtitle": "Join Our Team",
+    "searchPlaceholder": "Search positions...",
+    "filters": {
+      "title": "Filters",
+      "department": "Department",
+      "location": "Location",
+      "type": "Employment Type",
+      "clearAll": "Clear All",
+      "activeFilters": "positions found"
+    },
+    "departments": {
+      "all": "All Departments",
+      "engineering": "Engineering",
+      "product": "Product",
+      "design": "Design",
+      "marketing": "Marketing",
+      "sales": "Sales"
+    },
+    "locations": {
+      "all": "All Locations",
+      "bangkok": "Bangkok",
+      "shanghai": "Shanghai",
+      "beijing": "Beijing",
+      "remote": "Remote"
+    },
+    "types": {
+      "all": "All Types",
+      "fulltime": "Full-time",
+      "parttime": "Part-time",
+      "contract": "Contract",
+      "internship": "Internship"
+    },
+    "cards": {
+      "posted": "Posted",
+      "viewDetails": "View Details"
+    },
+    "detail": {
+      "backToList": "Back to list",
+      "description": "Job Description",
+      "responsibilities": "Responsibilities",
+      "requirements": "Requirements",
+      "benefits": "Benefits & Perks",
+      "culture": "Culture & Values",
+      "deadline": "Application Deadline",
+      "applyNow": "Apply Now",
+      "share": "Share"
+    },
+    "empty": {
+      "noPositions": "No positions available at this time",
+      "title": "No positions found",
+      "message": "Try adjusting your filters to see more results"
+    }
   }
 }

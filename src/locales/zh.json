@@ -3,6 +3,7 @@
     "home": "首页",
     "about": "关于",
     "news": "新闻",
+    "contact": "联系我们",
     "logo": "KTECH.AI"
   },
   "footer": {
@@ -108,5 +109,194 @@
     "by": "作者",
     "share": "分享这篇文章",
     "breadcrumb": "首页 > 新闻"
+  },
+  "contact": {
+    "title": "联系",
+    "titleAccent": "我们",
+    "subtitle": "与 KTech 取得联系",
+    "breadcrumb": "首页 > 联系我们",
+    "form": {
+      "title": "给我们留言",
+      "name": "姓名",
+      "namePlaceholder": "请输入您的姓名",
+      "phone": "电话",
+      "phonePlaceholder": "请输入您的电话号码",
+      "company": "公司",
+      "companyPlaceholder": "请输入您的公司名称",
+      "email": "邮箱",
+      "emailPlaceholder": "请输入您的邮箱地址",
+      "submit": "发送消息",
+      "submitting": "发送中...",
+      "privacy": "提交此表单即表示您同意我们的隐私政策",
+      "success": "消息发送成功！我们会尽快回复您。",
+      "error": "请正确填写所有必填字段。",
+      "validation": {
+        "nameRequired": "姓名为必填项",
+        "emailRequired": "邮箱为必填项",
+        "emailInvalid": "请输入有效的邮箱地址",
+        "phoneRequired": "电话号码为必填项",
+        "companyRequired": "公司名称为必填项"
+      }
+    },
+    "info": {
+      "title": "联系方式",
+      "address": "地址",
+      "addressValue": "中国深圳市罗湖区",
+      "email": "邮箱",
+      "emailValue": "contact@ktech.fintech",
+      "phone": "电话",
+      "phoneValue": "+86 755 8888 8888",
+      "wechat": "微信",
+      "wechatValue": "KTechOfficial",
+      "social": "关注我们"
+    },
+    "demo": {
+      "title": "申请演示",
+      "description": "亲身体验我们的尖端 AI 解决方案。我们的团队将根据您的业务需求提供个性化演示。",
+      "consultant": "专属售前顾问",
+      "solution": "专业方案设计",
+      "consulting": "免费业务咨询",
+      "button": "预约演示"
+    }
+  },
+  "joinUs": {
+    "title": "加入",
+    "titleAccent": "我们",
+    "subtitle": "与我们一起构建未来。加入我们的创新团队，共同塑造下一代人工智能技术。",
+    "cta": {
+      "button": "查看在招职位",
+      "ariaLabel": "查看在招职位"
+    },
+    "culture": {
+      "title": "公司文化",
+      "description": "我们培育创新、协作和持续学习的文化。在 KTech，每位团队成员都为推进 AI 技术的使命贡献力量。",
+      "innovation": {
+        "title": "创新优先",
+        "description": "我们拥抱尖端技术，不断拓展 AI 可能性的边界。"
+      },
+      "teamwork": {
+        "title": "协作精神",
+        "description": "伟大的成就源于团队合作。我们重视多元视角和包容性协作。"
+      },
+      "creativity": {
+        "title": "创意自由",
+        "description": "我们鼓励创造性思维，提供自由探索新想法和解决方案的空间。"
+      },
+      "growth": {
+        "title": "持续成长",
+        "description": "您的成长很重要。我们提供学习机会和职业发展通道。"
+      }
+    },
+    "benefits": {
+      "title": "福利与待遇",
+      "competitive": {
+        "title": "具有竞争力的薪酬",
+        "description": "根据经验和市场标准提供行业领先的薪酬待遇。"
+      },
+      "development": {
+        "title": "职业发展",
+        "description": "持续学习机会，包括会议、研讨会和技能提升项目。"
+      },
+      "balance": {
+        "title": "工作生活平衡",
+        "description": "灵活的工作安排和支持个人福祉的工作环境。"
+      },
+      "health": {
+        "title": "健康保险",
+        "description": "全面的健康保障，包括医疗、牙科和视力保险。"
+      },
+      "activities": {
+        "title": "团队活动",
+        "description": "定期团建活动、黑客马拉松和社交聚会，促进团队联系。"
+      },
+      "career": {
+        "title": "职业成长",
+        "description": "清晰的职业发展路径，提供指导和内部流动机会。"
+      }
+    },
+    "positions": {
+      "title": "在招职位",
+      "subtitle": "探索我们当前的职位空缺，找到适合您的位置。",
+      "viewDetails": "查看详情",
+      "viewAria": "查看 {title} 职位详情",
+      "viewAll": "查看全部职位"
+    },
+    "process": {
+      "title": "申请流程",
+      "step1": {
+        "title": "在线申请",
+        "description": "通过我们的在线平台提交申请，附上简历和求职信。"
+      },
+      "step2": {
+        "title": "初步筛选",
+        "description": "我们的团队审核您的申请，联系入围候选人进行初步沟通。"
+      },
+      "step3": {
+        "title": "面试环节",
+        "description": "与团队成员会面，讨论您的技能、经验和双方契合度。"
+      },
+      "step4": {
+        "title": "欢迎加入",
+        "description": "收到录用通知，加入我们的团队，一起构建未来。"
+      }
+    },
+    "contact": {
+      "title": "联系我们",
+      "description": "对在 KTech 工作有疑问？我们很乐意听取您的想法。",
+      "email": "careers@ktech.ai"
+    }
+  },
+  "blockchain": {
+    "breadcrumb": "区块链服务",
+    "hero": {
+      "title": "区块链",
+      "accent": "服务",
+      "subtitle": "革命性分布式账本技术，为企业提供安全、透明、高效的业务运营解决方案"
+    },
+    "overview": {
+      "title": "区块链技术概览",
+      "description": "KTech 提供前沿的区块链解决方案，彻底改变企业的运营方式。我们的分布式账本技术确保所有交易的透明度、安全性和效率。",
+      "detail": "从智能合约到供应链追踪，我们提供定制化的区块链实施服务，在您的业务生态系统中推动创新和建立信任。"
+    },
+    "features": {
+      "title": "技术能力",
+      "distributed": {
+        "title": "分布式账本",
+        "description": "由多个节点维护的去中心化数据库，确保数据完整性，防止单点故障。"
+      },
+      "security": {
+        "title": "先进安全",
+        "description": "加密保护和不可篡改记录，保护您的数据免受篡改和未授权访问。"
+      },
+      "efficiency": {
+        "title": "智能合约",
+        "description": "具有预定义条件的自动执行合约，自动化流程并降低运营成本。"
+      },
+      "traceability": {
+        "title": "全程追溯",
+        "description": "端到端的交易和资产追踪，为您的供应链和业务流程提供完整可见性。"
+      }
+    },
+    "benefits": {
+      "title": "商业优势",
+      "trust": {
+        "title": "增强信任",
+        "description": "通过透明、可验证且无法更改的交易，与利益相关者建立信任关系。"
+      },
+      "cost": {
+        "title": "降低成本",
+        "description": "消除中间商，简化运营流程，显著降低交易和管理成本。"
+      },
+      "speed": {
+        "title": "更快处理",
+        "description": "实时交易处理和自动化工作流程，加速业务运营和决策制定。"
+      }
+    },
+    "cta": {
+      "title": "准备好改变您的业务了吗？",
+      "description": "探索我们的区块链解决方案如何彻底改变您的运营并推动可持续增长。",
+      "button": "联系我们",
+      "ariaLabel": "联系我们了解区块链服务"
+    }
   }
 }
