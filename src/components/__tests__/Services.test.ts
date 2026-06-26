@@ -432,3 +432,22 @@ describe('Services.vue', () => {
     })
   })
 })
+
+  describe('DEBUG - Loading State', () => {
+    it('debug: check isLoading value when set to false', () => {
+      mockIsLoading.value = false
+      console.log('After setting to false, mockIsLoading.value:', mockIsLoading.value)
+      
+      wrapper = mount(Services, {
+        global: {
+          stubs: {
+            Transition: transitionStub
+          }
+        }
+      })
+      
+      console.log('After mount, wrapper.vm.isLoading:', wrapper.vm.isLoading)
+      console.log('Has content-wrapper:', wrapper.find('.content-wrapper').exists())
+      console.log('Has skeleton-grid:', wrapper.find('.skeleton-grid').exists())
+    })
+  })
