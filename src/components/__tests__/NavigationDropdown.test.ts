@@ -396,6 +396,129 @@ describe('NavigationDropdown.vue', () => {
   })
 
   // ============================================
+  // Grouped mode (groups prop) — mega-menu
+  // ============================================
+  describe('Grouped mode (groups prop)', () => {
+    const groupedProps = {
+      items: undefined,
+      groups: [
+        {
+          groupLabel: 'nav.groups.banking',
+          items: [
+            { key: 'retail', label: 'nav.submenu.retailLending', route: '/services/retail-lending' },
+            { key: 'supply', label: 'nav.submenu.supplyChainFinance', route: '/services/supply-chain-finance' },
+          ],
+        },
+        {
+          groupLabel: 'nav.groups.blockchainWeb3',
+          items: [
+            { key: 'blockchain', label: 'nav.submenu.blockchain', route: '/services/blockchain' },
+            { key: 'crossBorder', label: 'nav.submenu.crossBorderPayment', route: '/services/cross-border-payment' },
+            { key: 'custody', label: 'nav.submenu.digitalAssetCustody', route: '/services/digital-asset-custody' },
+            { key: 'stablecoin', label: 'nav.submenu.stablecoin', route: '/services/stablecoin' },
+          ],
+        },
+      ],
+    }
+
+    function createGroupedWrapper() {
+      return mount(NavigationDropdown, {
+        props: {
+          label: 'Our Solutions',
+          ...groupedProps,
+        },
+      })
+    }
+
+    it('mounts in grouped mode without errors', () => {
+      const w = createGroupedWrapper()
+      expect(w.exists()).toBe(true)
+      expect(w.find('.dropdown-trigger').text()).toContain('Our Solutions')
+      w.unmount()
+    })
+
+    it('renders one .dropdown-group per provided group when open', async () => {
+      const w = createGroupedWrapper()
+      await w.find('.dropdown-trigger').trigger('click')
+      const groups = w.findAll('.dropdown-group')
+      expect(groups).toHaveLength(2)
+      w.unmount()
+    })
+
+    it('renders a .dropdown-group-heading per group with translated label', async () => {
+      const w = createGroupedWrapper()
+      await w.find('.dropdown-trigger').trigger('click')
+      const headings = w.findAll('.dropdown-group-heading')
+      expect(headings).toHaveLength(2)
+      // The heading text is the output of t(group.groupLabel).
+      expect(headings[0].text()).toBe(w.vm.t('nav.groups.banking'))
+      expect(headings[1].text()).toBe(w.vm.t('nav.groups.blockchainWeb3'))
+      w.unmount()
+    })
+
+    it('renders a flat list of all items across groups when open', async () => {
+      const w = createGroupedWrapper()
+      await w.find('.dropdown-trigger').trigger('click')
+      // 2 + 4 = 6 items total.
+      expect(w.findAll('.dropdown-item')).toHaveLength(6)
+      w.unmount()
+    })
+
+    it('renders each item label via t(item.label)', async () => {
+      const w = createGroupedWrapper()
+      await w.find('.dropdown-trigger').trigger('click')
+      const items = w.findAll('.dropdown-item')
+      expect(items[0].text()).toBe(w.vm.t('nav.submenu.retailLending'))
+      expect(items[5].text()).toBe(w.vm.t('nav.submenu.stablecoin'))
+      w.unmount()
+    })
+
+    it('calls router.push with the clicked group item route and closes', async () => {
+      const w = createGroupedWrapper()
+      await w.find('.dropdown-trigger').trigger('click')
+      // Group1 has 2 items (indexes 0,1); group2 has 4 items (indexes 2-5).
+      // Cross-border-payment is the 2nd item of group2 -> index 3.
+      const items = w.findAll('.dropdown-item')
+      await items[3].trigger('click')
+      expect(pushMock).toHaveBeenCalledTimes(1)
+      expect(pushMock).toHaveBeenCalledWith('/services/cross-border-payment')
+      expect(w.vm.isOpen).toBe(false)
+      w.unmount()
+    })
+
+    it('toggles open/closed via the trigger like flat mode', async () => {
+      const w = createGroupedWrapper()
+      const trigger = w.find('.dropdown-trigger')
+      await trigger.trigger('click')
+      expect(w.find('.dropdown-menu').exists()).toBe(true)
+      await trigger.trigger('click')
+      expect(w.find('.dropdown-menu').exists()).toBe(false)
+      w.unmount()
+    })
+
+    it('closes on Escape when open (grouped mode)', async () => {
+      const w = createGroupedWrapper()
+      await w.find('.dropdown-trigger').trigger('click')
+      expect(w.vm.isOpen).toBe(true)
+
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+      await w.vm.$nextTick()
+      expect(w.vm.isOpen).toBe(false)
+      w.unmount()
+    })
+
+    it('does not render flat .dropdown-item entries when only groups are provided', async () => {
+      // items is undefined, so the flat v-for must not emit any items.
+      const w = createGroupedWrapper()
+      await w.find('.dropdown-trigger').trigger('click')
+      // All 6 .dropdown-item elements live inside .dropdown-group.
+      const loose = w.findAll('.dropdown-menu > .dropdown-item')
+      expect(loose).toHaveLength(0)
+      w.unmount()
+    })
+  })
+
+  // ============================================
   // Edge cases
   // ============================================
   describe('Edge Cases', () => {

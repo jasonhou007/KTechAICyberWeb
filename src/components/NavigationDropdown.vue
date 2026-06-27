@@ -13,14 +13,30 @@
     </button>
     
     <transition name="dropdown-fade">
-      <div v-if="isOpen" 
+      <div v-if="isOpen"
            class="dropdown-menu"
            @click="handleMenuClick">
-        <div v-for="item in items" 
-             :key="item.key" 
+        <!-- Flat mode (default): render items directly when items.length > 0. -->
+        <div v-if="items && items.length > 0"
+             v-for="item in items"
+             :key="item.key"
              class="dropdown-item"
              @click="navigateTo(item.route)">
           {{ t(item.label) }}
+        </div>
+        <!-- Grouped mega-menu mode: render one .dropdown-group per group when
+             items is empty/undefined but groups are provided. -->
+        <div v-else
+             v-for="group in groups"
+             :key="group.groupLabel"
+             class="dropdown-group">
+          <div class="dropdown-group-heading">{{ t(group.groupLabel) }}</div>
+          <div v-for="item in group.items"
+               :key="item.key"
+               class="dropdown-item"
+               @click="navigateTo(item.route)">
+            {{ t(item.label) }}
+          </div>
         </div>
       </div>
     </transition>
@@ -41,6 +57,13 @@ const props = defineProps({
     required: true
   },
   items: {
+    type: Array,
+    default: () => []
+  },
+  // Optional grouped (mega-menu) mode: when `items` is empty/undefined and
+  // `groups` is provided, render one .dropdown-group per group, each with a
+  // non-clickable heading (t(group.groupLabel)) followed by its items.
+  groups: {
     type: Array,
     default: () => []
   }
@@ -159,6 +182,34 @@ onUnmounted(() => {
   background: rgba(0, 240, 255, 0.1);
   color: #00f0ff;
   padding-left: 1.25rem;
+}
+
+/* Grouped mega-menu mode */
+.dropdown-group {
+  padding: 0.25rem 0;
+}
+
+.dropdown-group + .dropdown-group {
+  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+}
+
+.dropdown-group-heading {
+  padding: 0.5rem 1rem 0.25rem;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #00f0ff;
+  cursor: default;
+}
+
+.dropdown-group-heading:hover {
+  background: transparent;
+  color: #00f0ff;
+  padding-left: 1rem;
 }
 
 .dropdown-fade-enter-active,
