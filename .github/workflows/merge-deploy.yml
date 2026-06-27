@@ -52,6 +52,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      # History-mode routing on GitHub Pages needs 404.html (a copy of the
+      # built index.html) so a direct/refresh hit on a deep subpath serves the
+      # SPA instead of GitHub's 404. Copying after build keeps the hashed
+      # asset links in 404.html in sync with index.html. #140
+      - name: Generate 404.html for SPA deep links
+        run: cp dist/index.html dist/404.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

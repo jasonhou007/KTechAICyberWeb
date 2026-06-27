@@ -748,5 +748,11 @@
       "email": "Email: legal@ktech.fintech",
       "address": "Address: 开泰远景信息科技有限公司, Luohu District, Shenzhen, Guangdong, China 518000"
     }
+  },
+  "notFound": {
+    "code": "404",
+    "title": "Page Not Found",
+    "message": "The page you are looking for does not exist or has been moved.",
+    "home": "Back to Home"
   }
 }
