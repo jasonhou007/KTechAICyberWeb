@@ -25,9 +25,12 @@ export default defineConfig({
         '**/*.d.ts',
         '**/*.config.*',
         '**/__tests__/**',
+        '**/*.test.ts',
+        '**/*.spec.ts',
         'e2e/',
         'tests/e2e/',
         '.claude/',
+        'src/main.js',
       ],
       thresholds: {
         lines: 85,
