@@ -14,22 +14,13 @@
     "title": "KTech AI",
     "subtitle": "赛博朋克智能系统",
     "hero": {
-      "heading": "下一代人工智能",
+      "title": "下一代人工智能",
       "description": "运用尖端技术和赛博朋克美学，构建人工智能的未来。"
     },
     "stats": {
-      "uptime": {
-        "label": "正常运行时间",
-        "value": "99.9%"
-      },
-      "requests": {
-        "label": "请求数",
-        "value": "100万+"
-      },
-      "latency": {
-        "label": "响应延迟",
-        "value": "50毫秒"
-      }
+      "uptime": "99.9%",
+      "requests": "100万+",
+      "latency": "50ms"
     },
     "features": {
       "heading": "核心功能",
@@ -46,10 +37,7 @@
         "description": "企业级安全，采用抗量子加密技术"
       }
     },
-    "cta": {
-      "button": "立即开始",
-      "ariaLabel": "开始使用 KTech AI"
-    }
+    "cta": "立即开始"
   },
   "about": {
     "title": "关于 KTECH",
