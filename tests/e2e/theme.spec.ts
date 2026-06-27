@@ -285,16 +285,18 @@ test.describe.serial('Theme Toggle', { tag: ['@regression', '@theme'] }, () => {
     const changedTheme = await htmlElement.getAttribute('data-theme');
     expect(changedTheme).not.toBe(initialTheme);
 
-    // Navigate to the News page (the old /services link no longer exists in the
-    // nav — services are now /services/<slug> detail pages). The theme is
-    // persisted in localStorage by usePreferencesStore, so it survives the
-    // client-side route change.
-    await page.locator('.nav-links a').filter({ hasText: /^News$/ }).click();
+    // Navigate to the News page. The nav was restructured (#164) so News and
+    // About Us are dropdown triggers (buttons), not `.nav-links a` links — the
+    // intent of THIS test is theme PERSISTENCE across a client-side route
+    // change (theme is in localStorage via usePreferencesStore), not nav
+    // mechanics (covered by Header unit tests). Use page.goto() to drive the
+    // route change directly so the assertion stays decoupled from nav DOM.
+    await page.goto('/news');
     await page.waitForLoadState('networkidle');
     expect(await htmlElement.getAttribute('data-theme')).toBe(changedTheme);
 
     // Navigate to the About page
-    await page.locator('.nav-links a').filter({ hasText: /^About$/ }).click();
+    await page.goto('/about');
     await page.waitForLoadState('networkidle');
     expect(await htmlElement.getAttribute('data-theme')).toBe(changedTheme);
   });
