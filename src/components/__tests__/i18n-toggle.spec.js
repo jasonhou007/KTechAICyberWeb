@@ -51,10 +51,24 @@ const transitionStub = {
   },
 }
 
+// router-link stub: the rewritten Header (#164) renders the logo, Home, and
+// Contact items as <router-link>, which otherwise fail to resolve in an
+// isolated mount. Renders <a :href="to"> with slotted content.
+const routerLinkStub = {
+  name: 'RouterLink',
+  props: { to: { type: [String, Object], default: '' } },
+  computed: {
+    href() {
+      return typeof this.to === 'string' ? this.to : (this.to && this.to.path) || ''
+    },
+  },
+  template: '<a :href="href"><slot /></a>',
+}
+
 function mountWithStubs(component) {
   return mount(component, {
     global: {
-      stubs: { Transition: transitionStub },
+      stubs: { Transition: transitionStub, 'router-link': routerLinkStub },
     },
   })
 }
@@ -86,9 +100,16 @@ describe('migrated components re-render on language toggle to zh', () => {
   })
 
   it('Header renders Chinese nav labels after toggle', () => {
-    const wrapper = mount(Header)
-    const links = wrapper.findAll('ul.nav-links a').map((a) => a.text())
-    expect(links).toEqual(['服务', '荣誉', '联系'])
+    const wrapper = mountWithStubs(Header)
+    // The rewritten Header (#164) renders Home + Contact as router-link <a>
+    // and the 4 dropdown top-level items (About / News / Solutions / Join Us)
+    // as NavigationDropdown <button> triggers.
+    const anchors = wrapper.findAll('ul.nav-links a').map((a) => a.text())
+    expect(anchors).toEqual(['首页', '联系'])
+    const triggers = wrapper
+      .findAll('ul.nav-links .dropdown-trigger')
+      .map((b) => b.text().replace('▼', '').trim())
+    expect(triggers).toEqual(['关于我们', '新闻', '解决方案', '加入我们'])
     wrapper.unmount()
   })
 
