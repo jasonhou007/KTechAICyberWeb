@@ -97,11 +97,32 @@ describe('ThemeToggle.vue (FEAT-005)', () => {
   describe('Interaction', () => {
     it('calls store.toggleTheme on click and flips the theme', async () => {
       const store = usePreferencesStore()
-      expect(store.theme).toBe('cyber')
+      // Pin the start theme explicitly so the assertion is independent of the
+      // system-preference seed (issue #15 now seeds from prefers-color-scheme).
+      store.setTheme('dark')
+      await wrapper.vm.$nextTick()
 
       await wrapper.find('button.theme-toggle').trigger('click')
 
       expect(store.theme).toBe('light')
+    })
+
+    it('re-renders the icon + aria-pressed after a real click (end-to-end)', async () => {
+      const store = usePreferencesStore()
+      store.setTheme('dark')
+      await wrapper.vm.$nextTick()
+      // Dark active => shows the light affordance (sun) + aria-pressed false.
+      expect(wrapper.find('.theme-icon').text()).toBe('☀')
+      expect(wrapper.find('button.theme-toggle').attributes('aria-pressed')).toBe('false')
+
+      await wrapper.find('button.theme-toggle').trigger('click')
+      await wrapper.vm.$nextTick()
+
+      // Now light active => shows the dark affordance (moon) + aria-pressed true.
+      expect(store.theme).toBe('light')
+      expect(wrapper.find('.theme-icon').text()).toBe('☾')
+      expect(wrapper.find('.theme-label').text()).toBe('Dark')
+      expect(wrapper.find('button.theme-toggle').attributes('aria-pressed')).toBe('true')
     })
   })
 })

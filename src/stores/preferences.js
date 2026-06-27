@@ -25,6 +25,24 @@ function loadPersisted() {
 }
 
 /**
+ * Detect the OS color-scheme preference via prefers-color-scheme. Returns
+ * 'dark' or 'light'; falls back to 'dark' (the cyberpunk default) when
+ * matchMedia is unavailable (SSR / very old browsers). Used to seed the
+ * initial theme on first load so the site honours the user's OS setting
+ * before they explicitly choose a theme (issue #15 AC §3).
+ */
+function detectSystemTheme() {
+  try {
+    if (typeof window !== 'undefined' && window.matchMedia) {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    }
+  } catch {
+    // matchMedia may throw in restricted environments; fall through to default.
+  }
+  return 'dark'
+}
+
+/**
  * usePreferencesStore
  *
  * User-level preferences that MUST persist across sessions: theme and
@@ -39,9 +57,17 @@ function loadPersisted() {
 export const usePreferencesStore = defineStore('preferences', {
   state: () => {
     const persisted = loadPersisted()
+    // When the user has explicitly chosen a theme, honour it. Otherwise seed
+    // the initial theme from the OS prefers-color-scheme preference (issue
+    // #15 AC §3: "System preference detection (prefers-color-scheme)"). The
+    // chosen theme is dark-styled unless it is 'light', so a detected 'dark'
+    // or 'light' preference maps cleanly onto the dark/light CSS variants.
+    const theme = persisted.theme
+      || detectSystemTheme()
     return {
-      // Visual theme. Defaults to 'cyber' (the cyberpunk theme).
-      theme: persisted.theme || 'cyber',
+      // Visual theme. Either an explicit saved value, the detected system
+      // preference, or 'dark' (the cyberpunk default) as a final fallback.
+      theme,
       // UI language code. Defaults to 'en'. Mirrors useLanguage.js default.
       language: persisted.language || 'en'
     }
