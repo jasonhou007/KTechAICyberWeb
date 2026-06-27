@@ -1,28 +1,20 @@
 import { ref, computed } from 'vue'
+import enLocale from '../locales/en.json'
+import zhLocale from '../locales/zh.json'
 
 const LANGUAGE_KEY = 'ktech-language'
 const DEFAULT_LANGUAGE = 'en'
 
-// Translation cache
-const translations = ref({})
+// Translations are bundled at build time via static imports, so they resolve in
+// dev, preview, AND production regardless of the deploy base path.
+// Previously these were fetch()'d from `/src/locales/<lang>.json` at runtime,
+// which 404s in the production build (there is no `/src/` in `dist/`) and left
+// the UI full of raw i18n keys like "home.title".
+const translations = ref({
+  en: enLocale,
+  zh: zhLocale,
+})
 const currentLanguage = ref(DEFAULT_LANGUAGE)
-
-// Load translations from JSON files
-async function loadTranslations(lang) {
-  if (translations.value[lang]) {
-    return translations.value[lang]
-  }
-
-  try {
-    const response = await fetch(`/src/locales/${lang}.json`)
-    const data = await response.json()
-    translations.value[lang] = data
-    return data
-  } catch (error) {
-    console.error(`Failed to load translations for ${lang}:`, error)
-    return {}
-  }
-}
 
 // Get nested value from object using dot notation
 function getNestedValue(obj, path) {
@@ -41,7 +33,6 @@ export function initLanguage() {
   } else {
     currentLanguage.value = DEFAULT_LANGUAGE
   }
-  loadTranslations(currentLanguage.value)
 }
 
 export function useLanguage() {
@@ -50,7 +41,6 @@ export function useLanguage() {
     if (lang === 'en' || lang === 'zh') {
       currentLanguage.value = lang
       localStorage.setItem(LANGUAGE_KEY, lang)
-      loadTranslations(lang)
     }
   }
 

@@ -187,22 +187,25 @@ describe('Home.vue', () => {
       const stats = wrapper.findAll('.stat')
       const uptimeStat = stats[0]
       expect(uptimeStat.find('.stat-value').text()).toBe('99.9%')
-      // The label is the translation key since we only have values in locales
-      expect(uptimeStat.find('.stat-label').text()).toBe('home.stats.uptime')
+      // The label key resolves to the bundled English copy (same string as the
+      // value here); the raw key is no longer shown now that i18n loads.
+      expect(uptimeStat.find('.stat-label').text()).toBe('99.9%')
     })
 
     it('displays requests stat with value and label', () => {
       const stats = wrapper.findAll('.stat')
       const requestsStat = stats[1]
       expect(requestsStat.find('.stat-value').text()).toBe('1M+')
-      expect(requestsStat.find('.stat-label').text()).toBe('home.stats.requests')
+      // The label key resolves to the bundled English copy.
+      expect(requestsStat.find('.stat-label').text()).toBe('1M+')
     })
 
     it('displays latency stat with value and label', () => {
       const stats = wrapper.findAll('.stat')
       const latencyStat = stats[2]
       expect(latencyStat.find('.stat-value').text()).toBe('50ms')
-      expect(latencyStat.find('.stat-label').text()).toBe('home.stats.latency')
+      // The label key resolves to the bundled English copy.
+      expect(latencyStat.find('.stat-label').text()).toBe('50ms')
     })
 
     it('all stat values have neon-text class', () => {

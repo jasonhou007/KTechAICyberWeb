@@ -120,60 +120,58 @@ describe('ServiceRetailLending.vue', () => {
   // ============================================
   describe('Content', () => {
     it('renders the hero heading key', () => {
-      expect(wrapper.text()).toContain('services.retailLending.hero.heading')
+      expect(wrapper.text()).toContain('Digital Retail Lending Platform')
     })
 
     it('renders the hero description key', () => {
-      expect(wrapper.text()).toContain('services.retailLending.hero.description')
+      expect(wrapper.text()).toContain('Accelerate loan origination')
     })
 
     it('renders the overview heading and description keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.retailLending.overview.heading')
-      expect(text).toContain('services.retailLending.overview.description')
+      expect(text).toContain('Service Overview')
+      expect(text).toContain('Our Retail Lending Solution combines a configurable risk engine')
     })
 
     it('renders all four core feature keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.retailLending.coreFeatures.riskEngine.title')
-      expect(text).toContain('services.retailLending.coreFeatures.automation.title')
-      expect(text).toContain('services.retailLending.coreFeatures.antiFraud.title')
-      expect(text).toContain('services.retailLending.coreFeatures.creditDecisioning.title')
+      expect(text).toContain('Risk Engine')
+      expect(text).toContain('Process Automation')
+      expect(text).toContain('Anti-Fraud')
+      expect(text).toContain('Credit Decisioning')
     })
 
     it('renders all three loan type keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.retailLending.loanTypes.personal.title')
-      expect(text).toContain('services.retailLending.loanTypes.sme.title')
-      expect(text).toContain('services.retailLending.loanTypes.coLending.title')
+      expect(text).toContain('Personal Lending')
+      expect(text).toContain('SME Lending')
+      expect(text).toContain('Co-Lending')
     })
 
     it('renders all four tech feature keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.retailLending.techFeatures.baas.title')
-      expect(text).toContain('services.retailLending.techFeatures.digitalOnboarding.title')
-      expect(text).toContain('services.retailLending.techFeatures.lifecycle.title')
-      expect(text).toContain('services.retailLending.techFeatures.governance.title')
+      expect(text).toContain('Banking-as-a-Service')
+      expect(text).toContain('Digital Onboarding')
+      expect(text).toContain('Lifecycle Management')
+      expect(text).toContain('Governance & Compliance')
     })
 
     it('renders all four metric labels', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.retailLending.metrics.approvals.label')
-      expect(text).toContain('services.retailLending.metrics.opsCost.label')
-      expect(text).toContain('services.retailLending.metrics.automation.label')
-      expect(text).toContain('services.retailLending.metrics.fraud.label')
+      expect(text).toContain('Auto-Approval Rate')
+      expect(text).toContain('Operational Cost Reduction')
+      expect(text).toContain('Process Automation')
+      expect(text).toContain('Fraud Detection Accuracy')
     })
 
     it('renders all four process step numbers', () => {
-      const text = wrapper.text()
-      expect(text).toContain('services.retailLending.process.consult.step')
-      expect(text).toContain('services.retailLending.process.design.step')
-      expect(text).toContain('services.retailLending.process.deploy.step')
-      expect(text).toContain('services.retailLending.process.optimize.step')
+      // The four step-number slots render the bundled "01".."04" copy.
+      const stepNumbers = wrapper.findAll('.rl__step-number')
+      expect(stepNumbers.map((n) => n.text())).toEqual(['01', '02', '03', '04'])
     })
 
     it('renders the CTA button label key', () => {
-      expect(wrapper.text()).toContain('services.retailLending.cta.button')
+      expect(wrapper.text()).toContain('Request Consultation')
     })
   })
 
@@ -209,9 +207,15 @@ describe('ServiceRetailLending.vue', () => {
       expect(typeof (wrapper.vm as any).t).toBe('function')
     })
 
-    it('returns the key as fallback when translation is not loaded', () => {
-      const result = (wrapper.vm as any).t('services.retailLending.title')
-      expect(result).toBe('services.retailLending.title')
+    it('returns the key as fallback for a genuinely-missing key', () => {
+      const result = (wrapper.vm as any).t('services.retailLending.this.key.does.not.exist')
+      expect(result).toBe('services.retailLending.this.key.does.not.exist')
+    })
+
+    it('translates the title key to real English copy', () => {
+      expect((wrapper.vm as any).t('services.retailLending.title')).toBe(
+        'Retail Lending Solution',
+      )
     })
   })
 

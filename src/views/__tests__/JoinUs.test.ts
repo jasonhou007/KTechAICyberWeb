@@ -8,7 +8,11 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
 
-// Mock the module before importing the component
+// Mock the module before importing the component.
+// A module-scope initLanguage spy is captured so tests can assert the component
+// invokes it on mount. vi.hoisted() runs before the (hoisted) vi.mock factory so
+// the spy instance is shared across every useLanguage() call the component makes.
+const { initLanguageSpy } = vi.hoisted(() => ({ initLanguageSpy: vi.fn() }))
 vi.mock('../../composables/useLanguage', () => {
   const mockTranslations = {
     'joinUs.title': 'Join',
@@ -57,11 +61,12 @@ vi.mock('../../composables/useLanguage', () => {
   }
 
   return {
+    initLanguage: initLanguageSpy,
     useLanguage: () => ({
       currentLanguage: { value: 'en' },
       languageDisplay: { value: 'EN' },
       isEnglish: { value: true },
-      initLanguage: vi.fn(),
+      initLanguage: initLanguageSpy,
       setLanguage: vi.fn(),
       toggleLanguage: vi.fn(),
       t: (key) => mockTranslations[key] || key
@@ -69,6 +74,7 @@ vi.mock('../../composables/useLanguage', () => {
   }
 })
 
+import { useLanguage } from '../../composables/useLanguage'
 import JoinUs from '../JoinUs.vue'
 
 describe('JoinUs.vue', () => {
@@ -76,6 +82,9 @@ describe('JoinUs.vue', () => {
   let router: any
 
   beforeEach(async () => {
+    // Reset the shared initLanguage spy so per-test call counts stay isolated.
+    initLanguageSpy.mockClear()
+
     // Create router instance
     router = createRouter({
       history: createMemoryHistory(),
@@ -461,15 +470,17 @@ describe('JoinUs.vue', () => {
     })
 
     it('should call initLanguage on mount', () => {
-      const { useLanguage } = require('../../composables/useLanguage')
-      const mockInit = useLanguage().initLanguage
-      // Verify initLanguage was called during component setup
+      // JoinUs.vue calls initLanguage() during setup; the shared spy (returned by
+      // the mocked useLanguage) must have been invoked when the wrapper mounted.
+      expect(initLanguageSpy).toHaveBeenCalled()
     })
 
     it('should have translation function available', () => {
-      const { useLanguage } = require('../../composables/useLanguage')
-      const t = useLanguage().t
+      const { t } = useLanguage()
       expect(typeof t).toBe('function')
+      // The mock resolves known keys to real copy and falls back to the raw key.
+      expect(t('joinUs.title')).toBe('Join')
+      expect(t('joinUs.unknown.key')).toBe('joinUs.unknown.key')
     })
   })
 
@@ -513,8 +524,7 @@ describe('JoinUs.vue', () => {
    */
   describe('Edge Cases', () => {
     it('should handle missing translation keys gracefully', () => {
-      const { useLanguage } = require('../../composables/useLanguage')
-      const t = useLanguage().t
+      const { t } = useLanguage()
       const missingKey = 'nonexistent.key'
       expect(t(missingKey)).toBe(missingKey)
     })

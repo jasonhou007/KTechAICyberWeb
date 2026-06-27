@@ -13,14 +13,13 @@
  * - Edge Cases: Missing main-content element and lifecycle cycles
  *
  * Note on the i18n mock:
- * SkipLink imports `useLanguage` from '../i18n' (resolves to src/i18n). In the
- * happy-dom test environment the real composable fetches translations via
- * fetch('/src/locales/<lang>.json') which never resolves, so the rendered text
- * would just be the raw key. To get deterministic, fast unit tests we mock the
- * '../../i18n' module (the path from this test file) with a synchronous
- * translation function backed by an in-memory dictionary. This isolates the
- * component's own logic (rendering, click handling, focus management) from the
- * async loader.
+ * SkipLink imports `useLanguage` from '../i18n' (resolves to src/i18n). The real
+ * composable now bundles locales via static imports (no runtime fetch), so it
+ * would resolve real translations in tests too. We still mock the '../../i18n'
+ * module (the path from this test file) with a synchronous translation function
+ * backed by a small in-memory dictionary. This isolates the component's own
+ * logic (rendering, click handling, focus management) from the shared language
+ * singleton and gives deterministic, language-switchable assertions.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'

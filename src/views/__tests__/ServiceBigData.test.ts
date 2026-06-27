@@ -120,61 +120,61 @@ describe('ServiceBigData.vue', () => {
   // ============================================
   describe('Content', () => {
     it('renders the hero heading key', () => {
-      expect(wrapper.text()).toContain('services.bigDataAI.hero.heading')
+      expect(wrapper.text()).toContain('Big Data & AI Solutions')
     })
 
     it('renders the hero description key', () => {
-      expect(wrapper.text()).toContain('services.bigDataAI.hero.description')
+      expect(wrapper.text()).toContain(
+        'Transform raw data into intelligent decisions',
+      )
     })
 
     it('renders the overview heading and description keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.bigDataAI.overview.heading')
-      expect(text).toContain('services.bigDataAI.overview.description')
+      expect(text).toContain('Service Overview')
+      expect(text).toContain('Our Big Data & AI practice combines massive-scale')
     })
 
     it('renders all four AI capability keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.bigDataAI.aiCapabilities.machineLearning.title')
-      expect(text).toContain('services.bigDataAI.aiCapabilities.nlp.title')
-      expect(text).toContain('services.bigDataAI.aiCapabilities.computerVision.title')
-      expect(text).toContain('services.bigDataAI.aiCapabilities.predictiveAnalytics.title')
+      expect(text).toContain('Machine Learning')
+      expect(text).toContain('Natural Language Processing')
+      expect(text).toContain('Computer Vision')
+      expect(text).toContain('Predictive Analytics')
     })
 
     it('renders all four big data capability keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.bigDataAI.bigData.dataPipeline.title')
-      expect(text).toContain('services.bigDataAI.bigData.dataWarehouse.title')
-      expect(text).toContain('services.bigDataAI.bigData.realTimeAnalytics.title')
-      expect(text).toContain('services.bigDataAI.bigData.dataGovernance.title')
+      expect(text).toContain('Data Pipelines')
+      expect(text).toContain('Data Warehouse')
+      expect(text).toContain('Real-Time Analytics')
+      expect(text).toContain('Data Governance')
     })
 
     it('renders all four use case keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.bigDataAI.useCases.finance.title')
-      expect(text).toContain('services.bigDataAI.useCases.retail.title')
-      expect(text).toContain('services.bigDataAI.useCases.healthcare.title')
-      expect(text).toContain('services.bigDataAI.useCases.smartCity.title')
+      expect(text).toContain('Financial Services')
+      expect(text).toContain('Retail & E-Commerce')
+      expect(text).toContain('Healthcare')
+      expect(text).toContain('Smart City')
     })
 
     it('renders all four stat labels', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.bigDataAI.stats.dataVolume.label')
-      expect(text).toContain('services.bigDataAI.stats.models.label')
-      expect(text).toContain('services.bigDataAI.stats.accuracy.label')
-      expect(text).toContain('services.bigDataAI.stats.uptime.label')
+      expect(text).toContain('Data Processed')
+      expect(text).toContain('Models Deployed')
+      expect(text).toContain('Model Accuracy')
+      expect(text).toContain('Platform Uptime')
     })
 
     it('renders all four process step numbers', () => {
-      const text = wrapper.text()
-      expect(text).toContain('services.bigDataAI.process.consult.step')
-      expect(text).toContain('services.bigDataAI.process.design.step')
-      expect(text).toContain('services.bigDataAI.process.deploy.step')
-      expect(text).toContain('services.bigDataAI.process.optimize.step')
+      // The four step-number slots render the bundled "01".."04" copy.
+      const stepNumbers = wrapper.findAll('.bd__step-number')
+      expect(stepNumbers.map((n) => n.text())).toEqual(['01', '02', '03', '04'])
     })
 
     it('renders the CTA button label key', () => {
-      expect(wrapper.text()).toContain('services.bigDataAI.cta.button')
+      expect(wrapper.text()).toContain('Request Consultation')
     })
   })
 
@@ -210,9 +210,15 @@ describe('ServiceBigData.vue', () => {
       expect(typeof (wrapper.vm as any).t).toBe('function')
     })
 
-    it('returns the key as fallback when translation is not loaded', () => {
-      const result = (wrapper.vm as any).t('services.bigDataAI.title')
-      expect(result).toBe('services.bigDataAI.title')
+    it('returns the key as fallback for a genuinely-missing key', () => {
+      const result = (wrapper.vm as any).t('services.bigDataAI.this.key.does.not.exist')
+      expect(result).toBe('services.bigDataAI.this.key.does.not.exist')
+    })
+
+    it('translates the title key to real English copy', () => {
+      expect((wrapper.vm as any).t('services.bigDataAI.title')).toBe(
+        'Big Data & AI Solutions',
+      )
     })
   })
 
