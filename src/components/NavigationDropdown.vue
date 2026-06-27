@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-dropdown" 
+  <div class="nav-dropdown"
        @mouseenter="handleMouseEnter"
        @mouseleave="handleMouseLeave"
        :aria-expanded="isOpen"
@@ -11,32 +11,44 @@
       {{ label }}
       <span class="dropdown-arrow" :class="{ 'open': isOpen }">▼</span>
     </button>
-    
+
     <transition name="dropdown-fade">
       <div v-if="isOpen"
+           :id="menuId"
+           ref="menuRef"
            class="dropdown-menu"
+           role="menu"
+           :aria-label="label"
            @click="handleMenuClick">
         <!-- Flat mode (default): render items directly when items.length > 0. -->
-        <div v-if="items && items.length > 0"
-             v-for="item in items"
-             :key="item.key"
-             class="dropdown-item"
-             @click="navigateTo(item.route)">
+        <router-link v-for="item in items"
+                     v-show="items.length > 0"
+                     :key="item.key"
+                     :to="item.route"
+                     class="dropdown-item"
+                     role="menuitem"
+                     :data-item-idx="itemIdxById(item.key)"
+                     @click="close"
+                     @keydown="onItemKeydown($event, itemIdxById(item.key))">
           {{ t(item.label) }}
-        </div>
+        </router-link>
         <!-- Grouped mega-menu mode: render one .dropdown-group per group when
              items is empty/undefined but groups are provided. -->
-        <div v-else
-             v-for="group in groups"
+        <div v-for="group in groups"
+             v-show="items.length === 0"
              :key="group.groupLabel"
              class="dropdown-group">
           <div class="dropdown-group-heading">{{ t(group.groupLabel) }}</div>
-          <div v-for="item in group.items"
-               :key="item.key"
-               class="dropdown-item"
-               @click="navigateTo(item.route)">
+          <router-link v-for="item in group.items"
+                       :key="item.key"
+                       :to="item.route"
+                       class="dropdown-item"
+                       role="menuitem"
+                       :data-item-idx="itemIdxById(item.key)"
+                       @click="close"
+                       @keydown="onItemKeydown($event, itemIdxById(item.key))">
             {{ t(item.label) }}
-          </div>
+          </router-link>
         </div>
       </div>
     </transition>
@@ -44,8 +56,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 
 // Shared i18n — text follows the site-wide language toggle (en/zh).
@@ -66,12 +77,48 @@ const props = defineProps({
   groups: {
     type: Array,
     default: () => []
+  },
+  // Stable id for aria-controls linkage (defaults to a label-derived slug).
+  menuId: {
+    type: String,
+    default: ''
   }
 })
 
-const router = useRouter()
+// Derive a stable menu id once per instance so the trigger's aria-controls
+// points at the rendered menu element.
+const autoMenuId = `dropdown-menu-${Math.random().toString(36).slice(2, 9)}`
+const menuId = computed(() => props.menuId || autoMenuId)
+
 const isOpen = ref(false)
 const triggerRef = ref(null)
+const menuRef = ref(null)
+
+// Build a flat ordered list of all menuitems (flat items + grouped items) so
+// arrow-key navigation can index across both modes uniformly.
+const allItems = computed(() => {
+  if (props.items && props.items.length > 0) {
+    return props.items
+  }
+  return (props.groups || []).flatMap((g) => g.items || [])
+})
+
+// Map item.key -> flat index for the data-item-idx attribute + arrow nav.
+const itemIdxById = (key) => allItems.value.findIndex((i) => i.key === key)
+
+const focusItem = (idx) => {
+  const menu = menuRef.value || document.querySelector(`#${menuId.value}`)
+  const el = menu?.querySelector(`[data-item-idx="${idx}"]`)
+  el?.focus()
+}
+
+const open = () => {
+  isOpen.value = true
+}
+
+const close = () => {
+  isOpen.value = false
+}
 
 const toggle = () => {
   isOpen.value = !isOpen.value
@@ -95,9 +142,31 @@ const handleMenuClick = (e) => {
   }
 }
 
-const navigateTo = (route) => {
-  router.push(route)
-  isOpen.value = false
+// Unified keyboard handler bound to each menuitem. Implements the WAI-ARIA
+// Menu pattern: Enter/Space activate, ArrowDown/ArrowUp move focus (with
+// wrap), Escape closes + restores focus to the trigger.
+const onItemKeydown = (e, idx) => {
+  const total = allItems.value.length
+  if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space') {
+    // router-link handles the navigation; just ensure the menu closes.
+    close()
+    return
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    focusItem((idx + 1) % total)
+    return
+  }
+  if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    focusItem((idx - 1 + total) % total)
+    return
+  }
+  if (e.key === 'Escape') {
+    e.preventDefault()
+    close()
+    triggerRef.value?.focus()
+  }
 }
 
 const handleClickOutside = (e) => {
@@ -122,6 +191,9 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
   document.removeEventListener('keydown', handleEscape)
 })
+
+// Expose for template refs + tests.
+defineExpose({ isOpen, menuRef, open, close })
 </script>
 
 <style scoped>
@@ -172,16 +244,24 @@ onUnmounted(() => {
 }
 
 .dropdown-item {
+  display: block;
   padding: 0.75rem 1rem;
   color: #e0e0e0;
   cursor: pointer;
+  text-decoration: none;
   transition: all 0.3s ease;
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover,
+.dropdown-item:focus-visible {
   background: rgba(0, 240, 255, 0.1);
   color: #00f0ff;
   padding-left: 1.25rem;
+  outline: none;
+}
+
+.dropdown-item:focus-visible {
+  box-shadow: inset 0 0 0 2px rgba(0, 240, 255, 0.6);
 }
 
 /* Grouped mega-menu mode */
