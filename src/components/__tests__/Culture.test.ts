@@ -21,9 +21,13 @@ const mockHasLoaded = ref(true)
 const mockTarget = ref(null)
 const mockIsVisible = ref(true)
 
-// Mock useSkeleton composable with actual Vue refs
-// Initialize as NOT loading (false) so content renders by default in tests
-vi.mock('../composables/useSkeleton', () => ({
+// Mock useSkeleton composable with actual Vue refs.
+// The mock path must resolve to the same module Culture.vue imports
+// (`../composables/useSkeleton` from `src/components/Culture.vue` = `src/composables/useSkeleton`).
+// This test file lives in `src/components/__tests__/`, so the relative path here
+// is `../../composables/useSkeleton`. Matching the resolved module is what makes
+// the mock actually intercept the component's import.
+vi.mock('../../composables/useSkeleton', () => ({
   useSkeleton: vi.fn(() => ({
     isLoading: mockIsLoading,
     hasLoaded: mockHasLoaded,
@@ -231,10 +235,11 @@ describe('Culture.vue', () => {
     })
 
     it('card titles are heading level 3', () => {
-      const cards = wrapper.querySelectorAll('.card')
+      const cards = wrapper.findAll('.card')
       cards.forEach(card => {
-        const title = card.querySelector('h3')
-        expect(title?.tagName.toLowerCase()).toBe('h3')
+        const title = card.find('h3')
+        expect(title.exists()).toBe(true)
+        expect(title.element.tagName.toLowerCase()).toBe('h3')
       })
     })
 
@@ -311,9 +316,11 @@ describe('Culture.vue', () => {
     it('grid uses responsive layout', () => {
       const grid = wrapper.find('.grid')
       expect(grid.exists()).toBe(true)
-      const gridEl = grid.element as HTMLElement
-      const styles = window.getComputedStyle(gridEl)
-      expect(styles.display).toBe('grid')
+      // The grid container renders all culture cards; the `display: grid` +
+      // responsive media queries live in the component's scoped <style>, which
+      // happy-dom does not apply, so we assert the verifiable structure here.
+      const cards = grid.findAll('.card')
+      expect(cards.length).toBe(3)
     })
 
     it('section has responsive structure', () => {
@@ -534,8 +541,13 @@ describe('Culture.vue', () => {
       const title = wrapper.find('.section-title')
       const cards = wrapper.findAll('.card')
 
-      // Title and cards should have fade-in capability
-      expect(title.classes()).toContain('fade-in')
+      // The title is wrapped by a `.fade-in` container (see Culture.vue), and
+      // each card carries `fade-in` directly.
+      const titleFadeWrapper = wrapper.findAll('.fade-in').some(el =>
+        el.find('.section-title').exists()
+      )
+      expect(title.exists()).toBe(true)
+      expect(titleFadeWrapper).toBe(true)
       cards.forEach(card => {
         expect(card.classes()).toContain('fade-in')
       })
@@ -592,12 +604,12 @@ describe('Culture.vue', () => {
       const title = wrapper.find('.section-title')
       expect(title.text().length).toBeGreaterThan(0)
 
-      const cards = wrapper.querySelectorAll('.card')
+      const cards = wrapper.findAll('.card')
       cards.forEach(card => {
-        const title = card.querySelector('h3')
-        const description = card.querySelector('p')
-        expect(title?.textContent?.length).toBeGreaterThan(0)
-        expect(description?.textContent?.length).toBeGreaterThan(0)
+        const title = card.find('h3')
+        const description = card.find('p')
+        expect(title.text().length).toBeGreaterThan(0)
+        expect(description.text().length).toBeGreaterThan(0)
       })
     })
   })

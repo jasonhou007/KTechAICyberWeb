@@ -6,24 +6,42 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
+import { ref } from 'vue'
 import Contact from '../Contact.vue'
 import SkeletonContact from '../SkeletonContact.vue'
 
-// Mock @vueuse/core
+// Mock @vueuse/core (top-level so it is hoisted before the component imports it)
 vi.mock('@vueuse/core', () => ({
   useIntersectionObserver: vi.fn(() => vi.fn()),
 }))
 
-// Create a configurable mock for useSkeleton
-const createUseSkeletonMock = (isLoading: boolean) => {
-  vi.mock('../composables/useSkeleton', () => ({
-    useSkeleton: vi.fn(() => ({
-      isLoading,
-      hasLoaded: !isLoading,
-      target: { value: null },
-      isVisible: !isLoading,
-    })),
-  }))
+// Shared, controllable refs that back the mocked useSkeleton. Tests flip these
+// via setLoadingState() instead of re-mocking the module per beforeEach, which
+// avoids vi.mock/vi.unmock being called nested (which vitest hoists with a
+// warning and would silently no-op the per-suite overrides).
+const mockIsLoading = ref(true)
+const mockHasLoaded = ref(false)
+const mockTarget = ref(null)
+const mockIsVisible = ref(false)
+
+// Mock useSkeleton at the top level. The path resolves relative to this test
+// file (`src/components/__tests__/`) to the same module Contact.vue imports
+// (`../composables/useSkeleton` from `src/components/Contact.vue` = `src/composables/useSkeleton`).
+vi.mock('../../composables/useSkeleton', () => ({
+  useSkeleton: vi.fn(() => ({
+    isLoading: mockIsLoading,
+    hasLoaded: mockHasLoaded,
+    target: mockTarget,
+    isVisible: mockIsVisible,
+  })),
+}))
+
+// Helper to switch the mocked loading state for a given mount. Must be called
+// BEFORE mount() so the component reads the desired ref values during setup.
+const setLoadingState = (isLoading: boolean) => {
+  mockIsLoading.value = isLoading
+  mockHasLoaded.value = !isLoading
+  mockIsVisible.value = !isLoading
 }
 
 describe('Contact.vue', () => {
@@ -35,7 +53,7 @@ describe('Contact.vue', () => {
 
   describe('Rendering - Loading State (Default)', () => {
     beforeEach(() => {
-      createUseSkeletonMock(true)
+      setLoadingState(true)
       wrapper = mount(Contact)
     })
 
@@ -95,15 +113,7 @@ describe('Contact.vue', () => {
   describe('Content Display - Loaded State', () => {
     beforeEach(() => {
       // Re-mock with isLoading: false for content tests
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -158,15 +168,7 @@ describe('Contact.vue', () => {
 
   describe('Contact Icons - Loaded State', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -194,15 +196,7 @@ describe('Contact.vue', () => {
 
   describe('Cyberpunk Styling - Loaded State', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -237,15 +231,7 @@ describe('Contact.vue', () => {
 
   describe('Loading State - Content Visible', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -257,15 +243,7 @@ describe('Contact.vue', () => {
 
   describe('Accessibility - Loaded State', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -293,15 +271,7 @@ describe('Contact.vue', () => {
 
   describe('Responsive Behavior - Loaded State', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -320,15 +290,7 @@ describe('Contact.vue', () => {
 
   describe('Transitions - Loaded State', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -348,15 +310,7 @@ describe('Contact.vue', () => {
 
   describe('Component Structure - Loaded State', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -381,15 +335,7 @@ describe('Contact.vue', () => {
 
   describe('Internationalization - Loaded State', () => {
     beforeEach(() => {
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
     })
 
@@ -426,7 +372,7 @@ describe('Contact.vue', () => {
   describe('State Transitions', () => {
     it('handles transition from loading to loaded', () => {
       // Start with loading
-      createUseSkeletonMock(true)
+      setLoadingState(true)
       wrapper = mount(Contact)
       expect(wrapper.findComponent(SkeletonContact).exists()).toBe(true)
       expect(wrapper.find('.content-wrapper').exists()).toBe(false)
@@ -434,15 +380,7 @@ describe('Contact.vue', () => {
       wrapper.unmount()
 
       // Switch to loaded
-      vi.unmock('../composables/useSkeleton')
-      vi.mock('../composables/useSkeleton', () => ({
-        useSkeleton: vi.fn(() => ({
-          isLoading: false,
-          hasLoaded: true,
-          target: { value: null },
-          isVisible: true,
-        })),
-      }))
+      setLoadingState(false)
       wrapper = mount(Contact)
       expect(wrapper.find('.content-wrapper').exists()).toBe(true)
     })

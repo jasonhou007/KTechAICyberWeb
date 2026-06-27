@@ -90,16 +90,13 @@ describe('JoinUs.vue', () => {
     await router.push('/join-us')
     await router.isReady()
 
-    // Mount component
+    // Mount component. The real vue-router plugin is provided, so the genuine
+    // <router-link> (RouterLink) component renders — this is what the
+    // "integrates with Vue Router" assertion verifies. Do NOT stub router-link
+    // here, or findComponent({ name: 'RouterLink' }) would find the stub instead.
     wrapper = mount(JoinUs, {
       global: {
-        plugins: [router],
-        stubs: {
-          'router-link': {
-            template: '<a :href="to"><slot /></a>',
-            props: ['to']
-          }
-        }
+        plugins: [router]
       }
     })
 
