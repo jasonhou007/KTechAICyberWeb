@@ -2,12 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Home from '@/views/Home.vue'
 import { createRouter, createMemoryHistory } from 'vue-router'
-// This suite is skipped below because it depends on Pinia. Pinia is NOT set
-// up in this project yet — see GitHub issue #22 "Setup Pinia State Management"
-// (still OPEN). The `createPinia` import would fail to resolve, so the module
-// must stay inert until #22 lands. Re-enable (and restore the import) once
-// Pinia is installed.
-// import { createPinia } from 'pinia'
+import { createPinia } from 'pinia'
 
 // Mock useLanguage composable
 const mockTranslations = {
@@ -54,12 +49,7 @@ const mockTranslations = {
 vi.mock('@/composables/useLanguage', () => ({
   useLanguage: () => ({
     t: (key) => {
-      // Simulate nested key access for stats labels
-      if (key.includes('.label')) {
-        const keys = key.split('.')
-        const lang = 'en' // default
-        return mockTranslations[en][key] || key
-      }
+      // Resolve via the English map; fall back to the key itself.
       return mockTranslations.en[key] || key
     },
     locale: { value: 'en' },
@@ -72,10 +62,7 @@ vi.mock('@/composables/useLanguage', () => ({
   })
 }))
 
-// SKIP: depends on Pinia setup — tracked in #22 (not yet implemented).
-// Pinia is intentionally not installed in this project; re-enable this suite
-// (and restore the createPinia import above) once issue #22 lands.
-describe.skip('StatsSection (Home View)', () => {
+describe('StatsSection (Home View)', () => {
   let router
   let pinia
   let wrapper
@@ -88,7 +75,7 @@ describe.skip('StatsSection (Home View)', () => {
         { path: '/home', component: Home }
       ]
     })
-    pinia = null // createPinia() — disabled, see #22
+    pinia = createPinia()
   })
 
   describe('Rendering', () => {

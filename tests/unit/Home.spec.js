@@ -2,12 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import Home from '../../src/views/Home.vue'
 import { createRouter, createMemoryHistory } from 'vue-router'
-// This suite is skipped below because it depends on Pinia. Pinia is NOT set
-// up in this project yet — see GitHub issue #22 "Setup Pinia State Management"
-// (still OPEN). The `createPinia` import would fail to resolve, so the whole
-// module must remain inert until #22 lands. Re-enable (and restore the import)
-// once Pinia is installed.
-// import { createPinia } from 'pinia'
+import { createPinia } from 'pinia'
 
 // Mock composables
 vi.mock('../../src/composables/useLanguage', () => ({
@@ -41,10 +36,7 @@ vi.mock('../../src/composables/useIntersectionObserver', () => ({
   })
 }))
 
-// SKIP: depends on Pinia setup — tracked in #22 (not yet implemented).
-// Pinia is intentionally not installed in this project; re-enable this suite
-// (and restore the createPinia import above) once issue #22 lands.
-describe.skip('Home.vue (Hero Component)', () => {
+describe('Home.vue (Hero Component)', () => {
   let router
   let pinia
   let wrapper
@@ -56,7 +48,7 @@ describe.skip('Home.vue (Hero Component)', () => {
         { path: '/', component: Home }
       ]
     })
-    pinia = null // createPinia() — disabled, see #22
+    pinia = createPinia()
   })
 
   describe('Rendering', () => {
