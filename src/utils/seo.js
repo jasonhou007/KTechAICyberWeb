@@ -56,6 +56,12 @@ export function getRouteMeta(route) {
       description: 'KTech Privacy Policy. Learn how we collect, use, and protect your personal data in compliance with GDPR and CCPA, including your data protection rights.',
       ogImage: `${SITE_URL}/og-image-privacy.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-privacy.jpg`
+    },
+    '/terms': {
+      title: 'Terms of Service - KTech | KBight Fintech',
+      description: 'KTech Terms of Service. Read the terms and conditions governing your use of our financial technology platform, including user responsibilities, liability, and dispute resolution.',
+      ogImage: `${SITE_URL}/og-image-terms.jpg`,
+      twitterImage: `${SITE_URL}/twitter-image-terms.jpg`
     }
   }
 

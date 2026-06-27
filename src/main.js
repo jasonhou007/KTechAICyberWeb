@@ -17,6 +17,7 @@ import Blockchain from './views/Blockchain.vue'
 import Contact from './views/Contact.vue'
 import PositionList from './views/PositionList.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
+import Terms from './views/Terms.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -28,7 +29,8 @@ const routes = [
   { path: '/services/blockchain', component: Blockchain },
   { path: '/contact', component: Contact },
   { path: '/careers', component: PositionList },
-  { path: '/privacy', component: PrivacyPolicy }
+  { path: '/privacy', component: PrivacyPolicy },
+  { path: '/terms', component: Terms }
 ]
 
 const router = createRouter({

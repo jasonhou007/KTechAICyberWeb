@@ -34,6 +34,11 @@
             class="footer-link"
             :aria-label="t('footer.privacyPolicy')"
           >{{ t('footer.privacyPolicy') }}</router-link>
+          <router-link
+            to="/terms"
+            class="footer-link"
+            :aria-label="t('footer.termsOfService')"
+          >{{ t('footer.termsOfService') }}</router-link>
         </div>
         <div class="footer-status">
           <span class="status-dot" aria-hidden="true"></span>

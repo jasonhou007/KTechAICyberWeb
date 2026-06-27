@@ -8,7 +8,8 @@
   "footer": {
     "copyright": "\u00a9 2025 KTech AI. All systems operational.",
     "status": "ONLINE",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
   },
   "home": {
     "title": "KTech AI",
@@ -306,6 +307,120 @@
       "heading": "Contact Us",
       "description": "If you have questions about this Privacy Policy or wish to exercise your data protection rights, please contact our Data Protection Officer.",
       "email": "Email: privacy@ktech.fintech",
+      "address": "Address: 开泰远景信息科技有限公司, Luohu District, Shenzhen, Guangdong, China 518000"
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "titleAccent": "Legal Agreement",
+    "subtitle": "The terms and conditions that govern your use of KTech services",
+    "lastUpdated": "Last updated: June 27, 2026",
+    "disclaimer": "This is a template terms of service. Please consult legal counsel before production use.",
+    "intro": {
+      "heading": "Introduction",
+      "description": "These Terms of Service (\"Terms\") govern your access to and use of the KTech AI website, platform, and services (the \"Services\") operated by KTech AI (\"we\", \"us\", or \"our\"). By using our Services, you agree to be bound by these Terms. If you do not agree, you must not access or use our Services."
+    },
+    "acceptance": {
+      "heading": "Acceptance of Terms",
+      "description": "By accessing or using the Services, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy Policy.",
+      "items": {
+        "byAccess": {
+          "title": "Agreement by Access",
+          "description": "Your use of the Services constitutes your acceptance of these Terms, whether or not you create an account."
+        },
+        "amendments": {
+          "title": "Amendments",
+          "description": "We may update these Terms from time to time. Continued use after changes are posted constitutes acceptance of the revised Terms."
+        },
+        "rejection": {
+          "title": "Right to Reject",
+          "description": "If you do not agree to the revised Terms, you must stop using the Services before the changes take effect."
+        }
+      }
+    },
+    "responsibilities": {
+      "heading": "User Responsibilities",
+      "description": "You agree to the following responsibilities when using our Services:",
+      "items": {
+        "accurate": "Providing accurate, current, and complete information when creating an account or submitting data",
+        "compliance": "Complying with all applicable laws, regulations, and third-party agreements",
+        "security": "Maintaining the confidentiality and security of your account credentials and promptly notifying us of any unauthorized access",
+        "prohibited": "Not using the Services to engage in any unlawful, fraudulent, abusive, or infringing activity",
+        "fees": "Paying any applicable fees for premium services as described at the point of purchase"
+      }
+    },
+    "liability": {
+      "heading": "Limitation of Liability",
+      "description": "To the maximum extent permitted by law, the following limitations apply to your use of the Services:",
+      "items": {
+        "asIs": {
+          "title": "As-Is Basis",
+          "description": "The Services are provided on an \"as is\" and \"as available\" basis without warranties of any kind, express or implied."
+        },
+        "noIndirect": {
+          "title": "No Indirect Damages",
+          "description": "We are not liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Services."
+        },
+        "cap": {
+          "title": "Liability Cap",
+          "description": "Our total aggregate liability for any claim is limited to the amount you paid us in the twelve months preceding the claim, or one hundred US dollars, whichever is greater."
+        }
+      }
+    },
+    "ip": {
+      "heading": "Intellectual Property",
+      "description": "The following provisions govern ownership of intellectual property in connection with the Services:",
+      "items": {
+        "platform": {
+          "title": "Platform Materials",
+          "description": "The Services, including software, designs, logos, and content, are owned by us and protected by intellectual property laws."
+        },
+        "userContent": {
+          "title": "User Content",
+          "description": "You retain ownership of content you submit to the Services and grant us a worldwide, non-exclusive license to use it solely to operate and improve the Services."
+        },
+        "license": {
+          "title": "Limited License",
+          "description": "We grant you a personal, non-transferable, revocable license to access and use the Services in accordance with these Terms."
+        }
+      }
+    },
+    "termination": {
+      "heading": "Termination",
+      "description": "You may stop using the Services at any time. We may suspend or terminate your access under the following circumstances:",
+      "items": {
+        "byUser": "You may close your account or discontinue use at any time without notice",
+        "byUs": "We may suspend or terminate access immediately if you breach these Terms or engage in prohibited activity",
+        "effect": "Upon termination, all licenses and rights granted to you cease, and you must stop using the Services"
+      },
+      "note": "Surviving provisions such as intellectual property, limitation of liability, and dispute resolution remain in effect after termination."
+    },
+    "dispute": {
+      "heading": "Dispute Resolution",
+      "description": "We are committed to resolving disputes amicably and efficiently through the following process:",
+      "items": {
+        "negotiation": {
+          "title": "Negotiation",
+          "description": "The parties shall first attempt to resolve any dispute through good-faith negotiation within thirty days."
+        },
+        "mediation": {
+          "title": "Mediation",
+          "description": "If negotiation fails, the parties agree to attempt resolution through a mutually selected mediator."
+        },
+        "arbitration": {
+          "title": "Arbitration",
+          "description": "Any unresolved dispute shall be submitted to final and binding arbitration conducted in accordance with the applicable arbitration rules."
+        }
+      }
+    },
+    "governing": {
+      "heading": "Governing Law",
+      "description": "These Terms are governed by and construed in accordance with the laws of the People's Republic of China, without regard to its conflict of law principles. The courts of Shenzhen, Guangdong shall have exclusive jurisdiction over any disputes arising from these Terms."
+    },
+    "contact": {
+      "heading": "Contact Us",
+      "description": "If you have questions about these Terms of Service, please contact our legal team.",
+      "email": "Email: legal@ktech.fintech",
       "address": "Address: 开泰远景信息科技有限公司, Luohu District, Shenzhen, Guangdong, China 518000"
     }
   }
