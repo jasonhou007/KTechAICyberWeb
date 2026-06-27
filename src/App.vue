@@ -18,6 +18,7 @@
         <router-link to="/">{{ t('nav.home') }}</router-link>
         <router-link to="/about">{{ t('nav.about') }}</router-link>
         <router-link to="/news">{{ t('nav.news') }}</router-link>
+        <router-link to="/contact">{{ t('nav.contact') }}</router-link>
         <LanguageSwitcher />
       </div>
     </nav>
@@ -26,7 +27,14 @@
     </main>
     <footer class="cyber-footer" role="contentinfo">
       <div class="footer-content">
-        <div class="footer-text">{{ t('footer.copyright') }}</div>
+        <div class="footer-text">
+          {{ t('footer.copyright') }}
+          <router-link
+            to="/privacy"
+            class="footer-link"
+            :aria-label="t('footer.privacyPolicy')"
+          >{{ t('footer.privacyPolicy') }}</router-link>
+        </div>
         <div class="footer-status">
           <span class="status-dot" aria-hidden="true"></span>
           <span>{{ t('footer.status') }}</span>
@@ -160,6 +168,19 @@ export default {
 }
 .footer-content { display: flex; justify-content: space-between; align-items: center; }
 .footer-text { font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; color: #b0b0b0; }
+.footer-link {
+  margin-left: 1rem;
+  color: #00f0ff;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+.footer-link:hover {
+  border-color: rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+}
 .footer-status { display: flex; align-items: center; gap: 0.5rem; }
 .status-dot {
   width: 8px; height: 8px; background: #00f0ff; border-radius: 50%;

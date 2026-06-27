@@ -1,24 +1,34 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+
+// Global theme (CSS variables + reset) — required by all components.
+// Without this the SPA renders unstyled because component styles reference
+// var(--cyan), var(--font-display), etc. defined in assets/styles/variables.css.
+import './assets/styles/main.css'
+
 import App from './App.vue'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
 import News from './views/News.vue'
 import NewsDetail from './views/NewsDetail.vue'
-import JoinUs from './views/JoinUs.vue'
-import MobileApp from './views/MobileApp.vue'
+import SupplyChainFinance from './views/SupplyChainFinance.vue'
+import ServiceProjectManagement from './views/ServiceProjectManagement.vue'
 import Blockchain from './views/Blockchain.vue'
+import Contact from './views/Contact.vue'
 import PositionList from './views/PositionList.vue'
+import PrivacyPolicy from './views/PrivacyPolicy.vue'
 
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: About },
   { path: '/news', component: News },
   { path: '/news/:slug', component: NewsDetail, props: true },
-  { path: '/join-us', component: JoinUs },
-  { path: '/join-us/positions', component: PositionList },
-  { path: '/services/mobile-app', component: MobileApp },
-  { path: '/services/blockchain', component: Blockchain }
+  { path: '/services/supply-chain-finance', component: SupplyChainFinance },
+  { path: '/services/project-and-program-management', component: ServiceProjectManagement },
+  { path: '/services/blockchain', component: Blockchain },
+  { path: '/contact', component: Contact },
+  { path: '/careers', component: PositionList },
+  { path: '/privacy', component: PrivacyPolicy }
 ]
 
 const router = createRouter({

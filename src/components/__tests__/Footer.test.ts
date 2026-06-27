@@ -1,7 +1,7 @@
 /**
  * @file Footer.test.ts
  * @description Comprehensive unit tests for Footer component
- * @ticket #43 - TEST-005: Footer Component Unit Tests - TDD with Vitest
+ * @ticket #89 - TEST-022: Footer Component Unit Tests - TDD with Vitest
  *
  * Test Categories:
  * - Rendering Tests: Component mount and HTML structure
@@ -9,6 +9,12 @@
  * - Accessibility Tests: Semantic HTML and ARIA
  * - Styling Tests: CSS classes and responsive design
  * - i18n Tests: Translation function behavior
+ * - Edge Cases: Component lifecycle and multiple renders
+ *
+ * TDD Approach:
+ * 1. Red: Tests written to define expected behavior
+ * 2. Green: Component implementation makes tests pass
+ * 3. Refactor: Test code optimized for clarity and maintainability
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
@@ -22,10 +28,7 @@ describe('Footer.vue', () => {
     // Arrange: Create a fresh wrapper for each test
     wrapper = mount(Footer, {
       global: {
-        // CSS variables for styling tests
-        provide: {
-          // Mock any globals if needed
-        },
+        // Provide globals if needed
       },
     })
   })
@@ -48,7 +51,7 @@ describe('Footer.vue', () => {
       // Act: Find the footer element
       const footer = wrapper.find('footer.footer')
 
-      // Assert: Semantic footer element exists
+      // Assert: Semantic footer element exists with correct class
       expect(footer.exists()).toBe(true)
     })
 
@@ -59,6 +62,18 @@ describe('Footer.vue', () => {
 
       // Assert: Should have exactly 2 divs (company name + copyright)
       expect(divs).toHaveLength(2)
+    })
+
+    it('renders component structure correctly', () => {
+      // Act: Find footer and its children
+      const footer = wrapper.find('footer.footer')
+      const footerText = footer.find('.footer-text')
+      const footerCopyright = footer.find('.footer-copyright')
+
+      // Assert: Structure is correct
+      expect(footer.exists()).toBe(true)
+      expect(footerText.exists()).toBe(true)
+      expect(footerCopyright.exists()).toBe(true)
     })
   })
 
@@ -99,6 +114,16 @@ describe('Footer.vue', () => {
       expect(copyrightEl.exists()).toBe(true)
       expect(copyrightEl.text()).toBe('© 2026 KTech Fintech. All rights reserved.')
     })
+
+    it('has no leading or trailing whitespace in text content', () => {
+      // Act: Get text elements
+      const companyNameEl = wrapper.find('.footer-text')
+      const copyrightEl = wrapper.find('.footer-copyright')
+
+      // Assert: No extra whitespace
+      expect(companyNameEl.text()).toBe('开泰远景信息科技有限公司')
+      expect(copyrightEl.text()).toBe('© 2026 KTech Fintech. All rights reserved.')
+    })
   })
 
   // ============================================
@@ -120,6 +145,16 @@ describe('Footer.vue', () => {
 
       // Assert: Footer has class for CSS targeting
       expect(footer.exists()).toBe(true)
+      expect(footer.classes()).toContain('footer')
+    })
+
+    it('maintains readable text structure', () => {
+      // Act: Get text content
+      const text = wrapper.text()
+
+      // Assert: Text is readable and structured
+      expect(text.length).toBeGreaterThan(0)
+      expect(text).not.toBe('\n')
     })
   })
 
@@ -155,6 +190,14 @@ describe('Footer.vue', () => {
       // Assert: Element has correct class
       expect(footerCopyright.exists()).toBe(true)
       expect(footerCopyright.classes()).toContain('footer-copyright')
+    })
+
+    it('footer element has scoped styles applied', () => {
+      // Act: Check footer element
+      const footer = wrapper.find('footer.footer')
+
+      // Assert: Footer has class for scoped styles
+      expect(footer.attributes('class')).toContain('footer')
     })
   })
 
@@ -201,6 +244,14 @@ describe('Footer.vue', () => {
       // Assert: Returns the key when not found
       expect(result).toBe('key.with.dots')
     })
+
+    it('handles numeric-like keys', () => {
+      // Act: Call with numeric key
+      const result = wrapper.vm.t('footer.123')
+
+      // Assert: Returns the key when not found
+      expect(result).toBe('footer.123')
+    })
   })
 
   // ============================================
@@ -216,13 +267,13 @@ describe('Footer.vue', () => {
       ]
 
       // Assert: All wrappers mount successfully
-      wrappers.forEach(w => {
+      wrappers.forEach((w) => {
         expect(w.exists()).toBe(true)
         expect(w.text()).toContain('开泰远景信息科技有限公司')
       })
 
       // Cleanup: Unmount all
-      wrappers.forEach(w => w.unmount())
+      wrappers.forEach((w) => w.unmount())
 
       // Assert: No errors thrown
       expect(true).toBe(true)
@@ -231,11 +282,26 @@ describe('Footer.vue', () => {
     it('renders correctly when rendered multiple times', () => {
       // Act: Unmount and remount
       wrapper.unmount()
-      wrapper = mount(Footer)
+      const newWrapper = mount(Footer)
 
       // Assert: Still renders correctly
-      expect(wrapper.text()).toContain('开泰远景信息科技有限公司')
-      expect(wrapper.text()).toContain('© 2026 KTech Fintech')
+      expect(newWrapper.text()).toContain('开泰远景信息科技有限公司')
+      expect(newWrapper.text()).toContain('© 2026 KTech Fintech')
+
+      // Cleanup
+      newWrapper.unmount()
+    })
+
+    it('handles rapid mount/unmount cycles', () => {
+      // Act: Rapid mount/unmount
+      for (let i = 0; i < 10; i++) {
+        const w = mount(Footer)
+        expect(w.exists()).toBe(true)
+        w.unmount()
+      }
+
+      // Assert: No errors
+      expect(true).toBe(true)
     })
   })
 
@@ -269,6 +335,40 @@ describe('Footer.vue', () => {
 
       // Assert: Contains only copyright text
       expect(footerCopyright.text()).toBe('© 2026 KTech Fintech. All rights reserved.')
+    })
+
+    it('has correct number of child elements', () => {
+      // Act: Count direct children
+      const footer = wrapper.find('footer')
+      const children = footer.findAll('div')
+
+      // Assert: Exactly 2 div children
+      expect(children.length).toBe(2)
+    })
+  })
+
+  // ============================================
+  // Integration Tests
+  // ============================================
+  describe('Integration', () => {
+    it('translation function is accessible from component instance', () => {
+      // Act: Access vm
+      const vm = wrapper.vm
+
+      // Assert: t function exists
+      expect(typeof vm.t).toBe('function')
+    })
+
+    it('component renders complete footer content', () => {
+      // Act: Get full content
+      const html = wrapper.html()
+
+      // Assert: Contains all expected elements
+      expect(html).toContain('footer')
+      expect(html).toContain('footer-text')
+      expect(html).toContain('footer-copyright')
+      expect(html).toContain('开泰远景信息科技有限公司')
+      expect(html).toContain('© 2026 KTech Fintech')
     })
   })
 })

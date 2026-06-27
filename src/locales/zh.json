@@ -3,33 +3,24 @@
     "home": "首页",
     "about": "关于",
     "news": "新闻",
-    "contact": "联系我们",
     "logo": "KTECH.AI"
   },
   "footer": {
     "copyright": "© 2025 KTech AI. 所有系统正常运行。",
-    "status": "在线"
+    "status": "在线",
+    "privacyPolicy": "隐私政策"
   },
   "home": {
     "title": "KTech AI",
     "subtitle": "赛博朋克智能系统",
     "hero": {
-      "heading": "下一代人工智能",
+      "title": "下一代人工智能",
       "description": "运用尖端技术和赛博朋克美学，构建人工智能的未来。"
     },
     "stats": {
-      "uptime": {
-        "label": "正常运行时间",
-        "value": "99.9%"
-      },
-      "requests": {
-        "label": "请求数",
-        "value": "100万+"
-      },
-      "latency": {
-        "label": "响应延迟",
-        "value": "50毫秒"
-      }
+      "uptime": "99.9%",
+      "requests": "100万+",
+      "latency": "50ms"
     },
     "features": {
       "heading": "核心功能",
@@ -46,10 +37,7 @@
         "description": "企业级安全，采用抗量子加密技术"
       }
     },
-    "cta": {
-      "button": "立即开始",
-      "ariaLabel": "开始使用 KTech AI"
-    }
+    "cta": "立即开始"
   },
   "about": {
     "title": "关于 KTECH",
@@ -110,241 +98,215 @@
     "share": "分享这篇文章",
     "breadcrumb": "首页 > 新闻"
   },
-  "contact": {
-    "title": "联系",
-    "titleAccent": "我们",
-    "subtitle": "与 KTech 取得联系",
-    "breadcrumb": "首页 > 联系我们",
-    "form": {
-      "title": "给我们留言",
-      "name": "姓名",
-      "namePlaceholder": "请输入您的姓名",
-      "phone": "电话",
-      "phonePlaceholder": "请输入您的电话号码",
-      "company": "公司",
-      "companyPlaceholder": "请输入您的公司名称",
-      "email": "邮箱",
-      "emailPlaceholder": "请输入您的邮箱地址",
-      "submit": "发送消息",
-      "submitting": "发送中...",
-      "privacy": "提交此表单即表示您同意我们的隐私政策",
-      "success": "消息发送成功！我们会尽快回复您。",
-      "error": "请正确填写所有必填字段。",
-      "validation": {
-        "nameRequired": "姓名为必填项",
-        "emailRequired": "邮箱为必填项",
-        "emailInvalid": "请输入有效的邮箱地址",
-        "phoneRequired": "电话号码为必填项",
-        "companyRequired": "公司名称为必填项"
+  "services": {
+    "backToServices": "返回服务",
+    "breadcrumb": "首页 > 服务",
+    "relatedServices": "相关服务",
+    "supplyChainFinance": {
+      "title": "供应链金融解决方案",
+      "subtitle": "为供应链优化提供全面的金融服务",
+      "hero": {
+        "heading": "供应链金融解决方案",
+        "description": "通过创新的金融解决方案，为企业赋能，实现供应链优化和业务增长。"
+      },
+      "overview": {
+        "heading": "服务概述",
+        "description": "我们的供应链金融解决方案提供全面的金融服务，旨在优化现金流、降低风险并提高整个供应链生态系统的效率。"
+      },
+      "features": {
+        "heading": "核心功能",
+        "workingCapital": {
+          "title": "营运资金优化",
+          "description": "通过创新的融资方案最大化流动性，改善现金流并减少营运资金约束。"
+        },
+        "riskManagement": {
+          "title": "风险管理",
+          "description": "先进的风险评估和缓解策略，保护您的业务免受供应链中断的影响。"
+        },
+        "digitalPlatform": {
+          "title": "数字平台",
+          "description": "简化的数字体验，提供实时可见性和自动化流程，实现高效运营。"
+        },
+        "flexibleFinancing": {
+          "title": "灵活融资",
+          "description": "量身定制的融资方案，满足多样化的业务需求，提供具有竞争力的利率和条款。"
+        },
+        "supplierNetwork": {
+          "title": "供应商网络",
+          "description": "访问庞大的供应商网络，优化付款条款并加强合作关系。"
+        },
+        "analytics": {
+          "title": "高级分析",
+          "description": "数据驱动的洞察和预测性分析，为明智决策和战略规划提供支持。"
+        }
+      },
+      "benefits": {
+        "heading": "优势",
+        "cashFlow": {
+          "title": "改善现金流",
+          "description": "加速应收账款并优化付款时机，实现更好的流动性管理。"
+        },
+        "riskReduction": {
+          "title": "降低风险",
+          "description": "通过全面的风险评估和管理工具，缓解供应链风险。"
+        },
+        "efficiency": {
+          "title": "提高效率",
+          "description": "通过自动化流程和数字工作流集成简化运营。"
+        },
+        "costSavings": {
+          "title": "节约成本",
+          "description": "通过优化的融资条款和改进的供应商谈判降低运营成本。"
+        }
+      },
+      "process": {
+        "heading": "实施流程",
+        "assessment": {
+          "step": "01",
+          "title": "评估",
+          "description": "分析您当前的供应链结构，确定优化机会。"
+        },
+        "solution": {
+          "step": "02",
+          "title": "方案设计",
+          "description": "根据您的业务需求开发定制化的融资解决方案。"
+        },
+        "integration": {
+          "step": "03",
+          "title": "集成",
+          "description": "与您现有系统和工作流程无缝集成。"
+        },
+        "deployment": {
+          "step": "04",
+          "title": "部署",
+          "description": "推出解决方案并提供全面的培训和支持。"
+        },
+        "optimization": {
+          "step": "05",
+          "title": "优化",
+          "description": "持续监控和优化性能，实现最大价值。"
+        }
+      },
+      "cta": {
+        "heading": "转型您的供应链",
+        "description": "准备好通过创新的金融解决方案优化您的供应链了吗？",
+        "button": "请求咨询",
+        "ariaLabel": "请求供应链金融咨询"
       }
-    },
-    "info": {
-      "title": "联系方式",
-      "address": "地址",
-      "addressValue": "中国深圳市罗湖区",
-      "email": "邮箱",
-      "emailValue": "contact@ktech.fintech",
-      "phone": "电话",
-      "phoneValue": "+86 755 8888 8888",
-      "wechat": "微信",
-      "wechatValue": "KTechOfficial",
-      "social": "关注我们"
-    },
-    "demo": {
-      "title": "申请演示",
-      "description": "亲身体验我们的尖端 AI 解决方案。我们的团队将根据您的业务需求提供个性化演示。",
-      "consultant": "专属售前顾问",
-      "solution": "专业方案设计",
-      "consulting": "免费业务咨询",
-      "button": "预约演示"
     }
   },
-  "joinUs": {
-    "title": "加入",
-    "titleAccent": "我们",
-    "subtitle": "与我们一起构建未来。加入我们的创新团队，共同塑造下一代人工智能技术。",
-    "cta": {
-      "button": "查看在招职位",
-      "ariaLabel": "查看在招职位"
+  "privacy": {
+    "title": "隐私政策",
+    "titleAccent": "GDPR 合规",
+    "subtitle": "开泰科技如何收集、使用和保护您的个人数据",
+    "lastUpdated": "最后更新：2026年6月27日",
+    "disclaimer": "本隐私政策为模板版本。正式使用前请咨询法律顾问。",
+    "intro": {
+      "heading": "引言",
+      "description": "开泰科技（以下简称\"我们\"）致力于保护并尊重您的隐私。本隐私政策说明了当您访问我们的网站或使用我们的服务时，我们如何收集、使用、披露和保护您的信息。本政策符合《通用数据保护条例》（GDPR）和《加州消费者隐私法》（CCPA）。"
     },
-    "culture": {
-      "title": "公司文化",
-      "description": "我们培育创新、协作和持续学习的文化。在 KTech，每位团队成员都为推进 AI 技术的使命贡献力量。",
-      "innovation": {
-        "title": "创新优先",
-        "description": "我们拥抱尖端技术，不断拓展 AI 可能性的边界。"
-      },
-      "teamwork": {
-        "title": "协作精神",
-        "description": "伟大的成就源于团队合作。我们重视多元视角和包容性协作。"
-      },
-      "creativity": {
-        "title": "创意自由",
-        "description": "我们鼓励创造性思维，提供自由探索新想法和解决方案的空间。"
-      },
-      "growth": {
-        "title": "持续成长",
-        "description": "您的成长很重要。我们提供学习机会和职业发展通道。"
+    "collection": {
+      "heading": "我们收集的信息",
+      "description": "我们收集您直接提供给我们的信息，以及您使用我们服务时自动收集的信息。",
+      "items": {
+        "personal": {
+          "title": "个人信息",
+          "description": "您通过联系或注册表单提供的姓名、电子邮件地址、电话号码、公司名称和职位。"
+        },
+        "usage": {
+          "title": "使用数据",
+          "description": "通过 Cookie 和服务器日志自动收集的 IP 地址、浏览器类型、操作系统、访问页面、引荐来源和时间戳。"
+        },
+        "cookies": {
+          "title": "Cookie 数据",
+          "description": "存储在您设备上的标识符，用于记住偏好、验证会话和分析流量模式。"
+        },
+        "financial": {
+          "title": "财务数据",
+          "description": "为提供供应链金融和信贷解决方案所需的汇总匿名财务指标，严格依据合法依据进行处理。"
+        }
       }
     },
-    "benefits": {
-      "title": "福利与待遇",
-      "competitive": {
-        "title": "具有竞争力的薪酬",
-        "description": "根据经验和市场标准提供行业领先的薪酬待遇。"
-      },
-      "development": {
-        "title": "职业发展",
-        "description": "持续学习机会，包括会议、研讨会和技能提升项目。"
-      },
-      "balance": {
-        "title": "工作生活平衡",
-        "description": "灵活的工作安排和支持个人福祉的工作环境。"
-      },
-      "health": {
-        "title": "健康保险",
-        "description": "全面的健康保障，包括医疗、牙科和视力保险。"
-      },
-      "activities": {
-        "title": "团队活动",
-        "description": "定期团建活动、黑客马拉松和社交聚会，促进团队联系。"
-      },
-      "career": {
-        "title": "职业成长",
-        "description": "清晰的职业发展路径，提供指导和内部流动机会。"
+    "cookies": {
+      "heading": "Cookie 政策",
+      "description": "我们使用 Cookie 及类似跟踪技术来运营和改进我们的服务。",
+      "types": {
+        "essential": {
+          "title": "必要 Cookie",
+          "description": "网站正常运行所必需，无法禁用。"
+        },
+        "analytics": {
+          "title": "分析 Cookie",
+          "description": "帮助我们了解访客与网站的互动方式，以便改进性能和用户体验。"
+        },
+        "marketing": {
+          "title": "营销 Cookie",
+          "description": "用于投放相关广告。您可以随时选择退出。"
+        }
       }
     },
-    "process": {
-      "title": "申请流程",
-      "step1": {
-        "title": "在线申请",
-        "description": "通过我们的在线平台提交申请，附上简历和求职信。"
-      },
-      "step2": {
-        "title": "初步筛选",
-        "description": "我们的团队审核您的申请，联系入围候选人进行初步沟通。"
-      },
-      "step3": {
-        "title": "面试环节",
-        "description": "与团队成员会面，讨论您的技能、经验和双方契合度。"
-      },
-      "step4": {
-        "title": "欢迎加入",
-        "description": "收到录用通知，加入我们的团队，一起构建未来。"
+    "use": {
+      "heading": "我们如何使用您的数据",
+      "description": "我们出于以下合法目的处理您的个人数据：",
+      "items": {
+        "service": "提供、运营和维护我们的金融科技服务",
+        "improve": "根据您的反馈和使用情况，改进、个性化和扩展我们的服务",
+        "communicate": "回复您的评论、问题和客户服务请求",
+        "security": "监控和分析使用情况，以检测、预防和应对技术问题、欺诈和安全威胁",
+        "compliance": "遵守法律义务并保护我们合法的商业利益"
       }
+    },
+    "rights": {
+      "heading": "您的权利（GDPR / CCPA）",
+      "description": "根据 GDPR 和 CCPA，您对个人数据享有以下权利：",
+      "items": {
+        "access": {
+          "title": "访问权",
+          "description": "请求获取我们持有的关于您的个人数据副本。"
+        },
+        "rectification": {
+          "title": "更正权",
+          "description": "请求更正不准确或不完整的个人数据。"
+        },
+        "erasure": {
+          "title": "删除权",
+          "description": "请求删除您的个人数据（被遗忘权）。"
+        },
+        "portability": {
+          "title": "数据可携权",
+          "description": "以结构化、机器可读的格式接收您的数据，并将其传输给其他控制者。"
+        },
+        "object": {
+          "title": "拒绝权",
+          "description": "拒绝出于营销或其他合法利益目的处理您的个人数据。"
+        },
+        "restrict": {
+          "title": "限制处理权",
+          "description": "在特定条件下请求我们限制对您个人数据的处理。"
+        }
+      },
+      "exerciseNote": "如需行使上述任何权利，请通过 privacy@ktech.fintech 联系我们。我们将在 30 天内回复。"
+    },
+    "retention": {
+      "heading": "数据保留",
+      "description": "我们仅在实现本政策所述目的、遵守法律义务、解决争议和执行协议所必需的期限内保留个人数据。之后数据将被安全删除或匿名化。"
+    },
+    "thirdParty": {
+      "heading": "第三方服务",
+      "description": "我们可能会与帮助我们运营业务的受信任第三方服务提供商共享数据：",
+      "items": {
+        "hosting": "云托管和基础设施提供商",
+        "analytics": "用于了解网站使用情况的网络分析平台",
+        "support": "客户支持和沟通工具",
+        "legal": "在法律要求时的法律和财务顾问"
+      },
+      "note": "这些方在合同上有义务保护您的数据，并仅将其用于我们指定的目的。"
     },
     "contact": {
-      "title": "联系我们",
-      "description": "对在 KTech 工作有疑问？我们很乐意听取您的想法。",
-      "email": "careers@ktech.ai"
-    }
-  },
-  "blockchain": {
-    "breadcrumb": "区块链服务",
-    "hero": {
-      "title": "区块链",
-      "accent": "服务",
-      "subtitle": "革命性分布式账本技术，为企业提供安全、透明、高效的业务运营解决方案"
-    },
-    "overview": {
-      "title": "区块链技术概览",
-      "description": "KTech 提供前沿的区块链解决方案，彻底改变企业的运营方式。我们的分布式账本技术确保所有交易的透明度、安全性和效率。",
-      "detail": "从智能合约到供应链追踪，我们提供定制化的区块链实施服务，在您的业务生态系统中推动创新和建立信任。"
-    },
-    "features": {
-      "title": "技术能力",
-      "distributed": {
-        "title": "分布式账本",
-        "description": "由多个节点维护的去中心化数据库，确保数据完整性，防止单点故障。"
-      },
-      "security": {
-        "title": "先进安全",
-        "description": "加密保护和不可篡改记录，保护您的数据免受篡改和未授权访问。"
-      },
-      "efficiency": {
-        "title": "智能合约",
-        "description": "具有预定义条件的自动执行合约，自动化流程并降低运营成本。"
-      },
-      "traceability": {
-        "title": "全程追溯",
-        "description": "端到端的交易和资产追踪，为您的供应链和业务流程提供完整可见性。"
-      }
-    },
-    "benefits": {
-      "title": "商业优势",
-      "trust": {
-        "title": "增强信任",
-        "description": "通过透明、可验证且无法更改的交易，与利益相关者建立信任关系。"
-      },
-      "cost": {
-        "title": "降低成本",
-        "description": "消除中间商，简化运营流程，显著降低交易和管理成本。"
-      },
-      "speed": {
-        "title": "更快处理",
-        "description": "实时交易处理和自动化工作流程，加速业务运营和决策制定。"
-      }
-    },
-    "cta": {
-      "title": "准备好改变您的业务了吗？",
-      "description": "探索我们的区块链解决方案如何彻底改变您的运营并推动可持续增长。",
-      "button": "联系我们",
-      "ariaLabel": "联系我们了解区块链服务"
-    }
-  },
-  "positions": {
-    "title": "职位机会",
-    "subtitle": "加入我们",
-    "searchPlaceholder": "搜索职位...",
-    "filters": {
-      "title": "筛选",
-      "department": "部门",
-      "location": "地点",
-      "type": "雇佣类型",
-      "clearAll": "清除全部",
-      "activeFilters": "个职位"
-    },
-    "departments": {
-      "all": "所有部门",
-      "engineering": "工程",
-      "product": "产品",
-      "design": "设计",
-      "marketing": "市场营销",
-      "sales": "销售"
-    },
-    "locations": {
-      "all": "所有地点",
-      "bangkok": "曼谷",
-      "shanghai": "上海",
-      "beijing": "北京",
-      "remote": "远程"
-    },
-    "types": {
-      "all": "所有类型",
-      "fulltime": "全职",
-      "parttime": "兼职",
-      "contract": "合同",
-      "internship": "实习"
-    },
-    "cards": {
-      "posted": "发布于",
-      "viewDetails": "查看详情"
-    },
-    "detail": {
-      "backToList": "返回列表",
-      "description": "职位描述",
-      "responsibilities": "职责",
-      "requirements": "要求",
-      "benefits": "福利与待遇",
-      "culture": "文化与价值观",
-      "deadline": "申请截止日期",
-      "applyNow": "立即申请",
-      "share": "分享"
-    },
-    "empty": {
-      "noPositions": "目前没有可用职位",
-      "title": "未找到职位",
-      "message": "尝试调整您的筛选条件以查看更多结果"
+      "heading": "联系我们",
+      "description": "如果您对本隐私政策有任何疑问，或希望行使您的数据保护权利，请联系我们的数据保护官。",
+      "email": "电子邮箱：privacy@ktech.fintech",
+      "address": "地址：开泰远景信息科技有限公司，广东省深圳市罗湖区，518000"
     }
   }
 }
