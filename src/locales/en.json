@@ -70,19 +70,33 @@
       "solution": "Solution",
       "consulting": "Consulting",
       "button": "Request Demo"
-    }
+    },
+    "address": "Address",
+    "addressValue": "Luohu District, Shenzhen",
+    "email": "Email",
+    "emailValue": "contact@ktech.fintech",
+    "website": "Website",
+    "websiteValue": "www.kaitai.tech"
   },
   "nav": {
     "home": "Home",
     "about": "About",
     "news": "News",
-    "logo": "KTECH.AI"
+    "logo": "KTECH.AI",
+    "services": "Services",
+    "honors": "Honors",
+    "contact": "Contact",
+    "dropdown": {
+      "open": "Open menu",
+      "close": "Close menu"
+    }
   },
   "footer": {
     "copyright": "© 2025 KTech AI. All systems operational.",
     "status": "ONLINE",
     "privacyPolicy": "Privacy Policy",
-    "termsOfService": "Terms of Service"
+    "termsOfService": "Terms of Service",
+    "companyName": "Kaitai Vision Information Technology Co., Ltd."
   },
   "home": {
     "title": "KTech AI",
@@ -219,7 +233,10 @@
     "publishedOn": "Published on",
     "by": "By",
     "share": "Share this article",
-    "breadcrumb": "Home > News"
+    "breadcrumb": "Home > News",
+    "learnMore": "Learn More",
+    "ktechNews": "KTech News",
+    "kbtgNews": "KBTG News"
   },
   "services": {
     "backToServices": "Back to Services",
@@ -567,6 +584,112 @@
           "predictiveAnalytics": "Predictive Analytics",
           "dataGovernance": "Data Governance"
         }
+      },
+      "projectManagement": {
+        "title": "Project Management",
+        "description": "Agile delivery at scale for complex financial technology programs.",
+        "features": {
+          "sprint": "Sprint planning",
+          "velocity": "Velocity tracking",
+          "reporting": "Status reporting"
+        }
+      },
+      "supplyChain": {
+        "title": "Supply Chain Finance",
+        "description": "Working-capital solutions.",
+        "features": {
+          "tracking": "Invoice tracking",
+          "currency": "Multi-currency",
+          "mitigation": "Risk mitigation"
+        }
+      },
+      "blockchain": {
+        "title": "Blockchain",
+        "description": "Distributed ledger engineering.",
+        "features": {
+          "contracts": "Smart contracts",
+          "consensus": "Consensus design",
+          "trails": "Audit trails"
+        }
+      }
+    },
+    "title": "Core Services",
+    "subtitle": "Empowering financial innovation with frontier technology",
+    "cta": "Get in Touch",
+    "projectManagement": "Project Management",
+    "projectManagementDesc": "Professional fintech project management services",
+    "retailCredit": "Retail Lending",
+    "retailCreditDesc": "End-to-end retail lending system solutions",
+    "supplyChain": "Supply Chain Finance",
+    "supplyChainDesc": "Blockchain-based supply chain finance platform",
+    "blockchain": "Blockchain",
+    "blockchainDesc": "Enterprise-grade blockchain solutions",
+    "fintechApp": "FinTech Apps",
+    "fintechAppDesc": "Mobile financial application development",
+    "bigData": "Big Data & AI",
+    "bigDataDesc": "Artificial intelligence and big-data analytics",
+    "pm": {
+      "title": "Project Management",
+      "subtitle": "Professional fintech program delivery from discovery to long-term support",
+      "overview": {
+        "title": "Service Overview",
+        "content": "We deliver end-to-end project management for financial technology initiatives, combining agile coaching, governance, risk control, and compliance to ship regulated products on time, on budget, and to spec."
+      },
+      "capabilities": {
+        "title": "Delivery Capabilities",
+        "agile": {
+          "title": "Agile Delivery",
+          "description": "Scrum, Kanban, and SAFe practices that ship working software in short, predictable iterations."
+        },
+        "waterfall": {
+          "title": "Waterfall Delivery",
+          "description": "Phase-gated delivery for fixed-scope, compliance-heavy programs that require formal sign-offs."
+        },
+        "hybrid": {
+          "title": "Hybrid Model",
+          "description": "Blended agile and waterfall approaches tailored to each program's risk, scope, and regulatory profile."
+        },
+        "risk": {
+          "title": "Risk Management",
+          "description": "Structured risk registers, mitigation plans, and escalation paths that keep programs resilient."
+        }
+      },
+      "process": {
+        "title": "Delivery Process",
+        "discovery": {
+          "title": "Discovery",
+          "description": "We align on goals, scope, stakeholders, and success metrics before any commitment."
+        },
+        "planning": {
+          "title": "Planning",
+          "description": "We build the roadmap, release plan, budget, and governance model."
+        },
+        "execution": {
+          "title": "Execution",
+          "description": "We run iterations, track velocity, and manage scope, quality, and risk day to day."
+        },
+        "delivery": {
+          "title": "Delivery",
+          "description": "We ship, validate, and hand over with documentation, training, and sign-off."
+        },
+        "support": {
+          "title": "Support",
+          "description": "We provide hypercare, maintenance, and continuous improvement after launch."
+        }
+      },
+      "features": {
+        "title": "What's Included",
+        "sprint": "Sprint planning and review",
+        "velocity": "Velocity and burndown tracking",
+        "reporting": "Executive status reporting",
+        "collaboration": "Cross-team collaboration",
+        "tracking": "Budget and timeline tracking",
+        "compliance": "Compliance and audit support"
+      },
+      "cta": {
+        "title": "Deliver Your Next Program with Confidence",
+        "subtitle": "Talk to us about program delivery tailored to your fintech initiatives.",
+        "button": "Request Consultation"
       }
     }
   },
@@ -803,5 +926,290 @@
     "title": "Page Not Found",
     "message": "The page you are looking for does not exist or has been moved.",
     "home": "Back to Home"
+  },
+  "hero": {
+    "title": "KaiTech",
+    "subtitle": "KBRIGHT FINTECH",
+    "description": "Kaitai Vision Information Technology Co., Ltd. was established in Luohu District, Shenzhen in June 2020 by Thailand's KASIKORN Bank Group, with a registered capital of RMB 300 million. It is among the first batch of multinational-company headquarters enterprises recognized by Shenzhen."
+  },
+  "stats": {
+    "founded": "Founded",
+    "capital": "Registered Capital (RMB)",
+    "projects": "Projects Delivered"
+  },
+  "honors": {
+    "title": "Honors & Qualifications",
+    "subtitle": "Professional certifications · Trusted partner",
+    "highTech": "National High-Tech Enterprise",
+    "highTechDesc": "High-Tech Enterprise Certification",
+    "hq": "Shenzhen Multinational HQ",
+    "hqDesc": "First-batch recognized enterprise",
+    "aaa": "AAA-Rated Credit Enterprise",
+    "aaaDesc": "Highest-tier credit rating",
+    "iso9001": "ISO 9001 Certified",
+    "iso9001Desc": "Quality Management System",
+    "iso27001": "ISO 27001 Certified",
+    "iso27001Desc": "Information Security Management System",
+    "iso20000": "ISO 20000 Certified",
+    "iso20000Desc": "IT Service Management System",
+    "specialized": "Shenzhen SRDI Enterprise",
+    "specializedDesc": "Specialized, Refined, Differential, Innovative SME",
+    "member": "Shenzhen FinTech Association",
+    "memberDesc": "Member Unit"
+  },
+  "culture": {
+    "title": "Vision · Mission · Culture",
+    "vision": "Vision",
+    "visionDesc": "Become a leading regional fintech platform",
+    "mission": "Mission",
+    "missionDesc": "Empower clients with frontier technology",
+    "values": "Culture",
+    "valuesDesc": "Customer First · Open Collaboration<br>Agile Innovation · Professional Excellence"
+  },
+  "blockchain": {
+    "breadcrumb": "Blockchain",
+    "hero": {
+      "title": "Enterprise",
+      "accent": "Blockchain",
+      "subtitle": "Distributed ledger platforms engineered for trust, traceability, and programmable finance across regulated ecosystems."
+    },
+    "overview": {
+      "title": "Service Overview",
+      "description": "Our blockchain practice designs and ships production-grade distributed-ledger systems for financial institutions, combining consensus design, smart-contract engineering, and enterprise integration with the governance regulated industries demand.",
+      "detail": "From supply-chain finance and cross-border payments to tokenized assets and audit-ready registries, we build ledgers that turn trust into a verifiable, automated substrate."
+    },
+    "features": {
+      "title": "Key Features",
+      "distributed": {
+        "title": "Distributed Architecture",
+        "description": "Decentralized nodes eliminate single points of failure and keep data available even under partial outages."
+      },
+      "security": {
+        "title": "Cryptographic Security",
+        "description": "Hash chaining, digital signatures, and permissioned access controls protect data integrity at every block."
+      },
+      "efficiency": {
+        "title": "Operational Efficiency",
+        "description": "Smart contracts automate settlement, reconciliation, and compliance checks without manual intermediaries."
+      },
+      "traceability": {
+        "title": "Full Traceability",
+        "description": "Immutable, time-stamped records give auditors and regulators an end-to-end view of every transaction."
+      }
+    },
+    "benefits": {
+      "title": "Business Benefits",
+      "trust": {
+        "title": "Strengthened Trust",
+        "description": "Shared, tamper-evident ledgers let counterparties transact with confidence and lower verification overhead."
+      },
+      "cost": {
+        "title": "Reduced Cost",
+        "description": "Automating reconciliation and removing intermediaries cuts processing cost across the value chain."
+      },
+      "speed": {
+        "title": "Faster Settlement",
+        "description": "Smart-contract-driven settlement compresses multi-day processes into minutes."
+      }
+    },
+    "cta": {
+      "title": "Build Your Blockchain Foundation",
+      "description": "Ready to design a distributed-ledger platform tailored to your business? Let's map the roadmap together.",
+      "button": "Request Consultation",
+      "ariaLabel": "Request a consultation for blockchain solutions"
+    }
+  },
+  "joinUs": {
+    "title": "Join",
+    "titleAccent": " Us",
+    "subtitle": "Build the future of fintech with us. Join a team of innovators shaping next-generation financial intelligence.",
+    "cta": {
+      "button": "View Open Positions",
+      "ariaLabel": "View open positions"
+    },
+    "culture": {
+      "title": "Our Culture",
+      "description": "We foster a culture of innovation, collaboration, and continuous learning. Every team member contributes to our mission of advancing financial intelligence.",
+      "innovation": {
+        "title": "Innovation First",
+        "description": "We embrace cutting-edge technology and push the boundaries of what's possible in fintech."
+      },
+      "teamwork": {
+        "title": "Collaborative Spirit",
+        "description": "Great products are built together. We believe in diverse perspectives and inclusive teamwork."
+      },
+      "creativity": {
+        "title": "Creative Freedom",
+        "description": "We encourage creative thinking and provide the freedom to explore new ideas and solutions."
+      },
+      "growth": {
+        "title": "Continuous Growth",
+        "description": "Your growth matters. We offer learning opportunities and clear career advancement pathways."
+      }
+    },
+    "benefits": {
+      "title": "Benefits & Perks",
+      "competitive": {
+        "title": "Competitive Salary",
+        "description": "Industry-leading compensation packages based on experience and market benchmarks."
+      },
+      "development": {
+        "title": "Professional Development",
+        "description": "Continuous learning, conferences, workshops, and skill-enhancement programs."
+      },
+      "balance": {
+        "title": "Work-Life Balance",
+        "description": "Flexible working arrangements and a supportive environment for personal well-being."
+      },
+      "health": {
+        "title": "Health Insurance",
+        "description": "Comprehensive health coverage including medical, dental, and vision insurance."
+      },
+      "activities": {
+        "title": "Team Activities",
+        "description": "Regular team-building events, hackathons, and social gatherings."
+      },
+      "career": {
+        "title": "Career Growth",
+        "description": "Clear progression paths with mentorship and internal mobility opportunities."
+      }
+    },
+    "positions": {
+      "title": "Open Positions",
+      "subtitle": "Explore our current openings and find your place on the team.",
+      "viewAll": "View All Positions"
+    },
+    "process": {
+      "title": "Application Process",
+      "step1": {
+        "title": "Apply Online",
+        "description": "Submit your application through our portal with your resume and cover letter."
+      },
+      "step2": {
+        "title": "Initial Screening",
+        "description": "Our team reviews your application and contacts shortlisted candidates for an initial discussion."
+      },
+      "step3": {
+        "title": "Interviews",
+        "description": "Meet with our team to discuss your skills, experience, and mutual fit."
+      },
+      "step4": {
+        "title": "Welcome Aboard",
+        "description": "Receive an offer and join our team to start building the future together."
+      }
+    },
+    "contact": {
+      "title": "Get in Touch",
+      "description": "Have questions about working at KTech? We'd love to hear from you.",
+      "email": "careers@ktech.fintech"
+    }
+  },
+  "mobileApp": {
+    "title": "Mobile FinTech App",
+    "hero": {
+      "title": "Mobile",
+      "accent": "FinTech Apps",
+      "subtitle": "Native and cross-platform mobile financial applications engineered for security, speed, and delightful user experience.",
+      "tag1": "iOS & Android",
+      "tag2": "Secure by Design",
+      "tag3": "Real-Time"
+    },
+    "overview": {
+      "title": "Service Overview",
+      "description": "We design, build, and ship mobile financial applications end to end, from discovery and UX to release and continuous improvement.",
+      "card1Title": "Native Performance",
+      "card1Desc": "Platform-native builds that deliver smooth animations and responsive interactions on every device.",
+      "card2Title": "Bank-Grade Security",
+      "card2Desc": "Encryption, secure key storage, and biometric authentication protect every transaction.",
+      "card3Title": "Real-Time Experience",
+      "card3Desc": "Live data, instant notifications, and low-latency sync keep users connected."
+    },
+    "features": {
+      "title": "Key Features",
+      "feature1Title": "Account Management",
+      "feature1Desc": "Unified dashboards for balances, transactions, and linked accounts.",
+      "feature2Title": "Instant Payments",
+      "feature2Desc": "Fast, secure transfers with multi-factor authentication.",
+      "feature3Title": "Biometric Login",
+      "feature3Desc": "Face ID and fingerprint access for frictionless, secure sign-in.",
+      "feature4Title": "Smart Notifications",
+      "feature4Desc": "Real-time alerts for transactions, due dates, and fraud detection.",
+      "feature5Title": "Spending Insights",
+      "feature5Desc": "AI-driven categorization and analytics of personal finances.",
+      "feature6Title": "In-App Support",
+      "feature6Desc": "Chat and self-service help integrated directly into the app."
+    },
+    "benefits": {
+      "title": "Benefits",
+      "description": "Why teams choose our mobile fintech delivery:",
+      "benefit1": "Faster time-to-market with reusable fintech components",
+      "benefit2": "Compliant with financial regulations and standards",
+      "benefit3": "Consistent experience across iOS and Android",
+      "benefit4": "Modular architecture for rapid feature iteration",
+      "benefit5": "Built-in analytics and crash monitoring",
+      "benefit6": "Localized for multiple markets and languages"
+    },
+    "cta": {
+      "title": "Launch Your Mobile FinTech App",
+      "description": "Ready to build a secure, scalable mobile financial product? Let's talk.",
+      "button": "Request Consultation"
+    },
+    "related": {
+      "title": "Related Services"
+    }
+  },
+  "positions": {
+    "title": "Open Positions",
+    "subtitle": "Find your next role",
+    "searchPlaceholder": "Search positions...",
+    "filters": {
+      "title": "Filters",
+      "department": "Department",
+      "location": "Location",
+      "type": "Type",
+      "activeFilters": "results",
+      "clearAll": "Clear All"
+    },
+    "departments": {
+      "all": "All Departments",
+      "engineering": "Engineering",
+      "product": "Product",
+      "design": "Design",
+      "marketing": "Marketing",
+      "sales": "Sales"
+    },
+    "locations": {
+      "all": "All Locations",
+      "bangkok": "Bangkok",
+      "shanghai": "Shanghai",
+      "beijing": "Beijing",
+      "remote": "Remote"
+    },
+    "types": {
+      "all": "All Types",
+      "fulltime": "Full-time",
+      "parttime": "Part-time",
+      "contract": "Contract",
+      "internship": "Internship"
+    },
+    "cards": {
+      "posted": "Posted",
+      "viewDetails": "View Details"
+    },
+    "detail": {
+      "description": "Description",
+      "responsibilities": "Responsibilities",
+      "requirements": "Requirements",
+      "benefits": "Benefits",
+      "culture": "Culture",
+      "applyNow": "Apply Now",
+      "backToList": "Back to list",
+      "share": "Share"
+    },
+    "empty": {
+      "noPositions": "No positions available",
+      "title": "No matching positions",
+      "message": "Try adjusting your filters or search keywords."
+    }
   }
 }

@@ -11,8 +11,9 @@
  * - Behavior Tests: onMounted animation-delay side effects on cards/items
  * - Edge Cases: re-mount consistency, CTA aria-label
  *
- * Note: useLanguage() returns the key itself as fallback when no translations
- * are loaded in the test environment, so content assertions check for keys.
+ * Note: useLanguage() statically imports the locale bundles, so translations
+ * resolve to real English copy in the test environment. Content assertions
+ * check for that copy (not raw keys).
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
@@ -121,59 +122,59 @@ describe('Blockchain.vue', () => {
   })
 
   // ============================================
-  // Content Tests (i18n key fallback)
+  // Content Tests (real translated copy)
   // ============================================
   describe('Content', () => {
-    it('renders the hero title and accent keys', () => {
+    it('renders the hero title and accent copy', () => {
       const text = wrapper.text()
-      expect(text).toContain('blockchain.hero.title')
-      expect(text).toContain('blockchain.hero.accent')
+      expect(text).toContain('Enterprise')
+      expect(text).toContain('Blockchain')
     })
 
-    it('renders the hero subtitle key', () => {
-      expect(wrapper.text()).toContain('blockchain.hero.subtitle')
+    it('renders the hero subtitle copy', () => {
+      expect(wrapper.text()).toContain('Distributed ledger platforms')
     })
 
-    it('renders the breadcrumb label key', () => {
-      expect(wrapper.text()).toContain('blockchain.breadcrumb')
+    it('renders the breadcrumb label copy', () => {
+      expect(wrapper.text()).toContain('Blockchain')
     })
 
-    it('renders the overview title, description and detail keys', () => {
+    it('renders the overview title, description and detail copy', () => {
       const text = wrapper.text()
-      expect(text).toContain('blockchain.overview.title')
-      expect(text).toContain('blockchain.overview.description')
-      expect(text).toContain('blockchain.overview.detail')
+      expect(text).toContain('Service Overview')
+      expect(text).toContain('production-grade distributed-ledger systems')
+      expect(text).toContain('tokenized assets and audit-ready registries')
     })
 
-    it('renders the features section title key', () => {
-      expect(wrapper.text()).toContain('blockchain.features.title')
+    it('renders the features section title copy', () => {
+      expect(wrapper.text()).toContain('Key Features')
     })
 
-    it('renders all four feature title keys', () => {
+    it('renders all four feature title copies', () => {
       const text = wrapper.text()
-      expect(text).toContain('blockchain.features.distributed.title')
-      expect(text).toContain('blockchain.features.security.title')
-      expect(text).toContain('blockchain.features.efficiency.title')
-      expect(text).toContain('blockchain.features.traceability.title')
+      expect(text).toContain('Distributed Architecture')
+      expect(text).toContain('Cryptographic Security')
+      expect(text).toContain('Operational Efficiency')
+      expect(text).toContain('Full Traceability')
     })
 
-    it('renders all four feature description keys', () => {
+    it('renders all four feature description copies', () => {
       const text = wrapper.text()
-      expect(text).toContain('blockchain.features.distributed.description')
-      expect(text).toContain('blockchain.features.security.description')
-      expect(text).toContain('blockchain.features.efficiency.description')
-      expect(text).toContain('blockchain.features.traceability.description')
+      expect(text).toContain('Decentralized nodes')
+      expect(text).toContain('Hash chaining')
+      expect(text).toContain('Smart contracts automate settlement')
+      expect(text).toContain('Immutable, time-stamped records')
     })
 
-    it('renders the benefits section title key', () => {
-      expect(wrapper.text()).toContain('blockchain.benefits.title')
+    it('renders the benefits section title copy', () => {
+      expect(wrapper.text()).toContain('Business Benefits')
     })
 
-    it('renders all three benefit title keys', () => {
+    it('renders all three benefit title copies', () => {
       const text = wrapper.text()
-      expect(text).toContain('blockchain.benefits.trust.title')
-      expect(text).toContain('blockchain.benefits.cost.title')
-      expect(text).toContain('blockchain.benefits.speed.title')
+      expect(text).toContain('Strengthened Trust')
+      expect(text).toContain('Reduced Cost')
+      expect(text).toContain('Faster Settlement')
     })
 
     it('renders the numeric labels 01, 02, 03 for the benefit items', () => {
@@ -181,11 +182,11 @@ describe('Blockchain.vue', () => {
       expect(numbers).toEqual(['01', '02', '03'])
     })
 
-    it('renders the CTA title, description and button keys', () => {
+    it('renders the CTA title, description and button copy', () => {
       const text = wrapper.text()
-      expect(text).toContain('blockchain.cta.title')
-      expect(text).toContain('blockchain.cta.description')
-      expect(text).toContain('blockchain.cta.button')
+      expect(text).toContain('Build Your Blockchain Foundation')
+      expect(text).toContain("Let's map the roadmap together")
+      expect(text).toContain('Request Consultation')
     })
   })
 
@@ -214,7 +215,9 @@ describe('Blockchain.vue', () => {
 
     it('provides an aria-label on the CTA button', () => {
       const button = wrapper.find('.cta .cyber-button')
-      expect(button.attributes('aria-label')).toBe('blockchain.cta.ariaLabel')
+      expect(button.attributes('aria-label')).toBe(
+        'Request a consultation for blockchain solutions'
+      )
     })
 
     it('exposes the home link for keyboard/screen-reader navigation', () => {
@@ -283,9 +286,13 @@ describe('Blockchain.vue', () => {
       expect(typeof (wrapper.vm as any).t).toBe('function')
     })
 
-    it('returns the key as fallback when translation is not loaded', () => {
-      const result = (wrapper.vm as any).t('blockchain.hero.title')
-      expect(result).toBe('blockchain.hero.title')
+    it('resolves known keys to real copy and falls back to the raw key when missing', () => {
+      // Locale bundles are statically imported, so known keys resolve to copy.
+      expect((wrapper.vm as any).t('blockchain.hero.title')).toBe('Enterprise')
+      // Genuinely-unknown keys still fall back to the raw key string.
+      expect((wrapper.vm as any).t('blockchain.does.not.exist')).toBe(
+        'blockchain.does.not.exist'
+      )
     })
   })
 

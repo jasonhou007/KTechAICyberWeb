@@ -12,8 +12,9 @@
  * - i18n Tests: Translation function behavior and key fallback
  * - Edge Cases: re-mount consistency, data-array integrity
  *
- * Note: useLanguage() returns the key itself as fallback when no translations
- * are loaded in the test environment, so content assertions check for keys.
+ * useLanguage() statically imports the locale bundles, so translations resolve
+ * to real English copy in the test environment. Content assertions check for
+ * that copy (not raw keys).
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
@@ -115,73 +116,73 @@ describe('ServiceProjectManagement.vue', () => {
   })
 
   // ============================================
-  // Content Tests (i18n key fallback)
+  // Content Tests (real translated copy)
   // ============================================
   describe('Content', () => {
-    it('renders the hero title and subtitle keys', () => {
+    it('renders the hero title and subtitle copy', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.pm.title')
-      expect(text).toContain('services.pm.subtitle')
+      expect(text).toContain('Project Management')
+      expect(text).toContain('Professional fintech program delivery')
     })
 
-    it('renders the overview title and content keys', () => {
+    it('renders the overview title and content copy', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.pm.overview.title')
-      expect(text).toContain('services.pm.overview.content')
+      expect(text).toContain('Service Overview')
+      expect(text).toContain('end-to-end project management for financial technology')
     })
 
-    it('renders the capabilities title key', () => {
-      expect(wrapper.text()).toContain('services.pm.capabilities.title')
+    it('renders the capabilities title copy', () => {
+      expect(wrapper.text()).toContain('Delivery Capabilities')
     })
 
-    it('renders all four capability title keys', () => {
+    it('renders all four capability title copies', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.pm.capabilities.agile.title')
-      expect(text).toContain('services.pm.capabilities.waterfall.title')
-      expect(text).toContain('services.pm.capabilities.hybrid.title')
-      expect(text).toContain('services.pm.capabilities.risk.title')
+      expect(text).toContain('Agile Delivery')
+      expect(text).toContain('Waterfall Delivery')
+      expect(text).toContain('Hybrid Model')
+      expect(text).toContain('Risk Management')
     })
 
-    it('renders all four capability description keys', () => {
+    it('renders all four capability description copies', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.pm.capabilities.agile.description')
-      expect(text).toContain('services.pm.capabilities.waterfall.description')
-      expect(text).toContain('services.pm.capabilities.hybrid.description')
-      expect(text).toContain('services.pm.capabilities.risk.description')
+      expect(text).toContain('Scrum, Kanban, and SAFe')
+      expect(text).toContain('Phase-gated delivery')
+      expect(text).toContain('Blended agile and waterfall')
+      expect(text).toContain('Structured risk registers')
     })
 
-    it('renders the process title key', () => {
-      expect(wrapper.text()).toContain('services.pm.process.title')
+    it('renders the process title copy', () => {
+      expect(wrapper.text()).toContain('Delivery Process')
     })
 
-    it('renders all five process step title keys', () => {
+    it('renders all five process step title copies', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.pm.process.discovery.title')
-      expect(text).toContain('services.pm.process.planning.title')
-      expect(text).toContain('services.pm.process.execution.title')
-      expect(text).toContain('services.pm.process.delivery.title')
-      expect(text).toContain('services.pm.process.support.title')
+      expect(text).toContain('Discovery')
+      expect(text).toContain('Planning')
+      expect(text).toContain('Execution')
+      expect(text).toContain('Delivery')
+      expect(text).toContain('Support')
     })
 
-    it('renders the features title key', () => {
-      expect(wrapper.text()).toContain('services.pm.features.title')
+    it('renders the features title copy', () => {
+      expect(wrapper.text()).toContain("What's Included")
     })
 
-    it('renders all six feature keys', () => {
+    it('renders all six feature copies', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.pm.features.sprint')
-      expect(text).toContain('services.pm.features.velocity')
-      expect(text).toContain('services.pm.features.reporting')
-      expect(text).toContain('services.pm.features.collaboration')
-      expect(text).toContain('services.pm.features.tracking')
-      expect(text).toContain('services.pm.features.compliance')
+      expect(text).toContain('Sprint planning and review')
+      expect(text).toContain('Velocity and burndown tracking')
+      expect(text).toContain('Executive status reporting')
+      expect(text).toContain('Cross-team collaboration')
+      expect(text).toContain('Budget and timeline tracking')
+      expect(text).toContain('Compliance and audit support')
     })
 
-    it('renders the CTA title, subtitle and button keys', () => {
+    it('renders the CTA title, subtitle and button copy', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.pm.cta.title')
-      expect(text).toContain('services.pm.cta.subtitle')
-      expect(text).toContain('services.pm.cta.button')
+      expect(text).toContain('Deliver Your Next Program with Confidence')
+      expect(text).toContain('program delivery tailored to your fintech initiatives')
+      expect(text).toContain('Request Consultation')
     })
   })
 
@@ -240,7 +241,7 @@ describe('ServiceProjectManagement.vue', () => {
 
     it('renders the CTA button label and arrow inside the link', () => {
       const link = wrapper.find('.cta a[href="/contact"]')
-      expect(link.text()).toContain('services.pm.cta.button')
+      expect(link.text()).toContain('Request Consultation')
       expect(link.find('.cta-arrow').exists()).toBe(true)
     })
   })
@@ -253,9 +254,13 @@ describe('ServiceProjectManagement.vue', () => {
       expect(typeof (wrapper.vm as any).t).toBe('function')
     })
 
-    it('returns the key as fallback when translation is not loaded', () => {
-      const result = (wrapper.vm as any).t('services.pm.title')
-      expect(result).toBe('services.pm.title')
+    it('resolves known keys to real copy and falls back to the raw key when missing', () => {
+      // Locale bundles are statically imported, so known keys resolve to copy.
+      expect((wrapper.vm as any).t('services.pm.title')).toBe('Project Management')
+      // Genuinely-unknown keys still fall back to the raw key string.
+      expect((wrapper.vm as any).t('services.pm.does.not.exist')).toBe(
+        'services.pm.does.not.exist'
+      )
     })
   })
 
