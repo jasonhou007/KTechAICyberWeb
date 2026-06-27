@@ -1,12 +1,13 @@
 <template>
   <div class="nav-dropdown"
        @mouseenter="handleMouseEnter"
-       @mouseleave="handleMouseLeave"
-       :aria-expanded="isOpen"
-       :aria-haspopup="true">
+       @mouseleave="handleMouseLeave">
     <button class="dropdown-trigger"
             @click="toggle"
             :aria-label="isOpen ? t('nav.dropdown.close') : t('nav.dropdown.open')"
+            :aria-expanded="isOpen"
+            aria-haspopup="menu"
+            :aria-controls="menuId"
             ref="triggerRef">
       {{ label }}
       <span class="dropdown-arrow" :class="{ 'open': isOpen }">▼</span>

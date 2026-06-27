@@ -355,23 +355,42 @@ describe('NavigationDropdown.vue', () => {
   })
 
   // ============================================
-  // Accessibility
+  // Accessibility — M2: aria-expanded / aria-haspopup live on the TRIGGER
+  // button (not the wrapper div), per WCAG disclosure/menu pattern. The
+  // trigger also exposes aria-controls pointing at the menu's id.
   // ============================================
   describe('Accessibility', () => {
-    it('sets aria-haspopup="true" on the root container', () => {
+    it('sets aria-haspopup="menu" on the TRIGGER button (not the wrapper)', () => {
+      expect(
+        wrapper.find('.dropdown-trigger').attributes('aria-haspopup'),
+      ).toBe('menu')
+      // The wrapper div must NOT carry the aria attributes anymore.
       expect(wrapper.find('.nav-dropdown').attributes('aria-haspopup')).toBe(
-        'true',
+        undefined,
       )
     })
 
-    it('reflects isOpen through aria-expanded on the root container', async () => {
-      const root = wrapper.find('.nav-dropdown')
-      expect(root.attributes('aria-expanded')).toBe('false')
+    it('reflects isOpen through aria-expanded on the TRIGGER button', async () => {
+      const trigger = wrapper.find('.dropdown-trigger')
+      expect(trigger.attributes('aria-expanded')).toBe('false')
+      expect(wrapper.find('.nav-dropdown').attributes('aria-expanded')).toBe(
+        undefined,
+      )
 
       await wrapper.find('.dropdown-trigger').trigger('click')
-      expect(wrapper.find('.nav-dropdown').attributes('aria-expanded')).toBe(
-        'true',
-      )
+      expect(
+        wrapper.find('.dropdown-trigger').attributes('aria-expanded'),
+      ).toBe('true')
+    })
+
+    it('exposes aria-controls on the trigger pointing at the menu id', async () => {
+      const trigger = wrapper.find('.dropdown-trigger')
+      const controls = trigger.attributes('aria-controls')
+      expect(controls).toBeTruthy()
+
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const menu = wrapper.find('.dropdown-menu')
+      expect(menu.attributes('id')).toBe(controls)
     })
 
     it('uses the close-label aria-label when open', async () => {
