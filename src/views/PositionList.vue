@@ -1,0 +1,857 @@
+<template>
+  <div class="position-list">
+    <!-- Breadcrumb -->
+    <nav class="position-list__breadcrumb" aria-label="Breadcrumb">
+      <router-link to="/" class="breadcrumb-link">{{ t('nav.home') }}</router-link>
+      <span class="breadcrumb-separator">›</span>
+      <router-link to="/join-us" class="breadcrumb-link">Join Us</router-link>
+      <span class="breadcrumb-separator">›</span>
+      <span class="breadcrumb-current">{{ t('positions.title') }}</span>
+    </nav>
+
+    <!-- Header -->
+    <section class="position-list__header">
+      <h1 class="position-list__title">{{ t('positions.title') }}</h1>
+      <p class="position-list__title-accent">{{ t('positions.subtitle') }}</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="position-list__main">
+      <!-- Filters Sidebar -->
+      <aside class="position-list__filters">
+        <div class="filter-section">
+          <h2 class="filter-title">{{ t('positions.filters.title') }}</h2>
+
+          <!-- Search -->
+          <div class="filter-search">
+            <label for="search-input">{{ t('positions.searchPlaceholder') }}</label>
+            <input
+              id="search-input"
+              type="text"
+              v-model="searchQuery"
+              :placeholder="t('positions.searchPlaceholder')"
+            />
+          </div>
+
+          <!-- Department Filter -->
+          <div class="filter-group">
+            <label for="department-select">{{ t('positions.filters.department') }}</label>
+            <select id="department-select" v-model="selectedDepartment">
+              <option v-for="dept in departments" :key="dept.value" :value="dept.value">
+                {{ dept.label }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Location Filter -->
+          <div class="filter-group">
+            <label for="location-select">{{ t('positions.filters.location') }}</label>
+            <select id="location-select" v-model="selectedLocation">
+              <option v-for="loc in locations" :key="loc.value" :value="loc.value">
+                {{ loc.label }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Type Filter -->
+          <div class="filter-group">
+            <label for="type-select">{{ t('positions.filters.type') }}</label>
+            <select id="type-select" v-model="selectedType">
+              <option v-for="type in employmentTypes" :key="type.value" :value="type.value">
+                {{ type.label }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Active Filters -->
+          <div v-if="hasActiveFilters" class="filter-active">
+            <span>{{ filteredPositions.length }} {{ t('positions.filters.activeFilters') }}</span>
+            <button class="filter-clear" @click="clearAllFilters">
+              {{ t('positions.filters.clearAll') }}
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Positions Grid -->
+      <main class="position-list__content">
+        <div v-if="filteredPositions.length > 0" class="position-list__grid" role="list">
+          <div
+            v-for="position in filteredPositions"
+            :key="position.id"
+            class="position-card"
+            role="listitem"
+          >
+            <h3 class="position-card__title">{{ displayTitle(position) }}</h3>
+            
+            <div class="position-card__meta">
+              <div class="position-card__meta-item">
+                {{ getDepartmentLabel(position.department) }}
+              </div>
+              <div class="position-card__meta-item">
+                <span class="position-card__icon">📍</span>
+                {{ getLocationLabel(position.location) }}
+              </div>
+              <div class="position-card__meta-item">
+                {{ t('positions.cards.posted') }} {{ formatDate(position.postedDate) }}
+              </div>
+            </div>
+
+            <p class="position-card__description">
+              {{ truncateDescription(position.description[currentLanguage.value]) }}
+            </p>
+
+            <div class="position-card__footer">
+              <div class="position-card__salary">{{ position.salary[currentLanguage.value] }}</div>
+              <span class="position-card__badge">{{ position.type.toUpperCase() }}</span>
+            </div>
+
+            <button
+              class="position-card__action"
+              :aria-label="`${t('positions.cards.viewDetails')} - ${displayTitle(position)}`"
+              @click="openPositionDetail(position)"
+            >
+              {{ t('positions.cards.viewDetails') }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else class="position-list__empty" role="status" aria-live="polite">
+          <div class="empty-icon">🔍</div>
+          <h3 class="empty-title">
+            {{ positions.length === 0 ? t('positions.empty.noPositions') : t('positions.empty.title') }}
+          </h3>
+          <p v-if="hasActiveFilters" class="empty-message">
+            {{ t('positions.empty.message') }}
+          </p>
+          <button v-if="hasActiveFilters" class="empty-action" @click="clearAllFilters">
+            {{ t('positions.filters.clearAll') }}
+          </button>
+        </div>
+      </main>
+    </div>
+
+    <!-- Position Detail Modal -->
+    <div v-if="selectedPosition" class="position-modal" role="dialog" aria-modal="true">
+      <div class="position-modal__overlay" @click="closePositionDetail"></div>
+      <div class="position-modal__container">
+        <button
+          class="position-modal__close"
+          :aria-label="t('positions.detail.backToList')"
+          @click="closePositionDetail"
+        >
+          ✕
+        </button>
+
+        <div class="position-modal__content">
+          <h2 class="position-modal__title">{{ displayTitle(selectedPosition) }}</h2>
+
+          <div class="position-modal__meta">
+            <span>{{ getDepartmentLabel(selectedPosition.department) }}</span>
+            <span>•</span>
+            <span>{{ getLocationLabel(selectedPosition.location) }}</span>
+            <span>•</span>
+            <span>{{ selectedPosition.salary[currentLanguage.value] }}</span>
+          </div>
+
+          <section class="position-modal__section">
+            <h3>{{ t('positions.detail.description') }}</h3>
+            <p>{{ selectedPosition.description[currentLanguage.value] }}</p>
+          </section>
+
+          <section class="position-modal__section">
+            <h3>{{ t('positions.detail.responsibilities') }}</h3>
+            <ul class="position-modal__list">
+              <li v-for="(item, idx) in selectedPosition.responsibilities[currentLanguage.value]" :key="idx">
+                {{ item }}
+              </li>
+            </ul>
+          </section>
+
+          <section class="position-modal__section">
+            <h3>{{ t('positions.detail.requirements') }}</h3>
+            <ul class="position-modal__list">
+              <li v-for="(item, idx) in selectedPosition.requirements[currentLanguage.value]" :key="idx">
+                {{ item }}
+              </li>
+            </ul>
+          </section>
+
+          <section class="position-modal__section">
+            <h3>{{ t('positions.detail.benefits') }}</h3>
+            <ul class="position-modal__list">
+              <li v-for="(item, idx) in selectedPosition.benefits[currentLanguage.value]" :key="idx">
+                {{ item }}
+              </li>
+            </ul>
+          </section>
+
+          <section class="position-modal__section">
+            <h3>{{ t('positions.detail.culture') }}</h3>
+            <p>{{ selectedPosition.culture[currentLanguage.value] }}</p>
+          </section>
+
+          <div class="position-modal__actions">
+            <button class="position-modal__apply">{{ t('positions.detail.applyNow') }}</button>
+            <button class="position-modal__share">{{ t('positions.detail.share') }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useLanguage } from '../composables/useLanguage'
+
+// Load positions data
+const positions = ref([])
+
+// Composable
+const { t, currentLanguage } = useLanguage()
+
+// Filter state
+const searchQuery = ref('')
+const selectedDepartment = ref('')
+const selectedLocation = ref('')
+const selectedType = ref('')
+const selectedPosition = ref(null)
+
+// Department options
+const departments = computed(() => [
+  { value: '', label: t('positions.departments.all') },
+  { value: 'engineering', label: t('positions.departments.engineering') },
+  { value: 'product', label: t('positions.departments.product') },
+  { value: 'design', label: t('positions.departments.design') },
+  { value: 'marketing', label: t('positions.departments.marketing') },
+  { value: 'sales', label: t('positions.departments.sales') }
+])
+
+// Location options
+const locations = computed(() => [
+  { value: '', label: t('positions.locations.all') },
+  { value: 'bangkok', label: t('positions.locations.bangkok') },
+  { value: 'shanghai', label: t('positions.locations.shanghai') },
+  { value: 'beijing', label: t('positions.locations.beijing') },
+  { value: 'remote', label: t('positions.locations.remote') }
+])
+
+// Employment type options
+const employmentTypes = computed(() => [
+  { value: '', label: t('positions.types.all') },
+  { value: 'fulltime', label: t('positions.types.fulltime') },
+  { value: 'parttime', label: t('positions.types.parttime') },
+  { value: 'contract', label: t('positions.types.contract') },
+  { value: 'internship', label: t('positions.types.internship') }
+])
+
+// Has active filters
+const hasActiveFilters = computed(() => {
+  return searchQuery.value !== '' ||
+         selectedDepartment.value !== '' ||
+         selectedLocation.value !== '' ||
+         selectedType.value !== ''
+})
+
+// Filter positions
+const filteredPositions = computed(() => {
+  return positions.value.filter(position => {
+    const matchesSearch = searchQuery.value === '' ||
+      position.title[currentLanguage.value].toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      position.title['en'].toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      (position.title['zh'] && position.title['zh'].toLowerCase().includes(searchQuery.value.toLowerCase()))
+
+    const matchesDepartment = selectedDepartment.value === '' || position.department === selectedDepartment.value
+    const matchesLocation = selectedLocation.value === '' || position.location === selectedLocation.value
+    const matchesType = selectedType.value === '' || position.type === selectedType.value
+
+    return matchesSearch && matchesDepartment && matchesLocation && matchesType
+  })
+})
+
+// Helper functions
+const displayTitle = (position) => position.title[currentLanguage.value]
+
+const getDepartmentLabel = (dept) => {
+  const labels = {
+    engineering: 'Engineering',
+    product: 'Product',
+    design: 'Design',
+    marketing: 'Marketing',
+    sales: 'Sales'
+  }
+  return labels[dept] || dept
+}
+
+const getLocationLabel = (loc) => {
+  const labels = {
+    bangkok: 'Bangkok',
+    shanghai: 'Shanghai',
+    beijing: 'Beijing',
+    remote: 'Remote'
+  }
+  return labels[loc] || loc
+}
+
+const getTypeLabel = (type) => {
+  const labels = {
+    fulltime: 'Full-time',
+    parttime: 'Part-time',
+    contract: 'Contract',
+    internship: 'Internship'
+  }
+  return labels[type] || type
+}
+
+const formatDate = (dateStr) => {
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+}
+
+const truncateDescription = (text) => {
+  return text.length > 120 ? text.substring(0, 120) + '...' : text
+}
+
+const clearAllFilters = () => {
+  searchQuery.value = ''
+  selectedDepartment.value = ''
+  selectedLocation.value = ''
+  selectedType.value = ''
+}
+
+const openPositionDetail = (position) => {
+  selectedPosition.value = position
+  document.body.style.overflow = 'hidden'
+}
+
+const closePositionDetail = () => {
+  selectedPosition.value = null
+  document.body.style.overflow = ''
+}
+
+// Load positions on mount
+onMounted(async () => {
+  try {
+    const { default: positionData } = await import('../data/positions.json')
+    positions.value = positionData
+  } catch (error) {
+    console.error('Failed to load positions:', error)
+    positions.value = []
+  }
+})
+
+onUnmounted(() => {
+  if (selectedPosition.value) {
+    document.body.style.overflow = ''
+  }
+})
+</script>
+
+<style scoped>
+.position-list {
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(139, 0, 255, 0.05) 100%);
+  padding: 2rem 5%;
+}
+
+/* Breadcrumb */
+.position-list__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-link {
+  color: #00f0ff;
+  text-decoration: none;
+  transition: text-shadow 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+}
+
+.breadcrumb-separator {
+  color: #666;
+}
+
+.breadcrumb-current {
+  color: #e0e0e0;
+}
+
+/* Header */
+.position-list__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.position-list__title {
+  font-family: 'Orbitron', monospace;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #e0e0e0;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.5rem;
+}
+
+.position-list__title-accent {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.2rem;
+  color: #00f0ff;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+}
+
+/* Main Layout */
+.position-list__main {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Filters */
+.position-list__filters {
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
+}
+
+.filter-section {
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  padding: 2rem;
+  border-radius: 8px;
+}
+
+.filter-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.2rem;
+  color: #00f0ff;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.5rem;
+}
+
+.filter-search {
+  margin-bottom: 1.5rem;
+}
+
+.filter-search label {
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.filter-search input {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #e0e0e0;
+  font-family: 'Rajdhani', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-search input:focus {
+  outline: none;
+  border-color: #00f0ff;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.filter-group {
+  margin-bottom: 1.5rem;
+}
+
+.filter-group label {
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  color: #aaa;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #e0e0e0;
+  font-family: 'Rajdhani', sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #00f0ff;
+}
+
+.filter-active {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.filter-clear {
+  padding: 0.5rem 1rem;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #00f0ff;
+  font-family: 'Rajdhani', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-clear:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+/* Positions Grid */
+.position-list__content {
+  min-height: 500px;
+}
+
+.position-list__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* Position Card */
+.position-card {
+  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  padding: 2rem;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.position-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
+  border-color: #00f0ff;
+}
+
+.position-card__title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.3rem;
+  color: #e0e0e0;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.position-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.position-card__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+  color: #888;
+}
+
+.position-card__icon {
+  font-size: 0.8rem;
+}
+
+.position-card__description {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #aaa;
+  margin-bottom: 1.5rem;
+}
+
+.position-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.position-card__salary {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  color: #00f0ff;
+}
+
+.position-card__badge {
+  padding: 0.3rem 0.8rem;
+  background: rgba(139, 0, 255, 0.2);
+  border: 1px solid rgba(139, 0, 255, 0.4);
+  color: #8b00ff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.position-card__action {
+  width: 100%;
+  padding: 0.8rem;
+  background: transparent;
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: #00f0ff;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.position-card__action:hover {
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+/* Empty State */
+.position-list__empty {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  color: #e0e0e0;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.empty-message {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  color: #888;
+  margin-bottom: 2rem;
+}
+
+.empty-action {
+  padding: 0.8rem 2rem;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: #00f0ff;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.empty-action:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+/* Modal */
+.position-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.position-modal__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.position-modal__container {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: rgba(10, 10, 20, 0.95);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 12px;
+}
+
+.position-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: #00f0ff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.position-modal__close:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.position-modal__content {
+  padding: 3rem;
+}
+
+.position-modal__title {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  color: #e0e0e0;
+  letter-spacing: 0.15em;
+  margin-bottom: 1rem;
+}
+
+.position-modal__meta {
+  display: flex;
+  gap: 1rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 2rem;
+}
+
+.position-modal__section {
+  margin-bottom: 2rem;
+}
+
+.position-modal__section h3 {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.2rem;
+  color: #00f0ff;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.position-modal__section p {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: #aaa;
+}
+
+.position-modal__list {
+  list-style: none;
+  padding: 0;
+}
+
+.position-modal__list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #aaa;
+}
+
+.position-modal__list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: #00f0ff;
+}
+
+.position-modal__actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.position-modal__apply,
+.position-modal__share {
+  flex: 1;
+  padding: 1rem;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.position-modal__apply {
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: #00f0ff;
+}
+
+.position-modal__apply:hover {
+  background: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+}
+
+.position-modal__share {
+  background: transparent;
+  border: 1px solid rgba(139, 0, 255, 0.4);
+  color: #8b00ff;
+}
+
+.position-modal__share:hover {
+  background: rgba(139, 0, 255, 0.1);
+  box-shadow: 0 0 15px rgba(139, 0, 255, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .position-list__main {
+    grid-template-columns: 1fr;
+  }
+
+  .position-list__filters {
+    position: static;
+  }
+
+  .position-list__grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .position-list {
+    padding: 1rem 5%;
+  }
+
+  .position-list__title {
+    font-size: 2rem;
+  }
+
+  .position-list__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .position-modal__content {
+    padding: 2rem 1.5rem;
+  }
+}
+</style>

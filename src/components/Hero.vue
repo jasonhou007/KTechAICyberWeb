@@ -40,19 +40,6 @@ import { ref, onMounted } from 'vue'
 import SkeletonHero from './SkeletonHero.vue'
 import { useSkeleton } from '../composables/useSkeleton'
 
-// Refs
-const particles = ref(null)
-
-// Skeleton loading state for above-fold content
-const { isLoading } = useSkeleton({ immediate: true })
-
-// Stats data
-const stats = [
-  { value: '2020', label: t('stats.founded') },
-  { value: '3亿', label: t('stats.capital') },
-  { value: '20+', label: t('stats.projects') }
-]
-
 // Translations
 const t = (key) => {
   const translations = {
@@ -65,6 +52,26 @@ const t = (key) => {
   }
   return translations[key] || key
 }
+
+// Refs
+const particles = ref(null)
+
+// Skeleton loading state for above-fold content
+const { isLoading } = useSkeleton({ immediate: true })
+
+// Debug: log what we're getting from useSkeleton
+if (typeof window !== 'undefined' && window.__DEBUG__) {
+  console.log('Hero: isLoading from useSkeleton =', isLoading)
+  console.log('Hero: isLoading.value =', isLoading.value)
+  console.log('Hero: typeof isLoading =', typeof isLoading)
+}
+
+// Stats data
+const stats = [
+  { value: '2020', label: t('stats.founded') },
+  { value: '3亿', label: t('stats.capital') },
+  { value: '20+', label: t('stats.projects') }
+]
 
 // Create particles
 const createParticles = () => {
