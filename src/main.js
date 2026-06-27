@@ -13,6 +13,7 @@ import News from './views/News.vue'
 import NewsDetail from './views/NewsDetail.vue'
 import SupplyChainFinance from './views/SupplyChainFinance.vue'
 import ServiceProjectManagement from './views/ServiceProjectManagement.vue'
+import Blockchain from './views/Blockchain.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 
 const routes = [
@@ -22,6 +23,7 @@ const routes = [
   { path: '/news/:slug', component: NewsDetail, props: true },
   { path: '/services/supply-chain-finance', component: SupplyChainFinance },
   { path: '/services/project-and-program-management', component: ServiceProjectManagement },
+  { path: '/services/blockchain', component: Blockchain },
   { path: '/privacy', component: PrivacyPolicy }
 ]
 
