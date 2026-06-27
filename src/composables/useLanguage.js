@@ -31,18 +31,20 @@ function getNestedValue(obj, path) {
   }, obj)
 }
 
-export function useLanguage() {
-  // Initialize language from localStorage or default
-  function initLanguage() {
-    const saved = localStorage.getItem(LANGUAGE_KEY)
-    if (saved && (saved === 'en' || saved === 'zh')) {
-      currentLanguage.value = saved
-    } else {
-      currentLanguage.value = DEFAULT_LANGUAGE
-    }
-    loadTranslations(currentLanguage.value)
+// Initialize language from localStorage or default.
+// Exported at module scope so it can be called directly (e.g. App.vue onMounted)
+// without first invoking useLanguage().
+export function initLanguage() {
+  const saved = localStorage.getItem(LANGUAGE_KEY)
+  if (saved && (saved === 'en' || saved === 'zh')) {
+    currentLanguage.value = saved
+  } else {
+    currentLanguage.value = DEFAULT_LANGUAGE
   }
+  loadTranslations(currentLanguage.value)
+}
 
+export function useLanguage() {
   // Set language and persist
   function setLanguage(lang) {
     if (lang === 'en' || lang === 'zh') {
