@@ -325,6 +325,9 @@ onUnmounted(() => {
   outline-offset: 4px;
 }
 
+/* Media queries cannot reference CSS variables (not resolved at parse
+ * time), so the literal mirrors src/constants/breakpoints.js
+ * MOBILE_BREAKPOINT / --breakpoint-mobile. Keep these in sync. */
 @media (max-width: 768px) {
   .nav {
     padding-left: 1rem;

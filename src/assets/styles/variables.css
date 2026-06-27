@@ -41,4 +41,7 @@
   --z-nav: 100;
   --z-loading: 9999;
   --z-scanlines: 1000;
+
+  /* Responsive breakpoints (kept in sync with src/constants/breakpoints.js) */
+  --breakpoint-mobile: 768px;
 }

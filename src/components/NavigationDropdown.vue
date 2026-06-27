@@ -59,6 +59,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
+import { isDesktopViewport, isMobileViewport } from '../constants/breakpoints'
 
 // Shared i18n — text follows the site-wide language toggle (en/zh).
 const { t } = useLanguage()
@@ -126,19 +127,19 @@ const toggle = () => {
 }
 
 const handleMouseEnter = () => {
-  if (window.innerWidth > 768) {
+  if (isDesktopViewport()) {
     isOpen.value = true
   }
 }
 
 const handleMouseLeave = () => {
-  if (window.innerWidth > 768) {
+  if (isDesktopViewport()) {
     isOpen.value = false
   }
 }
 
 const handleMenuClick = (e) => {
-  if (window.innerWidth <= 768) {
+  if (isMobileViewport()) {
     e.stopPropagation()
   }
 }
@@ -304,6 +305,9 @@ defineExpose({ isOpen, menuRef, open, close })
   transform: translateY(-10px);
 }
 
+/* Media queries cannot reference CSS variables (not resolved at parse
+ * time), so the literal mirrors src/constants/breakpoints.js
+ * MOBILE_BREAKPOINT / --breakpoint-mobile. Keep these in sync. */
 @media (max-width: 768px) {
   .dropdown-menu {
     position: fixed;
