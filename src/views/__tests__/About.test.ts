@@ -224,10 +224,8 @@ describe('About.vue', () => {
 
     it('renders the mission card title and description', () => {
       const missionCard = wrapper.findAll('.vmc-card')[1]
-      // Title key is not (yet) in the locale, so t() returns the raw key (still
-      // asserts the wiring). The description key IS bundled and now resolves to
-      // its real English copy instead of the raw key.
-      expect(missionCard.find('h3').text()).toBe('about.mission.title')
+      // Mission title resolves to real English copy (about.mission.heading).
+      expect(missionCard.find('h3').text()).toBe('Our Mission')
       expect(missionCard.find('p').text()).toBe(
         'KTech is dedicated to building transformative AI solutions that push the boundaries of what\'s possible.',
       )
