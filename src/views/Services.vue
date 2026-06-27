@@ -77,7 +77,8 @@ const services = [
     id: 2,
     key: 'retailCredit',
     icon: '💳',
-    features: ['underwriting', 'analytics', 'compliance']
+    features: ['underwriting', 'analytics', 'compliance'],
+    link: '/services/retail-lending'
   },
   {
     id: 3,
