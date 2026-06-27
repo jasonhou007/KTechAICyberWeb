@@ -21,6 +21,7 @@ import Contact from './views/Contact.vue'
 import PositionList from './views/PositionList.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import Terms from './views/Terms.vue'
+import NotFound from './views/NotFound.vue'
 
 const routes = [
   { path: '/', component: Home },
@@ -35,11 +36,19 @@ const routes = [
   { path: '/contact', component: Contact },
   { path: '/careers', component: PositionList },
   { path: '/privacy', component: PrivacyPolicy },
-  { path: '/terms', component: Terms }
+  { path: '/terms', component: Terms },
+  // Catch-all: render NotFound for any unmatched path so deep links / typos
+  // no longer render a blank page. (:pathMatch(.*)* is the vue-router 4 form.)
+  { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound }
 ]
 
+// The app is deployed at the GitHub Pages subpath /KTechAICyberWeb/ (see the
+// `base` in vite.config.js). createWebHistory() with no argument strips that
+// prefix, so the router matched no route in production and the site rendered
+// blank. import.meta.env.BASE_URL is the Vite base ('/KTechAICyberWeb/'), so
+// the router now matches paths under the subpath. #140.
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes
 })
 
