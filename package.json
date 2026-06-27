@@ -7,10 +7,6 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
-    "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
@@ -19,6 +15,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^14.3.0",
+    "@vueuse/head": "^2.0.0",
     "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
@@ -26,9 +23,8 @@
     "@playwright/test": "^1.61.1",
     "@vitejs/plugin-vue": "^5.0.0",
     "@vitest/coverage-v8": "^4.1.9",
-    "@vitest/ui": "^4.1.9",
     "@vue/test-utils": "^2.4.11",
-    "jsdom": "^29.1.1",
+    "happy-dom": "^20.10.6",
     "serve": "^14.2.6",
     "vite": "^5.0.0",
     "vitest": "^4.1.9"
