@@ -50,6 +50,12 @@ export function getRouteMeta(route) {
       description: 'Stay updated with the latest news, insights, and updates from KTech. Company announcements, industry insights, technology updates, and events.',
       ogImage: `${SITE_URL}/og-image-news.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-news.jpg`
+    },
+    '/privacy': {
+      title: 'Privacy Policy - KTech | KBight Fintech',
+      description: 'KTech Privacy Policy. Learn how we collect, use, and protect your personal data in compliance with GDPR and CCPA, including your data protection rights.',
+      ogImage: `${SITE_URL}/og-image-privacy.jpg`,
+      twitterImage: `${SITE_URL}/twitter-image-privacy.jpg`
     }
   }
 
@@ -210,6 +216,11 @@ export function getSitemapRoutes() {
       path: '/news',
       changefreq: 'daily',
       priority: 0.9
+    },
+    {
+      path: '/privacy',
+      changefreq: 'yearly',
+      priority: 0.5
     }
   ]
 }
