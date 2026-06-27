@@ -70,19 +70,33 @@
       "solution": "解决方案",
       "consulting": "顾问",
       "button": "申请演示"
-    }
+    },
+    "address": "公司地址",
+    "addressValue": "深圳市罗湖区",
+    "email": "电子邮箱",
+    "emailValue": "contact@ktech.fintech",
+    "website": "官方网站",
+    "websiteValue": "www.kaitai.tech"
   },
   "nav": {
     "home": "首页",
     "about": "关于",
     "news": "新闻",
-    "logo": "KTECH.AI"
+    "logo": "KTECH.AI",
+    "services": "服务",
+    "honors": "荣誉",
+    "contact": "联系",
+    "dropdown": {
+      "open": "打开菜单",
+      "close": "关闭菜单"
+    }
   },
   "footer": {
     "copyright": "© 2025 KTech AI. 所有系统正常运行。",
     "status": "在线",
     "privacyPolicy": "隐私政策",
-    "termsOfService": "服务条款"
+    "termsOfService": "服务条款",
+    "companyName": "开泰远景信息科技有限公司"
   },
   "home": {
     "title": "KTech AI",
@@ -219,7 +233,10 @@
     "publishedOn": "发布于",
     "by": "作者",
     "share": "分享这篇文章",
-    "breadcrumb": "首页 > 新闻"
+    "breadcrumb": "首页 > 新闻",
+    "learnMore": "了解更多",
+    "ktechNews": "开泰科技动态",
+    "kbtgNews": "KBTG 动态"
   },
   "services": {
     "backToServices": "返回服务",
@@ -567,6 +584,112 @@
           "predictiveAnalytics": "预测分析",
           "dataGovernance": "数据治理"
         }
+      },
+      "projectManagement": {
+        "title": "项目管理",
+        "description": "面向复杂金融科技项目的大规模敏捷交付。",
+        "features": {
+          "sprint": "迭代规划",
+          "velocity": "速率跟踪",
+          "reporting": "状态报告"
+        }
+      },
+      "supplyChain": {
+        "title": "供应链金融",
+        "description": "营运资金解决方案。",
+        "features": {
+          "tracking": "发票跟踪",
+          "currency": "多币种",
+          "mitigation": "风险缓释"
+        }
+      },
+      "blockchain": {
+        "title": "区块链",
+        "description": "分布式账本工程。",
+        "features": {
+          "contracts": "智能合约",
+          "consensus": "共识机制",
+          "trails": "审计追踪"
+        }
+      }
+    },
+    "title": "核心服务",
+    "subtitle": "以尖端科技赋能金融创新",
+    "cta": "联系我们",
+    "projectManagement": "项目管理",
+    "projectManagementDesc": "专业的金融科技项目管理服务",
+    "retailCredit": "零售信贷",
+    "retailCreditDesc": "端到端的零售信贷系统解决方案",
+    "supplyChain": "供应链金融",
+    "supplyChainDesc": "基于区块链的供应链金融平台",
+    "blockchain": "区块链技术",
+    "blockchainDesc": "企业级区块链解决方案",
+    "fintechApp": "金融科技应用",
+    "fintechAppDesc": "移动端金融应用开发",
+    "bigData": "大数据与AI",
+    "bigDataDesc": "人工智能与大数据分析",
+    "pm": {
+      "title": "项目管理",
+      "subtitle": "从需求发现到长期运维的专业金融科技项目交付",
+      "overview": {
+        "title": "服务概述",
+        "content": "我们为金融科技项目提供端到端的项目管理服务，融合敏捷教练、治理、风险控制与合规，确保受监管产品按时、按预算、按规格交付。"
+      },
+      "capabilities": {
+        "title": "交付能力",
+        "agile": {
+          "title": "敏捷交付",
+          "description": "以 Scrum、看板和 SAFe 实践在短而可预测的迭代中持续交付可用软件。"
+        },
+        "waterfall": {
+          "title": "瀑布交付",
+          "description": "面向范围固定、合规要求高、需正式签收的阶段式门控交付。"
+        },
+        "hybrid": {
+          "title": "混合模式",
+          "description": "根据每个项目的风险、范围与合规特征定制的敏捷与瀑布混合模式。"
+        },
+        "risk": {
+          "title": "风险管理",
+          "description": "结构化的风险登记、缓释计划与升级机制，保障项目稳健推进。"
+        }
+      },
+      "process": {
+        "title": "交付流程",
+        "discovery": {
+          "title": "需求发现",
+          "description": "在任何承诺之前，先就目标、范围、干系人与成功指标达成一致。"
+        },
+        "planning": {
+          "title": "计划制定",
+          "description": "制定路线图、发布计划、预算与治理模型。"
+        },
+        "execution": {
+          "title": "执行交付",
+          "description": "运行迭代，跟踪速率，日常管理范围、质量与风险。"
+        },
+        "delivery": {
+          "title": "上线交付",
+          "description": "完成交付、验收与移交，含文档、培训与签收。"
+        },
+        "support": {
+          "title": "持续运维",
+          "description": "上线后提供护航、维护与持续改进。"
+        }
+      },
+      "features": {
+        "title": "包含内容",
+        "sprint": "迭代规划与评审",
+        "velocity": "速率与燃尽跟踪",
+        "reporting": "管理层状态报告",
+        "collaboration": "跨团队协作",
+        "tracking": "预算与进度跟踪",
+        "compliance": "合规与审计支持"
+      },
+      "cta": {
+        "title": "放心交付您的下一个项目",
+        "subtitle": "与我们聊聊为您的金融科技项目量身定制的项目交付。",
+        "button": "申请咨询"
       }
     }
   },
@@ -803,5 +926,290 @@
     "title": "页面未找到",
     "message": "您访问的页面不存在或已被移动。",
     "home": "返回首页"
+  },
+  "hero": {
+    "title": "开泰科技",
+    "subtitle": "凯泰金融科技",
+    "description": "开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。"
+  },
+  "stats": {
+    "founded": "成立年份",
+    "capital": "注册资本（元）",
+    "projects": "建设项目"
+  },
+  "honors": {
+    "title": "荣誉资质",
+    "subtitle": "专业认证 · 值得信赖",
+    "highTech": "国家高新技术企业",
+    "highTechDesc": "高新技术企业认证",
+    "hq": "深圳市跨国公司总部",
+    "hqDesc": "第一批认定企业",
+    "aaa": "AAA级信用企业",
+    "aaaDesc": "信用评级最高等级",
+    "iso9001": "ISO9001认证",
+    "iso9001Desc": "质量管理体系认证",
+    "iso27001": "ISO27001认证",
+    "iso27001Desc": "信息安全管理体系",
+    "iso20000": "ISO20000认证",
+    "iso20000Desc": "IT服务管理体系",
+    "specialized": "深圳市专精特新",
+    "specializedDesc": "专精特新中小企业",
+    "member": "深圳市金融科技协会",
+    "memberDesc": "会员单位"
+  },
+  "culture": {
+    "title": "愿景·使命·文化",
+    "vision": "愿景",
+    "visionDesc": "成为区域领先的金融科技平台",
+    "mission": "使命",
+    "missionDesc": "以尖端科技赋能客户",
+    "values": "文化",
+    "valuesDesc": "客户至上 · 开放协作<br>敏捷创新 · 专业高效"
+  },
+  "blockchain": {
+    "breadcrumb": "区块链",
+    "hero": {
+      "title": "企业级",
+      "accent": "区块链",
+      "subtitle": "为受监管生态设计的分布式账本平台，实现信任、可追溯与可编程金融。"
+    },
+    "overview": {
+      "title": "服务概述",
+      "description": "我们的区块链业务为金融机构设计并交付生产级分布式账本系统，融合共识设计、智能合约工程与企业级集成，满足受监管行业的治理要求。",
+      "detail": "从供应链金融、跨境支付到资产数字化与可审计登记，我们构建将信任转化为可验证、自动化基础设施的账本系统。"
+    },
+    "features": {
+      "title": "核心特性",
+      "distributed": {
+        "title": "分布式架构",
+        "description": "去中心化节点消除单点故障，即使部分节点中断也能保持数据可用。"
+      },
+      "security": {
+        "title": "密码学安全",
+        "description": "哈希链、数字签名与许可访问控制在每个区块守护数据完整性。"
+      },
+      "efficiency": {
+        "title": "运营效率",
+        "description": "智能合约自动执行结算、对账与合规检查，无需人工中介。"
+      },
+      "traceability": {
+        "title": "全程可追溯",
+        "description": "不可篡改、带时间戳的记录为审计与监管提供每笔交易的端到端视图。"
+      }
+    },
+    "benefits": {
+      "title": "业务价值",
+      "trust": {
+        "title": "增强信任",
+        "description": "共享的防篡改账本让交易对手放心协作，降低核验成本。"
+      },
+      "cost": {
+        "title": "降低成本",
+        "description": "通过对账自动化与去中介化，降低全链路处理成本。"
+      },
+      "speed": {
+        "title": "加速结算",
+        "description": "智能合约驱动的结算将多日流程压缩至分钟级。"
+      }
+    },
+    "cta": {
+      "title": "构建您的区块链基础",
+      "description": "准备好为您的业务设计分布式账本平台了吗？让我们一起规划路线图。",
+      "button": "申请咨询",
+      "ariaLabel": "申请区块链解决方案咨询"
+    }
+  },
+  "joinUs": {
+    "title": "加入",
+    "titleAccent": "我们",
+    "subtitle": "与我们共建金融科技的未来。加入一支正在塑造下一代金融智能的创新团队。",
+    "cta": {
+      "button": "查看在招职位",
+      "ariaLabel": "查看在招职位"
+    },
+    "culture": {
+      "title": "我们的文化",
+      "description": "我们营造创新、协作与持续学习的文化。每位成员都为推进金融智能的使命贡献力量。",
+      "innovation": {
+        "title": "创新优先",
+        "description": "我们拥抱前沿技术，不断拓展金融科技的边界。"
+      },
+      "teamwork": {
+        "title": "协作精神",
+        "description": "优秀的产品源自协作。我们坚信多元视角与包容的团队合作。"
+      },
+      "creativity": {
+        "title": "创造自由",
+        "description": "我们鼓励创造性思考，给予探索新想法与新方案的自由。"
+      },
+      "growth": {
+        "title": "持续成长",
+        "description": "您的成长至关重要。我们提供学习机会与清晰的职业晋升通道。"
+      }
+    },
+    "benefits": {
+      "title": "福利待遇",
+      "competitive": {
+        "title": "有竞争力的薪酬",
+        "description": "基于经验与市场水平的行业领先薪酬方案。"
+      },
+      "development": {
+        "title": "职业发展",
+        "description": "持续学习、会议、工作坊与技能提升计划。"
+      },
+      "balance": {
+        "title": "工作与生活平衡",
+        "description": "弹性工作安排与关注身心健康的支持性环境。"
+      },
+      "health": {
+        "title": "健康保障",
+        "description": "涵盖医疗、牙科与视力的全面健康保险。"
+      },
+      "activities": {
+        "title": "团队活动",
+        "description": "定期团建、黑客马拉松与社交活动。"
+      },
+      "career": {
+        "title": "职业成长",
+        "description": "清晰的晋升通道，含导师辅导与内部转岗机会。"
+      }
+    },
+    "positions": {
+      "title": "在招职位",
+      "subtitle": "探索我们当前的职位空缺，找到您在团队中的位置。",
+      "viewAll": "查看全部职位"
+    },
+    "process": {
+      "title": "申请流程",
+      "step1": {
+        "title": "在线申请",
+        "description": "通过我们的招聘门户提交申请，附上简历与求职信。"
+      },
+      "step2": {
+        "title": "初筛",
+        "description": "我们的团队将审阅您的申请，并联系入围候选人进行初步沟通。"
+      },
+      "step3": {
+        "title": "面试",
+        "description": "与我们的团队面谈，讨论您的技能、经验与双方契合度。"
+      },
+      "step4": {
+        "title": "欢迎加入",
+        "description": "收到录用通知，加入我们共同创造未来。"
+      }
+    },
+    "contact": {
+      "title": "联系我们",
+      "description": "对在开泰科技工作有疑问？我们很乐意为您解答。",
+      "email": "careers@ktech.fintech"
+    }
+  },
+  "mobileApp": {
+    "title": "移动金融应用",
+    "hero": {
+      "title": "移动",
+      "accent": "金融应用",
+      "subtitle": "为安全、速度与卓越用户体验而设计的原生与跨平台移动金融应用。",
+      "tag1": "iOS 与 Android",
+      "tag2": "内生安全",
+      "tag3": "实时"
+    },
+    "overview": {
+      "title": "服务概述",
+      "description": "我们端到端设计、构建并交付移动金融应用，从需求发现与体验到发布与持续优化。",
+      "card1Title": "原生性能",
+      "card1Desc": "原生构建在每台设备上提供流畅动画与响应式交互。",
+      "card2Title": "银行级安全",
+      "card2Desc": "加密、安全密钥存储与生物识别保护每一笔交易。",
+      "card3Title": "实时体验",
+      "card3Desc": "实时数据、即时通知与低延迟同步让用户时刻连接。"
+    },
+    "features": {
+      "title": "核心功能",
+      "feature1Title": "账户管理",
+      "feature1Desc": "统一的余额、交易与关联账户仪表盘。",
+      "feature2Title": "即时支付",
+      "feature2Desc": "带多重认证的快速、安全转账。",
+      "feature3Title": "生物识别登录",
+      "feature3Desc": "面容 ID 与指纹识别，实现便捷安全登录。",
+      "feature4Title": "智能通知",
+      "feature4Desc": "交易、到期与欺诈检测的实时提醒。",
+      "feature5Title": "消费洞察",
+      "feature5Desc": "AI 驱动的个人财务分类与分析。",
+      "feature6Title": "应用内支持",
+      "feature6Desc": "直接集成于应用内的聊天与自助帮助。"
+    },
+    "benefits": {
+      "title": "核心价值",
+      "description": "团队选择我们移动金融交付的理由：",
+      "benefit1": "可复用组件，加速上市",
+      "benefit2": "符合金融监管与标准",
+      "benefit3": "iOS 与 Android 一致体验",
+      "benefit4": "模块化架构，支持快速迭代",
+      "benefit5": "内置分析与崩溃监控",
+      "benefit6": "面向多市场多语言的本地化"
+    },
+    "cta": {
+      "title": "发布您的移动金融应用",
+      "description": "准备好打造安全、可扩展的移动金融产品了吗？聊聊吧。",
+      "button": "申请咨询"
+    },
+    "related": {
+      "title": "相关服务"
+    }
+  },
+  "positions": {
+    "title": "在招职位",
+    "subtitle": "寻找您的下一个职位",
+    "searchPlaceholder": "搜索职位...",
+    "filters": {
+      "title": "筛选",
+      "department": "部门",
+      "location": "地点",
+      "type": "类型",
+      "activeFilters": "条结果",
+      "clearAll": "清除全部"
+    },
+    "departments": {
+      "all": "全部部门",
+      "engineering": "工程",
+      "product": "产品",
+      "design": "设计",
+      "marketing": "市场",
+      "sales": "销售"
+    },
+    "locations": {
+      "all": "全部地点",
+      "bangkok": "曼谷",
+      "shanghai": "上海",
+      "beijing": "北京",
+      "remote": "远程"
+    },
+    "types": {
+      "all": "全部类型",
+      "fulltime": "全职",
+      "parttime": "兼职",
+      "contract": "合同制",
+      "internship": "实习"
+    },
+    "cards": {
+      "posted": "发布于",
+      "viewDetails": "查看详情"
+    },
+    "detail": {
+      "description": "职位描述",
+      "responsibilities": "工作职责",
+      "requirements": "任职要求",
+      "benefits": "福利待遇",
+      "culture": "团队文化",
+      "applyNow": "立即申请",
+      "backToList": "返回列表",
+      "share": "分享"
+    },
+    "empty": {
+      "noPositions": "暂无在招职位",
+      "title": "没有匹配的职位",
+      "message": "请尝试调整筛选条件或搜索关键词。"
+    }
   }
 }
