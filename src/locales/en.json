@@ -89,6 +89,31 @@
     "dropdown": {
       "open": "Open menu",
       "close": "Close menu"
+    },
+    "aboutUs": "About Us",
+    "ourSolutions": "Our Solutions",
+    "joinUs": "Join Us",
+    "submenu": {
+      "aboutKTech": "About KTech",
+      "ourGroup": "Our Group",
+      "ktechNews": "KTech News",
+      "bbtgNews": "BBTG News",
+      "joinUs": "Join Us",
+      "positionList": "Position List",
+      "retailLending": "Retail Lending",
+      "supplyChainFinance": "Supply Chain Finance",
+      "blockchain": "Regulated Public Blockchain",
+      "crossBorderPayment": "Cross Border Payment",
+      "digitalAssetCustody": "Digital Asset Custody",
+      "stablecoin": "Stablecoin"
+    },
+    "menu": {
+      "open": "Open menu",
+      "close": "Close menu"
+    },
+    "groups": {
+      "banking": "Banking Solution",
+      "blockchainWeb3": "Blockchain & Web3"
     }
   },
   "footer": {
@@ -705,6 +730,105 @@
         "title": "Deliver Your Next Program with Confidence",
         "subtitle": "Talk to us about program delivery tailored to your fintech initiatives.",
         "button": "Request Consultation"
+      }
+    },
+    "crossBorderPayment": {
+      "title": "Cross-Border Payment Solution",
+      "subtitle": "A regulated cross-border payment rail connecting fiat and digital-asset corridors for banks, fintechs, and enterprises",
+      "hero": {
+        "heading": "Regulated Cross-Border Payment Rails",
+        "description": "Move value across borders in minutes on regulated payment rails that connect fiat settlement, correspondent banking, and digital-asset liquidity on a single platform."
+      },
+      "overview": {
+        "heading": "Service Overview",
+        "description": "Our Cross-Border Payment Solution unifies correspondent banking rails, real-time payment networks, and regulated digital-asset corridors so financial institutions can settle multi-currency payments faster, cheaper, and with full compliance. Built-in sanctions screening, travel-rule handling, and FX management keep every payment audit-ready end to end."
+      },
+      "capabilities": {
+        "heading": "Core Capabilities",
+        "c1": {
+          "title": "Multi-Rail Settlement",
+          "description": "Orchestrate payments across SWIFT, real-time payment networks, stablecoin rails, and correspondent banks from one API layer, with smart routing by cost, speed, and corridor."
+        },
+        "c2": {
+          "title": "Real-Time FX & Liquidity",
+          "description": "Live FX pricing, multi-currency liquidity pools, and pre-funded or on-demand settlement that compress remittance windows from days to minutes."
+        },
+        "c3": {
+          "title": "Compliance & Screening",
+          "description": "Sanctions screening, transaction monitoring, and travel-rule messaging integrated into the payment flow, with full audit trails for every leg of the journey."
+        }
+      },
+      "cta": {
+        "heading": "Modernize Your Cross-Border Payments",
+        "description": "Ready to consolidate your cross-border payment rails onto one compliant platform? Let's design your corridor roadmap together.",
+        "button": "Request Consultation",
+        "ariaLabel": "Request a consultation for the Cross-Border Payment Solution"
+      }
+    },
+    "digitalAssetCustody": {
+      "title": "Digital Asset Custody Solution",
+      "subtitle": "Institutional-grade custody for digital assets with MPC key management, regulated segregation, and on-chain settlement",
+      "hero": {
+        "heading": "Institutional Digital-Asset Custody",
+        "description": "Safeguard institutional digital assets with multi-party-computation key management, regulated segregation of duties, and on-chain settlement engineered for banks, asset managers, and exchanges."
+      },
+      "overview": {
+        "heading": "Service Overview",
+        "description": "Our Digital Asset Custody Solution combines hardware-backed MPC key management, HSM-secured cold storage, and policy-driven governance into a regulated custody platform. From on-chain settlement to fund administration, we help institutions hold, transfer, and report digital assets with the controls and transparency regulators require."
+      },
+      "capabilities": {
+        "heading": "Core Capabilities",
+        "c1": {
+          "title": "MPC Key Management",
+          "description": "Threshold signatures across hardware-backed nodes that eliminate single points of key compromise while keeping signing latency low for production workflows."
+        },
+        "c2": {
+          "title": "Regulated Segregation",
+          "description": "Segregated wallet structures, bankruptcy-remote account models, and reconciliation against the chain that meet institutional and regulatory custody standards."
+        },
+        "c3": {
+          "title": "On-Chain Settlement & Reporting",
+          "description": "Native on-chain settlement with automated proof-of-reserves, NAV reporting, and audit exports for fund administrators and regulators."
+        }
+      },
+      "cta": {
+        "heading": "Custody Digital Assets With Confidence",
+        "description": "Ready to launch an institutional digital-asset custody program? Let's design your governance and key-management architecture together.",
+        "button": "Request Consultation",
+        "ariaLabel": "Request a consultation for the Digital Asset Custody Solution"
+      }
+    },
+    "stablecoin": {
+      "title": "Stablecoin Solution",
+      "subtitle": "A regulated stablecoin issuance platform with reserve management, redemption rails, and on-chain programmability for banks and fintechs",
+      "hero": {
+        "heading": "Regulated Stablecoin Issuance",
+        "description": "Issue and operate a regulated stablecoin with transparent reserve management, instant redemption rails, and programmable on-chain money movement built for banks and licensed issuers."
+      },
+      "overview": {
+        "heading": "Service Overview",
+        "description": "Our Stablecoin Solution covers the full issuance lifecycle: reserve custody and attestation, mint and burn controls, redemption rails, and on-chain programmability. We help banks and fintechs launch fiat-backed stablecoins that satisfy monetary-authority requirements while enabling fast, composable, cross-chain payments."
+      },
+      "capabilities": {
+        "heading": "Core Capabilities",
+        "c1": {
+          "title": "Reserve Management",
+          "description": "Segregated reserve custody with daily reconciliation and independent attestation so every token in circulation is backed 1:1 by high-quality liquid assets."
+        },
+        "c2": {
+          "title": "Mint, Burn & Redeem Rails",
+          "description": "Policy-driven mint/burn APIs, KYC-anchored redemption flows, and integration with banking rails so issuers can move between fiat and stablecoin on demand."
+        },
+        "c3": {
+          "title": "On-Chain Programmability",
+          "description": "Multi-chain issuance, smart-contract-based compliance controls, and composable payment rails that plug stablecoin liquidity into wallets, exchanges, and merchant networks."
+        }
+      },
+      "cta": {
+        "heading": "Launch a Regulated Stablecoin",
+        "description": "Ready to issue a regulated stablecoin? Let's design your reserve, redemption, and on-chain architecture together.",
+        "button": "Request Consultation",
+        "ariaLabel": "Request a consultation for the Stablecoin Solution"
       }
     }
   },
