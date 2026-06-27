@@ -7,7 +7,8 @@
   },
   "footer": {
     "copyright": "\u00a9 2025 KTech AI. All systems operational.",
-    "status": "ONLINE"
+    "status": "ONLINE",
+    "privacyPolicy": "Privacy Policy"
   },
   "home": {
     "title": "KTech AI",
@@ -204,6 +205,120 @@
         "button": "Request Consultation",
         "ariaLabel": "Request a consultation for supply chain finance"
       }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "titleAccent": "GDPR Compliant",
+    "subtitle": "How KTech collects, uses, and protects your personal data",
+    "lastUpdated": "Last updated: June 27, 2026",
+    "disclaimer": "This is a template privacy policy. Please consult legal counsel before production use.",
+    "intro": {
+      "heading": "Introduction",
+      "description": "KTech AI (\"we\", \"us\", or \"our\") is committed to protecting and respecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services. This policy complies with the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA)."
+    },
+    "collection": {
+      "heading": "Information We Collect",
+      "description": "We collect information you provide directly to us and information collected automatically when you use our services.",
+      "items": {
+        "personal": {
+          "title": "Personal Information",
+          "description": "Name, email address, phone number, company name, and job title that you provide via contact or registration forms."
+        },
+        "usage": {
+          "title": "Usage Data",
+          "description": "IP address, browser type, operating system, pages visited, referral URLs, and timestamps collected automatically through cookies and server logs."
+        },
+        "cookies": {
+          "title": "Cookie Data",
+          "description": "Identifiers stored on your device to remember preferences, authenticate sessions, and analyze traffic patterns."
+        },
+        "financial": {
+          "title": "Financial Data",
+          "description": "Aggregated and anonymized financial metrics required to deliver our supply chain finance and credit solutions, processed strictly under lawful basis."
+        }
+      }
+    },
+    "cookies": {
+      "heading": "Cookie Policy",
+      "description": "We use cookies and similar tracking technologies to operate and improve our services.",
+      "types": {
+        "essential": {
+          "title": "Essential Cookies",
+          "description": "Required for the website to function correctly. These cannot be disabled."
+        },
+        "analytics": {
+          "title": "Analytics Cookies",
+          "description": "Help us understand how visitors interact with our website so we can improve performance and user experience."
+        },
+        "marketing": {
+          "title": "Marketing Cookies",
+          "description": "Used to deliver relevant advertisements. You may opt out of these at any time."
+        }
+      }
+    },
+    "use": {
+      "heading": "How We Use Your Data",
+      "description": "We process your personal data for the following legitimate purposes:",
+      "items": {
+        "service": "Providing, operating, and maintaining our financial technology services",
+        "improve": "Improving, personalizing, and expanding our services based on your feedback and usage",
+        "communicate": "Responding to your comments, questions, and customer service requests",
+        "security": "Monitoring and analyzing usage to detect, prevent, and address technical issues, fraud, and security threats",
+        "compliance": "Complying with legal obligations and protecting our legitimate business interests"
+      }
+    },
+    "rights": {
+      "heading": "Your Rights (GDPR / CCPA)",
+      "description": "Under GDPR and CCPA, you have the following rights regarding your personal data:",
+      "items": {
+        "access": {
+          "title": "Right of Access",
+          "description": "Request a copy of the personal data we hold about you."
+        },
+        "rectification": {
+          "title": "Right to Rectification",
+          "description": "Request correction of inaccurate or incomplete personal data."
+        },
+        "erasure": {
+          "title": "Right to Erasure",
+          "description": "Request deletion of your personal data (the right to be forgotten)."
+        },
+        "portability": {
+          "title": "Right to Data Portability",
+          "description": "Receive your data in a structured, machine-readable format and transmit it to another controller."
+        },
+        "object": {
+          "title": "Right to Object",
+          "description": "Object to the processing of your personal data for marketing or other legitimate-interest purposes."
+        },
+        "restrict": {
+          "title": "Right to Restrict Processing",
+          "description": "Request that we limit the processing of your personal data under certain conditions."
+        }
+      },
+      "exerciseNote": "To exercise any of these rights, contact us at privacy@ktech.fintech. We will respond within 30 days."
+    },
+    "retention": {
+      "heading": "Data Retention",
+      "description": "We retain personal data only for as long as necessary to fulfill the purposes outlined in this policy, comply with legal obligations, resolve disputes, and enforce our agreements. Data is then securely deleted or anonymized."
+    },
+    "thirdParty": {
+      "heading": "Third-Party Services",
+      "description": "We may share data with trusted third-party service providers who help us operate our business:",
+      "items": {
+        "hosting": "Cloud hosting and infrastructure providers",
+        "analytics": "Web analytics platforms used to understand site usage",
+        "support": "Customer support and communication tools",
+        "legal": "Legal and financial advisors when legally required"
+      },
+      "note": "These parties are contractually obligated to protect your data and use it only for the purposes we specify."
+    },
+    "contact": {
+      "heading": "Contact Us",
+      "description": "If you have questions about this Privacy Policy or wish to exercise your data protection rights, please contact our Data Protection Officer.",
+      "email": "Email: privacy@ktech.fintech",
+      "address": "Address: 开泰远景信息科技有限公司, Luohu District, Shenzhen, Guangdong, China 518000"
     }
   }
 }
