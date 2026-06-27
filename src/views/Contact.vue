@@ -34,6 +34,7 @@
               :aria-invalid="errors.name ? 'true' : 'false'"
               :aria-describedby="errors.name ? 'name-error' : undefined"
               required
+              @blur="handleBlur('name')"
             />
             <span v-if="errors.name === 'required'" id="name-error" class="error-message" role="alert">
               {{ t('contact.form.validation.nameRequired') }}
@@ -59,6 +60,7 @@
               :aria-invalid="errors.phone ? 'true' : 'false'"
               :aria-describedby="errors.phone ? 'phone-error' : undefined"
               required
+              @blur="handleBlur('phone')"
             />
             <span v-if="errors.phone === 'required'" id="phone-error" class="error-message" role="alert">
               {{ t('contact.form.validation.phoneRequired') }}
@@ -84,6 +86,7 @@
               :aria-invalid="errors.company ? 'true' : 'false'"
               :aria-describedby="errors.company ? 'company-error' : undefined"
               required
+              @blur="handleBlur('company')"
             />
             <span v-if="errors.company" id="company-error" class="error-message" role="alert">
               {{ t('contact.form.validation.companyRequired') }}
@@ -107,12 +110,69 @@
               :aria-invalid="errors.email ? 'true' : 'false'"
               :aria-describedby="errors.email ? 'email-error' : undefined"
               required
+              @blur="handleBlur('email')"
             />
             <span v-if="errors.email === 'invalid'" id="email-error" class="error-message" role="alert">
               {{ t('contact.form.validation.emailInvalid') }}
             </span>
             <span v-else-if="errors.email" id="email-error" class="error-message" role="alert">
               {{ t('contact.form.validation.emailRequired') }}
+            </span>
+          </div>
+
+          <!-- Subject Field -->
+          <div class="form-group">
+            <label for="subject" class="form-label">
+              {{ t('contact.form.subject') }} <span class="required" aria-label="required">*</span>
+            </label>
+            <select
+              id="subject"
+              v-model="formData.subject"
+              name="subject"
+              class="form-input"
+              :class="{ 'error': errors.subject }"
+              :aria-invalid="errors.subject ? 'true' : 'false'"
+              :aria-describedby="errors.subject ? 'subject-error' : undefined"
+              required
+              @blur="handleBlur('subject')"
+            >
+              <option value="" disabled>{{ t('contact.form.subjectPlaceholder') }}</option>
+              <option v-for="opt in subjectOptions" :key="opt.value" :value="opt.value">
+                {{ t(opt.labelKey) }}
+              </option>
+            </select>
+            <span v-if="errors.subject === 'required'" id="subject-error" class="error-message" role="alert">
+              {{ t('contact.form.validation.subjectRequired') }}
+            </span>
+          </div>
+
+          <!-- Message Field -->
+          <div class="form-group">
+            <label for="message" class="form-label">
+              {{ t('contact.form.message') }} <span class="required" aria-label="required">*</span>
+            </label>
+            <textarea
+              id="message"
+              v-model="formData.message"
+              name="message"
+              class="form-input form-textarea"
+              :class="{ 'error': errors.message }"
+              :placeholder="t('contact.form.messagePlaceholder')"
+              :minlength="MESSAGE_MIN"
+              :maxlength="MESSAGE_MAX"
+              :aria-invalid="errors.message ? 'true' : 'false'"
+              :aria-describedby="errors.message ? 'message-error' : undefined"
+              required
+              @blur="handleBlur('message')"
+            ></textarea>
+            <span v-if="errors.message === 'required'" id="message-error" class="error-message" role="alert">
+              {{ t('contact.form.validation.messageRequired') }}
+            </span>
+            <span v-else-if="errors.message === 'tooShort'" id="message-error" class="error-message" role="alert">
+              {{ t('contact.form.validation.messageTooShort') }}
+            </span>
+            <span v-else-if="errors.message === 'tooLong'" id="message-error" class="error-message" role="alert">
+              {{ t('contact.form.validation.messageTooLong') }}
             </span>
           </div>
 
@@ -241,12 +301,27 @@ import { useLanguage } from '../composables/useLanguage'
 
 const { t } = useLanguage()
 
+// Allowed subject values, kept in sync with the i18n labels and the
+// <select> options in the template.
+const subjectOptions = [
+  { value: 'general', labelKey: 'contact.form.subjectGeneral' },
+  { value: 'partnership', labelKey: 'contact.form.subjectPartnership' },
+  { value: 'support', labelKey: 'contact.form.subjectSupport' },
+  { value: 'other', labelKey: 'contact.form.subjectOther' },
+]
+
+// Message length bounds (issue #13 AC §1: min 10, max 1000).
+const MESSAGE_MIN = 10
+const MESSAGE_MAX = 1000
+
 // Form data
 const formData = reactive({
   name: '',
   phone: '',
   company: '',
   email: '',
+  subject: '',
+  message: '',
   privacy: false
 })
 
@@ -257,48 +332,86 @@ const submitStatus = ref(null)
 
 // Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-// Phone must be all digits (an optional leading + is tolerated).
-const phoneDigitsRegex = /^\+?\d+$/
+// Phone: lenient — allow digits, spaces, parentheses, + and hyphens, at least
+// 7 characters. This accepts realistic numbers like "+86 755 0000 0000",
+// "(415) 555-1212", or "0044 20 7946 0958" while still rejecting pure garbage.
+const phoneRegex = /^[\d\s()+-]{7,}$/
 
-// Validate form. Each error is stored as a string code (e.g. 'required',
-// 'tooShort', 'invalid') so the template can render a distinct, accessible
-// message per rule. Returns true when the form is valid.
+// Rules for each field. Each validator returns an error CODE ('required',
+// 'tooShort', 'invalid', ...) or null when valid. Centralising the per-field
+// rules lets us run a single field on @blur and the whole form on submit.
+const fieldValidators = {
+  name: (value) => {
+    const v = value.trim()
+    if (!v) return 'required'
+    if (v.length < 2) return 'tooShort'
+    return null
+  },
+  phone: (value) => {
+    const v = value.trim()
+    if (!v) return 'required'
+    if (!phoneRegex.test(v)) return 'invalid'
+    return null
+  },
+  company: (value) => {
+    if (!value.trim()) return 'required'
+    return null
+  },
+  email: (value) => {
+    const v = value.trim()
+    if (!v) return 'required'
+    if (!emailRegex.test(v)) return 'invalid'
+    return null
+  },
+  subject: (value) => {
+    if (!value) return 'required'
+    return null
+  },
+  message: (value) => {
+    const v = value.trim()
+    if (!v) return 'required'
+    if (v.length < MESSAGE_MIN) return 'tooShort'
+    if (value.length > MESSAGE_MAX) return 'tooLong'
+    return null
+  },
+  privacy: (value) => {
+    if (!value) return 'required'
+    return null
+  },
+}
+
+// Validate a single field by name. Re-runs that field's rule, stores the
+// resulting error code (or clears it), and returns the error code. Used as
+// the @blur handler so the user gets immediate per-field feedback (issue #13
+// AC §2: "field validation on blur").
+const validateField = (field) => {
+  const validator = fieldValidators[field]
+  if (!validator) return null
+  const code = validator(formData[field])
+  if (code) {
+    errors.value[field] = code
+  } else {
+    // Clear this field's error as soon as it becomes valid.
+    delete errors.value[field]
+  }
+  return code
+}
+
+// Handle a field @blur event. Validates just that field.
+const handleBlur = (field) => {
+  validateField(field)
+}
+
+// Validate the whole form by running every field's rule. Returns true when
+// the form is valid. Used by the submit handler.
 const validateForm = () => {
-  errors.value = {}
-
-  // Name validation: required + min 2 characters.
-  if (!formData.name.trim()) {
-    errors.value.name = 'required'
-  } else if (formData.name.trim().length < 2) {
-    errors.value.name = 'tooShort'
+  const next = {}
+  for (const field of Object.keys(fieldValidators)) {
+    const code = fieldValidators[field](formData[field])
+    if (code) next[field] = code
   }
-
-  // Phone validation: required + numeric only.
-  const trimmedPhone = formData.phone.trim()
-  if (!trimmedPhone) {
-    errors.value.phone = 'required'
-  } else if (!phoneDigitsRegex.test(trimmedPhone)) {
-    errors.value.phone = 'invalid'
-  }
-
-  // Company validation: required.
-  if (!formData.company.trim()) {
-    errors.value.company = 'required'
-  }
-
-  // Email validation: required + valid format.
-  if (!formData.email.trim()) {
-    errors.value.email = 'required'
-  } else if (!emailRegex.test(formData.email)) {
-    errors.value.email = 'invalid'
-  }
-
-  // Privacy validation: must be checked.
-  if (!formData.privacy) {
-    errors.value.privacy = 'required'
-  }
-
-  return Object.keys(errors.value).length === 0
+  errors.value = next
+  return Object.keys(next).length === 0
 }
 
 // Handle form submit
@@ -331,6 +444,8 @@ const handleSubmit = () => {
     formData.phone = ''
     formData.company = ''
     formData.email = ''
+    formData.subject = ''
+    formData.message = ''
     formData.privacy = false
   }, 1500)
 }
@@ -450,6 +565,31 @@ const handleSubmit = () => {
 
 .form-input::placeholder {
   color: #666;
+}
+
+/* Select: keep native affordance but match the cyber input look. */
+select.form-input {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #00f0ff 50%),
+    linear-gradient(135deg, #00f0ff 50%, transparent 50%);
+  background-position: calc(100% - 1.2rem) center, calc(100% - 0.8rem) center;
+  background-size: 0.4rem 0.4rem, 0.4rem 0.4rem;
+  background-repeat: no-repeat;
+  padding-right: 2.5rem;
+}
+
+select.form-input option {
+  color: #e0e0e0;
+  background: #0a0a14;
+}
+
+/* Textarea: multiline variant of the cyber input. */
+.form-textarea {
+  min-height: 8rem;
+  resize: vertical;
+  font-family: 'Rajdhani', sans-serif;
+  line-height: 1.5;
 }
 
 .error-message {

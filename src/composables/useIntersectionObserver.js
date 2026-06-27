@@ -1,7 +1,7 @@
 /**
  * Intersection Observer composable for lazy loading
  * Provides performant lazy loading for images and components
- * Following the pattern of useTheme.js and useLanguage.js
+ * Following the pattern of useLanguage.js
  */
 import { ref, onMounted, onUnmounted } from 'vue'
 

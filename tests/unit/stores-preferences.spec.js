@@ -17,9 +17,11 @@ describe('usePreferencesStore', () => {
   })
 
   describe('initial state', () => {
-    it('defaults to cyber theme and English when storage is empty', () => {
+    it('seeds the theme from the system preference when storage is empty (happy-dom default = light)', () => {
       const prefs = usePreferencesStore()
-      expect(prefs.theme).toBe('cyber')
+      // No saved preference: the store honours prefers-color-scheme (#15 AC3).
+      // happy-dom reports light by default, so the seed is 'light'.
+      expect(prefs.theme).toBe('light')
       expect(prefs.language).toBe('en')
     })
 
@@ -33,10 +35,11 @@ describe('usePreferencesStore', () => {
       expect(prefs.language).toBe('zh')
     })
 
-    it('falls back to defaults when stored JSON is corrupt', () => {
+    it('falls back to the system seed when stored JSON is corrupt', () => {
       localStorage.setItem(PREFERENCES_STORAGE_KEY, 'not-json{')
       const prefs = usePreferencesStore()
-      expect(prefs.theme).toBe('cyber')
+      // Corrupt JSON is ignored, so the seed comes from prefers-color-scheme.
+      expect(prefs.theme).toBe('light')
       expect(prefs.language).toBe('en')
     })
   })
@@ -44,7 +47,8 @@ describe('usePreferencesStore', () => {
   describe('getters', () => {
     it('currentTheme and currentLanguage expose the values', () => {
       const prefs = usePreferencesStore()
-      expect(prefs.currentTheme).toBe('cyber')
+      // System-seeded (light) in this environment.
+      expect(prefs.currentTheme).toBe('light')
       expect(prefs.currentLanguage).toBe('en')
     })
 
@@ -74,8 +78,10 @@ describe('usePreferencesStore', () => {
 
     it('ignores an invalid theme', () => {
       const prefs = usePreferencesStore()
+      const initial = prefs.theme
       prefs.setTheme('hot-pink')
-      expect(prefs.theme).toBe('cyber')
+      // Rejected: theme is unchanged and nothing is persisted.
+      expect(prefs.theme).toBe(initial)
       expect(localStorage.getItem(PREFERENCES_STORAGE_KEY)).toBe(null)
     })
   })
@@ -110,13 +116,16 @@ describe('usePreferencesStore', () => {
 
     it('ignores invalid persisted values', () => {
       const prefs = usePreferencesStore()
+      const before = { theme: prefs.theme, language: prefs.language }
       localStorage.setItem(
         PREFERENCES_STORAGE_KEY,
         JSON.stringify({ theme: 'hot-pink', language: 'fr' })
       )
       prefs.hydrate()
-      expect(prefs.theme).toBe('cyber')
-      expect(prefs.language).toBe('en')
+      // Invalid values are rejected, so the existing (system-seeded) values
+      // are left untouched.
+      expect(prefs.theme).toBe(before.theme)
+      expect(prefs.language).toBe(before.language)
     })
   })
 
