@@ -36,23 +36,24 @@
         </div>
       </section>
 
-      <!-- Features grid with lazy loading -->
+      <!-- Features grid -->
       <section class="features">
-        <div
-          v-for="(feature, index) in features"
-          :key="index"
-          :ref="el => observeFeatureCard(el, index)"
-          class="feature-card"
-          :class="{ 'is-visible': isFeatureVisible(index) }"
-        >
-          <div class="feature-icon neon-border">{{ feature.icon }}</div>
-          <h3>{{ feature.title }}</h3>
-          <p>{{ feature.description }}</p>
+        <div class="feature-card">
+          <div class="feature-icon neon-border">🤖</div>
+          <h3>{{ t('home.features.ai.title') }}</h3>
+          <p>{{ t('home.features.ai.description') }}</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon neon-border">⚡</div>
+          <h3>{{ t('home.features.realtime.title') }}</h3>
+          <p>{{ t('home.features.realtime.description') }}</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon neon-border">🔒</div>
+          <h3>{{ t('home.features.secure.title') }}</h3>
+          <p>{{ t('home.features.secure.description') }}</p>
         </div>
       </section>
-
-      <!-- News Section -->
-      <NewsSection />
 
       <!-- CTA Button -->
       <div class="cta">
@@ -65,55 +66,15 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
-import { useIntersectionObserverList } from '../composables/useIntersectionObserver'
-import NewsSection from '../components/NewsSection.vue'
 
 const { t } = useLanguage()
-const { visibleItems, observeItem } = useIntersectionObserverList({
-  rootMargin: '50px',
-  threshold: 0.1
-})
-
-// Feature data
-const features = computed(() => [
-  {
-    icon: '🤖',
-    title: t('home.features.ai.title'),
-    description: t('home.features.ai.description')
-  },
-  {
-    icon: '⚡',
-    title: t('home.features.realtime.title'),
-    description: t('home.features.realtime.description')
-  },
-  {
-    icon: '🔒',
-    title: t('home.features.secure.title'),
-    description: t('home.features.secure.description')
-  }
-])
-
-// Lazy loading for feature cards
-const observeFeatureCard = (el, index) => {
-  if (el) {
-    observeItem(el, index)
-  }
-}
-
-const isFeatureVisible = (index) => {
-  return visibleItems.value.has(index)
-}
 
 onMounted(() => {
-  // Add entrance animations (deferred for performance)
-  requestAnimationFrame(() => {
-    document.querySelectorAll('.feature-card').forEach((card, index) => {
-      if (!card.style.animationDelay) {
-        card.style.animationDelay = `${index * 0.1}s`
-      }
-    })
+  // Add entrance animations
+  document.querySelectorAll('.feature-card').forEach((card, index) => {
+    card.style.animationDelay = `${index * 0.1}s`
   })
 })
 </script>
@@ -311,13 +272,8 @@ h1 {
   border-radius: 10px;
   padding: 2rem;
   transition: all 0.3s ease;
-  opacity: 0;
-  /* Start with initial state, animation triggers when is-visible */
-  transform: translateY(20px);
-}
-
-.feature-card.is-visible {
   animation: fadeInUp 0.6s ease forwards;
+  opacity: 0;
 }
 
 .feature-card:hover {

@@ -11,11 +11,9 @@
 </template>
 
 <script setup>
-import { useLanguageStore } from '../stores/language'
+import { useLanguage } from '../composables/useLanguage'
 
-const languageStore = useLanguageStore()
-
-const { languageDisplay, toggleLanguage, t, initLanguage } = languageStore
+const { languageDisplay, toggleLanguage, t, initLanguage } = useLanguage()
 
 // Initialize language on component mount
 initLanguage()

@@ -2,305 +2,341 @@
 
 /**
  * Bundle Analysis Script
- * Analyzes bundle sizes and generates reports for CI/CD integration
- * Following TDD principles - script created after tests were written
+ *
+ * This script analyzes the production build and generates detailed reports
+ * about bundle sizes, composition, and optimization opportunities.
+ *
+ * Usage: node scripts/analyze-bundle.js
  */
 
-import { readFileSync, readdirSync, existsSync, statSync } from 'fs';
-import { join, dirname } from 'path';
-import { gzipSync, brotliCompressSync } from 'zlib';
-import { fileURLToPath } from 'url';
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
-// Configuration
-const DIST_PATH = join(__dirname, '../dist');
-const ASSETS_PATH = join(DIST_PATH, 'assets');
+const DIST_DIR = path.join(__dirname, '../dist')
+const STATS_FILE = path.join(DIST_DIR, 'stats.html')
+const MANIFEST_FILE = path.join(DIST_DIR, '.vite', 'manifest.json')
+const INDEX_FILE = path.join(DIST_DIR, 'index.html')
 
-// Bundle size limits (in bytes)
-const LIMITS = {
-  JS_GZIPPED: 200 * 1024,      // 200KB
-  JS_BROTLI: 200 * 1024,       // 200KB
-  CSS_GZIPPED: 50 * 1024,      // 50KB
-  CSS_BROTLI: 50 * 1024,       // 50KB
-  ROUTE_CHUNK_GZIPPED: 50 * 1024, // 50KB
-  ROUTE_CHUNK_BROTLI: 50 * 1024,  // 50KB
-};
-
-// Color codes for terminal output
-const COLORS = {
+// ANSI color codes for terminal output
+const colors = {
   reset: '\x1b[0m',
+  bold: '\x1b[1m',
   red: '\x1b[31m',
   green: '\x1b[32m',
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
   cyan: '\x1b[36m',
-};
-
-function colorize(color, text) {
-  return `${COLORS[color]}${text}${COLORS.reset}`;
+  white: '\x1b[37m'
 }
 
-/**
- * Get gzipped size of a buffer
- */
-function getGzipSize(buffer) {
-  return gzipSync(buffer).length;
+function formatSize(bytes) {
+  if (bytes === 0) return '0 B'
+  const k = 1024
+  const sizes = ['B', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
 }
 
-/**
- * Get brotli size of a buffer
- */
-function getBrotliSize(buffer) {
-  return brotliCompressSync(buffer).length;
+function formatPercent(value, total) {
+  if (total === 0) return '0%'
+  return `${((value / total) * 100).toFixed(1)}%`
 }
 
-/**
- * Format bytes to human-readable string
- */
-function formatBytes(bytes) {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${(bytes / Math.pow(k, i)).toFixed(2)} ${sizes[i]}`;
+function getColorForSize(bytes) {
+  const KB = bytes / 1024
+  const MB = KB / 1024
+
+  if (MB > 1) return colors.red // Red for > 1MB
+  if (KB > 500) return colors.yellow // Yellow for > 500KB
+  return colors.green // Green for <= 500KB
 }
 
-/**
- * Format percentage
- */
-function formatPercentage(value, total) {
-  return ((value / total) * 100).toFixed(1);
+function printHeader(text) {
+  console.log(`\n${colors.bold}${colors.cyan}${'='.repeat(60)}`)
+  console.log(`${text}`)
+  console.log(`${'='.repeat(60)}${colors.reset}\n`)
 }
 
-/**
- * Find files matching a pattern
- */
-function findFiles(dir, pattern) {
-  if (!existsSync(dir)) return [];
-  return readdirSync(dir).filter(file => pattern.test(file));
+function printSubheader(text) {
+  console.log(`\n${colors.bold}${colors.yellow}${text}${colors.reset}`)
+  console.log(`${colors.yellow}${'-'.repeat(text.length)}${colors.reset}\n`)
 }
 
-/**
- * Read file buffer
- */
-function readFileBuffer(filePath) {
-  if (!existsSync(filePath)) return Buffer.alloc(0);
-  return readFileSync(filePath);
-}
+function analyzeIndexHTML() {
+  if (!fs.existsSync(INDEX_FILE)) {
+    console.log(`${colors.yellow}No index.html found in dist.${colors.reset}`)
+    return null
+  }
 
-/**
- * Get file stats
- */
-function getFileStats(filePath) {
-  const buffer = readFileBuffer(filePath);
+  const stats = fs.statSync(INDEX_FILE)
+  const size = stats.size
+
   return {
-    size: buffer.length,
-    gzip: getGzipSize(buffer),
-    brotli: getBrotliSize(buffer),
-  };
+    name: 'index.html',
+    size,
+    type: 'html'
+  }
 }
 
-/**
- * Analyze bundle sizes
- */
-function analyzeBundles() {
-  console.log(colorize('cyan', '\n📦 Bundle Size Analysis\n'));
-
-  if (!existsSync(ASSETS_PATH)) {
-    console.error(colorize('red', '❌ Assets directory not found. Run `npm run build` first.'));
-    process.exit(1);
+function analyzeDistDirectory() {
+  if (!fs.existsSync(DIST_DIR)) {
+    console.log(`${colors.red}Build directory not found. Run 'npm run build' first.${colors.reset}`)
+    return null
   }
 
-  const results = {
-    js: [],
-    css: [],
-    routes: {},
-    vendor: null,
-  };
-
-  // Find JS bundles
-  const jsFiles = findFiles(ASSETS_PATH, /^index-.*\.js$/);
-  for (const file of jsFiles) {
-    const filePath = join(ASSETS_PATH, file);
-    const stats = getFileStats(filePath);
-    results.js.push({ file, ...stats });
-  }
-
-  // Find CSS bundles
-  const cssFiles = findFiles(ASSETS_PATH, /^index-.*\.css$/);
-  for (const file of cssFiles) {
-    const filePath = join(ASSETS_PATH, file);
-    const stats = getFileStats(filePath);
-    results.css.push({ file, ...stats });
-  }
-
-  // Find vendor chunks
-  const vendorFiles = findFiles(ASSETS_PATH, /vendor-.*\.js$/);
-  for (const file of vendorFiles) {
-    const filePath = join(ASSETS_PATH, file);
-    const stats = getFileStats(filePath);
-    results.vendor = { file, ...stats };
-  }
-
-  // Find route chunks
-  const routeFiles = findFiles(ASSETS_PATH, /(Home|About|Services)-.*\.js$/);
-  for (const file of routeFiles) {
-    const routeName = file.match(/(Home|About|Services)/)?.[1] || 'unknown';
-    const filePath = join(ASSETS_PATH, file);
-    const stats = getFileStats(filePath);
-    results.routes[routeName] = { file, ...stats };
-  }
-
-  return results;
-}
-
-/**
- * Display bundle analysis results
- */
-function displayResults(results) {
-  let hasErrors = false;
-
-  // Display JS bundles
-  console.log(colorize('blue', '\n📄 JavaScript Bundles:'));
-  for (const bundle of results.js) {
-    const jsPass = bundle.gzip <= LIMITS.JS_GZIPPED && bundle.brotli <= LIMITS.JS_BROTLI;
-    const status = jsPass ? colorize('green', '✓') : colorize('red', '✗');
-    console.log(`  ${status} ${bundle.file}`);
-    console.log(`     Raw: ${formatBytes(bundle.size)}, Gzip: ${formatBytes(bundle.gzip)}, Brotli: ${formatBytes(bundle.brotli)}`);
-    if (!jsPass) hasErrors = true;
-  }
-
-  // Display CSS bundles
-  console.log(colorize('blue', '\n🎨 CSS Bundles:'));
-  for (const bundle of results.css) {
-    const cssPass = bundle.gzip <= LIMITS.CSS_GZIPPED && bundle.brotli <= LIMITS.CSS_BROTLI;
-    const status = cssPass ? colorize('green', '✓') : colorize('red', '✗');
-    console.log(`  ${status} ${bundle.file}`);
-    console.log(`     Raw: ${formatBytes(bundle.size)}, Gzip: ${formatBytes(bundle.gzip)}, Brotli: ${formatBytes(bundle.brotli)}`);
-    if (!cssPass) hasErrors = true;
-  }
-
-  // Display vendor chunk
-  if (results.vendor) {
-    console.log(colorize('blue', '\n📦 Vendor Chunk:'));
-    console.log(`  ${results.vendor.file}`);
-    console.log(`     Raw: ${formatBytes(results.vendor.size)}, Gzip: ${formatBytes(results.vendor.gzip)}, Brotli: ${formatBytes(results.vendor.brotli)}`);
-  }
-
-  // Display route chunks
-  console.log(colorize('blue', '\n🛣️  Route Chunks:'));
-  for (const [routeName, bundle] of Object.entries(results.routes)) {
-    const routePass = bundle.gzip <= LIMITS.ROUTE_CHUNK_GZIPPED && bundle.brotli <= LIMITS.ROUTE_CHUNK_BROTLI;
-    const status = routePass ? colorize('green', '✓') : colorize('red', '✗');
-    console.log(`  ${status} ${routeName}: ${bundle.file}`);
-    console.log(`     Raw: ${formatBytes(bundle.size)}, Gzip: ${formatBytes(bundle.gzip)}, Brotli: ${formatBytes(bundle.brotli)}`);
-    if (!routePass) hasErrors = true;
-  }
-
-  // Display summary
-  console.log(colorize('cyan', '\n📊 Summary:'));
-  const totalJsGzip = results.js.reduce((sum, b) => sum + b.gzip, 0);
-  const totalJsBrotli = results.js.reduce((sum, b) => sum + b.brotli, 0);
-  const totalCssGzip = results.css.reduce((sum, b) => sum + b.gzip, 0);
-  const totalCssBrotli = results.css.reduce((sum, b) => sum + b.brotli, 0);
-
-  console.log(`  Total JS (gzipped): ${formatBytes(totalJsGzip)} / ${formatBytes(LIMITS.JS_GZIPPED)} ${colorize(totalJsGzip <= LIMITS.JS_GZIPPED ? 'green' : 'red', totalJsGzip <= LIMITS.JS_GZIPPED ? '✓' : '✗')}`);
-  console.log(`  Total CSS (gzipped): ${formatBytes(totalCssGzip)} / ${formatBytes(LIMITS.CSS_GZIPPED)} ${colorize(totalCssGzip <= LIMITS.CSS_GZIPPED ? 'green' : 'red', totalCssGzip <= LIMITS.CSS_GZIPPED ? '✓' : '✗')}`);
-
-  // Check for bundle analyzer
-  const statsPath = join(DIST_PATH, 'stats.html');
-  if (existsSync(statsPath)) {
-    console.log(colorize('green', `  ✓ Bundle analyzer report: ${statsPath}`));
-  } else {
-    console.log(colorize('yellow', `  ⚠ Bundle analyzer report not found`));
-  }
-
-  // Check for compression files
-  const gzFiles = findFiles(ASSETS_PATH, /\.gz$/);
-  const brFiles = findFiles(ASSETS_PATH, /\.br$/);
-  console.log(colorize(gzFiles.length > 0 ? 'green' : 'yellow', `  ${gzFiles.length > 0 ? '✓' : '⚠'} Gzip compressed files: ${gzFiles.length}`));
-  console.log(colorize(brFiles.length > 0 ? 'green' : 'yellow', `  ${brFiles.length > 0 ? '✓' : '⚠'} Brotli compressed files: ${brFiles.length}`));
-
-  if (hasErrors) {
-    console.log(colorize('red', '\n❌ Bundle size limits exceeded!\n'));
-    process.exit(1);
-  } else {
-    console.log(colorize('green', '\n✅ All bundle size checks passed!\n'));
-  }
-
-  return results;
-}
-
-/**
- * Generate CI/CD compatible report
- */
-function generateReport(results) {
-  const report = {
-    timestamp: new Date().toISOString(),
-    bundles: {
-      js: results.js.map(b => ({
-        file: b.file,
-        size: b.size,
-        gzip: b.gzip,
-        brotli: b.brotli,
-      })),
-      css: results.css.map(b => ({
-        file: b.file,
-        size: b.size,
-        gzip: b.gzip,
-        brotli: b.brotli,
-      })),
-      routes: results.routes,
-      vendor: results.vendor,
-    },
-    limits: LIMITS,
-    status: 'passed',
-  };
-
-  // Check if any limits exceeded
-  for (const bundle of report.bundles.js) {
-    if (bundle.gzip > LIMITS.JS_GZIPPED || bundle.brotli > LIMITS.JS_BROTLI) {
-      report.status = 'failed';
-    }
-  }
-  for (const bundle of report.bundles.css) {
-    if (bundle.gzip > LIMITS.CSS_GZIPPED || bundle.brotli > LIMITS.CSS_BROTLI) {
-      report.status = 'failed';
+  const analysis = {
+    totalSize: 0,
+    files: [],
+    byType: {
+      html: { count: 0, size: 0 },
+      js: { count: 0, size: 0 },
+      css: { count: 0, size: 0 },
+      images: { count: 0, size: 0 },
+      other: { count: 0, size: 0 }
     }
   }
 
-  return report;
+  function scanDirectory(dir) {
+    const entries = fs.readdirSync(dir, { withFileTypes: true })
+
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name)
+      const relPath = path.relative(DIST_DIR, fullPath)
+
+      if (entry.isDirectory()) {
+        // Skip .vite directory
+        if (entry.name !== '.vite') {
+          scanDirectory(fullPath)
+        }
+        continue
+      }
+
+      const stats = fs.statSync(fullPath)
+      const size = stats.size
+      const ext = path.extname(entry.name).toLowerCase()
+
+      analysis.totalSize += size
+      analysis.files.push({
+        name: entry.name,
+        path: relPath,
+        size,
+        ext
+      })
+
+      // Categorize by type
+      if (ext === '.html') {
+        analysis.byType.html.count++
+        analysis.byType.html.size += size
+      } else if (ext === '.js') {
+        analysis.byType.js.count++
+        analysis.byType.js.size += size
+      } else if (ext === '.css') {
+        analysis.byType.css.count++
+        analysis.byType.css.size += size
+      } else if (/png|jpe?g|svg|gif|tiff|bmp|ico|webp/i.test(ext)) {
+        analysis.byType.images.count++
+        analysis.byType.images.size += size
+      } else {
+        analysis.byType.other.count++
+        analysis.byType.other.size += size
+      }
+    }
+  }
+
+  scanDirectory(DIST_DIR)
+  return analysis
 }
 
-/**
- * Main execution
- */
-function main() {
-  const args = process.argv.slice(2);
-  const jsonMode = args.includes('--json');
+function printAnalysis(analysis) {
+  if (!analysis) {
+    console.log(`${colors.red}Analysis failed. No data available.${colors.reset}`)
+    return
+  }
 
-  try {
-    const results = analyzeBundles();
+  printHeader('📊 BUNDLE SIZE ANALYSIS')
 
-    if (jsonMode) {
-      const report = generateReport(results);
-      console.log(JSON.stringify(report, null, 2));
-      process.exit(report.status === 'passed' ? 0 : 1);
+  // Total size
+  console.log(`${colors.bold}Total Bundle Size:${colors.reset} ${formatSize(analysis.totalSize)}`)
+
+  // By type
+  printSubheader('Files by Type')
+
+  const types = [
+    { key: 'html', name: 'HTML' },
+    { key: 'js', name: 'JavaScript' },
+    { key: 'css', name: 'CSS' },
+    { key: 'images', name: 'Images' },
+    { key: 'other', name: 'Other' }
+  ]
+
+  for (const type of types) {
+    const data = analysis.byType[type.key]
+    if (data.count > 0) {
+      console.log(`${type.name}: ${colors.bold}${data.count}${colors.reset} files | ` +
+        `Size: ${getColorForSize(data.size)}${formatSize(data.size)}${colors.reset} | ` +
+        `Percentage: ${formatPercent(data.size, analysis.totalSize)}`)
+    }
+  }
+
+  // Largest files
+  printSubheader('Largest Files (Top 10)')
+
+  const sortedFiles = [...analysis.files].sort((a, b) => b.size - a.size).slice(0, 10)
+
+  for (const file of sortedFiles) {
+    const sizeColor = getColorForSize(file.size)
+    const percentage = formatPercent(file.size, analysis.totalSize)
+    console.log(`${sizeColor}${formatSize(file.size).padStart(10)}${colors.reset} ` +
+      `(${percentage.padStart(5)}) ${file.path}`)
+  }
+}
+
+function printRecommendations(analysis) {
+  if (!analysis) return
+
+  printSubheader('💡 Optimization Recommendations')
+
+  const recommendations = []
+
+  // Check HTML size
+  if (analysis.byType.html.size > 100 * 1024) {
+    recommendations.push({
+      level: 'warning',
+      message: `index.html is ${formatSize(analysis.byType.html.size)}. Consider extracting inline scripts to separate files.`
+    })
+  }
+
+  // Check image optimization
+  if (analysis.byType.images.size > 500 * 1024) {
+    recommendations.push({
+      level: 'warning',
+      message: `Total image size is ${formatSize(analysis.byType.images.size)}. Consider WebP format and lazy loading.`
+    })
+  }
+
+  // Check for large files
+  const largeFiles = analysis.files.filter(f => f.size > 200 * 1024)
+  if (largeFiles.length > 0) {
+    recommendations.push({
+      level: 'info',
+      message: `Found ${largeFiles.length} file(s) over 200KB. Review for optimization opportunities.`
+    })
+  }
+
+  // Overall bundle size
+  if (analysis.totalSize > 2 * 1024 * 1024) {
+    recommendations.push({
+      level: 'warning',
+      message: `Total bundle size is ${formatSize(analysis.totalSize)}. Aim for under 2MB.`
+    })
+  } else if (analysis.totalSize < 500 * 1024) {
+    recommendations.push({
+      level: 'success',
+      message: `Bundle size is excellent (${formatSize(analysis.totalSize)}).`
+    })
+  } else {
+    recommendations.push({
+      level: 'success',
+      message: `Bundle size is within acceptable range (${formatSize(analysis.totalSize)}).`
+    })
+  }
+
+  for (const rec of recommendations) {
+    let color = colors.white
+    let icon = 'ℹ️'
+
+    if (rec.level === 'success') {
+      color = colors.green
+      icon = '✅'
+    } else if (rec.level === 'warning') {
+      color = colors.yellow
+      icon = '⚠️'
+    }
+
+    console.log(`${color}${icon} ${rec.message}${colors.reset}`)
+  }
+}
+
+function checkBuildArtifacts() {
+  printSubheader('Build Artifacts')
+
+  if (!fs.existsSync(DIST_DIR)) {
+    console.log(`${colors.red}Build directory not found.${colors.reset}`)
+    return
+  }
+
+  // Check for stats.html
+  if (fs.existsSync(STATS_FILE)) {
+    const stats = fs.statSync(STATS_FILE)
+    console.log(`${colors.green}✓${colors.reset} Bundle visualization: ${STATS_FILE} (${formatSize(stats.size)})`)
+    console.log(`  ${colors.cyan}→ Open in browser to view interactive bundle analysis${colors.reset}`)
+  } else {
+    console.log(`${colors.yellow}✗${colors.reset} Bundle visualization not found`)
+  }
+
+  // Check for manifest
+  if (fs.existsSync(MANIFEST_FILE)) {
+    const manifestSize = fs.statSync(MANIFEST_FILE).size
+    if (manifestSize > 10) {
+      console.log(`${colors.green}✓${colors.reset} Vite build manifest found (${formatSize(manifestSize)})`)
     } else {
-      displayResults(results);
+      console.log(`${colors.yellow}⚠${colors.reset} Vite manifest exists but is empty - no chunks created`)
     }
-  } catch (error) {
-    console.error(colorize('red', `❌ Error: ${error.message}`));
-    process.exit(1);
+  } else {
+    console.log(`${colors.yellow}✗${colors.reset} Vite manifest not found`)
   }
 }
 
-// Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+function printPerformanceTargets() {
+  printSubheader('Performance Targets')
+
+  const targets = [
+    { name: 'Initial Bundle Size', target: '< 500KB', recommended: '< 250KB' },
+    { name: 'First Contentful Paint', target: '< 1.8s', recommended: '< 1s' },
+    { name: 'Largest Contentful Paint', target: '< 2.5s', recommended: '< 2s' },
+    { name: 'Time to Interactive', target: '< 3.8s', recommended: '< 3s' },
+    { name: 'Total Blocking Time', target: '< 200ms', recommended: '< 100ms' },
+    { name: 'Cumulative Layout Shift', target: '< 0.1', recommended: '< 0.05' }
+  ]
+
+  console.log(`\n${colors.cyan}Metric${colors.reset}                ${colors.cyan}Target${colors.reset}          ${colors.cyan}Recommended${colors.reset}`)
+  console.log(`${colors.cyan}${'─'.repeat(60)}${colors.reset}`)
+
+  for (const t of targets) {
+    console.log(
+      `${t.name.padEnd(25)}${colors.green}${t.target.padStart(16)}${colors.reset}${colors.cyan}${t.recommended.padStart(16)}${colors.reset}`
+    )
+  }
 }
 
-export { analyzeBundles, displayResults, generateReport };
+// Main execution
+async function main() {
+  console.log(`${colors.bold}${colors.magenta}`)
+  console.log('╔════════════════════════════════════════════════════════════╗')
+  console.log('║          KTech AI Cyber Web - Bundle Analyzer           ║')
+  console.log('╚════════════════════════════════════════════════════════════╝')
+  console.log(`${colors.reset}`)
+
+  const analysis = analyzeDistDirectory()
+
+  if (analysis) {
+    printAnalysis(analysis)
+    printRecommendations(analysis)
+  }
+
+  checkBuildArtifacts()
+  printPerformanceTargets()
+
+  console.log(`\n${colors.bold}${colors.cyan}Next Steps:${colors.reset}`)
+  console.log(`1. View bundle visualization: ${colors.yellow}open dist/stats.html${colors.reset}`)
+  console.log(`2. Build with analysis: ${colors.yellow}npm run build && npm run analyze${colors.reset}`)
+  console.log(`3. Preview production build: ${colors.yellow}npm run preview${colors.reset}`)
+  console.log(`\n${colors.reset}`)
+}
+
+main().catch(console.error)

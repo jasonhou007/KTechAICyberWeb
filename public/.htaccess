@@ -1,0 +1,141 @@
+# SEO and Performance Optimization for KTechAICyberWeb
+# Place this in public/ directory for Apache servers
+
+# Enable Apache mod_rewrite
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Force HTTPS (uncomment if using HTTPS)
+  # RewriteCond %{HTTPS} off
+  # RewriteRule ^(.*)$ https://%{HTTP_HOST%{REQUEST_URI} [L,R=301]
+
+  # Redirect non-www to www (or vice versa)
+  # RewriteCond %{HTTP_HOST} ^example.com [NC]
+  # RewriteRule ^(.*)$ https://www.example.com/$1 [L,R=301]
+
+  # SEO-friendly redirects for common cases
+  # Redirect old URLs to new ones
+  # Redirect 301 /old-page.html /new-page.html
+
+  # Remove trailing slash (optional)
+  # RewriteCond %{REQUEST_FILENAME} !-d
+  # RewriteCond %{REQUEST_URI} (.+)/$
+  # RewriteRule ^ %1 [L,R=301]
+</IfModule>
+
+# Browser Caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/avif "access plus 1 year"
+
+  # Fonts
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+
+  # CSS and JavaScript
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType application/x-javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+
+  # HTML
+  ExpiresByType text/html "access plus 0 seconds"
+
+  # Favicon
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType image/vnd.microsoft.icon "access plus 1 year"
+</IfModule>
+
+# Gzip Compression
+<IfModule mod_deflate.c>
+  # Compress HTML, CSS, JavaScript, Text, XML and fonts
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+  AddOutputFilterByType DEFLATE application/x-font
+  AddOutputFilterByType DEFLATE application/x-font-opentype
+  AddOutputFilterByType DEFLATE application/x-font-otf
+  AddOutputFilterByType DEFLATE application/x-font-truetype
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE font/opentype
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE image/x-icon
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/ld+json
+
+  # Remove browser bugs (only needed for really old browsers)
+  BrowserMatch ^Mozilla/4 gzip-only-text/html
+  BrowserMatch ^Mozilla/4\.0[6789] no-gzip
+  BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+  Header append Vary User-Agent
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+  # X-Frame-Options
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # X-Content-Type-Options
+  Header always set X-Content-Type-Options "nosniff"
+
+  # X-XSS-Protection
+  Header always set X-XSS-Protection "1; mode=block"
+
+  # Referrer-Policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Permissions-Policy (formerly Feature-Policy)
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+  # HSTS (uncomment if using HTTPS)
+  # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# Security - Prevent access to sensitive files
+<FilesMatch "(^\.htaccess|^\.git|^\.env|composer\.json|package\.json|package-lock\.json)">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# CORS for fonts (if using external fonts)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(woff2|woff|ttf|otf|eot)$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+</IfModule>
+
+# Force UTF-8 encoding
+AddDefaultCharset utf-8
+<IfModule mod_mime.c>
+  AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
+</IfModule>
+
+# Custom Error Pages
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# SEO: Prevent access to backup files
+<FilesMatch "\.(bak|backup|old|orig|save|tmp)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>

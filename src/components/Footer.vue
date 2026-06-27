@@ -1,0 +1,53 @@
+<template>
+  <footer class="footer">
+    <div class="footer-text">{{ t('footer.companyName') }}</div>
+    <div class="footer-copyright">{{ t('footer.copyright') }}</div>
+  </footer>
+</template>
+
+<script setup>
+/**
+ * @component Footer
+ * @description Site footer with company name and copyright
+ *
+ * @example
+ * <Footer />
+ */
+
+// Translations
+const t = (key) => {
+  const translations = {
+    'footer.companyName': '开泰远景信息科技有限公司',
+    'footer.copyright': '© 2026 KTech Fintech. All rights reserved.'
+  }
+  return translations[key] || key
+}
+</script>
+
+<style scoped>
+.footer {
+  padding: 3rem 8%;
+  background: rgba(10, 15, 28, 0.9);
+  border-top: 1px solid rgba(0, 255, 204, 0.2);
+  text-align: center;
+}
+
+.footer-text {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: var(--font-display);
+}
+
+.footer-copyright {
+  margin-top: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+</style>

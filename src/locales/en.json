@@ -1,37 +1,14 @@
 {
   "nav": {
     "home": "Home",
-    "services": "Services",
     "about": "About",
-    "contact": "Contact",
-    "logo": "KTECH.AI",
-    "aboutUs": "About Us",
     "news": "News",
-    "ourBusiness": "Our Business",
-    "joinUs": "Join Us",
-    "aboutKTech": "About KTech",
-    "ourGroup": "Our group",
-    "ktechNews": "KTech News",
-    "kbtgNews": "KBTG News",
-    "projectManagement": "Project and Program Management",
-    "retailLending": "Retail Lending Solution",
-    "supplyChainFinance": "Supply Chain Finance Solution",
-    "blockchain": "Blockchain",
-    "mobileApp": "Mobile App",
-    "positionList": "Position List",
-    "dropdown": {
-      "open": "Open menu",
-      "close": "Close menu"
-    },
-    "menu": {
-      "open": "Open menu",
-      "close": "Close menu",
-      "label": "Navigation menu"
-    }
+    "logo": "KTECH.AI"
   },
   "footer": {
-    "copyright": "© 2026 KTech Fintech. All rights reserved.",
-    "status": "ONLINE"
+    "copyright": "\u00a9 2025 KTech AI. All systems operational.",
+    "status": "ONLINE",
+    "privacyPolicy": "Privacy Policy"
   },
   "home": {
     "title": "KTech AI",
@@ -41,11 +18,12 @@
       "description": "Building the future of artificial intelligence with cutting-edge technology and cyberpunk aesthetics."
     },
     "stats": {
-      "uptime": "Uptime",
-      "requests": "Requests",
-      "latency": "Latency"
+      "uptime": "99.9%",
+      "requests": "1M+",
+      "latency": "50ms"
     },
     "features": {
+      "heading": "Key Features",
       "ai": {
         "title": "AI Models",
         "description": "Advanced neural networks powered by state-of-the-art transformers"
@@ -62,208 +40,273 @@
     "cta": "Get Started"
   },
   "about": {
-    "pageTitle": "ABOUT",
-    "pageTitleAccent": "KTECH",
-    "pageSubtitle": "Innovating at the intersection of AI and humanity",
-    "whoWeAre": {
-      "title": "Who We Are",
-      "companyName": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd.",
-      "companyInfo": "Established in June 2020, Luohu District, Shenzhen",
-      "parentCompany": "Parent Company",
-      "parentInfo": "KASIKORNBANK (Thailand) via KASIKORN VISION Co., Ltd.",
-      "capital": "Registered Capital",
-      "capitalAmount": "300 million yuan",
-      "services": "Our Services",
-      "servicesList": "Blockchain, Big Data, Artificial Intelligence"
-    },
-    "achievements": {
-      "title": "Our Achievements",
-      "iso9001": "Quality Management System",
-      "iso27001": "Information Security Management",
-      "iso20000": "IT Service Management",
-      "firstMnc": "First MNC HQ in Shenzhen",
-      "firstFintech": "First Foreign Bank Fintech",
-      "projects": "20+ Key Projects Completed"
-    },
-    "vision": {
-      "title": "Our Vision",
-      "description": "A Regional Leading Fintech Platform"
-    },
+    "title": "ABOUT KTECH",
+    "subtitle": "Innovating at the intersection of AI and humanity",
     "mission": {
-      "title": "Our Mission",
-      "description": "Empower Customers with Cutting-edge Technology"
-    },
-    "culture": {
-      "title": "Our Culture",
-      "customer": "Customer Centricity",
-      "collaboration": "Openness & Collaboration",
-      "agile": "Agile & Innovation",
-      "professional": "Professionalism & Efficiency"
-    },
-    "serviceProvider": {
-      "title": "Implementation Service Provider",
-      "service1": {
-        "title": "Regional Expansion",
-        "description": "Deliver advanced solution to enable KBank regional expansion"
-      },
-      "service2": {
-        "title": "China-KBank Connection",
-        "description": "Connect fintech solutions from China to KBank digitalization needs"
-      },
-      "service3": {
-        "title": "Digital Innovation",
-        "description": "Contribute innovative solutions to reinforce KBank digitalization leadership"
-      }
+      "heading": "Our Mission",
+      "description": "KTech is dedicated to building transformative AI solutions that push the boundaries of what's possible."
     },
     "stats": {
-      "projects": "Projects",
-      "commitment": "Commitment",
-      "innovation": "Innovation"
+      "projects": {
+        "label": "Projects",
+        "value": "50+"
+      },
+      "commitment": {
+        "label": "Commitment",
+        "value": "100%"
+      },
+      "innovation": {
+        "label": "Innovation",
+        "value": "24/7"
+      }
     }
   },
   "language": {
-    "button": "Language",
-    "switch": "Switch Language"
+    "switch": "Switch Language",
+    "en": "English",
+    "zh": "\u4e2d\u6587"
   },
-  "theme": {
-    "toggle": "Toggle theme",
-    "current": "Dark",
-    "dark": "Dark",
-    "light": "Light"
-  },
-  "services": {
-    "title": "SERVICES",
-    "subtitle": "Comprehensive solutions for modern enterprises",
-    "cta": "Get In Touch",
-    "items": {
-      "projectManagement": {
-        "title": "Project Management",
-        "description": "Agile/Scrum methodologies with advanced collaboration tools and milestone tracking",
-        "features": {
-          "sprint": "Sprint planning & execution",
-          "velocity": "Velocity tracking & analytics",
-          "reporting": "Stakeholder reporting dashboards"
-        }
-      },
-      "retailCredit": {
-        "title": "Retail Credit",
-        "description": "Risk assessment, loan management, and intelligent credit scoring systems",
-        "features": {
-          "underwriting": "Automated underwriting processes",
-          "analytics": "Portfolio analytics & insights",
-          "compliance": "Regulatory compliance reporting"
-        }
-      },
-      "supplyChain": {
-        "title": "Supply Chain Finance",
-        "description": "Trade finance solutions with working capital optimization",
-        "features": {
-          "tracking": "Real-time shipment tracking",
-          "currency": "Multi-currency support",
-          "mitigation": "Risk mitigation strategies"
-        }
-      },
-      "blockchain": {
-        "title": "Blockchain Solutions",
-        "description": "Smart contracts, DLT platforms, and decentralized application development",
-        "features": {
-          "contracts": "Smart contract development",
-          "consensus": "Custom consensus mechanisms",
-          "trails": "Immutable audit trails"
-        }
-      }
-    }
-  },
-  "contact": {
-    "title": "CONTACT",
-    "subtitle": "Get in Touch",
-    "form": {
-      "name": "Name",
-      "email": "Email",
-      "subject": "Subject",
-      "message": "Message",
-      "submit": "Send Message",
-      "submitting": "Sending...",
-      "validation": {
-        "nameRequired": "Name is required (min 2 characters)",
-        "emailRequired": "Valid email is required",
-        "subjectRequired": "Subject is required (min 3 characters)",
-        "messageRequired": "Message is required (min 10 characters)"
-      },
-      "success": "Message sent successfully! We'll get back to you soon.",
-      "error": "Failed to send message. Please try again."
-    }
+  "a11y": {
+    "skipLink": "Skip to main content",
+    "navLabel": "Main navigation",
+    "mainLabel": "Main content",
+    "loadingLabel": "Loading",
+    "languageExpanded": "Language menu expanded",
+    "languageCollapsed": "Language menu collapsed",
+    "loadingProgress": "Loading progress",
+    "pageChange": "Page changed to",
+    "languageChanged": "Language changed to"
   },
   "news": {
-    "title": "News",
-    "ktechNews": "KTech News",
-    "kbtgNews": "KBTG News",
-    "learnMore": "Learn more"
+    "title": "News & Updates",
+    "subtitle": "Latest from KTech",
+    "categories": {
+      "all": "All",
+      "company": "Company News",
+      "industry": "Industry Insights",
+      "technology": "Technology Updates",
+      "events": "Events"
+    },
+    "filter": "Filter by category",
+    "loadMore": "Load More",
+    "noNews": "No news available",
+    "readMore": "Read More",
+    "backToNews": "Back to News",
+    "relatedArticles": "Related Articles",
+    "publishedOn": "Published on",
+    "by": "By",
+    "share": "Share this article",
+    "breadcrumb": "Home > News"
   },
   "services": {
-    "pm": {
-      "title": "Project and Program Management",
-      "subtitle": "Transform your vision into reality with expert project leadership",
-      "overview": {
-        "title": "Our Approach",
-        "content": "We deliver end-to-end project management services using proven methodologies and cutting-edge tools. From initial planning to successful delivery, our experienced team ensures your projects stay on track, on budget, and aligned with your strategic objectives."
+    "backToServices": "Back to Services",
+    "breadcrumb": "Home > Services",
+    "relatedServices": "Related Services",
+    "supplyChainFinance": {
+      "title": "Supply Chain Finance Solution",
+      "subtitle": "Comprehensive financial services for supply chain optimization",
+      "hero": {
+        "heading": "Supply Chain Finance Solution",
+        "description": "Empowering businesses with innovative financial solutions for supply chain optimization and growth."
       },
-      "capabilities": {
-        "title": "Our Capabilities",
-        "agile": {
-          "title": "Agile & Scrum",
-          "description": "Iterative development with sprint planning, daily standups, and continuous improvement cycles"
+      "overview": {
+        "heading": "Service Overview",
+        "description": "Our Supply Chain Finance Solution provides comprehensive financial services designed to optimize cash flow, reduce risk, and enhance efficiency across your entire supply chain ecosystem."
+      },
+      "features": {
+        "heading": "Key Features",
+        "workingCapital": {
+          "title": "Working Capital Optimization",
+          "description": "Maximize liquidity through innovative financing solutions that improve cash flow and reduce working capital constraints."
         },
-        "waterfall": {
-          "title": "Waterfall",
-          "description": "Traditional sequential approach with clear milestones and structured phases for regulated industries"
-        },
-        "hybrid": {
-          "title": "Hybrid Methods",
-          "description": "Flexible approach combining Agile's adaptability with Waterfall's predictability"
-        },
-        "risk": {
+        "riskManagement": {
           "title": "Risk Management",
-          "description": "Proactive identification, assessment, and mitigation of project risks throughout the lifecycle"
+          "description": "Advanced risk assessment and mitigation strategies to protect your business from supply chain disruptions."
+        },
+        "digitalPlatform": {
+          "title": "Digital Platform",
+          "description": "Streamlined digital experience with real-time visibility and automated processes for efficient operations."
+        },
+        "flexibleFinancing": {
+          "title": "Flexible Financing",
+          "description": "Tailored financing options to meet diverse business needs with competitive rates and terms."
+        },
+        "supplierNetwork": {
+          "title": "Supplier Network",
+          "description": "Access to extensive supplier networks with optimized payment terms and strengthened relationships."
+        },
+        "analytics": {
+          "title": "Advanced Analytics",
+          "description": "Data-driven insights and predictive analytics for informed decision-making and strategic planning."
+        }
+      },
+      "benefits": {
+        "heading": "Benefits",
+        "cashFlow": {
+          "title": "Improved Cash Flow",
+          "description": "Accelerate receivables and optimize payment timing for better liquidity management."
+        },
+        "riskReduction": {
+          "title": "Reduced Risk",
+          "description": "Mitigate supply chain risks through comprehensive risk assessment and management tools."
+        },
+        "efficiency": {
+          "title": "Enhanced Efficiency",
+          "description": "Streamline operations with automated processes and digital workflow integration."
+        },
+        "costSavings": {
+          "title": "Cost Savings",
+          "description": "Reduce operational costs through optimized financing terms and improved supplier negotiations."
         }
       },
       "process": {
-        "title": "Our Process",
-        "discovery": {
-          "title": "Discovery",
-          "description": "Understanding requirements, defining scope, and establishing clear objectives"
+        "heading": "Implementation Process",
+        "assessment": {
+          "step": "01",
+          "title": "Assessment",
+          "description": "Analyze your current supply chain structure and identify optimization opportunities."
         },
-        "planning": {
-          "title": "Planning",
-          "description": "Creating detailed roadmaps, resource allocation, and timeline development"
+        "solution": {
+          "step": "02",
+          "title": "Solution Design",
+          "description": "Develop customized financing solutions tailored to your business requirements."
         },
-        "execution": {
-          "title": "Execution",
-          "description": "Implementation with continuous monitoring, stakeholder communication, and progress tracking"
+        "integration": {
+          "step": "03",
+          "title": "Integration",
+          "description": "Seamlessly integrate with your existing systems and workflows."
         },
-        "delivery": {
-          "title": "Delivery",
-          "description": "Quality assurance, user acceptance testing, and seamless deployment"
+        "deployment": {
+          "step": "04",
+          "title": "Deployment",
+          "description": "Launch the solution with comprehensive training and support."
         },
-        "support": {
-          "title": "Support",
-          "description": "Post-launch support, performance optimization, and continuous improvement"
+        "optimization": {
+          "step": "05",
+          "title": "Optimization",
+          "description": "Continuously monitor and optimize performance for maximum value."
         }
       },
-      "features": {
-        "title": "Key Features",
-        "sprint": "Sprint Planning & Execution",
-        "velocity": "Velocity Tracking & Analytics",
-        "reporting": "Stakeholder Reporting Dashboards",
-        "collaboration": "Collaborative Tools Integration",
-        "tracking": "Real-time Progress Tracking",
-        "compliance": "Compliance & Documentation"
-      },
       "cta": {
-        "title": "Ready to Transform Your Projects?",
-        "subtitle": "Let's discuss how our project management expertise can drive your success",
-        "button": "Request Consultation"
+        "heading": "Transform Your Supply Chain",
+        "description": "Ready to optimize your supply chain with innovative financing solutions?",
+        "button": "Request Consultation",
+        "ariaLabel": "Request a consultation for supply chain finance"
       }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "titleAccent": "GDPR Compliant",
+    "subtitle": "How KTech collects, uses, and protects your personal data",
+    "lastUpdated": "Last updated: June 27, 2026",
+    "disclaimer": "This is a template privacy policy. Please consult legal counsel before production use.",
+    "intro": {
+      "heading": "Introduction",
+      "description": "KTech AI (\"we\", \"us\", or \"our\") is committed to protecting and respecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services. This policy complies with the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA)."
+    },
+    "collection": {
+      "heading": "Information We Collect",
+      "description": "We collect information you provide directly to us and information collected automatically when you use our services.",
+      "items": {
+        "personal": {
+          "title": "Personal Information",
+          "description": "Name, email address, phone number, company name, and job title that you provide via contact or registration forms."
+        },
+        "usage": {
+          "title": "Usage Data",
+          "description": "IP address, browser type, operating system, pages visited, referral URLs, and timestamps collected automatically through cookies and server logs."
+        },
+        "cookies": {
+          "title": "Cookie Data",
+          "description": "Identifiers stored on your device to remember preferences, authenticate sessions, and analyze traffic patterns."
+        },
+        "financial": {
+          "title": "Financial Data",
+          "description": "Aggregated and anonymized financial metrics required to deliver our supply chain finance and credit solutions, processed strictly under lawful basis."
+        }
+      }
+    },
+    "cookies": {
+      "heading": "Cookie Policy",
+      "description": "We use cookies and similar tracking technologies to operate and improve our services.",
+      "types": {
+        "essential": {
+          "title": "Essential Cookies",
+          "description": "Required for the website to function correctly. These cannot be disabled."
+        },
+        "analytics": {
+          "title": "Analytics Cookies",
+          "description": "Help us understand how visitors interact with our website so we can improve performance and user experience."
+        },
+        "marketing": {
+          "title": "Marketing Cookies",
+          "description": "Used to deliver relevant advertisements. You may opt out of these at any time."
+        }
+      }
+    },
+    "use": {
+      "heading": "How We Use Your Data",
+      "description": "We process your personal data for the following legitimate purposes:",
+      "items": {
+        "service": "Providing, operating, and maintaining our financial technology services",
+        "improve": "Improving, personalizing, and expanding our services based on your feedback and usage",
+        "communicate": "Responding to your comments, questions, and customer service requests",
+        "security": "Monitoring and analyzing usage to detect, prevent, and address technical issues, fraud, and security threats",
+        "compliance": "Complying with legal obligations and protecting our legitimate business interests"
+      }
+    },
+    "rights": {
+      "heading": "Your Rights (GDPR / CCPA)",
+      "description": "Under GDPR and CCPA, you have the following rights regarding your personal data:",
+      "items": {
+        "access": {
+          "title": "Right of Access",
+          "description": "Request a copy of the personal data we hold about you."
+        },
+        "rectification": {
+          "title": "Right to Rectification",
+          "description": "Request correction of inaccurate or incomplete personal data."
+        },
+        "erasure": {
+          "title": "Right to Erasure",
+          "description": "Request deletion of your personal data (the right to be forgotten)."
+        },
+        "portability": {
+          "title": "Right to Data Portability",
+          "description": "Receive your data in a structured, machine-readable format and transmit it to another controller."
+        },
+        "object": {
+          "title": "Right to Object",
+          "description": "Object to the processing of your personal data for marketing or other legitimate-interest purposes."
+        },
+        "restrict": {
+          "title": "Right to Restrict Processing",
+          "description": "Request that we limit the processing of your personal data under certain conditions."
+        }
+      },
+      "exerciseNote": "To exercise any of these rights, contact us at privacy@ktech.fintech. We will respond within 30 days."
+    },
+    "retention": {
+      "heading": "Data Retention",
+      "description": "We retain personal data only for as long as necessary to fulfill the purposes outlined in this policy, comply with legal obligations, resolve disputes, and enforce our agreements. Data is then securely deleted or anonymized."
+    },
+    "thirdParty": {
+      "heading": "Third-Party Services",
+      "description": "We may share data with trusted third-party service providers who help us operate our business:",
+      "items": {
+        "hosting": "Cloud hosting and infrastructure providers",
+        "analytics": "Web analytics platforms used to understand site usage",
+        "support": "Customer support and communication tools",
+        "legal": "Legal and financial advisors when legally required"
+      },
+      "note": "These parties are contractually obligated to protect your data and use it only for the purposes we specify."
+    },
+    "contact": {
+      "heading": "Contact Us",
+      "description": "If you have questions about this Privacy Policy or wish to exercise your data protection rights, please contact our Data Protection Officer.",
+      "email": "Email: privacy@ktech.fintech",
+      "address": "Address: 开泰远景信息科技有限公司, Luohu District, Shenzhen, Guangdong, China 518000"
     }
   }
 }

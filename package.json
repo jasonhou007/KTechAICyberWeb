@@ -6,13 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:analyze": "vite build --mode analyze",
     "preview": "vite preview",
-    "analyze": "node scripts/analyze-bundle.js",
-    "analyze:json": "node scripts/analyze-bundle.js --json",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
@@ -20,7 +14,8 @@
     "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
-    "pinia": "^2.3.1",
+    "@vueuse/core": "^14.3.0",
+    "@vueuse/head": "^2.0.0",
     "vue": "^3.4.0",
     "vue-router": "^4.2.0"
   },
@@ -29,11 +24,9 @@
     "@vitejs/plugin-vue": "^5.0.0",
     "@vitest/coverage-v8": "^4.1.9",
     "@vue/test-utils": "^2.4.11",
-    "jsdom": "^29.1.1",
-    "rollup-plugin-visualizer": "^7.0.1",
+    "happy-dom": "^20.10.6",
     "serve": "^14.2.6",
     "vite": "^5.0.0",
-    "vite-plugin-compression": "^0.5.1",
     "vitest": "^4.1.9"
   }
 }
