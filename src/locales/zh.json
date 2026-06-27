@@ -194,6 +194,135 @@
         "button": "请求咨询",
         "ariaLabel": "请求供应链金融咨询"
       }
+    },
+    "bigDataAI": {
+      "title": "大数据与人工智能",
+      "subtitle": "通过机器学习与实时分析，从数据中释放智能价值",
+      "breadcrumb": "首页 > 大数据与AI",
+      "hero": {
+        "heading": "大数据与人工智能解决方案",
+        "description": "借助端到端大数据管道、机器学习模型与企业级 AI 应用，将原始数据转化为智能决策。"
+      },
+      "overview": {
+        "heading": "服务概述",
+        "description": "我们的大数据与 AI 实践将超大规模数据工程与应用型机器学习相结合，帮助组织采集、处理并利用信息。从数据接入到模型部署，我们构建安全、合规的数据平台，将复杂化为竞争优势。"
+      },
+      "aiCapabilities": {
+        "heading": "AI 能力",
+        "machineLearning": {
+          "title": "机器学习",
+          "description": "定制的监督与非监督学习模型，从您的数据中学习，以自动化决策、检测异常并预测结果，准确度可衡量。"
+        },
+        "nlp": {
+          "title": "自然语言处理",
+          "description": "大语言模型与文本分析，可从文档、对话与客户反馈中规模化提取意图、情感与实体。"
+        },
+        "computerVision": {
+          "title": "计算机视觉",
+          "description": "由深度神经网络驱动的图像与视频识别系统，用于质量检测、身份核验与可视化分析。"
+        },
+        "predictiveAnalytics": {
+          "title": "预测分析",
+          "description": "基于统计与机器学习的预测，提前洞察需求、流失与风险，让您在事件发生前采取行动。"
+        }
+      },
+      "bigData": {
+        "heading": "大数据工程",
+        "dataPipeline": {
+          "title": "数据管道",
+          "description": "高弹性的接入与 ETL/ELT 管道，将海量、高速数据从源系统迁移至就绪分析存储。"
+        },
+        "dataWarehouse": {
+          "title": "数据仓库",
+          "description": "云原生湖仓一体与数据仓库架构，统一结构化与半结构化数据，构建唯一可信来源。"
+        },
+        "realTimeAnalytics": {
+          "title": "实时分析",
+          "description": "流式处理框架，针对持续到达的事件数据，提供亚秒级洞察与实时看板。"
+        },
+        "dataGovernance": {
+          "title": "数据治理",
+          "description": "血缘、目录、质量管控与访问策略，让数据可信、合规且可审计。"
+        }
+      },
+      "useCases": {
+        "heading": "行业应用",
+        "finance": {
+          "title": "金融服务",
+          "description": "信用评分、欺诈检测与算法风险模型，改善授信质量并保护收入。"
+        },
+        "retail": {
+          "title": "零售与电商",
+          "description": "需求预测、推荐引擎与动态定价，提升转化率与客户终身价值。"
+        },
+        "healthcare": {
+          "title": "医疗健康",
+          "description": "临床决策支持与医学影像分析，增强诊断、治疗规划与运营效率。"
+        },
+        "smartCity": {
+          "title": "智慧城市",
+          "description": "基于物联网的交通、能源与公共安全分析，让城市基础设施更具响应力与可持续性。"
+        }
+      },
+      "stats": {
+        "heading": "数据一览",
+        "dataVolume": {
+          "value": "100PB+",
+          "label": "数据处理量"
+        },
+        "models": {
+          "value": "500+",
+          "label": "部署模型"
+        },
+        "accuracy": {
+          "value": "99%",
+          "label": "模型准确率"
+        },
+        "uptime": {
+          "value": "99.9%",
+          "label": "平台可用性"
+        }
+      },
+      "process": {
+        "heading": "交付流程",
+        "consult": {
+          "step": "01",
+          "title": "咨询",
+          "description": "评估您的数据现状、业务目标与成功指标，界定高影响力的项目范围。"
+        },
+        "design": {
+          "step": "02",
+          "title": "设计",
+          "description": "在编写任何代码之前，先完成数据平台架构、模型选型与治理方案设计。"
+        },
+        "deploy": {
+          "step": "03",
+          "title": "部署",
+          "description": "完成管道与模型的构建、训练并交付上线，内置 CI/CD 与可观测性。"
+        },
+        "optimize": {
+          "step": "04",
+          "title": "优化",
+          "description": "随着数据演进，持续重训练、监控与调优，保障准确率、成本与可靠性。"
+        }
+      },
+      "cta": {
+        "heading": "让数据驱动决策",
+        "description": "准备好打造智能、数据驱动的组织了吗？让我们一起规划您的大数据与 AI 路线图。",
+        "button": "申请咨询",
+        "ariaLabel": "申请大数据与人工智能解决方案咨询"
+      }
+    },
+    "items": {
+      "bigDataAI": {
+        "title": "大数据与人工智能",
+        "description": "机器学习、预测分析与受治理的数据平台，将原始数据转化为智能行动。",
+        "features": {
+          "machineLearning": "机器学习",
+          "predictiveAnalytics": "预测分析",
+          "dataGovernance": "数据治理"
+        }
+      }
     }
   },
   "privacy": {

@@ -6,7 +6,7 @@
     "logo": "KTECH.AI"
   },
   "footer": {
-    "copyright": "\u00a9 2025 KTech AI. All systems operational.",
+    "copyright": "© 2025 KTech AI. All systems operational.",
     "status": "ONLINE",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service"
@@ -65,7 +65,7 @@
   "language": {
     "switch": "Switch Language",
     "en": "English",
-    "zh": "\u4e2d\u6587"
+    "zh": "中文"
   },
   "a11y": {
     "skipLink": "Skip to main content",
@@ -193,6 +193,135 @@
         "description": "Ready to optimize your supply chain with innovative financing solutions?",
         "button": "Request Consultation",
         "ariaLabel": "Request a consultation for supply chain finance"
+      }
+    },
+    "bigDataAI": {
+      "title": "Big Data & AI Solutions",
+      "subtitle": "Unlock intelligent value from your data with machine learning and real-time analytics",
+      "breadcrumb": "Home > Big Data & AI",
+      "hero": {
+        "heading": "Big Data & AI Solutions",
+        "description": "Transform raw data into intelligent decisions with end-to-end big data pipelines, machine learning models, and AI applications engineered for enterprise scale."
+      },
+      "overview": {
+        "heading": "Service Overview",
+        "description": "Our Big Data & AI practice combines massive-scale data engineering with applied machine learning to help organizations capture, process, and act on information. From data ingestion to model deployment, we build secure, governed platforms that turn complexity into competitive advantage."
+      },
+      "aiCapabilities": {
+        "heading": "AI Capabilities",
+        "machineLearning": {
+          "title": "Machine Learning",
+          "description": "Custom supervised and unsupervised models that learn from your data to automate decisions, detect anomalies, and forecast outcomes with measurable accuracy."
+        },
+        "nlp": {
+          "title": "Natural Language Processing",
+          "description": "Large language models and text analytics that extract intent, sentiment, and entities from documents, conversations, and customer feedback at scale."
+        },
+        "computerVision": {
+          "title": "Computer Vision",
+          "description": "Image and video recognition systems for quality inspection, identity verification, and visual analytics powered by deep neural networks."
+        },
+        "predictiveAnalytics": {
+          "title": "Predictive Analytics",
+          "description": "Statistical and ML-driven forecasting that anticipates demand, churn, and risk so you can act before events unfold."
+        }
+      },
+      "bigData": {
+        "heading": "Big Data Engineering",
+        "dataPipeline": {
+          "title": "Data Pipelines",
+          "description": "Resilient ingestion and ETL/ELT pipelines that move high-volume, high-velocity data from source systems into analytics-ready storage."
+        },
+        "dataWarehouse": {
+          "title": "Data Warehouse",
+          "description": "Cloud-native lakehouse and warehouse architectures that unify structured and semi-structured data under a single source of truth."
+        },
+        "realTimeAnalytics": {
+          "title": "Real-Time Analytics",
+          "description": "Stream processing frameworks that deliver sub-second insights and live dashboards over continuously arriving event data."
+        },
+        "dataGovernance": {
+          "title": "Data Governance",
+          "description": "Lineage, cataloging, quality controls, and access policies that keep data trustworthy, compliant, and audit-ready."
+        }
+      },
+      "useCases": {
+        "heading": "Industry Use Cases",
+        "finance": {
+          "title": "Financial Services",
+          "description": "Credit scoring, fraud detection, and algorithmic risk models that improve underwriting and protect revenue."
+        },
+        "retail": {
+          "title": "Retail & E-Commerce",
+          "description": "Demand forecasting, recommendation engines, and dynamic pricing that lift conversion and customer lifetime value."
+        },
+        "healthcare": {
+          "title": "Healthcare",
+          "description": "Clinical decision support and medical imaging analytics that enhance diagnosis, treatment planning, and operational efficiency."
+        },
+        "smartCity": {
+          "title": "Smart City",
+          "description": "IoT-driven traffic, energy, and public-safety analytics that make urban infrastructure more responsive and sustainable."
+        }
+      },
+      "stats": {
+        "heading": "By the Numbers",
+        "dataVolume": {
+          "value": "100PB+",
+          "label": "Data Processed"
+        },
+        "models": {
+          "value": "500+",
+          "label": "Models Deployed"
+        },
+        "accuracy": {
+          "value": "99%",
+          "label": "Model Accuracy"
+        },
+        "uptime": {
+          "value": "99.9%",
+          "label": "Platform Uptime"
+        }
+      },
+      "process": {
+        "heading": "Delivery Process",
+        "consult": {
+          "step": "01",
+          "title": "Consult",
+          "description": "We assess your data landscape, business goals, and success metrics to scope a high-impact initiative."
+        },
+        "design": {
+          "step": "02",
+          "title": "Design",
+          "description": "We architect the data platform, select models, and define governance before any code is written."
+        },
+        "deploy": {
+          "step": "03",
+          "title": "Deploy",
+          "description": "We build, train, and ship pipelines and models into production with CI/CD and observability built in."
+        },
+        "optimize": {
+          "step": "04",
+          "title": "Optimize",
+          "description": "We continuously retrain, monitor, and tune for accuracy, cost, and reliability as your data evolves."
+        }
+      },
+      "cta": {
+        "heading": "Turn Your Data Into Decisions",
+        "description": "Ready to build an intelligent, data-driven organization? Let's design your Big Data & AI roadmap together.",
+        "button": "Request Consultation",
+        "ariaLabel": "Request a consultation for Big Data and AI solutions"
+      }
+    },
+    "items": {
+      "bigDataAI": {
+        "title": "Big Data & AI",
+        "description": "Machine learning, predictive analytics, and governed data platforms that turn raw data into intelligent action.",
+        "features": {
+          "machineLearning": "Machine Learning",
+          "predictiveAnalytics": "Predictive Analytics",
+          "dataGovernance": "Data Governance"
+        }
       }
     }
   },

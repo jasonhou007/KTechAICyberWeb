@@ -33,6 +33,14 @@
               {{ t(`services.items.${service.key}.features.${feature}`) }}
             </li>
           </ul>
+          <router-link
+            v-if="service.link"
+            :to="service.link"
+            class="service-link neon-border"
+            :aria-label="t(`services.items.${service.key}.title`)"
+          >
+            {{ t('services.relatedServices') }}
+          </router-link>
         </article>
       </section>
 
@@ -82,6 +90,13 @@ const services = [
     key: 'blockchain',
     icon: '⛓️',
     features: ['contracts', 'consensus', 'trails']
+  },
+  {
+    id: 5,
+    key: 'bigDataAI',
+    icon: '🧠',
+    features: ['machineLearning', 'predictiveAnalytics', 'dataGovernance'],
+    link: '/services/big-data-ai'
   }
 ]
 
@@ -356,6 +371,30 @@ onMounted(() => {
   font-weight: bold;
   margin-right: 0.5rem;
   font-size: 1.1rem;
+}
+
+/* Detail-page link inside a card */
+.service-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #00ff88;
+  border: 1px solid #00ff88;
+  border-radius: 5px;
+  background: rgba(0, 255, 136, 0.05);
+  transition: all 0.3s ease;
+}
+
+.service-link:hover,
+.service-link:focus {
+  background: rgba(0, 255, 136, 0.2);
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+  transform: translateY(-2px);
 }
 
 /* CTA Button */
