@@ -1,0 +1,26 @@
+# robots.txt for KTechAICyberWeb
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+
+# Disallow specific paths if any
+# Disallow: /admin/
+# Disallow: /api/
+
+# Sitemap location
+Sitemap: https://jasonhou007.github.io/KTechAICyberWeb/sitemap.xml
+
+# Crawl-delay (optional, slows down crawling)
+# Crawl-delay: 1
+
+# Allow specific bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block unwanted bots (optional)
+# User-agent: AhrefsBot
+# Disallow: /
