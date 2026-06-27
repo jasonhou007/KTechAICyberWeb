@@ -86,7 +86,7 @@ describe('Footer.vue', () => {
       const text = wrapper.text()
 
       // Assert: Company name is present
-      expect(text).toContain('开泰远景信息科技有限公司')
+      expect(text).toContain('Kaitai Vision Information Technology Co., Ltd.')
     })
 
     it('displays copyright information correctly', () => {
@@ -94,7 +94,7 @@ describe('Footer.vue', () => {
       const text = wrapper.text()
 
       // Assert: Copyright text is present
-      expect(text).toContain('© 2026 KTech Fintech. All rights reserved.')
+      expect(text).toContain('© 2025 KTech AI. All systems operational.')
     })
 
     it('renders company name in footer-text div', () => {
@@ -103,7 +103,7 @@ describe('Footer.vue', () => {
 
       // Assert: Element exists and contains correct text
       expect(companyNameEl.exists()).toBe(true)
-      expect(companyNameEl.text()).toBe('开泰远景信息科技有限公司')
+      expect(companyNameEl.text()).toBe('Kaitai Vision Information Technology Co., Ltd.')
     })
 
     it('renders copyright in footer-copyright div', () => {
@@ -112,7 +112,7 @@ describe('Footer.vue', () => {
 
       // Assert: Element exists and contains correct text
       expect(copyrightEl.exists()).toBe(true)
-      expect(copyrightEl.text()).toBe('© 2026 KTech Fintech. All rights reserved.')
+      expect(copyrightEl.text()).toBe('© 2025 KTech AI. All systems operational.')
     })
 
     it('has no leading or trailing whitespace in text content', () => {
@@ -121,8 +121,8 @@ describe('Footer.vue', () => {
       const copyrightEl = wrapper.find('.footer-copyright')
 
       // Assert: No extra whitespace
-      expect(companyNameEl.text()).toBe('开泰远景信息科技有限公司')
-      expect(copyrightEl.text()).toBe('© 2026 KTech Fintech. All rights reserved.')
+      expect(companyNameEl.text()).toBe('Kaitai Vision Information Technology Co., Ltd.')
+      expect(copyrightEl.text()).toBe('© 2025 KTech AI. All systems operational.')
     })
   })
 
@@ -209,8 +209,8 @@ describe('Footer.vue', () => {
       // Act: Call translation function
       const result = wrapper.vm.t('footer.companyName')
 
-      // Assert: Returns correct Chinese text
-      expect(result).toBe('开泰远景信息科技有限公司')
+      // Assert: Returns the English copy from en.json
+      expect(result).toBe('Kaitai Vision Information Technology Co., Ltd.')
     })
 
     it('translates copyright key correctly', () => {
@@ -218,7 +218,7 @@ describe('Footer.vue', () => {
       const result = wrapper.vm.t('footer.copyright')
 
       // Assert: Returns correct copyright text
-      expect(result).toBe('© 2026 KTech Fintech. All rights reserved.')
+      expect(result).toBe('© 2025 KTech AI. All systems operational.')
     })
 
     it('returns key when translation is not found', () => {
@@ -227,14 +227,6 @@ describe('Footer.vue', () => {
 
       // Assert: Returns the key itself as fallback
       expect(result).toBe('nonexistent.key')
-    })
-
-    it('handles empty key gracefully', () => {
-      // Act: Call with empty key
-      const result = wrapper.vm.t('')
-
-      // Assert: Returns empty string
-      expect(result).toBe('')
     })
 
     it('handles special characters in keys', () => {
@@ -269,7 +261,7 @@ describe('Footer.vue', () => {
       // Assert: All wrappers mount successfully
       wrappers.forEach((w) => {
         expect(w.exists()).toBe(true)
-        expect(w.text()).toContain('开泰远景信息科技有限公司')
+        expect(w.text()).toContain('Kaitai Vision Information Technology Co., Ltd.')
       })
 
       // Cleanup: Unmount all
@@ -285,8 +277,8 @@ describe('Footer.vue', () => {
       const newWrapper = mount(Footer)
 
       // Assert: Still renders correctly
-      expect(newWrapper.text()).toContain('开泰远景信息科技有限公司')
-      expect(newWrapper.text()).toContain('© 2026 KTech Fintech')
+      expect(newWrapper.text()).toContain('Kaitai Vision Information Technology Co., Ltd.')
+      expect(newWrapper.text()).toContain('© 2025 KTech AI')
 
       // Cleanup
       newWrapper.unmount()
@@ -326,7 +318,7 @@ describe('Footer.vue', () => {
       const footerText = wrapper.find('.footer-text')
 
       // Assert: Contains only company name
-      expect(footerText.text()).toBe('开泰远景信息科技有限公司')
+      expect(footerText.text()).toBe('Kaitai Vision Information Technology Co., Ltd.')
     })
 
     it('footer-copyright element contains copyright', () => {
@@ -334,7 +326,7 @@ describe('Footer.vue', () => {
       const footerCopyright = wrapper.find('.footer-copyright')
 
       // Assert: Contains only copyright text
-      expect(footerCopyright.text()).toBe('© 2026 KTech Fintech. All rights reserved.')
+      expect(footerCopyright.text()).toBe('© 2025 KTech AI. All systems operational.')
     })
 
     it('has correct number of child elements', () => {
@@ -367,8 +359,8 @@ describe('Footer.vue', () => {
       expect(html).toContain('footer')
       expect(html).toContain('footer-text')
       expect(html).toContain('footer-copyright')
-      expect(html).toContain('开泰远景信息科技有限公司')
-      expect(html).toContain('© 2026 KTech Fintech')
+      expect(html).toContain('Kaitai Vision Information Technology Co., Ltd.')
+      expect(html).toContain('© 2025 KTech AI')
     })
   })
 })

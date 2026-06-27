@@ -45,31 +45,14 @@
 
 import SkeletonCard from './SkeletonCard.vue'
 import { useSkeleton } from '../composables/useSkeleton'
+import { useLanguage } from '../composables/useLanguage'
 import { computed } from 'vue'
+
+// Shared i18n — text follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 
 // Skeleton loading state for below-fold content
 const { isLoading } = useSkeleton({ immediate: false })
-
-// Translations - must be defined before services
-const t = (key) => {
-  const translations = {
-    'services.title': '核心服务',
-    'services.subtitle': '以尖端科技赋能金融创新',
-    'services.projectManagement': '项目管理',
-    'services.projectManagementDesc': '专业的金融科技项目管理服务',
-    'services.retailCredit': '零售信贷',
-    'services.retailCreditDesc': '端到端的零售信贷系统解决方案',
-    'services.supplyChain': '供应链金融',
-    'services.supplyChainDesc': '基于区块链的供应链金融平台',
-    'services.blockchain': '区块链技术',
-    'services.blockchainDesc': '企业级区块链解决方案',
-    'services.fintechApp': '金融科技应用',
-    'services.fintechAppDesc': '移动端金融应用开发',
-    'services.bigData': '大数据与AI',
-    'services.bigDataDesc': '人工智能与大数据分析'
-  }
-  return translations[key] || key
-}
 
 // Services data - computed to avoid reference error
 const services = computed(() => [

@@ -44,20 +44,10 @@
 
 import SkeletonCard from './SkeletonCard.vue'
 import { useSkeleton } from '../composables/useSkeleton'
+import { useLanguage } from '../composables/useLanguage'
 
-// Translations - must be defined before use
-const t = (key) => {
-  const translations = {
-    'culture.title': '愿景·使命·文化',
-    'culture.vision': '愿景',
-    'culture.visionDesc': '成为区域领先的金融科技平台',
-    'culture.mission': '使命',
-    'culture.missionDesc': '以尖端科技赋能客户',
-    'culture.values': '文化',
-    'culture.valuesDesc': '客户至上 · 开放协作<br>敏捷创新 · 专业高效'
-  }
-  return translations[key] || key
-}
+// Shared i18n — text follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 
 // Skeleton loading state for below-fold content
 const { isLoading } = useSkeleton({ immediate: false })

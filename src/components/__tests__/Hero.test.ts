@@ -137,19 +137,19 @@ describe('Hero.vue', () => {
     it('displays hero title with main text', () => {
       const titleMain = wrapper.find('.hero-title .main')
       expect(titleMain.exists()).toBe(true)
-      expect(titleMain.text()).toBe('开泰科技')
+      expect(titleMain.text()).toBe('KaiTech')
     })
 
     it('displays hero title with accent text', () => {
       const titleAccent = wrapper.find('.hero-title .accent')
       expect(titleAccent.exists()).toBe(true)
-      expect(titleAccent.text()).toBe('KBIGHT FINTECH')
+      expect(titleAccent.text()).toBe('KBRIGHT FINTECH')
     })
 
     it('displays hero subtitle/description', () => {
       const subtitle = wrapper.find('.hero-subtitle')
       expect(subtitle.exists()).toBe(true)
-      expect(subtitle.text()).toContain('开泰远景信息科技有限公司')
+      expect(subtitle.text()).toContain('Kaitai Vision Information Technology')
     })
 
     it('renders hero stats container', () => {
@@ -185,21 +185,21 @@ describe('Hero.vue', () => {
       const statItems = wrapper.findAll('.stat-item')
       const firstStat = statItems[0]
       expect(firstStat.find('.stat-number').text()).toBe('2020')
-      expect(firstStat.find('.stat-label').text()).toBe('成立年份')
+      expect(firstStat.find('.stat-label').text()).toBe('Founded')
     })
 
     it('displays capital stat', () => {
       const statItems = wrapper.findAll('.stat-item')
       const secondStat = statItems[1]
       expect(secondStat.find('.stat-number').text()).toBe('3亿')
-      expect(secondStat.find('.stat-label').text()).toBe('注册资本（元）')
+      expect(secondStat.find('.stat-label').text()).toBe('Registered Capital (RMB)')
     })
 
     it('displays projects stat', () => {
       const statItems = wrapper.findAll('.stat-item')
       const thirdStat = statItems[2]
       expect(thirdStat.find('.stat-number').text()).toBe('20+')
-      expect(thirdStat.find('.stat-label').text()).toBe('建设项目')
+      expect(thirdStat.find('.stat-label').text()).toBe('Projects Delivered')
     })
 
     it('stat items have correct structure', () => {
@@ -464,25 +464,25 @@ describe('Hero.vue', () => {
 
     it('translates hero title', () => {
       const titleMain = wrapper.find('.hero-title .main')
-      expect(titleMain.text()).toBe('开泰科技')
+      expect(titleMain.text()).toBe('KaiTech')
     })
 
     it('translates hero subtitle', () => {
       const titleAccent = wrapper.find('.hero-title .accent')
-      expect(titleAccent.text()).toBe('KBIGHT FINTECH')
+      expect(titleAccent.text()).toBe('KBRIGHT FINTECH')
     })
 
     it('translates hero description', () => {
       const subtitle = wrapper.find('.hero-subtitle')
-      expect(subtitle.text()).toContain('开泰远景信息科技有限公司')
-      expect(subtitle.text()).toContain('深圳市罗湖区')
+      expect(subtitle.text()).toContain('Kaitai Vision Information Technology')
+      expect(subtitle.text()).toContain('Shenzhen')
     })
 
     it('translates stats labels', () => {
       const statItems = wrapper.findAll('.stat-item')
-      expect(statItems[0].find('.stat-label').text()).toBe('成立年份')
-      expect(statItems[1].find('.stat-label').text()).toBe('注册资本（元）')
-      expect(statItems[2].find('.stat-label').text()).toBe('建设项目')
+      expect(statItems[0].find('.stat-label').text()).toBe('Founded')
+      expect(statItems[1].find('.stat-label').text()).toBe('Registered Capital (RMB)')
+      expect(statItems[2].find('.stat-label').text()).toBe('Projects Delivered')
     })
 
     it('returns translation key when key not found', () => {

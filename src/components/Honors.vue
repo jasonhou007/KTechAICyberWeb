@@ -38,35 +38,13 @@
 
 import SkeletonHonors from './SkeletonHonors.vue'
 import { useSkeleton } from '../composables/useSkeleton'
+import { useLanguage } from '../composables/useLanguage'
+
+// Shared i18n — text follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 
 // Skeleton loading state for below-fold content
 const { isLoading } = useSkeleton({ immediate: false })
-
-// Translations (declared before the honors array below, which calls t() at
-// module-init — defining t first avoids a temporal-dead-zone ReferenceError).
-const t = (key) => {
-  const translations = {
-    'honors.title': '荣誉资质',
-    'honors.subtitle': '专业认证 · 值得信赖',
-    'honors.highTech': '国家高新技术企业',
-    'honors.highTechDesc': '高新技术企业认证',
-    'honors.hq': '深圳市跨国公司总部',
-    'honors.hqDesc': '第一批认定企业',
-    'honors.aaa': 'AAA级信用企业',
-    'honors.aaaDesc': '信用评级最高等级',
-    'honors.iso9001': 'ISO9001认证',
-    'honors.iso9001Desc': '质量管理体系认证',
-    'honors.iso27001': 'ISO27001认证',
-    'honors.iso27001Desc': '信息安全管理体系',
-    'honors.iso20000': 'ISO20000认证',
-    'honors.iso20000Desc': 'IT服务管理体系',
-    'honors.specialized': '深圳市专精特新',
-    'honors.specializedDesc': '专精特新中小企业',
-    'honors.member': '深圳市金融科技协会',
-    'honors.memberDesc': '会员单位'
-  }
-  return translations[key] || key
-}
 
 // Honors data
 const honors = [

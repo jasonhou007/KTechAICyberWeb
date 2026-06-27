@@ -130,13 +130,13 @@ describe('Contact.vue', () => {
     it('displays section title', () => {
       const title = wrapper.find('.section-title')
       expect(title.exists()).toBe(true)
-      expect(title.text()).toBe('联系我们')
+      expect(title.text()).toBe('Contact')
     })
 
     it('displays section subtitle', () => {
       const subtitle = wrapper.find('.section-subtitle')
       expect(subtitle.exists()).toBe(true)
-      expect(subtitle.text()).toBe('期待与您合作')
+      expect(subtitle.text()).toBe('Reach out to start your next project')
     })
 
     it('renders all three contact items', () => {
@@ -147,21 +147,21 @@ describe('Contact.vue', () => {
     it('displays address contact item', () => {
       const items = wrapper.findAll('.contact-item')
       const addressItem = items[0]
-      expect(addressItem.find('h4').text()).toBe('公司地址')
-      expect(addressItem.find('p').text()).toBe('深圳市罗湖区')
+      expect(addressItem.find('h4').text()).toBe('Address')
+      expect(addressItem.find('p').text()).toBe('Luohu District, Shenzhen')
     })
 
     it('displays email contact item', () => {
       const items = wrapper.findAll('.contact-item')
       const emailItem = items[1]
-      expect(emailItem.find('h4').text()).toBe('电子邮箱')
+      expect(emailItem.find('h4').text()).toBe('Email')
       expect(emailItem.find('p').text()).toBe('contact@ktech.fintech')
     })
 
     it('displays website contact item', () => {
       const items = wrapper.findAll('.contact-item')
       const websiteItem = items[2]
-      expect(websiteItem.find('h4').text()).toBe('官方网站')
+      expect(websiteItem.find('h4').text()).toBe('Website')
       expect(websiteItem.find('p').text()).toBe('www.kaitai.tech')
     })
   })
@@ -341,27 +341,27 @@ describe('Contact.vue', () => {
 
     it('translates contact title', () => {
       const title = wrapper.find('.section-title')
-      expect(title.text()).toBe('联系我们')
+      expect(title.text()).toBe('Contact')
     })
 
     it('translates contact subtitle', () => {
       const subtitle = wrapper.find('.section-subtitle')
-      expect(subtitle.text()).toBe('期待与您合作')
+      expect(subtitle.text()).toBe('Reach out to start your next project')
     })
 
     it('translates address label', () => {
       const items = wrapper.findAll('.contact-item')
-      expect(items[0].find('h4').text()).toBe('公司地址')
+      expect(items[0].find('h4').text()).toBe('Address')
     })
 
     it('translates email label', () => {
       const items = wrapper.findAll('.contact-item')
-      expect(items[1].find('h4').text()).toBe('电子邮箱')
+      expect(items[1].find('h4').text()).toBe('Email')
     })
 
     it('translates website label', () => {
       const items = wrapper.findAll('.contact-item')
-      expect(items[2].find('h4').text()).toBe('官方网站')
+      expect(items[2].find('h4').text()).toBe('Website')
     })
 
     it('returns translation key when key not found', () => {

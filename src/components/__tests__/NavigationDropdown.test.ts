@@ -129,8 +129,9 @@ describe('NavigationDropdown.vue', () => {
     it('renders the translated label of each item via t(item.label)', async () => {
       await wrapper.find('.dropdown-trigger').trigger('click')
       const items = wrapper.findAll('.dropdown-item')
-      // Unknown keys fall through to the key itself.
-      expect(items[0].text()).toBe('nav.about')
+      // nav.about resolves via the shared locale; nav.group is not a real key
+      // and falls through to the key itself.
+      expect(items[0].text()).toBe('About')
       expect(items[1].text()).toBe('nav.group')
     })
   })
@@ -370,9 +371,9 @@ describe('NavigationDropdown.vue', () => {
   })
 
   // ============================================
-  // i18n (internal t)
+  // i18n (shared useLanguage t)
   // ============================================
-  describe('Internationalization (internal t())', () => {
+  describe('Internationalization (shared useLanguage t())', () => {
     it('exposes a translation function on the component instance', () => {
       expect(typeof wrapper.vm.t).toBe('function')
     })

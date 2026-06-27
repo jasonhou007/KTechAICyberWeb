@@ -81,7 +81,7 @@ describe('Culture.vue', () => {
     it('renders section title', () => {
       const title = wrapper.find('.section-title')
       expect(title.exists()).toBe(true)
-      expect(title.text()).toBe('愿景·使命·文化')
+      expect(title.text()).toBe('Vision · Mission · Culture')
     })
 
     it('renders culture grid', () => {
@@ -142,7 +142,7 @@ describe('Culture.vue', () => {
       const visionCard = cards[0]
       const title = visionCard.find('h3')
       expect(title.exists()).toBe(true)
-      expect(title.text()).toBe('愿景')
+      expect(title.text()).toBe('Vision')
     })
 
     it('displays mission title', () => {
@@ -150,7 +150,7 @@ describe('Culture.vue', () => {
       const missionCard = cards[1]
       const title = missionCard.find('h3')
       expect(title.exists()).toBe(true)
-      expect(title.text()).toBe('使命')
+      expect(title.text()).toBe('Mission')
     })
 
     it('displays values title', () => {
@@ -158,7 +158,7 @@ describe('Culture.vue', () => {
       const valuesCard = cards[2]
       const title = valuesCard.find('h3')
       expect(title.exists()).toBe(true)
-      expect(title.text()).toBe('文化')
+      expect(title.text()).toBe('Culture')
     })
 
     it('displays vision description', () => {
@@ -166,7 +166,7 @@ describe('Culture.vue', () => {
       const visionCard = cards[0]
       const description = visionCard.find('p')
       expect(description.exists()).toBe(true)
-      expect(description.text()).toBe('成为区域领先的金融科技平台')
+      expect(description.text()).toBe('Become a leading regional fintech platform')
     })
 
     it('displays mission description', () => {
@@ -174,7 +174,7 @@ describe('Culture.vue', () => {
       const missionCard = cards[1]
       const description = missionCard.find('p')
       expect(description.exists()).toBe(true)
-      expect(description.text()).toBe('以尖端科技赋能客户')
+      expect(description.text()).toBe('Empower clients with frontier technology')
     })
 
     it('displays values description with HTML content', () => {
@@ -182,8 +182,8 @@ describe('Culture.vue', () => {
       const valuesCard = cards[2]
       const description = valuesCard.find('p')
       expect(description.exists()).toBe(true)
-      expect(description.html()).toContain('客户至上')
-      expect(description.html()).toContain('开放协作')
+      expect(description.html()).toContain('Customer First')
+      expect(description.html()).toContain('Open Collaboration')
     })
 
     it('values card supports line breaks in description', () => {
@@ -566,32 +566,32 @@ describe('Culture.vue', () => {
       })
     })
 
-    it('displays Chinese culture title', () => {
+    it('displays the English culture title', () => {
       const title = wrapper.find('.section-title')
-      expect(title.text()).toBe('愿景·使命·文化')
+      expect(title.text()).toBe('Vision · Mission · Culture')
     })
 
-    it('displays Chinese card titles', () => {
+    it('displays English card titles', () => {
       const cards = wrapper.findAll('.card')
       const titles = cards.map(card => card.find('h3').text())
 
-      expect(titles).toContain('愿景')
-      expect(titles).toContain('使命')
-      expect(titles).toContain('文化')
+      expect(titles).toContain('Vision')
+      expect(titles).toContain('Mission')
+      expect(titles).toContain('Culture')
     })
 
-    it('supports HTML content in Chinese descriptions', () => {
+    it('supports HTML content in English descriptions', () => {
       const cards = wrapper.findAll('.card')
       const valuesCard = cards[2]
       const description = valuesCard.find('p')
 
-      expect(description.html()).toContain('客户至上')
-      expect(description.html()).toContain('开放协作')
-      expect(description.html()).toContain('敏捷创新')
-      expect(description.html()).toContain('专业高效')
+      expect(description.html()).toContain('Customer First')
+      expect(description.html()).toContain('Open Collaboration')
+      expect(description.html()).toContain('Agile Innovation')
+      expect(description.html()).toContain('Professional Excellence')
     })
 
-    it('Chinese text renders correctly with special characters', () => {
+    it('renders special characters correctly', () => {
       const valuesCard = wrapper.findAll('.card')[2]
       const description = valuesCard.find('p')
 

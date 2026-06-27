@@ -30,6 +30,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLanguage } from '../composables/useLanguage'
+
+// Shared i18n — text follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 
 const props = defineProps({
   label: {
@@ -45,15 +49,6 @@ const props = defineProps({
 const router = useRouter()
 const isOpen = ref(false)
 const triggerRef = ref(null)
-
-// Simple translation function
-const t = (key) => {
-  const translations = {
-    'nav.dropdown.open': 'Open menu',
-    'nav.dropdown.close': 'Close menu'
-  }
-  return translations[key] || key
-}
 
 const toggle = () => {
   isOpen.value = !isOpen.value

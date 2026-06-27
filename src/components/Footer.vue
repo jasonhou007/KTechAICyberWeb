@@ -14,14 +14,10 @@
  * <Footer />
  */
 
-// Translations
-const t = (key) => {
-  const translations = {
-    'footer.companyName': '开泰远景信息科技有限公司',
-    'footer.copyright': '© 2026 KTech Fintech. All rights reserved.'
-  }
-  return translations[key] || key
-}
+import { useLanguage } from '../composables/useLanguage'
+
+// Shared i18n — text follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 </script>
 
 <style scoped>

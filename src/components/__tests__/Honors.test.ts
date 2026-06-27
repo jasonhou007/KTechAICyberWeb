@@ -5,8 +5,8 @@
  * Test Categories:
  * - Rendering Tests: section container, skeleton-vs-content states, honor count
  * - Content Tests: title/subtitle, per-honor emoji icon, title, description
- *   (Honors ships its own local t() returning real Chinese strings, so these
- *   assertions check rendered values, not bare keys)
+ *   (Honors now resolves copy through the shared useLanguage() composable, so
+ *   in the default English locale these assertions check real en.json copy)
  * - Accessibility Tests: section id, aria-hidden on decorative icons, h2/h4
  *   heading hierarchy
  * - Behavior Tests: skeleton shows while loading, content shows once loaded,
@@ -95,8 +95,8 @@ describe('Honors.vue', () => {
     })
 
     it('renders the section title and subtitle', () => {
-      expect(wrapper.find('.section-title').text()).toBe('荣誉资质')
-      expect(wrapper.find('.section-subtitle').text()).toBe('专业认证 · 值得信赖')
+      expect(wrapper.find('.section-title').text()).toBe('Honors & Qualifications')
+      expect(wrapper.find('.section-subtitle').text()).toBe('Professional certifications · Trusted partner')
     })
 
     it('renders exactly eight honor badges', () => {
@@ -119,16 +119,16 @@ describe('Honors.vue', () => {
 
     it('renders the correct h4 title for each honor', () => {
       const titles = wrapper.findAll('.honor-badge h4').map((h) => h.text())
-      expect(titles).toContain('国家高新技术企业')
-      expect(titles).toContain('ISO9001认证')
-      expect(titles).toContain('深圳市金融科技协会')
+      expect(titles).toContain('National High-Tech Enterprise')
+      expect(titles).toContain('ISO 9001 Certified')
+      expect(titles).toContain('Shenzhen FinTech Association')
     })
 
     it('renders the description span for each honor', () => {
       const descs = wrapper.findAll('.honor-badge span').map((s) => s.text())
-      expect(descs).toContain('高新技术企业认证')
-      expect(descs).toContain('质量管理体系认证')
-      expect(descs).toContain('会员单位')
+      expect(descs).toContain('High-Tech Enterprise Certification')
+      expect(descs).toContain('Quality Management System')
+      expect(descs).toContain('Member Unit')
     })
 
     it('renders each honor title with an h4 element', () => {

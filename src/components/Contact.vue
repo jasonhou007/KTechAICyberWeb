@@ -38,21 +38,10 @@
 
 import SkeletonContact from './SkeletonContact.vue'
 import { useSkeleton } from '../composables/useSkeleton'
+import { useLanguage } from '../composables/useLanguage'
 
-// Translations - must be defined before use
-const t = (key) => {
-  const translations = {
-    'contact.title': '联系我们',
-    'contact.subtitle': '期待与您合作',
-    'contact.address': '公司地址',
-    'contact.addressValue': '深圳市罗湖区',
-    'contact.email': '电子邮箱',
-    'contact.emailValue': 'contact@ktech.fintech',
-    'contact.website': '官方网站',
-    'contact.websiteValue': 'www.kaitai.tech'
-  }
-  return translations[key] || key
-}
+// Shared i18n — text follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 
 // Skeleton loading state for below-fold content.
 // Loading is driven entirely by the useSkeleton composable so it can be

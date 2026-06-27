@@ -39,19 +39,10 @@
 import { ref, onMounted } from 'vue'
 import SkeletonHero from './SkeletonHero.vue'
 import { useSkeleton } from '../composables/useSkeleton'
+import { useLanguage } from '../composables/useLanguage'
 
-// Translations
-const t = (key) => {
-  const translations = {
-    'hero.title': '开泰科技',
-    'hero.subtitle': 'KBIGHT FINTECH',
-    'hero.description': '开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。',
-    'stats.founded': '成立年份',
-    'stats.capital': '注册资本（元）',
-    'stats.projects': '建设项目'
-  }
-  return translations[key] || key
-}
+// Shared i18n — text now follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 
 // Refs
 const particles = ref(null)

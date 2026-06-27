@@ -21,19 +21,13 @@
  */
 
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useLanguage } from '../composables/useLanguage'
+
+// Shared i18n — text follows the site-wide language toggle (en/zh).
+const { t } = useLanguage()
 
 // State
 const isScrolled = ref(false)
-
-// Translations (can be extended for i18n)
-const t = (key) => {
-  const translations = {
-    'nav.services': '服务',
-    'nav.honors': '荣誉',
-    'nav.contact': '联系'
-  }
-  return translations[key] || key
-}
 
 // Handle scroll event
 const handleScroll = () => {

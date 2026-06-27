@@ -4,10 +4,10 @@
  * @ticket #44 - TEST-006: Header Component Unit Tests - TDD with Vitest
  *
  * The Header renders a fixed <nav> with a "KAITECH" logo and three anchor
- * links (服务 / 荣誉 / 联系). It also binds a scroll listener that toggles a
- * `scrolled` class once `window.scrollY > 50`. Translation is handled by an
- * internal `t()` function (no vue-i18n dependency), so we exercise it through
- * `wrapper.vm.t(...)`.
+ * links (Services / Honors / Contact in the default English locale). It also
+ * binds a scroll listener that toggles a `scrolled` class once
+ * `window.scrollY > 50`. Translation flows through the shared `useLanguage()`
+ * composable, so we exercise it through `wrapper.vm.t(...)`.
  *
  * Test Categories:
  * - Rendering / structure
@@ -119,21 +119,21 @@ describe('Header.vue', () => {
     it('renders the services link with the translated label and href', () => {
       const services = wrapper.find('ul.nav-links li:nth-child(1) a')
       expect(services.exists()).toBe(true)
-      expect(services.text()).toBe('服务')
+      expect(services.text()).toBe('Services')
       expect(services.attributes('href')).toBe('#services')
     })
 
     it('renders the honors link with the translated label and href', () => {
       const honors = wrapper.find('ul.nav-links li:nth-child(2) a')
       expect(honors.exists()).toBe(true)
-      expect(honors.text()).toBe('荣誉')
+      expect(honors.text()).toBe('Honors')
       expect(honors.attributes('href')).toBe('#honors')
     })
 
     it('renders the contact link with the translated label and href', () => {
       const contact = wrapper.find('ul.nav-links li:nth-child(3) a')
       expect(contact.exists()).toBe(true)
-      expect(contact.text()).toBe('联系')
+      expect(contact.text()).toBe('Contact')
       expect(contact.attributes('href')).toBe('#contact')
     })
 
@@ -279,29 +279,30 @@ describe('Header.vue', () => {
   // ============================================
   // Internal translation function
   // ============================================
-  describe('Internationalization (internal t())', () => {
+  describe('Internationalization (shared useLanguage t())', () => {
     it('exposes a translation function on the component instance', () => {
       expect(typeof wrapper.vm.t).toBe('function')
     })
 
-    it('translates nav.services to Chinese label', () => {
-      expect(wrapper.vm.t('nav.services')).toBe('服务')
+    it('translates nav.services to the English label', () => {
+      expect(wrapper.vm.t('nav.services')).toBe('Services')
     })
 
-    it('translates nav.honors to Chinese label', () => {
-      expect(wrapper.vm.t('nav.honors')).toBe('荣誉')
+    it('translates nav.honors to the English label', () => {
+      expect(wrapper.vm.t('nav.honors')).toBe('Honors')
     })
 
-    it('translates nav.contact to Chinese label', () => {
-      expect(wrapper.vm.t('nav.contact')).toBe('联系')
+    it('translates nav.contact to the English label', () => {
+      expect(wrapper.vm.t('nav.contact')).toBe('Contact')
     })
 
     it('returns the key as fallback for unknown keys', () => {
       expect(wrapper.vm.t('nav.unknown')).toBe('nav.unknown')
     })
 
-    it('returns the key for unrelated namespaces', () => {
-      expect(wrapper.vm.t('footer.copyright')).toBe('footer.copyright')
+    it('resolves keys from other namespaces via the shared locale', () => {
+      // Header shares the site-wide locale, so footer.* resolves too.
+      expect(wrapper.vm.t('footer.status')).toBe('ONLINE')
     })
 
     it('returns empty string for an empty key', () => {
