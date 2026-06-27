@@ -78,7 +78,8 @@ describe('SupplyChainFinance.vue', () => {
 
     it('provides an aria-label on the main landmark', () => {
       const main = wrapper.find('main')
-      expect(main.attributes('aria-label')).toBe('a11y.mainLabel')
+      // a11y.mainLabel is bundled and resolves to real English copy.
+      expect(main.attributes('aria-label')).toBe('Main content')
     })
 
     it('renders the breadcrumb navigation', () => {
@@ -137,49 +138,49 @@ describe('SupplyChainFinance.vue', () => {
   })
 
   // ============================================
-  // Content Tests (i18n key fallback)
+  // Content Tests (bundled i18n resolves to real English copy)
   // ============================================
   describe('Content', () => {
     it('renders the breadcrumb current label using the services title key', () => {
-      expect(wrapper.text()).toContain('services.supplyChainFinance.title')
+      expect(wrapper.text()).toContain('Supply Chain Finance Solution')
     })
 
     it('renders the hero heading and description keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.supplyChainFinance.hero.heading')
-      expect(text).toContain('services.supplyChainFinance.hero.description')
+      expect(text).toContain('Supply Chain Finance Solution')
+      expect(text).toContain('Empowering businesses with innovative financial solutions')
     })
 
     it('renders the overview heading and description keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.supplyChainFinance.overview.heading')
-      expect(text).toContain('services.supplyChainFinance.overview.description')
+      expect(text).toContain('Service Overview')
+      expect(text).toContain('Our Supply Chain Finance Solution provides comprehensive')
     })
 
     it('renders the features heading key', () => {
-      expect(wrapper.text()).toContain('services.supplyChainFinance.features.heading')
+      expect(wrapper.text()).toContain('Key Features')
     })
 
     it('renders all six feature title keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.supplyChainFinance.features.workingCapital.title')
-      expect(text).toContain('services.supplyChainFinance.features.riskManagement.title')
-      expect(text).toContain('services.supplyChainFinance.features.digitalPlatform.title')
-      expect(text).toContain('services.supplyChainFinance.features.flexibleFinancing.title')
-      expect(text).toContain('services.supplyChainFinance.features.supplierNetwork.title')
-      expect(text).toContain('services.supplyChainFinance.features.analytics.title')
+      expect(text).toContain('Working Capital Optimization')
+      expect(text).toContain('Risk Management')
+      expect(text).toContain('Digital Platform')
+      expect(text).toContain('Flexible Financing')
+      expect(text).toContain('Supplier Network')
+      expect(text).toContain('Advanced Analytics')
     })
 
     it('renders the benefits heading key', () => {
-      expect(wrapper.text()).toContain('services.supplyChainFinance.benefits.heading')
+      expect(wrapper.text()).toContain('Benefits')
     })
 
     it('renders all four benefit title keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.supplyChainFinance.benefits.cashFlow.title')
-      expect(text).toContain('services.supplyChainFinance.benefits.riskReduction.title')
-      expect(text).toContain('services.supplyChainFinance.benefits.efficiency.title')
-      expect(text).toContain('services.supplyChainFinance.benefits.costSavings.title')
+      expect(text).toContain('Improved Cash Flow')
+      expect(text).toContain('Reduced Risk')
+      expect(text).toContain('Enhanced Efficiency')
+      expect(text).toContain('Cost Savings')
     })
 
     it('renders the numeric labels 01-04 for the benefit items', () => {
@@ -188,27 +189,24 @@ describe('SupplyChainFinance.vue', () => {
     })
 
     it('renders the process heading key', () => {
-      expect(wrapper.text()).toContain('services.supplyChainFinance.process.heading')
+      expect(wrapper.text()).toContain('Implementation Process')
     })
 
     it('renders all five process step numbers', () => {
-      const text = wrapper.text()
-      expect(text).toContain('services.supplyChainFinance.process.assessment.step')
-      expect(text).toContain('services.supplyChainFinance.process.solution.step')
-      expect(text).toContain('services.supplyChainFinance.process.integration.step')
-      expect(text).toContain('services.supplyChainFinance.process.deployment.step')
-      expect(text).toContain('services.supplyChainFinance.process.optimization.step')
+      // The five step-number slots render the bundled "01".."05" copy.
+      const stepNumbers = wrapper.findAll('.scf__step-number').map((n) => n.text())
+      expect(stepNumbers).toEqual(['01', '02', '03', '04', '05'])
     })
 
     it('renders the CTA heading, description and button keys', () => {
       const text = wrapper.text()
-      expect(text).toContain('services.supplyChainFinance.cta.heading')
-      expect(text).toContain('services.supplyChainFinance.cta.description')
-      expect(text).toContain('services.supplyChainFinance.cta.button')
+      expect(text).toContain('Transform Your Supply Chain')
+      expect(text).toContain('Ready to optimize your supply chain')
+      expect(text).toContain('Request Consultation')
     })
 
     it('renders the back-to-services label key', () => {
-      expect(wrapper.text()).toContain('services.backToServices')
+      expect(wrapper.text()).toContain('Back to Services')
     })
   })
 
@@ -265,7 +263,10 @@ describe('SupplyChainFinance.vue', () => {
     it('provides an aria-label on the CTA button link', () => {
       const cta = wrapper.find('.scf__cta-button')
       expect(cta.exists()).toBe(true)
-      expect(cta.attributes('aria-label')).toBe('services.supplyChainFinance.cta.ariaLabel')
+      // cta.ariaLabel is bundled and resolves to real English copy.
+      expect(cta.attributes('aria-label')).toBe(
+        'Request a consultation for supply chain finance',
+      )
     })
   })
 
@@ -357,9 +358,15 @@ describe('SupplyChainFinance.vue', () => {
       expect(typeof (wrapper.vm as any).t).toBe('function')
     })
 
-    it('returns the key as fallback when translation is not loaded', () => {
-      const result = (wrapper.vm as any).t('services.supplyChainFinance.title')
-      expect(result).toBe('services.supplyChainFinance.title')
+    it('returns the key as fallback for a genuinely-missing key', () => {
+      const result = (wrapper.vm as any).t('services.supplyChainFinance.this.key.does.not.exist')
+      expect(result).toBe('services.supplyChainFinance.this.key.does.not.exist')
+    })
+
+    it('translates the title key to real English copy', () => {
+      expect((wrapper.vm as any).t('services.supplyChainFinance.title')).toBe(
+        'Supply Chain Finance Solution',
+      )
     })
   })
 

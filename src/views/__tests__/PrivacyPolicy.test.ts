@@ -68,40 +68,40 @@ describe('PrivacyPolicy.vue', () => {
     })
 
     it('renders an introduction section', () => {
-      expect(wrapper.text()).toContain('privacy.intro.heading')
+      expect(wrapper.text()).toContain('Introduction')
     })
 
     it('renders an information collection section', () => {
-      expect(wrapper.text()).toContain('privacy.collection.heading')
+      expect(wrapper.text()).toContain('Information We Collect')
     })
 
     it('renders a cookie policy section', () => {
-      expect(wrapper.text()).toContain('privacy.cookies.heading')
+      expect(wrapper.text()).toContain('Cookie Policy')
     })
 
     it('renders a data use section', () => {
-      expect(wrapper.text()).toContain('privacy.use.heading')
+      expect(wrapper.text()).toContain('How We Use Your Data')
     })
 
     it('renders a GDPR user rights section', () => {
-      expect(wrapper.text()).toContain('privacy.rights.heading')
+      expect(wrapper.text()).toContain('Your Rights (GDPR / CCPA)')
     })
 
     it('renders a data retention section', () => {
-      expect(wrapper.text()).toContain('privacy.retention.heading')
+      expect(wrapper.text()).toContain('Data Retention')
     })
 
     it('renders a third-party services section', () => {
-      expect(wrapper.text()).toContain('privacy.thirdParty.heading')
+      expect(wrapper.text()).toContain('Third-Party Services')
     })
 
     it('renders a contact section', () => {
-      expect(wrapper.text()).toContain('privacy.contact.heading')
+      expect(wrapper.text()).toContain('Contact Us')
     })
 
     it('renders a last-updated meta line', () => {
       expect(wrapper.find('.page-meta').exists()).toBe(true)
-      expect(wrapper.text()).toContain('privacy.lastUpdated')
+      expect(wrapper.text()).toContain('Last updated:')
     })
   })
 
@@ -111,17 +111,18 @@ describe('PrivacyPolicy.vue', () => {
   describe('GDPR Rights', () => {
     it('lists all six GDPR rights', () => {
       const text = wrapper.text()
-      expect(text).toContain('privacy.rights.items.access.title')
-      expect(text).toContain('privacy.rights.items.rectification.title')
-      expect(text).toContain('privacy.rights.items.erasure.title')
-      expect(text).toContain('privacy.rights.items.portability.title')
-      expect(text).toContain('privacy.rights.items.object.title')
-      expect(text).toContain('privacy.rights.items.restrict.title')
+      expect(text).toContain('Right of Access')
+      expect(text).toContain('Right to Rectification')
+      expect(text).toContain('Right to Erasure')
+      expect(text).toContain('Right to Data Portability')
+      expect(text).toContain('Right to Object')
+      expect(text).toContain('Right to Restrict Processing')
     })
 
     it('includes a note on how to exercise rights', () => {
       expect(wrapper.find('.note').exists()).toBe(true)
-      expect(wrapper.text()).toContain('privacy.rights.exerciseNote')
+      // The bundled exerciseNote resolves to real copy mentioning the contact email.
+      expect(wrapper.text()).toContain('privacy@ktech.fintech')
     })
 
     it('renders item lists for each sectioned block', () => {
@@ -185,14 +186,14 @@ describe('PrivacyPolicy.vue', () => {
       expect(typeof (wrapper.vm as any).t).toBe('function')
     })
 
-    it('returns the key as fallback when translation is not loaded', () => {
-      const result = (wrapper.vm as any).t('privacy.title')
-      expect(result).toBe('privacy.title')
+    it('returns the key as fallback for a genuinely-missing key', () => {
+      const result = (wrapper.vm as any).t('privacy.this.key.does.not.exist')
+      expect(result).toBe('privacy.this.key.does.not.exist')
     })
 
-    it('translates the GDPR accent key', () => {
-      const result = (wrapper.vm as any).t('privacy.titleAccent')
-      expect(result).toBe('privacy.titleAccent')
+    it('translates the title and GDPR accent keys to real English copy', () => {
+      expect((wrapper.vm as any).t('privacy.title')).toBe('Privacy Policy')
+      expect((wrapper.vm as any).t('privacy.titleAccent')).toBe('GDPR Compliant')
     })
   })
 

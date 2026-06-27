@@ -10,8 +10,10 @@
  * - i18n Tests: Translation function behavior
  * - Styling Tests: CSS classes and cyberpunk theme hooks
  *
- * Note: useLanguage() returns the key itself as fallback when no translations
- * are loaded in the test environment, so content assertions check for keys.
+ * Note: translations are now bundled (static import), so t() resolves real
+ * English copy for keys present in src/locales/en.json. Section-structure
+ * assertions therefore check for the real heading text. The fallback behavior
+ * (raw key returned for a genuinely-missing key) is covered separately.
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
@@ -69,44 +71,44 @@ describe('Terms.vue', () => {
     })
 
     it('renders an introduction section', () => {
-      expect(wrapper.text()).toContain('terms.intro.heading')
+      expect(wrapper.text()).toContain('Introduction')
     })
 
     it('renders an acceptance of terms section', () => {
-      expect(wrapper.text()).toContain('terms.acceptance.heading')
+      expect(wrapper.text()).toContain('Acceptance of Terms')
     })
 
     it('renders a user responsibilities section', () => {
-      expect(wrapper.text()).toContain('terms.responsibilities.heading')
+      expect(wrapper.text()).toContain('User Responsibilities')
     })
 
     it('renders a limitation of liability section', () => {
-      expect(wrapper.text()).toContain('terms.liability.heading')
+      expect(wrapper.text()).toContain('Limitation of Liability')
     })
 
     it('renders an intellectual property section', () => {
-      expect(wrapper.text()).toContain('terms.ip.heading')
+      expect(wrapper.text()).toContain('Intellectual Property')
     })
 
     it('renders a termination section', () => {
-      expect(wrapper.text()).toContain('terms.termination.heading')
+      expect(wrapper.text()).toContain('Termination')
     })
 
     it('renders a dispute resolution section', () => {
-      expect(wrapper.text()).toContain('terms.dispute.heading')
+      expect(wrapper.text()).toContain('Dispute Resolution')
     })
 
     it('renders a governing law section', () => {
-      expect(wrapper.text()).toContain('terms.governing.heading')
+      expect(wrapper.text()).toContain('Governing Law')
     })
 
     it('renders a contact section', () => {
-      expect(wrapper.text()).toContain('terms.contact.heading')
+      expect(wrapper.text()).toContain('Contact Us')
     })
 
     it('renders a last-updated meta line', () => {
       expect(wrapper.find('.page-meta').exists()).toBe(true)
-      expect(wrapper.text()).toContain('terms.lastUpdated')
+      expect(wrapper.text()).toContain('Last updated:')
     })
   })
 
@@ -179,14 +181,17 @@ describe('Terms.vue', () => {
       expect(typeof (wrapper.vm as any).t).toBe('function')
     })
 
-    it('returns the key as fallback when translation is not loaded', () => {
-      const result = (wrapper.vm as any).t('terms.title')
-      expect(result).toBe('terms.title')
+    it('returns the key as fallback for a genuinely-missing key', () => {
+      // A key that does not exist anywhere in the locale must fall back to the
+      // raw key string (translations are bundled, so this only triggers for keys
+      // that are actually absent).
+      const result = (wrapper.vm as any).t('terms.this.key.does.not.exist')
+      expect(result).toBe('terms.this.key.does.not.exist')
     })
 
-    it('translates the accent key', () => {
-      const result = (wrapper.vm as any).t('terms.titleAccent')
-      expect(result).toBe('terms.titleAccent')
+    it('translates the title and accent keys to real English copy', () => {
+      expect((wrapper.vm as any).t('terms.title')).toBe('Terms of Service')
+      expect((wrapper.vm as any).t('terms.titleAccent')).toBe('Legal Agreement')
     })
   })
 
