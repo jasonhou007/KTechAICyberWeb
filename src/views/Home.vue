@@ -17,49 +17,41 @@
       <!-- Hero section -->
       <section class="hero">
         <div class="cyber-card">
-          <h2>{{ t('home.hero.title') }}</h2>
-          <p>{{ t('home.hero.description') }}</p>
-          <div class="stats">
-            <div class="stat">
-              <span class="stat-value neon-text">99.9%</span>
-              <span class="stat-label">{{ t('home.stats.uptime') }}</span>
+          <p class="hero-description">{{ t('home.hero.description') }}</p>
+          <p class="hero-description2">{{ t('home.hero.description2') }}</p>
+        </div>
+      </section>
+
+      <!-- What We Do -->
+      <section class="whatwedo">
+        <h2 class="section-heading">{{ t('home.whatwedo.heading') }}</h2>
+
+        <div class="solution-group">
+          <h3 class="group-label">{{ t('home.whatwedo.group.blockchain.label') }}</h3>
+          <div class="solution-grid">
+            <div class="solution-card" v-for="item in blockchainCards" :key="item.key">
+              <h4>{{ t(`home.whatwedo.group.blockchain.${item.key}.title`) }}</h4>
+              <p>{{ t(`home.whatwedo.group.blockchain.${item.key}.description`) }}</p>
             </div>
-            <div class="stat">
-              <span class="stat-value neon-text">1M+</span>
-              <span class="stat-label">{{ t('home.stats.requests') }}</span>
-            </div>
-            <div class="stat">
-              <span class="stat-value neon-text">50ms</span>
-              <span class="stat-label">{{ t('home.stats.latency') }}</span>
+          </div>
+        </div>
+
+        <div class="solution-group">
+          <h3 class="group-label">{{ t('home.whatwedo.group.banking.label') }}</h3>
+          <div class="solution-grid">
+            <div class="solution-card" v-for="item in bankingCards" :key="item.key">
+              <h4>{{ t(`home.whatwedo.group.banking.${item.key}.title`) }}</h4>
+              <p>{{ t(`home.whatwedo.group.banking.${item.key}.description`) }}</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Features grid -->
-      <section class="features">
-        <div class="feature-card">
-          <div class="feature-icon neon-border">🤖</div>
-          <h3>{{ t('home.features.ai.title') }}</h3>
-          <p>{{ t('home.features.ai.description') }}</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon neon-border">⚡</div>
-          <h3>{{ t('home.features.realtime.title') }}</h3>
-          <p>{{ t('home.features.realtime.description') }}</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon neon-border">🔒</div>
-          <h3>{{ t('home.features.secure.title') }}</h3>
-          <p>{{ t('home.features.secure.description') }}</p>
-        </div>
-      </section>
-
-      <!-- CTA Button -->
+      <!-- CTA -->
       <div class="cta">
-        <button class="cyber-button neon-border">
+        <router-link to="/about" class="cyber-button neon-border">
           <span>{{ t('home.cta') }}</span>
-        </button>
+        </router-link>
       </div>
     </div>
   </div>
@@ -71,9 +63,22 @@ import { useLanguage } from '../composables/useLanguage'
 
 const { t } = useLanguage()
 
+// Static card catalogs. Keys map to home.whatwedo.group.{group}.{key}.{title|description}.
+const blockchainCards = [
+  { key: 'publicchain' },
+  { key: 'crossborder' },
+  { key: 'custody' },
+  { key: 'stablecoin' },
+]
+
+const bankingCards = [
+  { key: 'retaillending' },
+  { key: 'supplychain' },
+]
+
 onMounted(() => {
-  // Add entrance animations
-  document.querySelectorAll('.feature-card').forEach((card, index) => {
+  // Staggered entrance animation for the solution cards.
+  document.querySelectorAll('.solution-card').forEach((card, index) => {
     card.style.animationDelay = `${index * 0.1}s`
   })
 })
@@ -219,54 +224,52 @@ h1 {
     0 0 20px rgba(0, 255, 136, 0.3),
     inset 0 0 20px rgba(0, 255, 136, 0.1);
   margin-bottom: 3rem;
-}
-
-.cyber-card h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  color: #00ff88;
-  text-shadow: 0 0 10px #00ff88;
+  text-align: left;
 }
 
 .cyber-card p {
   font-size: 1.2rem;
   color: #00ffff;
   line-height: 1.8;
+  margin: 0 0 1rem 0;
 }
 
-/* Stats */
-.stats {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 2rem;
-  gap: 2rem;
+.cyber-card p:last-child {
+  margin-bottom: 0;
 }
 
-.stat {
+/* What We Do */
+.whatwedo {
+  margin-bottom: 3rem;
+  text-align: left;
+}
+
+.section-heading {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #00ff88;
+  text-shadow: 0 0 10px #00ff88;
   text-align: center;
 }
 
-.stat-value {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+.solution-group {
+  margin-bottom: 2rem;
 }
 
-.stat-label {
-  font-size: 1rem;
+.group-label {
   color: #00ffff;
+  text-shadow: 0 0 10px #00ffff;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 }
 
-/* Features */
-.features {
+.solution-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
-.feature-card {
+.solution-card {
   background: rgba(26, 26, 46, 0.6);
   border: 1px solid #00ff88;
   border-radius: 10px;
@@ -276,7 +279,7 @@ h1 {
   opacity: 0;
 }
 
-.feature-card:hover {
+.solution-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
 }
@@ -292,27 +295,22 @@ h1 {
   }
 }
 
-.feature-icon {
-  font-size: 3rem;
-  width: 80px;
-  height: 80px;
-  line-height: 80px;
-  margin: 0 auto 1rem;
-  border-radius: 50%;
-}
-
-.feature-card h3 {
+.solution-card h4 {
   color: #00ff88;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
 }
 
-.feature-card p {
+.solution-card p {
   color: #00ffff;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
 }
 
 /* Button */
 .cyber-button {
+  display: inline-block;
   background: rgba(0, 255, 136, 0.1);
   color: #00ff88;
   border: 2px solid #00ff88;
@@ -323,6 +321,7 @@ h1 {
   position: relative;
   overflow: hidden;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .cyber-button:hover {
@@ -348,7 +347,6 @@ h1 {
 /* Responsive */
 @media (max-width: 768px) {
   h1 { font-size: 3rem; }
-  .stats { flex-direction: column; }
-  .features { grid-template-columns: 1fr; }
+  .solution-grid { grid-template-columns: 1fr; }
 }
 </style>
