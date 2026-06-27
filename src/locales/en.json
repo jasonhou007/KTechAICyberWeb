@@ -3,33 +3,24 @@
     "home": "Home",
     "about": "About",
     "news": "News",
-    "contact": "Contact",
     "logo": "KTECH.AI"
   },
   "footer": {
-    "copyright": "© 2025 KTech AI. All systems operational.",
-    "status": "ONLINE"
+    "copyright": "\u00a9 2025 KTech AI. All systems operational.",
+    "status": "ONLINE",
+    "privacyPolicy": "Privacy Policy"
   },
   "home": {
     "title": "KTech AI",
     "subtitle": "Cyberpunk Intelligence Systems",
     "hero": {
-      "heading": "Next Generation AI",
+      "title": "Next Generation AI",
       "description": "Building the future of artificial intelligence with cutting-edge technology and cyberpunk aesthetics."
     },
     "stats": {
-      "uptime": {
-        "label": "Uptime",
-        "value": "99.9%"
-      },
-      "requests": {
-        "label": "Requests",
-        "value": "1M+"
-      },
-      "latency": {
-        "label": "Latency",
-        "value": "50ms"
-      }
+      "uptime": "99.9%",
+      "requests": "1M+",
+      "latency": "50ms"
     },
     "features": {
       "heading": "Key Features",
@@ -46,10 +37,7 @@
         "description": "Enterprise-grade security with quantum-resistant encryption"
       }
     },
-    "cta": {
-      "button": "Get Started",
-      "ariaLabel": "Get started with KTech AI"
-    }
+    "cta": "Get Started"
   },
   "about": {
     "title": "ABOUT KTECH",
@@ -76,7 +64,7 @@
   "language": {
     "switch": "Switch Language",
     "en": "English",
-    "zh": "中文"
+    "zh": "\u4e2d\u6587"
   },
   "a11y": {
     "skipLink": "Skip to main content",
@@ -110,248 +98,215 @@
     "share": "Share this article",
     "breadcrumb": "Home > News"
   },
-  "contact": {
-    "title": "Contact",
-    "titleAccent": "Us",
-    "subtitle": "Get in touch with KTech",
-    "breadcrumb": "Home > Contact",
-    "form": {
-      "title": "Send us a message",
-      "name": "Name",
-      "namePlaceholder": "Enter your name",
-      "phone": "Phone",
-      "phonePlaceholder": "Enter your phone number",
-      "company": "Company",
-      "companyPlaceholder": "Enter your company name",
-      "email": "Email",
-      "emailPlaceholder": "Enter your email",
-      "submit": "Send Message",
-      "submitting": "Sending...",
-      "privacy": "By submitting this form, you agree to our Privacy Policy",
-      "success": "Message sent successfully! We'll get back to you soon.",
-      "error": "Please fill in all required fields correctly.",
-      "validation": {
-        "nameRequired": "Name is required",
-        "emailRequired": "Email is required",
-        "emailInvalid": "Please enter a valid email address",
-        "phoneRequired": "Phone number is required",
-        "companyRequired": "Company name is required"
+  "services": {
+    "backToServices": "Back to Services",
+    "breadcrumb": "Home > Services",
+    "relatedServices": "Related Services",
+    "supplyChainFinance": {
+      "title": "Supply Chain Finance Solution",
+      "subtitle": "Comprehensive financial services for supply chain optimization",
+      "hero": {
+        "heading": "Supply Chain Finance Solution",
+        "description": "Empowering businesses with innovative financial solutions for supply chain optimization and growth."
+      },
+      "overview": {
+        "heading": "Service Overview",
+        "description": "Our Supply Chain Finance Solution provides comprehensive financial services designed to optimize cash flow, reduce risk, and enhance efficiency across your entire supply chain ecosystem."
+      },
+      "features": {
+        "heading": "Key Features",
+        "workingCapital": {
+          "title": "Working Capital Optimization",
+          "description": "Maximize liquidity through innovative financing solutions that improve cash flow and reduce working capital constraints."
+        },
+        "riskManagement": {
+          "title": "Risk Management",
+          "description": "Advanced risk assessment and mitigation strategies to protect your business from supply chain disruptions."
+        },
+        "digitalPlatform": {
+          "title": "Digital Platform",
+          "description": "Streamlined digital experience with real-time visibility and automated processes for efficient operations."
+        },
+        "flexibleFinancing": {
+          "title": "Flexible Financing",
+          "description": "Tailored financing options to meet diverse business needs with competitive rates and terms."
+        },
+        "supplierNetwork": {
+          "title": "Supplier Network",
+          "description": "Access to extensive supplier networks with optimized payment terms and strengthened relationships."
+        },
+        "analytics": {
+          "title": "Advanced Analytics",
+          "description": "Data-driven insights and predictive analytics for informed decision-making and strategic planning."
+        }
+      },
+      "benefits": {
+        "heading": "Benefits",
+        "cashFlow": {
+          "title": "Improved Cash Flow",
+          "description": "Accelerate receivables and optimize payment timing for better liquidity management."
+        },
+        "riskReduction": {
+          "title": "Reduced Risk",
+          "description": "Mitigate supply chain risks through comprehensive risk assessment and management tools."
+        },
+        "efficiency": {
+          "title": "Enhanced Efficiency",
+          "description": "Streamline operations with automated processes and digital workflow integration."
+        },
+        "costSavings": {
+          "title": "Cost Savings",
+          "description": "Reduce operational costs through optimized financing terms and improved supplier negotiations."
+        }
+      },
+      "process": {
+        "heading": "Implementation Process",
+        "assessment": {
+          "step": "01",
+          "title": "Assessment",
+          "description": "Analyze your current supply chain structure and identify optimization opportunities."
+        },
+        "solution": {
+          "step": "02",
+          "title": "Solution Design",
+          "description": "Develop customized financing solutions tailored to your business requirements."
+        },
+        "integration": {
+          "step": "03",
+          "title": "Integration",
+          "description": "Seamlessly integrate with your existing systems and workflows."
+        },
+        "deployment": {
+          "step": "04",
+          "title": "Deployment",
+          "description": "Launch the solution with comprehensive training and support."
+        },
+        "optimization": {
+          "step": "05",
+          "title": "Optimization",
+          "description": "Continuously monitor and optimize performance for maximum value."
+        }
+      },
+      "cta": {
+        "heading": "Transform Your Supply Chain",
+        "description": "Ready to optimize your supply chain with innovative financing solutions?",
+        "button": "Request Consultation",
+        "ariaLabel": "Request a consultation for supply chain finance"
       }
-    },
-    "info": {
-      "title": "Contact Information",
-      "address": "Address",
-      "addressValue": "Luohu District, Shenzhen, China",
-      "email": "Email",
-      "emailValue": "contact@ktech.fintech",
-      "phone": "Phone",
-      "phoneValue": "+86 755 8888 8888",
-      "wechat": "WeChat",
-      "wechatValue": "KTechOfficial",
-      "social": "Follow Us"
-    },
-    "demo": {
-      "title": "Request a Demo",
-      "description": "Experience our cutting-edge AI solutions firsthand. Our team will provide a personalized demo tailored to your business needs.",
-      "consultant": "Designated Pre-sale Consultant",
-      "solution": "Professional Solution Design",
-      "consulting": "Free Business Consulting",
-      "button": "Schedule Demo"
     }
   },
-  "joinUs": {
-    "title": "Join",
-    "titleAccent": "Us",
-    "subtitle": "Build the future with us. Join our team of innovators and shape the next generation of AI technology.",
-    "cta": {
-      "button": "View Open Positions",
-      "ariaLabel": "View open positions"
+  "privacy": {
+    "title": "Privacy Policy",
+    "titleAccent": "GDPR Compliant",
+    "subtitle": "How KTech collects, uses, and protects your personal data",
+    "lastUpdated": "Last updated: June 27, 2026",
+    "disclaimer": "This is a template privacy policy. Please consult legal counsel before production use.",
+    "intro": {
+      "heading": "Introduction",
+      "description": "KTech AI (\"we\", \"us\", or \"our\") is committed to protecting and respecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services. This policy complies with the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA)."
     },
-    "culture": {
-      "title": "Our Culture",
-      "description": "We foster a culture of innovation, collaboration, and continuous learning. At KTech, every team member contributes to our mission of advancing AI technology.",
-      "innovation": {
-        "title": "Innovation First",
-        "description": "We embrace cutting-edge technology and push the boundaries of what's possible with AI."
-      },
-      "teamwork": {
-        "title": "Collaborative Spirit",
-        "description": "Great things are built together. We believe in diverse perspectives and inclusive teamwork."
-      },
-      "creativity": {
-        "title": "Creative Freedom",
-        "description": "We encourage creative thinking and provide the freedom to explore new ideas and solutions."
-      },
-      "growth": {
-        "title": "Continuous Growth",
-        "description": "Your growth matters. We offer learning opportunities and career advancement pathways."
+    "collection": {
+      "heading": "Information We Collect",
+      "description": "We collect information you provide directly to us and information collected automatically when you use our services.",
+      "items": {
+        "personal": {
+          "title": "Personal Information",
+          "description": "Name, email address, phone number, company name, and job title that you provide via contact or registration forms."
+        },
+        "usage": {
+          "title": "Usage Data",
+          "description": "IP address, browser type, operating system, pages visited, referral URLs, and timestamps collected automatically through cookies and server logs."
+        },
+        "cookies": {
+          "title": "Cookie Data",
+          "description": "Identifiers stored on your device to remember preferences, authenticate sessions, and analyze traffic patterns."
+        },
+        "financial": {
+          "title": "Financial Data",
+          "description": "Aggregated and anonymized financial metrics required to deliver our supply chain finance and credit solutions, processed strictly under lawful basis."
+        }
       }
     },
-    "benefits": {
-      "title": "Benefits & Perks",
-      "competitive": {
-        "title": "Competitive Salary",
-        "description": "Industry-leading compensation packages based on experience and market standards."
-      },
-      "development": {
-        "title": "Professional Development",
-        "description": "Continuous learning opportunities, conferences, workshops, and skill enhancement programs."
-      },
-      "balance": {
-        "title": "Work-Life Balance",
-        "description": "Flexible working arrangements and supportive environment for personal well-being."
-      },
-      "health": {
-        "title": "Health Insurance",
-        "description": "Comprehensive health coverage including medical, dental, and vision insurance."
-      },
-      "activities": {
-        "title": "Team Activities",
-        "description": "Regular team building events, hackathons, and social gatherings to foster connections."
-      },
-      "career": {
-        "title": "Career Growth",
-        "description": "Clear career progression paths with mentorship and internal mobility opportunities."
+    "cookies": {
+      "heading": "Cookie Policy",
+      "description": "We use cookies and similar tracking technologies to operate and improve our services.",
+      "types": {
+        "essential": {
+          "title": "Essential Cookies",
+          "description": "Required for the website to function correctly. These cannot be disabled."
+        },
+        "analytics": {
+          "title": "Analytics Cookies",
+          "description": "Help us understand how visitors interact with our website so we can improve performance and user experience."
+        },
+        "marketing": {
+          "title": "Marketing Cookies",
+          "description": "Used to deliver relevant advertisements. You may opt out of these at any time."
+        }
       }
     },
-    "positions": {
-      "title": "Open Positions",
-      "subtitle": "Explore our current openings and find your place in our team.",
-      "viewDetails": "View Details",
-      "viewAria": "View details for {title} position",
-      "viewAll": "View All Positions"
-    },
-    "process": {
-      "title": "Application Process",
-      "step1": {
-        "title": "Apply Online",
-        "description": "Submit your application through our portal with your resume and cover letter."
-      },
-      "step2": {
-        "title": "Initial Screening",
-        "description": "Our team reviews your application and contacts shortlisted candidates for initial discussion."
-      },
-      "step3": {
-        "title": "Interviews",
-        "description": "Meet with our team members to discuss your skills, experience, and mutual fit."
-      },
-      "step4": {
-        "title": "Welcome Aboard",
-        "description": "Receive an offer and join our team to start building the future together."
+    "use": {
+      "heading": "How We Use Your Data",
+      "description": "We process your personal data for the following legitimate purposes:",
+      "items": {
+        "service": "Providing, operating, and maintaining our financial technology services",
+        "improve": "Improving, personalizing, and expanding our services based on your feedback and usage",
+        "communicate": "Responding to your comments, questions, and customer service requests",
+        "security": "Monitoring and analyzing usage to detect, prevent, and address technical issues, fraud, and security threats",
+        "compliance": "Complying with legal obligations and protecting our legitimate business interests"
       }
+    },
+    "rights": {
+      "heading": "Your Rights (GDPR / CCPA)",
+      "description": "Under GDPR and CCPA, you have the following rights regarding your personal data:",
+      "items": {
+        "access": {
+          "title": "Right of Access",
+          "description": "Request a copy of the personal data we hold about you."
+        },
+        "rectification": {
+          "title": "Right to Rectification",
+          "description": "Request correction of inaccurate or incomplete personal data."
+        },
+        "erasure": {
+          "title": "Right to Erasure",
+          "description": "Request deletion of your personal data (the right to be forgotten)."
+        },
+        "portability": {
+          "title": "Right to Data Portability",
+          "description": "Receive your data in a structured, machine-readable format and transmit it to another controller."
+        },
+        "object": {
+          "title": "Right to Object",
+          "description": "Object to the processing of your personal data for marketing or other legitimate-interest purposes."
+        },
+        "restrict": {
+          "title": "Right to Restrict Processing",
+          "description": "Request that we limit the processing of your personal data under certain conditions."
+        }
+      },
+      "exerciseNote": "To exercise any of these rights, contact us at privacy@ktech.fintech. We will respond within 30 days."
+    },
+    "retention": {
+      "heading": "Data Retention",
+      "description": "We retain personal data only for as long as necessary to fulfill the purposes outlined in this policy, comply with legal obligations, resolve disputes, and enforce our agreements. Data is then securely deleted or anonymized."
+    },
+    "thirdParty": {
+      "heading": "Third-Party Services",
+      "description": "We may share data with trusted third-party service providers who help us operate our business:",
+      "items": {
+        "hosting": "Cloud hosting and infrastructure providers",
+        "analytics": "Web analytics platforms used to understand site usage",
+        "support": "Customer support and communication tools",
+        "legal": "Legal and financial advisors when legally required"
+      },
+      "note": "These parties are contractually obligated to protect your data and use it only for the purposes we specify."
     },
     "contact": {
-      "title": "Get In Touch",
-      "description": "Have questions about working at KTech? We'd love to hear from you.",
-      "email": "careers@ktech.ai"
-    }
-  },
-  "blockchain": {
-    "breadcrumb": "Blockchain Services",
-    "hero": {
-      "title": "BLOCKCHAIN",
-      "accent": "SERVICES",
-      "subtitle": "Revolutionary distributed ledger technology for secure, transparent, and efficient business operations"
-    },
-    "overview": {
-      "title": "Blockchain Technology Overview",
-      "description": "KTech provides cutting-edge blockchain solutions that transform how businesses operate. Our distributed ledger technology ensures transparency, security, and efficiency in all transactions.",
-      "detail": "From smart contracts to supply chain tracking, we deliver customized blockchain implementations that drive innovation and trust in your business ecosystem."
-    },
-    "features": {
-      "title": "Technical Capabilities",
-      "distributed": {
-        "title": "Distributed Ledger",
-        "description": "Decentralized database maintained by multiple nodes, ensuring data integrity and preventing single points of failure."
-      },
-      "security": {
-        "title": "Advanced Security",
-        "description": "Cryptographic protection and immutable records that safeguard your data against tampering and unauthorized access."
-      },
-      "efficiency": {
-        "title": "Smart Contracts",
-        "description": "Self-executing contracts with predefined conditions, automating processes and reducing operational costs."
-      },
-      "traceability": {
-        "title": "Complete Traceability",
-        "description": "End-to-end tracking of transactions and assets, providing full visibility into your supply chain and business processes."
-      }
-    },
-    "benefits": {
-      "title": "Business Benefits",
-      "trust": {
-        "title": "Enhanced Trust",
-        "description": "Build trust with stakeholders through transparent, verifiable transactions that cannot be altered."
-      },
-      "cost": {
-        "title": "Reduced Costs",
-        "description": "Eliminate intermediaries and streamline operations, significantly reducing transaction and administrative costs."
-      },
-      "speed": {
-        "title": "Faster Processing",
-        "description": "Real-time transaction processing and automated workflows accelerate business operations and decision-making."
-      }
-    },
-    "cta": {
-      "title": "Ready to Transform Your Business?",
-      "description": "Explore how our blockchain solutions can revolutionize your operations and drive sustainable growth.",
-      "button": "Contact Us",
-      "ariaLabel": "Contact us about blockchain services"
-    }
-  },
-  "positions": {
-    "title": "Job Openings",
-    "subtitle": "Join Our Team",
-    "searchPlaceholder": "Search positions...",
-    "filters": {
-      "title": "Filters",
-      "department": "Department",
-      "location": "Location",
-      "type": "Employment Type",
-      "clearAll": "Clear All",
-      "activeFilters": "positions found"
-    },
-    "departments": {
-      "all": "All Departments",
-      "engineering": "Engineering",
-      "product": "Product",
-      "design": "Design",
-      "marketing": "Marketing",
-      "sales": "Sales"
-    },
-    "locations": {
-      "all": "All Locations",
-      "bangkok": "Bangkok",
-      "shanghai": "Shanghai",
-      "beijing": "Beijing",
-      "remote": "Remote"
-    },
-    "types": {
-      "all": "All Types",
-      "fulltime": "Full-time",
-      "parttime": "Part-time",
-      "contract": "Contract",
-      "internship": "Internship"
-    },
-    "cards": {
-      "posted": "Posted",
-      "viewDetails": "View Details"
-    },
-    "detail": {
-      "backToList": "Back to list",
-      "description": "Job Description",
-      "responsibilities": "Responsibilities",
-      "requirements": "Requirements",
-      "benefits": "Benefits & Perks",
-      "culture": "Culture & Values",
-      "deadline": "Application Deadline",
-      "applyNow": "Apply Now",
-      "share": "Share"
-    },
-    "empty": {
-      "noPositions": "No positions available at this time",
-      "title": "No positions found",
-      "message": "Try adjusting your filters to see more results"
+      "heading": "Contact Us",
+      "description": "If you have questions about this Privacy Policy or wish to exercise your data protection rights, please contact our Data Protection Officer.",
+      "email": "Email: privacy@ktech.fintech",
+      "address": "Address: 开泰远景信息科技有限公司, Luohu District, Shenzhen, Guangdong, China 518000"
     }
   }
 }

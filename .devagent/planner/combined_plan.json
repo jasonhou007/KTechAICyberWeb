@@ -1,0 +1,25 @@
+{
+  "issue_title": "Issue #20",
+  "issue_number": 20,
+  "sub_agent_results": {
+    "requirements_analyzer": {
+      "sub_agent": "requirements_analyzer",
+      "status": "failed",
+      "error": "Error code: 401 - {'error': {'message': '\u4ee4\u724c\u5df2\u8fc7\u671f\u6216\u9a8c\u8bc1\u4e0d\u6b63\u786e', 'type': '401'}}"
+    },
+    "architecture_designer": {
+      "sub_agent": "architecture_designer",
+      "status": "failed",
+      "error": "Error code: 401 - {'error': {'message': '\u4ee4\u724c\u5df2\u8fc7\u671f\u6216\u9a8c\u8bc1\u4e0d\u6b63\u786e', 'type': '401'}}"
+    },
+    "task_planner": {
+      "sub_agent": "task_planner",
+      "status": "failed",
+      "error": "Error code: 401 - {'error': {'message': '\u4ee4\u724c\u5df2\u8fc7\u671f\u6216\u9a8c\u8bc1\u4e0d\u6b63\u786e', 'type': '401'}}"
+    }
+  },
+  "task_plan": {},
+  "overall_status": "failed",
+  "successful_sub_agents": 0,
+  "total_sub_agents": 3
+}

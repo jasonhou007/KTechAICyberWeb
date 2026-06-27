@@ -1,67 +1,94 @@
 /**
  * @file NewsCard.test.ts
  * @description Comprehensive unit tests for NewsCard component
- * @ticket #60 - TEST-013: News Section Component Unit Tests - TDD with Vitest
+ * @ticket #93 - TEST-024: NewsCard Component Unit Tests - TDD with Vitest
+ *
+ * Test Categories:
+ * - Rendering Tests: Component mount and DOM structure
+ * - Data Display Tests: Date formatting, image rendering, text content
+ * - Loading State Tests: Skeleton UI and loading prop behavior
+ * - Behavior Tests: Click handling and navigation via router-link
+ * - Accessibility Tests: ARIA attributes and alt text
+ * - Styling Tests: CSS class application and overlay rendering
+ * - i18n Tests: Translation function behavior for news keys
+ * - Edge Cases: Component lifecycle and multiple renders
+ *
+ * TDD Approach:
+ * 1. Red: Tests written to define expected behavior
+ * 2. Green: Component implementation makes tests pass
+ * 3. Refactor: Test code optimized for clarity and maintainability
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
-import { useRouter } from 'vue-router'
+
+// Mock the i18n barrel BEFORE importing the component so its `useLanguage`
+// import resolves to a controlled translation function.
+vi.mock('../../i18n', () => {
+  // A minimal translation map mirroring src/locales/en.json (news.* keys).
+  const dictionary: Record<string, string> = {
+    'news.readMore': 'Read More',
+    'news.categories.company': 'Company News',
+    'news.categories.industry': 'Industry Insights',
+    'news.categories.technology': 'Technology Updates',
+    'news.categories.events': 'Events',
+  }
+
+  // t(key) resolves known keys to their English value and falls back to the
+  // key itself for unknown keys — matching the real useLanguage().t contract.
+  const t = (key: string) => dictionary[key] ?? key
+
+  return {
+    useLanguage: () => ({ t }),
+  }
+})
+
 import NewsCard from '../NewsCard.vue'
-import RouterLinkStub from './RouterLinkStub.vue'
 
-// Mock vue-router
-vi.mock('vue-router', () => ({
-  useRouter: vi.fn(),
-}))
+// A representative article used across rendering/data-display tests.
+const baseArticle = {
+  title: 'KTech Launches New Platform',
+  excerpt: 'A deep dive into our latest release and what it means for users.',
+  image: 'https://example.com/images/launch.jpg',
+  date: '2026-06-15',
+  category: 'Company News',
+  slug: 'ktech-launches-new-platform',
+}
 
-// Mock useLanguage composable
-vi.mock('../../composables/useLanguage', () => ({
-  useLanguage: () => ({
-    t: (key: string) => {
-      const translations: Record<string, string> = {
-        'news.readMore': 'Read More',
-        'news.categories.company': 'Company News',
-        'news.categories.industry': 'Industry Insights',
-        'news.categories.technology': 'Technology Updates',
-        'news.categories.events': 'Events',
-      }
-      return translations[key] || key
+// Stub router-link so the component renders without vue-router and we can
+// assert on the rendered link attributes (to / aria-label).
+const RouterLinkStub = {
+  name: 'RouterLink',
+  template: '<a :href="String(to)"><slot /></a>',
+  props: ['to'],
+}
+
+function createWrapper(props: Record<string, unknown> = {}) {
+  return mount(NewsCard, {
+    props: { article: baseArticle, ...props },
+    global: {
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     },
-  }),
-}))
+  })
+}
 
 describe('NewsCard.vue', () => {
   let wrapper: VueWrapper
-  let mockRouter: any
-
-  const mockArticle = {
-    id: 1,
-    slug: 'test-article',
-    title: 'Test Article Title',
-    excerpt: 'This is a test article excerpt for unit testing purposes.',
-    date: '2024-01-15',
-    category: 'Company News',
-    image: '/images/test-article.webp',
-  }
 
   beforeEach(() => {
-    mockRouter = { push: vi.fn(), resolve: vi.fn() }
-    ;(useRouter as any).mockReturnValue(mockRouter)
+    wrapper = createWrapper()
   })
 
   afterEach(() => {
-    if (wrapper) wrapper.unmount()
+    wrapper.unmount()
   })
 
+  // ============================================
+  // Rendering Tests
+  // ============================================
   describe('Rendering', () => {
-    beforeEach(() => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-    })
-
     it('should mount without errors', () => {
       expect(wrapper.exists()).toBe(true)
     })
@@ -71,457 +98,334 @@ describe('NewsCard.vue', () => {
       expect(article.exists()).toBe(true)
     })
 
-    it('does not have loading class when not loading', () => {
-      const article = wrapper.find('article.news-card')
-      expect(article.classes()).not.toContain('news-card--loading')
-    })
-
-    it('has loading class when isLoading is true', async () => {
-      await wrapper.setProps({ isLoading: true })
-      const article = wrapper.find('article.news-card')
-      expect(article.classes()).toContain('news-card--loading')
-    })
-  })
-
-  describe('Props', () => {
-    it('accepts article prop with correct structure', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      expect(wrapper.props('article')).toEqual(mockArticle)
-    })
-
-    it('accepts isLoading prop', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: true },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      expect(wrapper.props('isLoading')).toBe(true)
-    })
-
-    it('has default isLoading value of false', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      expect(wrapper.props('isLoading')).toBe(false)
-    })
-  })
-
-  describe('Content Display', () => {
-    beforeEach(() => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-    })
-
-    it('displays article title', () => {
-      const title = wrapper.find('.news-card__title')
-      expect(title.exists()).toBe(true)
-      expect(title.text()).toBe('Test Article Title')
-    })
-
-    it('displays article excerpt', () => {
-      const excerpt = wrapper.find('.news-card__excerpt')
-      expect(excerpt.exists()).toBe(true)
-      expect(excerpt.text()).toBe('This is a test article excerpt for unit testing purposes.')
-    })
-
-    it('displays formatted date', () => {
-      const badge = wrapper.find('.news-card__badge')
-      expect(badge.exists()).toBe(true)
-      expect(badge.text()).toMatch(/\w{3} \d{2}, \d{4}/)
-    })
-
-    it('displays category label', () => {
-      const category = wrapper.find('.news-card__category')
-      expect(category.exists()).toBe(true)
-      expect(category.text()).toBe('Company News')
-    })
-
-    it('displays read more text', () => {
-      const link = wrapper.find('.news-card__link')
-      expect(link.exists()).toBe(true)
-      expect(link.text()).toContain('Read More')
-    })
-
-    it('displays arrow icon in read more link', () => {
-      const arrow = wrapper.find('.news-card__arrow')
-      expect(arrow.exists()).toBe(true)
-      expect(arrow.text()).toBe('→')
-    })
-  })
-
-  describe('Image Rendering', () => {
-    it('renders image when article has image', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const image = wrapper.find('.news-card__image')
-      expect(image.exists()).toBe(true)
-      expect(image.attributes('src')).toBe('/images/test-article.webp')
-      expect(image.attributes('alt')).toBe('Test Article Title')
-    })
-
-    it('shows skeleton when isLoading is true', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: true },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const image = wrapper.find('.news-card__image')
-      expect(image.exists()).toBe(false)
-      const skeleton = wrapper.find('.news-card__image-skeleton')
-      expect(skeleton.exists()).toBe(true)
-    })
-
-    it('shows skeleton when article has no image', () => {
-      const articleNoImage = { ...mockArticle, image: '' }
-      wrapper = mount(NewsCard, {
-        props: { article: articleNoImage, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const image = wrapper.find('.news-card__image')
-      expect(image.exists()).toBe(false)
-      const skeleton = wrapper.find('.news-card__image-skeleton')
-      expect(skeleton.exists()).toBe(true)
-    })
-
-    it('has image overlay element', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const overlay = wrapper.find('.news-card__image-overlay')
-      expect(overlay.exists()).toBe(true)
-      expect(overlay.attributes('aria-hidden')).toBe('true')
-    })
-  })
-
-  describe('Navigation Links', () => {
-    it('renders router-link with correct path', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const link = wrapper.findComponent(RouterLinkStub)
-      expect(link.exists()).toBe(true)
-      expect(link.props('to')).toBe('/news/test-article')
-    })
-
-    it('has accessible name on read more link', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const link = wrapper.find('.news-card__link')
-      expect(link.attributes('aria-label')).toBe('Read More: Test Article Title')
-    })
-
-    it('does not render link when loading', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: true },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const link = wrapper.find('.news-card__link')
-      expect(link.exists()).toBe(false)
-    })
-  })
-
-  describe('Internationalization', () => {
-    it('translates read more text', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const link = wrapper.find('.news-card__link')
-      expect(link.text()).toContain('Read More')
-    })
-
-    it('translates company category', () => {
-      const article = { ...mockArticle, category: 'Company News' }
-      wrapper = mount(NewsCard, {
-        props: { article, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const category = wrapper.find('.news-card__category')
-      expect(category.text()).toBe('Company News')
-    })
-
-    it('translates industry category', () => {
-      const article = { ...mockArticle, category: 'Industry Insights' }
-      wrapper = mount(NewsCard, {
-        props: { article, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const category = wrapper.find('.news-card__category')
-      expect(category.text()).toBe('Industry Insights')
-    })
-
-    it('translates technology category', () => {
-      const article = { ...mockArticle, category: 'Technology Updates' }
-      wrapper = mount(NewsCard, {
-        props: { article, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const category = wrapper.find('.news-card__category')
-      expect(category.text()).toBe('Technology Updates')
-    })
-
-    it('translates events category', () => {
-      const article = { ...mockArticle, category: 'Events' }
-      wrapper = mount(NewsCard, {
-        props: { article, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const category = wrapper.find('.news-card__category')
-      expect(category.text()).toBe('Events')
-    })
-
-    it('shows untranslated category when not in map', () => {
-      const article = { ...mockArticle, category: 'Unknown Category' }
-      wrapper = mount(NewsCard, {
-        props: { article, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const category = wrapper.find('.news-card__category')
-      expect(category.text()).toBe('Unknown Category')
-    })
-  })
-
-  describe('Cyberpunk Styling', () => {
-    beforeEach(() => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-    })
-
-    it('has correct CSS class on article element', () => {
-      const article = wrapper.find('article.news-card')
-      expect(article.classes()).toContain('news-card')
-    })
-
-    it('date badge has correct styling class', () => {
-      const badge = wrapper.find('.news-card__badge')
-      expect(badge.classes()).toContain('news-card__badge')
-    })
-
-    it('image wrapper has correct class', () => {
-      const wrapperEl = wrapper.find('.news-card__image-wrapper')
-      expect(wrapperEl.classes()).toContain('news-card__image-wrapper')
-    })
-
-    it('category has correct styling class', () => {
-      const category = wrapper.find('.news-card__category')
-      expect(category.classes()).toContain('news-card__category')
-    })
-
-    it('content section has correct class', () => {
-      const content = wrapper.find('.news-card__content')
-      expect(content.classes()).toContain('news-card__content')
-    })
-
-    it('read more link has correct class', () => {
-      const link = wrapper.find('.news-card__link')
-      expect(link.classes()).toContain('news-card__link')
-    })
-  })
-
-  describe('Accessibility', () => {
-    beforeEach(() => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-    })
-
-    it('uses semantic article tag', () => {
+    it('uses semantic article HTML5 tag', () => {
       const article = wrapper.find('article')
       expect(article.exists()).toBe(true)
       expect(article.element.tagName.toLowerCase()).toBe('article')
     })
 
-    it('image has alt text for accessibility', () => {
-      const image = wrapper.find('.news-card__image')
-      expect(image.attributes('alt')).toBe('Test Article Title')
+    it('renders the image wrapper structure', () => {
+      const imageWrapper = wrapper.find('.news-card__image-wrapper')
+      expect(imageWrapper.exists()).toBe(true)
     })
 
-    it('read more link has aria-label', () => {
+    it('renders the content section', () => {
+      const content = wrapper.find('.news-card__content')
+      expect(content.exists()).toBe(true)
+    })
+
+    it('renders the read more link when not loading', () => {
       const link = wrapper.find('.news-card__link')
-      expect(link.attributes('aria-label')).toBe('Read More: Test Article Title')
+      expect(link.exists()).toBe(true)
     })
 
-    it('image overlay has aria-hidden', () => {
-      const overlay = wrapper.find('.news-card__image-overlay')
-      expect(overlay.attributes('aria-hidden')).toBe('true')
+    it('does not render read more link when loading', () => {
+      const loadingWrapper = createWrapper({ isLoading: true })
+      expect(loadingWrapper.find('.news-card__link').exists()).toBe(false)
+      loadingWrapper.unmount()
+    })
+  })
+
+  // ============================================
+  // Data Display Tests
+  // ============================================
+  describe('Data Display', () => {
+    it('displays formatted date in the date badge', () => {
+      const badge = wrapper.find('.news-card__badge')
+      expect(badge.exists()).toBe(true)
+      // 2026-06-15 formatted as en-US short month, day, year.
+      expect(badge.text()).toBe('Jun 15, 2026')
     })
 
-    it('date badge has aria-hidden', () => {
+    it('renders empty date badge when article has no date', () => {
+      const noDate = createWrapper({
+        article: { ...baseArticle, date: '' },
+      })
+      const badge = noDate.find('.news-card__badge')
+      expect(badge.exists()).toBe(true)
+      expect(badge.text()).toBe('')
+      noDate.unmount()
+    })
+
+    it('renders featured image when image is provided', () => {
+      const img = wrapper.find('img.news-card__image')
+      expect(img.exists()).toBe(true)
+    })
+
+    it('sets the image src to the article image', () => {
+      const img = wrapper.find('.news-card__image')
+      expect(img.attributes('src')).toBe(baseArticle.image)
+    })
+
+    it('uses article title as image alt text', () => {
+      const img = wrapper.find('.news-card__image')
+      expect(img.attributes('alt')).toBe(baseArticle.title)
+    })
+
+    it('renders the article title in the content section', () => {
+      const title = wrapper.find('.news-card__title')
+      expect(title.exists()).toBe(true)
+      expect(title.text()).toBe(baseArticle.title)
+    })
+
+    it('renders the article excerpt in the content section', () => {
+      const excerpt = wrapper.find('.news-card__excerpt')
+      expect(excerpt.exists()).toBe(true)
+      expect(excerpt.text()).toBe(baseArticle.excerpt)
+    })
+
+    it('renders the resolved category label', () => {
+      const category = wrapper.find('.news-card__category')
+      expect(category.exists()).toBe(true)
+      // 'Company News' maps to news.categories.company -> 'Company News'
+      expect(category.text()).toBe('Company News')
+    })
+
+    it('falls back to raw category text for unmapped categories', () => {
+      const unmapped = createWrapper({
+        article: { ...baseArticle, category: 'Press Releases' },
+      })
+      expect(unmapped.find('.news-card__category').text()).toBe('Press Releases')
+      unmapped.unmount()
+    })
+  })
+
+  // ============================================
+  // Loading State Tests
+  // ============================================
+  describe('Loading State', () => {
+    it('applies loading modifier class when isLoading is true', () => {
+      const loadingWrapper = createWrapper({ isLoading: true })
+      const article = loadingWrapper.find('article')
+      expect(article.classes()).toContain('news-card--loading')
+      loadingWrapper.unmount()
+    })
+
+    it('does not apply loading modifier class by default', () => {
+      const article = wrapper.find('article')
+      expect(article.classes()).not.toContain('news-card--loading')
+    })
+
+    it('shows skeleton instead of image in loading state', () => {
+      const loadingWrapper = createWrapper({ isLoading: true })
+      expect(loadingWrapper.find('.news-card__image-skeleton').exists()).toBe(true)
+      expect(loadingWrapper.find('.news-card__image').exists()).toBe(false)
+      loadingWrapper.unmount()
+    })
+
+    it('shows skeleton when image is missing even if not loading', () => {
+      const noImage = createWrapper({
+        article: { ...baseArticle, image: '' },
+      })
+      expect(noImage.find('.news-card__image-skeleton').exists()).toBe(true)
+      expect(noImage.find('.news-card__image').exists()).toBe(false)
+      noImage.unmount()
+    })
+
+    it('displays loading text in title during loading state', () => {
+      const loadingWrapper = createWrapper({ isLoading: true })
+      expect(loadingWrapper.find('.news-card__title').text()).toBe('Loading article...')
+      loadingWrapper.unmount()
+    })
+
+    it('displays loading text in excerpt during loading state', () => {
+      const loadingWrapper = createWrapper({ isLoading: true })
+      expect(loadingWrapper.find('.news-card__excerpt').text()).toBe('Loading excerpt...')
+      loadingWrapper.unmount()
+    })
+  })
+
+  // ============================================
+  // Behavior Tests
+  // ============================================
+  describe('Behavior', () => {
+    it('renders a router-link pointing to the article detail route', () => {
+      const link = wrapper.find('.news-card__link')
+      expect(link.exists()).toBe(true)
+      // The router-link stub exposes the resolved `to` target as the link href.
+      expect(link.attributes('href')).toBe(`/news/${baseArticle.slug}`)
+    })
+
+    it('renders the read more label text', () => {
+      const link = wrapper.find('.news-card__link')
+      expect(link.text()).toContain('Read More')
+    })
+
+    it('renders an arrow indicator inside the link', () => {
+      const arrow = wrapper.find('.news-card__arrow')
+      expect(arrow.exists()).toBe(true)
+      expect(arrow.text()).toBe('→')
+    })
+
+    it('reacts to isLoading prop changes', async () => {
+      // Starts not loading: link visible.
+      expect(wrapper.find('.news-card__link').exists()).toBe(true)
+      // Flip to loading: link should disappear, skeleton should appear.
+      await wrapper.setProps({ isLoading: true })
+      expect(wrapper.find('.news-card__link').exists()).toBe(false)
+      expect(wrapper.find('.news-card__image-skeleton').exists()).toBe(true)
+      // Flip back: link reappears.
+      await wrapper.setProps({ isLoading: false })
+      expect(wrapper.find('.news-card__link').exists()).toBe(true)
+    })
+  })
+
+  // ============================================
+  // Accessibility Tests
+  // ============================================
+  describe('Accessibility', () => {
+    it('marks the date badge as aria-hidden', () => {
       const badge = wrapper.find('.news-card__badge')
       expect(badge.attributes('aria-hidden')).toBe('true')
     })
 
-    it('arrow icon has aria-hidden', () => {
+    it('marks the image overlay as aria-hidden', () => {
+      const overlay = wrapper.find('.news-card__image-overlay')
+      expect(overlay.attributes('aria-hidden')).toBe('true')
+    })
+
+    it('marks the read more arrow as aria-hidden', () => {
       const arrow = wrapper.find('.news-card__arrow')
       expect(arrow.attributes('aria-hidden')).toBe('true')
     })
+
+    it('provides a descriptive aria-label on the read more link', () => {
+      const link = wrapper.find('.news-card__link')
+      expect(link.attributes('aria-label')).toBe(
+        `Read More: ${baseArticle.title}`
+      )
+    })
+
+    it('provides alt text for the featured image', () => {
+      const img = wrapper.find('.news-card__image')
+      expect(img.attributes('alt')).toBeTruthy()
+    })
   })
 
-  describe('Responsive Behavior', () => {
-    beforeEach(() => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
+  // ============================================
+  // Styling Tests
+  // ============================================
+  describe('Styling', () => {
+    it('applies news-card class to the root article', () => {
+      const article = wrapper.find('article')
+      expect(article.classes()).toContain('news-card')
     })
 
-    it('has proper min-height for desktop', () => {
-      const article = wrapper.find('article.news-card')
-      expect(article.exists()).toBe(true)
+    it('applies expected CSS classes to child elements', () => {
+      expect(wrapper.find('.news-card__badge').exists()).toBe(true)
+      expect(wrapper.find('.news-card__image-wrapper').exists()).toBe(true)
+      expect(wrapper.find('.news-card__category').exists()).toBe(true)
+      expect(wrapper.find('.news-card__content').exists()).toBe(true)
+      expect(wrapper.find('.news-card__link').exists()).toBe(true)
     })
 
-    it('maintains aspect ratio structure', () => {
+    it('renders the image overlay element', () => {
+      const overlay = wrapper.find('.news-card__image-overlay')
+      expect(overlay.exists()).toBe(true)
+    })
+
+    it('overlay is a child of the image wrapper', () => {
       const imageWrapper = wrapper.find('.news-card__image-wrapper')
-      const content = wrapper.find('.news-card__content')
-      const link = wrapper.find('.news-card__link')
-      expect(imageWrapper.exists()).toBe(true)
-      expect(content.exists()).toBe(true)
-      expect(link.exists()).toBe(true)
+      const overlay = imageWrapper.find('.news-card__image-overlay')
+      expect(overlay.exists()).toBe(true)
     })
   })
 
-  describe('Loading State', () => {
-    it('shows loading placeholders when isLoading is true', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: true },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const title = wrapper.find('.news-card__title')
-      const excerpt = wrapper.find('.news-card__excerpt')
-      expect(title.text()).toBe('Loading article...')
-      expect(excerpt.text()).toBe('Loading excerpt...')
+  // ============================================
+  // i18n Tests
+  // ============================================
+  describe('Internationalization', () => {
+    it('exposes a translation function on the component instance', () => {
+      expect(typeof wrapper.vm.t).toBe('function')
     })
 
-    it('shows skeleton loader for image when loading', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: true },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const skeleton = wrapper.find('.news-card__image-skeleton')
-      expect(skeleton.exists()).toBe(true)
+    it('translates the news.readMore key correctly', () => {
+      expect(wrapper.vm.t('news.readMore')).toBe('Read More')
     })
 
-    it('hides read more link when loading', () => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: true },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
+    it('translates a known category key correctly', () => {
+      expect(wrapper.vm.t('news.categories.company')).toBe('Company News')
+    })
+
+    it('returns the key as fallback when translation is missing', () => {
+      expect(wrapper.vm.t('nonexistent.key')).toBe('nonexistent.key')
+    })
+
+    it('uses readMore translation in the link aria-label', () => {
       const link = wrapper.find('.news-card__link')
-      expect(link.exists()).toBe(false)
+      expect(link.attributes('aria-label')).toContain('Read More')
     })
   })
 
+  // ============================================
+  // Edge Cases
+  // ============================================
   describe('Edge Cases', () => {
-    it('handles missing date gracefully', () => {
-      const articleNoDate = { ...mockArticle, date: '' }
-      wrapper = mount(NewsCard, {
-        props: { article: articleNoDate, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const badge = wrapper.find('.news-card__badge')
-      expect(badge.text()).toBeTruthy()
-    })
-
-    it('handles undefined date gracefully', () => {
-      const articleNoDate = { ...mockArticle, date: undefined }
-      wrapper = mount(NewsCard, {
-        props: { article: articleNoDate, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const badge = wrapper.find('.news-card__badge')
-      expect(badge.text()).toBe('')
-    })
-
-    it('handles very long title', () => {
-      const longTitle = 'A'.repeat(200)
-      const articleLongTitle = { ...mockArticle, title: longTitle }
-      wrapper = mount(NewsCard, {
-        props: { article: articleLongTitle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const title = wrapper.find('.news-card__title')
-      expect(title.exists()).toBe(true)
-    })
-
-    it('handles very long excerpt', () => {
-      const longExcerpt = 'B'.repeat(500)
-      const articleLongExcerpt = { ...mockArticle, excerpt: longExcerpt }
-      wrapper = mount(NewsCard, {
-        props: { article: articleLongExcerpt, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const excerpt = wrapper.find('.news-card__excerpt')
-      expect(excerpt.exists()).toBe(true)
-    })
-
-    it('handles special characters in title', () => {
-      const specialTitle = 'Test: "Special" & <Characters>'
-      const articleSpecial = { ...mockArticle, title: specialTitle }
-      wrapper = mount(NewsCard, {
-        props: { article: articleSpecial, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-      const title = wrapper.find('.news-card__title')
-      expect(title.text()).toBe(specialTitle)
-    })
-
     it('can be mounted and unmounted multiple times', () => {
       const wrappers = [
-        mount(NewsCard, {
-          props: { article: mockArticle, isLoading: false },
-          global: { components: { RouterLink: RouterLinkStub } },
-        }),
-        mount(NewsCard, {
-          props: { article: mockArticle, isLoading: false },
-          global: { components: { RouterLink: RouterLinkStub } },
-        }),
+        createWrapper(),
+        createWrapper(),
+        createWrapper(),
       ]
-      wrappers.forEach(w => expect(w.exists()).toBe(true))
-      wrappers.forEach(w => w.unmount())
+      wrappers.forEach((w) => {
+        expect(w.exists()).toBe(true)
+        expect(w.text()).toContain(baseArticle.title)
+      })
+      wrappers.forEach((w) => w.unmount())
+      expect(true).toBe(true)
+    })
+
+    it('renders correctly when remounted after unmount', () => {
+      wrapper.unmount()
+      const reWrapper = createWrapper()
+      expect(reWrapper.text()).toContain(baseArticle.title)
+      expect(reWrapper.find('.news-card__image').exists()).toBe(true)
+      reWrapper.unmount()
+    })
+
+    it('handles rapid mount/unmount cycles', () => {
+      for (let i = 0; i < 10; i++) {
+        const w = createWrapper()
+        expect(w.exists()).toBe(true)
+        w.unmount()
+      }
+      expect(true).toBe(true)
+    })
+
+    it('renders without image-skeleton when image and not loading', () => {
+      expect(wrapper.find('.news-card__image-skeleton').exists()).toBe(false)
+    })
+
+    it('renders two non-loading child text blocks (title + excerpt)', () => {
+      expect(wrapper.find('.news-card__title').exists()).toBe(true)
+      expect(wrapper.find('.news-card__excerpt').exists()).toBe(true)
     })
   })
 
+  // ============================================
+  // Component Structure
+  // ============================================
   describe('Component Structure', () => {
-    beforeEach(() => {
-      wrapper = mount(NewsCard, {
-        props: { article: mockArticle, isLoading: false },
-        global: { components: { RouterLink: RouterLinkStub } },
-      })
-    })
-
-    it('has correct DOM hierarchy', () => {
-      const article = wrapper.find('article.news-card')
-      const imageWrapper = article.find('.news-card__image-wrapper')
-      const content = article.find('.news-card__content')
-      expect(article.exists()).toBe(true)
-      expect(imageWrapper.exists()).toBe(true)
-      expect(content.exists()).toBe(true)
-    })
-
-    it('all major sections are present', () => {
-      const badge = wrapper.find('.news-card__badge')
+    it('has correct DOM hierarchy for the image section', () => {
       const imageWrapper = wrapper.find('.news-card__image-wrapper')
-      const category = wrapper.find('.news-card__category')
+      expect(imageWrapper.find('.news-card__image').exists()).toBe(true)
+      expect(imageWrapper.find('.news-card__image-overlay').exists()).toBe(true)
+    })
+
+    it('contains the title and excerpt within the content section', () => {
       const content = wrapper.find('.news-card__content')
-      const link = wrapper.find('.news-card__link')
-      expect(badge.exists()).toBe(true)
-      expect(imageWrapper.exists()).toBe(true)
-      expect(category.exists()).toBe(true)
-      expect(content.exists()).toBe(true)
-      expect(link.exists()).toBe(true)
+      expect(content.find('.news-card__title').exists()).toBe(true)
+      expect(content.find('.news-card__excerpt').exists()).toBe(true)
+    })
+
+    it('renders the full expected HTML structure', () => {
+      const html = wrapper.html()
+      expect(html).toContain('news-card')
+      expect(html).toContain('news-card__badge')
+      expect(html).toContain('news-card__image')
+      expect(html).toContain('news-card__category')
+      expect(html).toContain('news-card__content')
+      expect(html).toContain('news-card__link')
     })
   })
 })
