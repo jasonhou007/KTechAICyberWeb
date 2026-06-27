@@ -14,7 +14,14 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
-    include: ['**/__tests__/*.test.ts', '**/__tests__/*.spec.ts', 'tests/unit/*.spec.{js,ts}'],
+    // Note: the previous glob only matched `*.test.ts` / `*.spec.ts` under
+    // __tests__, which silently skipped any `.spec.js` / `.test.js` files there
+    // (e.g. src/components/__tests__/i18n-toggle.spec.js was never collected).
+    // Match both .js and .ts under __tests__ AND tests/unit so every guard runs.
+    include: [
+      '**/__tests__/*.{test,spec}.{js,ts}',
+      'tests/unit/*.{test,spec}.{js,ts}',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
