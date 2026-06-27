@@ -14,15 +14,33 @@
  * their default-English assumptions.
  */
 
-import { describe, it, expect, afterEach, beforeEach } from 'vitest'
+import { describe, it, expect, afterEach, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { h } from 'vue'
+import { h, ref } from 'vue'
 
 import { useLanguage } from '../../composables/useLanguage'
 import Hero from '../Hero.vue'
 import Footer from '../Footer.vue'
 import Header from '../Header.vue'
 import Contact from '../Contact.vue'
+
+// Contact.vue gates its real copy behind `v-if="!isLoading"` driven by
+// useSkeleton(). With the real composable, isLoading starts true and only
+// clears via the IntersectionObserver (which never fires in a jsdom/happy-dom
+// unit mount), so `.section-title` / `.contact-item` never render and the
+// Chinese-copy assertions below would never see the text. Mock useSkeleton so
+// isLoading is false from the start — the content renders synchronously and the
+// language-toggle regression is actually exercised. Path resolves relative to
+// this test file: src/components/__tests__/ -> src/composables/useSkeleton.
+const mockIsLoading = ref(false)
+vi.mock('../../composables/useSkeleton', () => ({
+  useSkeleton: () => ({
+    isLoading: mockIsLoading,
+    hasLoaded: ref(true),
+    target: ref(null),
+    isVisible: ref(true),
+  }),
+}))
 
 const { setLanguage } = useLanguage()
 

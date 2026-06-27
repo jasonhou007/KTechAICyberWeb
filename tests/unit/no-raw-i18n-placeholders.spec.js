@@ -13,6 +13,12 @@
  * If a future change introduces a t('some.new.key') call without adding the key
  * to en.json/zh.json, this test fails and names the offending view.
  *
+ * The view list is AUTO-DISCOVERED via import.meta.glob('src/views/*.vue') so
+ * that adding a new page can never silently fall out of coverage. The previous
+ * hardcoded list omitted 8 views (NewsDetail, PrivacyPolicy, Terms,
+ * ServiceBigData, ServiceRetailLending, SupplyChainFinance,
+ * ServiceProjectManagement, NotFound), leaving ~324 t() calls unguarded.
+ *
  * Note: the Home sub-components (Hero, Honors, Services, Culture, Contact,
  * Footer, Header, NavigationDropdown) previously declared a LOCAL t() map that
  * bypassed useLanguage entirely. They have since been migrated onto the shared
@@ -26,15 +32,21 @@ import { createRouter, createMemoryHistory } from 'vue-router'
 import { createPinia, setActivePinia } from 'pinia'
 import { h } from 'vue'
 
-import Home from '../../src/views/Home.vue'
-import About from '../../src/views/About.vue'
-import Services from '../../src/views/Services.vue'
-import Blockchain from '../../src/views/Blockchain.vue'
-import MobileApp from '../../src/views/MobileApp.vue'
-import JoinUs from '../../src/views/JoinUs.vue'
-import PositionList from '../../src/views/PositionList.vue'
-import Contact from '../../src/views/Contact.vue'
-import News from '../../src/views/News.vue'
+// Auto-discover every view so the guard can never silently miss a page.
+// import.meta.glob with { eager: true } returns { path: module } where each
+// module's default export is the Vue component.
+const viewModules = import.meta.glob('../../src/views/*.vue', { eager: true })
+const views = Object.entries(viewModules)
+  .map(([path, mod]) => ({
+    // Derive a friendly name from the file name (e.g. "NewsDetail" from
+    // ".../NewsDetail.vue") for readable failure output.
+    name: path.split('/').pop().replace(/\.vue$/, ''),
+    component: mod.default,
+  }))
+  .filter((v) => v.component)
+  .sort((a, b) => a.name.localeCompare(b.name))
+
+// A standalone component not under src/views but still i18n-driven.
 import NewsSection from '../../src/components/NewsSection.vue'
 
 // The 8 components migrated from local t() maps onto useLanguage().
@@ -92,20 +104,14 @@ describe('No raw i18n placeholder keys leak into rendered views', () => {
     wrappers = []
   })
 
-  const views = [
-    { name: 'Home', component: Home },
-    { name: 'About', component: About },
-    { name: 'Services', component: Services },
-    { name: 'Blockchain', component: Blockchain },
-    { name: 'MobileApp', component: MobileApp },
-    { name: 'JoinUs', component: JoinUs },
-    { name: 'PositionList', component: PositionList },
-    { name: 'Contact', component: Contact },
-    { name: 'News', component: News },
+  // The auto-discovered src/views/*.vue list, plus the standalone NewsSection
+  // component (not under src/views but still i18n-driven).
+  const viewCases = [
+    ...views,
     { name: 'NewsSection', component: NewsSection },
   ]
 
-  it.each(views.map((v) => [v.name, v.component]))(
+  it.each(viewCases.map((v) => [v.name, v.component]))(
     '%s renders no raw dotted placeholder key',
     async (_name, component) => {
       const wrapper = mountView(component)
@@ -120,7 +126,7 @@ describe('No raw i18n placeholder keys leak into rendered views', () => {
   // Single consolidated sweep across ALL mounted views at once, so a regression
   // in any one of them surfaces even if the per-view case is edited away.
   it('the union of all major views contains zero raw placeholder keys', async () => {
-    const text = views
+    const text = viewCases
       .map(({ component }) => {
         const w = mountView(component)
         wrappers.push(w)
