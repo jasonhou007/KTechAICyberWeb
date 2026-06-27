@@ -19,7 +19,7 @@ class CulturePage {
    * Navigate to the home page
    */
   async goto() {
-    await this.page.goto('http://localhost:5173/')
+    await this.page.goto('/')
     await this.page.waitForLoadState('networkidle')
   }
 

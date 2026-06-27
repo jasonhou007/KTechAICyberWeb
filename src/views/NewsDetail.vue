@@ -115,14 +115,14 @@
         </div>
       </section>
 
-      <!-- Schema.org Structured Data -->
-      <script type="application/ld+json" v-html="articleSchema"></script>
+      <!-- Schema.org JSON-LD is injected into <head> from script setup
+           (a <script> tag in the template breaks vite/coverage parsers) -->
     </article>
   </main>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLanguage } from '../i18n'
 import newsData from '../data/news.json'
@@ -251,6 +251,19 @@ const articleSchema = computed(() => {
 
   return JSON.stringify(schema)
 })
+
+// Inject JSON-LD structured data into <head> reactively. Kept out of <template>
+// because a <script> tag there breaks vite/coverage parsers and is silently dropped.
+let __ldScript = null
+watch(articleSchema, (json) => {
+  if (__ldScript) { __ldScript.remove(); __ldScript = null }
+  if (!json) return
+  __ldScript = document.createElement('script')
+  __ldScript.type = 'application/ld+json'
+  __ldScript.textContent = json
+  document.head.appendChild(__ldScript)
+}, { immediate: true })
+onBeforeUnmount(() => { if (__ldScript) { __ldScript.remove(); __ldScript = null } })
 
 // Share functionality
 const handleShare = async () => {
