@@ -1588,5 +1588,57 @@
     "glitch": {
       "complete": "INFERENCE COMPLETE"
     }
+  },
+  "forge": {
+    "title": "AI Solution Forge",
+    "subtitle": "Configure your needs — forge a deployment-ready blueprint",
+    "scaleLabel": "Scale",
+    "forgeButton": "Forge Solution",
+    "reroll": "Reroll",
+    "reset": "Reset",
+    "cta": "View recommended service",
+    "result": {
+      "title": "Deployment Blueprint"
+    },
+    "industries": {
+      "finance": "Finance",
+      "retail": "Retail",
+      "health": "Health",
+      "smartcity": "Smart City",
+      "manufacturing": "Manufacturing"
+    },
+    "priorities": {
+      "speed": "Speed",
+      "security": "Security",
+      "compliance": "Compliance",
+      "automation": "Automation"
+    },
+    "services": {
+      "supply-chain-finance": "Supply-Chain Finance",
+      "big-data-ai": "Big-Data & AI",
+      "retail-lending": "Retail Lending",
+      "cross-border-payment": "Cross-Border Payment",
+      "digital-asset-custody": "Digital-Asset Custody",
+      "stablecoin": "Stablecoin"
+    },
+    "metrics": {
+      "throughput": "Throughput",
+      "accuracy": "Accuracy",
+      "ttv": "Time-to-Value"
+    },
+    "verdicts": {
+      "optimal": "Optimal — deploy-ready",
+      "strong": "Strong fit",
+      "balanced": "Balanced profile",
+      "frontier": "Frontier build"
+    },
+    "aria": {
+      "regionLabel": "AI Solution Forge interactive configurator",
+      "description": "An interactive configurator. Pick an industry, set a scale, and toggle priority drivers; activate Forge to generate a deployment blueprint with recommended services, metrics, and a verdict. Outputs are deterministic and illustrative, not live system data.",
+      "industryGroup": "Industry",
+      "priorityGroup": "Priority drivers",
+      "scale": "Deployment scale",
+      "result": "Forged deployment blueprint"
+    }
   }
 }

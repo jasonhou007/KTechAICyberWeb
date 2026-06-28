@@ -63,6 +63,11 @@
       <section class="neural-core-section">
         <NeuralCore />
       </section>
+
+      <!-- AI Solution Forge configurator (#180) -->
+      <section class="solution-forge-section">
+        <SolutionForge />
+      </section>
     </div>
   </div>
 </template>
@@ -73,6 +78,7 @@ import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
 import NeuralTerminal from '../components/NeuralTerminal.vue'
 import NeuralCore from '../components/NeuralCore.vue'
+import SolutionForge from '../components/SolutionForge.vue'
 
 const { t } = useLanguage()
 
@@ -452,6 +458,14 @@ h1 {
    .neural-terminal-section rhythm so the two interactive AI modules read
    as a coordinated pair on the homepage. */
 .neural-core-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 3rem;
+}
+
+/* AI Solution Forge configurator section (#180) — same rhythm as the AI Core
+   section so the three interactive modules stack consistently. */
+.solution-forge-section {
   position: relative;
   z-index: 1;
   margin-top: 3rem;

@@ -7,6 +7,33 @@
   "iteration": 18,
   "startedAt": "2026-06-28",
   "resumedAt": "2026-06-28",
-  "followUpIssues": [198, 199],
-  "notes": "16 official images extracted (all HTTP 200), 3 converted to webp, 11 award PNGs kept as-is. Logo/branded SVGs (n-img*, arrow99) skipped. Follow-ups #198 (icons), #199 (srcset) filed. STALLED-AND-RESUMED run: commits 1-5 done pre-stall, commit-6 (base-path resolution + E2E + evidence) finished on resume. Gates re-derived: vitest 2044/2044, 96.23% lines, build green (+1.75 kB entry), E2E 7/7 live-DOM, visual-AC + red-tests, i18n 880/880, 0 SEC001. Ready for PR."
+  "followUpIssues": [
+    198,
+    199
+  ],
+  "notes": "16 official images extracted (all HTTP 200), 3 converted to webp, 11 award PNGs kept as-is. Logo/branded SVGs (n-img*, arrow99) skipped. Follow-ups #198 (icons), #199 (srcset) filed. STALLED-AND-RESUMED run: commits 1-5 done pre-stall, commit-6 (base-path resolution + E2E + evidence) finished on resume. Gates re-derived: vitest 2044/2044, 96.23% lines, build green (+1.75 kB entry), E2E 7/7 live-DOM, visual-AC + red-tests, i18n 880/880, 0 SEC001. Ready for PR.",
+  "203": {
+    "title": "Self-Driving ambient demo background (always-on Agent pipeline loop)",
+    "status": "InProgress",
+    "stage": "security",
+    "github_state": "OPEN",
+    "branch": "autodev-203-self-driving",
+    "baseline": "origin/main @ c240c81 (v1.0)",
+    "started_at": "2026-06-28",
+    "flagship": true,
+    "commits_main_to_HEAD": 11,
+    "head_sha": "508321b",
+    "coverage": {
+      "statements": 94.31,
+      "branches": 86.16,
+      "functions": 94.79,
+      "lines": 95.46
+    },
+    "tests": "71 files / 2119 tests pass",
+    "build": "green",
+    "e2e": "3/3 pass (auto-play + reduced-motion + global) — verified in isolated worktree",
+    "revision_round": 1,
+    "revision_findings_resolved": 4,
+    "notes": "Gap1 glitch + Gap2 parallax + Gap3 CSS-source visual gate (red-proven) + Gap4 E2E executed (phase 2500->1500ms). Concurrent autodev-180 process shares working tree — verify in worktree."
+  }
 }

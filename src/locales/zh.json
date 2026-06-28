@@ -1588,5 +1588,57 @@
     "glitch": {
       "complete": "推理完成"
     }
+  },
+  "forge": {
+    "title": "AI 方案锻造台",
+    "subtitle": "配置你的需求 — 锻造可部署的方案蓝图",
+    "scaleLabel": "规模",
+    "forgeButton": "锻造方案",
+    "reroll": "重铸",
+    "reset": "重置",
+    "cta": "查看推荐服务",
+    "result": {
+      "title": "部署蓝图"
+    },
+    "industries": {
+      "finance": "金融",
+      "retail": "零售",
+      "health": "医疗",
+      "smartcity": "智慧城市",
+      "manufacturing": "制造业"
+    },
+    "priorities": {
+      "speed": "速度",
+      "security": "安全",
+      "compliance": "合规",
+      "automation": "自动化"
+    },
+    "services": {
+      "supply-chain-finance": "供应链金融",
+      "big-data-ai": "大数据与 AI",
+      "retail-lending": "零售信贷",
+      "cross-border-payment": "跨境支付",
+      "digital-asset-custody": "数字资产托管",
+      "stablecoin": "稳定币"
+    },
+    "metrics": {
+      "throughput": "吞吐量",
+      "accuracy": "精度",
+      "ttv": "落地周期"
+    },
+    "verdicts": {
+      "optimal": "最优 — 可直接部署",
+      "strong": "强适配",
+      "balanced": "均衡型",
+      "frontier": "前沿方案"
+    },
+    "aria": {
+      "regionLabel": "AI 方案锻造台交互配置器",
+      "description": "一个交互式配置器。选择行业、设置规模并切换优先级驱动；激活「锻造方案」以生成包含推荐服务、指标和判定的部署蓝图。输出结果为确定性且用于演示，并非实时系统数据。",
+      "industryGroup": "行业",
+      "priorityGroup": "优先级驱动",
+      "scale": "部署规模",
+      "result": "锻造的部署蓝图"
+    }
   }
 }
