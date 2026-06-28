@@ -1642,5 +1642,63 @@
       "scale": "Deployment scale",
       "result": "Forged deployment blueprint"
     }
+  },
+  "opsHud": {
+    "title": "Cyber Ops HUD",
+    "subtitle": "Real-time mission control",
+    "aria": {
+      "regionLabel": "Cyber Ops HUD interactive mission-control dashboard",
+      "description": "An interactive mission-control dashboard. Watch live uptime, latency and throughput gauges, filter the event feed by category, and investigate AI anomaly alerts. Pulse the network to spike all metrics. All data is simulated locally and illustrative, not live system data.",
+      "feedLive": "Live operations event feed",
+      "anomalyLive": "Anomaly alert",
+      "pulseButton": "Pulse the network: spike all metrics",
+      "investigateButton": "Investigate this anomaly: open the drill-down",
+      "dismissButton": "Dismiss this anomaly alert",
+      "closeDetail": "Close the widget detail panel"
+    },
+    "widgets": {
+      "gauge": {
+        "label": "Uptime",
+        "unit": "%"
+      },
+      "sparkline": {
+        "label": "Latency",
+        "labelAlt": "Throughput",
+        "unit": "ms",
+        "unitAlt": "req/s"
+      },
+      "requestflow": {
+        "label": "Request Flow"
+      },
+      "eventlog": {
+        "label": "Event Log"
+      }
+    },
+    "categories": {
+      "all": "All",
+      "ai": "AI",
+      "security": "Security",
+      "performance": "Performance"
+    },
+    "events": {
+      "ai_1": "AI model inference latency nominal",
+      "ai_2": "Anomaly detector retrained on new samples",
+      "sec_1": "Firewall rule sync complete",
+      "sec_2": "TLS certificate rotation scheduled",
+      "perf_1": "Throughput sustained above baseline",
+      "perf_2": "Cache hit ratio holding steady",
+      "pulse": "Network pulse fired — metrics spiking",
+      "anomaly": "AI anomaly detected — request pattern deviation"
+    },
+    "anomaly": {
+      "title": "AI Anomaly Detected",
+      "drilldown": "Investigating request-pattern deviation across the AI gateway. Correlating latency burst with model-inference queue depth.",
+      "dismissed": "Anomaly dismissed"
+    },
+    "pulse": {
+      "label": "Pulse the network",
+      "applied": "Pulse applied — spiking all metrics"
+    },
+    "reducedMotion": "Reduced-motion mode: static readouts, animations paused."
   }
 }

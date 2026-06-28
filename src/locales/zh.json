@@ -1642,5 +1642,63 @@
       "scale": "部署规模",
       "result": "锻造的部署蓝图"
     }
+  },
+  "opsHud": {
+    "title": "网络作战 HUD",
+    "subtitle": "实时任务控制台",
+    "aria": {
+      "regionLabel": "网络作战 HUD 交互式任务控制台",
+      "description": "一个交互式任务控制台。实时查看正常运行时间、延迟与吞吐量仪表,按类别过滤事件流,并调查 AI 异常告警。点击「脉冲网络」可让所有指标飙升。所有数据均为本地模拟,仅用于演示,并非实时系统数据。",
+      "feedLive": "实时运维事件流",
+      "anomalyLive": "异常告警",
+      "pulseButton": "脉冲网络:让所有指标飙升",
+      "investigateButton": "调查此异常:打开下钻视图",
+      "dismissButton": "关闭此异常告警",
+      "closeDetail": "关闭组件详情面板"
+    },
+    "widgets": {
+      "gauge": {
+        "label": "正常运行时间",
+        "unit": "%"
+      },
+      "sparkline": {
+        "label": "延迟",
+        "labelAlt": "吞吐量",
+        "unit": "ms",
+        "unitAlt": "req/s"
+      },
+      "requestflow": {
+        "label": "请求流"
+      },
+      "eventlog": {
+        "label": "事件日志"
+      }
+    },
+    "categories": {
+      "all": "全部",
+      "ai": "AI",
+      "security": "安全",
+      "performance": "性能"
+    },
+    "events": {
+      "ai_1": "AI 模型推理延迟正常",
+      "ai_2": "异常检测器已在新增样本上重训",
+      "sec_1": "防火墙规则同步完成",
+      "sec_2": "TLS 证书轮换已排程",
+      "perf_1": "吞吐量持续高于基线",
+      "perf_2": "缓存命中率保持稳定",
+      "pulse": "网络脉冲已触发 —— 指标飙升中",
+      "anomaly": "检测到 AI 异常 —— 请求模式偏离"
+    },
+    "anomaly": {
+      "title": "检测到 AI 异常",
+      "drilldown": "正在调查 AI 网关上的请求模式偏离。将延迟突增与模型推理队列深度进行关联分析。",
+      "dismissed": "异常已关闭"
+    },
+    "pulse": {
+      "label": "脉冲网络",
+      "applied": "脉冲已应用 —— 所有指标飙升中"
+    },
+    "reducedMotion": "减弱动效模式:静态读数,动画已暂停。"
   }
 }
