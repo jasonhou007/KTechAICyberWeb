@@ -234,7 +234,7 @@
 import { computed, watch, ref, nextTick, onUnmounted } from 'vue'
 import Scanlines from './Scanlines.vue'
 import { useLanguage } from '../composables/useLanguage'
-import { useSolutionForge } from '../composables/useSolutionForge.js'
+import { useSolutionForge, buildAssemblyTimeline } from '../composables/useSolutionForge.js'
 
 const { t } = useLanguage()
 
@@ -260,28 +260,15 @@ const {
 // --- assembly timeline (module fly-in source) -----------------------------
 // Derived off the current recommendation + the reduced-motion flag so the
 // stage collapses to a single step under reduced motion (AC + visual-AC gate).
+// Uses the composable's PURE buildAssemblyTimeline directly — calling it inside
+// computed() tracks the live recommendation reactively, so there is no need to
+// reimplement the builder here (Stage-6 review: was duplicated inline).
 const assemblyTimeline = computed(() => {
   if (assemblyState.value === 'idle') return []
   // During computing the composable has already seeded recommendation.value.
   const rec = recommendation.value
-  return buildAssemblySteps(rec, prefersReducedMotion.value)
+  return buildAssemblyTimeline(rec, { reducedMotion: prefersReducedMotion.value })
 })
-
-// Inline pure builder (keeps the template free of logic). Mirrors the
-// composable's exported buildAssemblyTimeline but is bound here reactively so
-// the module list tracks the live recommendation.
-function buildAssemblySteps(rec, reducedMotion) {
-  if (reducedMotion) return [{ label: 'Assembled' }]
-  const phases = ['Ingest', 'Analyze', 'Forge', 'Validate']
-  const steps = phases.map((label) => ({ label }))
-  if (rec && rec.serviceIds) {
-    steps[steps.length - 1] = {
-      label: phases[phases.length - 1],
-      serviceIds: rec.serviceIds.slice(),
-    }
-  }
-  return steps
-}
 
 // --- one-shot glitch flash on completion -----------------------------------
 // Fires a short neon flash when the forge lands (assemblyState -> 'done').
