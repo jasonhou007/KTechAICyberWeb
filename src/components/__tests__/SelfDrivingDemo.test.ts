@@ -69,6 +69,33 @@ function neverRAF() {
   vi.stubGlobal('cancelAnimationFrame', (() => {}) as any)
 }
 
+// Deferred setTimeout/clearTimeout: enqueues timer callbacks but never fires
+// them automatically, so the glitch-flash watcher's 600ms clear does NOT run
+// until the test explicitly flushes it. This avoids vi.useFakeTimers(), which
+// would clobber the deferredRAF() stubs above (fake timers replace rAF too).
+function deferredTimers() {
+  const queue: { cb: () => void; id: number }[] = []
+  let next = 1
+  const cleared = new Set<number>()
+  vi.stubGlobal('setTimeout', ((cb: () => void) => {
+    const id = next++
+    queue.push({ cb, id })
+    return id
+  }) as any)
+  vi.stubGlobal('clearTimeout', ((id: number) => {
+    cleared.add(id)
+  }) as any)
+  return {
+    // Fire the oldest non-cleared timer (FIFO).
+    flushOne() {
+      while (queue.length > 0 && cleared.has(queue[0].id)) queue.shift()
+      const entry = queue.shift()
+      if (entry) entry.cb()
+    },
+    pending: () => queue.filter((e) => !cleared.has(e.id)).length,
+  }
+}
+
 // happy-dom ships a real IntersectionObserver; replace it with a no-op so the
 // offscreen throttle doesn't fire spuriously during a unit mount.
 function noopIO() {
@@ -203,6 +230,59 @@ describe('SelfDrivingDemo', () => {
     expect(later).toBeTruthy()
     // The phase advanced past the initial intake.
     expect(later).not.toBe(first)
+    wrapper.unmount()
+  })
+
+  // -------------------------------------------------------------------------
+  // AC2 — GLITCH TRANSITION (one-shot, fired on PHASE CHANGE)
+  // -------------------------------------------------------------------------
+
+  it('AC2 glitch: fires the one-shot glitch overlay when the phase changes', async () => {
+    installMatchMedia({ reduce: false })
+    const raf = deferredRAF()
+    const timers = deferredTimers()
+
+    const wrapper = mount(SelfDrivingDemo, { attachTo: document.body })
+    await nextTick()
+    // On mount the glitch must NOT be showing.
+    expect(wrapper.find('[data-selfdriving-glitch]').exists()).toBe(false)
+
+    // Step frames to cross PHASE_DURATION_MS -> phase advances -> glitch fires.
+    let t = 0
+    for (let i = 0; i < 200; i++) {
+      t += 16
+      raf.step(t)
+    }
+    await nextTick()
+    await nextTick() // flush the async watcher's inner await nextTick()
+    // The glitch overlay is mounted during the ~600ms window after a change.
+    expect(wrapper.find('[data-selfdriving-glitch]').exists()).toBe(true)
+
+    // The watcher scheduled a setTimeout to clear the overlay. Flush it and the
+    // overlay must vanish (proves it is one-shot, not stuck on).
+    timers.flushOne()
+    await nextTick()
+    expect(wrapper.find('[data-selfdriving-glitch]').exists()).toBe(false)
+
+    wrapper.unmount()
+  })
+
+  it('AC2 glitch: NEVER fires under reduced motion (seizure-safety AC4)', async () => {
+    installMatchMedia({ reduce: true })
+    neverRAF()
+    const timers = deferredTimers()
+
+    const wrapper = mount(SelfDrivingDemo, { attachTo: document.body })
+    await nextTick()
+    // Static branch active, so the phase never changes and the glitch never fires.
+    expect(wrapper.find('[data-selfdriving-glitch]').exists()).toBe(false)
+    // Flushing all pending timers must still leave no glitch (nothing was armed).
+    while (timers.pending() > 0) {
+      timers.flushOne()
+      await nextTick()
+    }
+    expect(wrapper.find('[data-selfdriving-glitch]').exists()).toBe(false)
+
     wrapper.unmount()
   })
 })

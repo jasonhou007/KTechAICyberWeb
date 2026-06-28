@@ -21,11 +21,17 @@
  * (8 cards + a handful of feed/readout nodes ≈ 40 desktop, fewer on mobile
  * where the track stacks). Throttling/offscreen/handled in the composable.
  *
+ * AC2 visual richness: besides neon + scanlines (reused), this layer also ships
+ *   - GLITCH TRANSITIONS: a one-shot chromatic-aberration flash fired on every
+ *     PHASE CHANGE (not continuously). Phases advance every 2.5s and the flash
+ *     lasts ~0.6s, so the strobe rate is ~0.4Hz — far under the 3Hz seizure-
+ *     safety ceiling (AC4). Mirrors the NeuralCore one-shot glitch pattern.
+ *
  * Reuses the EXISTING cyber palette + Scanlines.vue — no new palette invented.
  *
  * @ticket #203
  */
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useAutoDemoLoop } from '../composables/useAutoDemoLoop'
 import Scanlines from './Scanlines.vue'
@@ -49,6 +55,33 @@ const rootEl = ref(null)
 onMounted(() => {
   // Point the composable's offscreen IntersectionObserver at our root.
   if (rootEl.value) observe(rootEl.value)
+})
+
+// --- AC2: GLITCH TRANSITION (one-shot, fired on PHASE CHANGE) ---------------
+// Mirrors NeuralCore.vue's glitchFlash: watch phaseId, flip a ref true, render
+// a chromatic-aberration overlay via v-if, clear it after GLITCH_DURATION_MS.
+// watch() without `immediate` only fires on an actual phaseId CHANGE (never on
+// mount), so every callback is a genuine INTAKE->TRIAGE->... transition and
+// deserves a flash. Never fires under reduced motion (AC4).
+const GLITCH_DURATION_MS = 600
+const glitchFlash = ref(false)
+let glitchTimer = null
+watch(phaseId, async () => {
+  if (isStatic.value) return // AC4 — no flash under reduced motion
+  glitchFlash.value = true
+  await nextTick()
+  if (glitchTimer) clearTimeout(glitchTimer)
+  glitchTimer = setTimeout(() => {
+    glitchFlash.value = false
+    glitchTimer = null
+  }, GLITCH_DURATION_MS)
+})
+
+onUnmounted(() => {
+  if (glitchTimer) {
+    clearTimeout(glitchTimer)
+    glitchTimer = null
+  }
 })
 
 // Feed reveal progress 0..1 within the current phase, drives StreamingCode.
@@ -116,6 +149,16 @@ const staticSummary = computed(() => t('selfDriving.readout.merged'))
         {{ staticSummary }}
       </p>
     </div>
+
+    <!-- AC2 GLITCH TRANSITION — one-shot chromatic-aberration flash fired on
+         every phase change (v-if glitchFlash). Auto-clears after 0.6s via the
+         watcher above; strobe rate ~0.4Hz, well under the 3Hz AC4 ceiling. -->
+    <div
+      v-if="glitchFlash"
+      class="self-driving-glitch"
+      aria-hidden="true"
+      data-selfdriving-glitch="true"
+    ></div>
   </section>
 </template>
 
@@ -164,6 +207,48 @@ const staticSummary = computed(() => t('selfDriving.readout.merged'))
   text-shadow: 0 0 6px var(--neon-green, #00ff88);
 }
 
+/* ---- AC2 GLITCH TRANSITION (one-shot, phase-change) -------------------
+ * Chromatic-aberration scan-tear using the existing cyber palette tokens
+ * (--magenta / --cyan). Fires via v-if on phase change; the 0.6s animation
+ * period keeps the strobe rate ~0.4Hz (<< 3Hz AC4 ceiling). */
+.self-driving-glitch {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 0, 170, 0.12) 0%,
+    transparent 20%,
+    transparent 80%,
+    rgba(0, 255, 255, 0.12) 100%
+  );
+  mix-blend-mode: screen;
+  animation: self-driving-glitch-tear 0.6s steps(2, end) forwards;
+}
+@keyframes self-driving-glitch-tear {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+    clip-path: inset(0 0 0 0);
+  }
+  20% {
+    opacity: 0.9;
+    transform: translateX(-3px);
+    clip-path: inset(20% 0 60% 0);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(4px);
+    clip-path: inset(55% 0 20% 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
 /* Mobile: shrink padding + drop opacity slightly so the track fits a narrow
    viewport (the track also stacks vertically below 768px). */
 @media (max-width: 768px) {
@@ -175,12 +260,18 @@ const staticSummary = computed(() => t('selfDriving.readout.merged'))
 }
 
 /* Reduced motion: kill every transition/animation on this layer; the static
-   summary + the (color-only) current-card highlight still convey the story. */
+   summary + the (color-only) current-card highlight still convey the story.
+   Defense-in-depth: the watcher also skips firing glitchFlash under reduced
+   motion, but this CSS locks the overlay's transform too (mirrors the
+   accessibility.css [data-parallax="on"] neutralizer pattern). */
 @media (prefers-reduced-motion: reduce) {
   .self-driving-demo,
   .self-driving-demo * {
     animation: none !important;
     transition: none !important;
+  }
+  .self-driving-glitch {
+    transform: none !important;
   }
 }
 </style>
