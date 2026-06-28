@@ -333,6 +333,46 @@ describe('useNeuralNet()', () => {
     expect(seen.size).toBeLessThanOrEqual(3)
   })
 
+  // --- rAF re-entrancy guard (security Medium tidy-up) ---------------------
+  it('runInference cancels an in-flight rAF frame when called re-entrantly', async () => {
+    mockMatchMedia({ '(prefers-reduced-motion: reduce)': false })
+    // rAF that does NOT auto-flush: it just schedules, so a second runInference
+    // call lands while the first frame is still pending.
+    const queue: FrameRequestCallback[] = []
+    let nextId = 1
+    const scheduled = new Map<number, FrameRequestCallback>()
+    let cancelCount = 0
+    window.requestAnimationFrame = ((cb: FrameRequestCallback) => {
+      const id = nextId++
+      scheduled.set(id, cb)
+      queue.push(cb)
+      return id
+    }) as any
+    window.cancelAnimationFrame = ((handle: number) => {
+      cancelCount++
+      scheduled.delete(handle)
+    }) as any
+
+    const { wrapper, getApi } = mountHost(false)
+    const { runInference } = getApi()
+
+    // First call schedules one frame.
+    runInference()
+    await nextTick()
+    expect(scheduled.size).toBe(1)
+
+    // Second call before the first frame fires: the guard must cancel the
+    // in-flight frame, so we never have two chains running at once.
+    runInference()
+    await nextTick()
+    expect(cancelCount).toBeGreaterThanOrEqual(1)
+    // After the re-entrant call, exactly one frame is still scheduled (the new
+    // chain's), not two.
+    expect(scheduled.size).toBe(1)
+
+    wrapper.unmount()
+  })
+
   // --- drag math -----------------------------------------------------------
 
   it('beginDrag/dragTo/endDrag move a node and synapse geometry tracks', async () => {

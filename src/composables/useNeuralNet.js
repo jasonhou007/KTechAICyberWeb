@@ -316,6 +316,14 @@ export function useNeuralNet(opts = {}) {
   }
 
   function runInference() {
+    // Re-entrancy guard: if a previous inference run still has a frame
+    // scheduled (e.g. the user double-clicks Run Inference, or runInference is
+    // called re-entrantly before the in-flight rAF fires), cancel the leaked
+    // frame first so we never have two rAF chains advancing pulses at once.
+    if (rafHandle !== null) {
+      window.cancelAnimationFrame(rafHandle)
+      rafHandle = null
+    }
     // Any interaction resets the idle timer.
     resetIdle()
     if (prefersReducedMotion.value) {
