@@ -273,8 +273,18 @@ test.describe.serial('Theme Toggle', { tag: ['@regression', '@theme'] }, () => {
     const themeToggle = page.locator('.theme-toggle');
     const htmlElement = page.locator('html');
 
+    // Vite `base` is `/KTechAICyberWeb/`, so absolute-path page.goto() must
+    // include the subpath or it resolves against the origin and 404s (a 404
+    // serves no SPA shell, so <html data-theme> is never set and the
+    // persistence assertion compares against null). #194: the previous
+    // version called page.goto('/news') / page.goto('/about') which 404'd —
+    // the test was asserting theme persistence against an empty error page,
+    // not the real app. This mirrors the BASE pattern already used by the
+    // `should work on all pages` test in this file (see line ~162).
+    const BASE = '/KTechAICyberWeb';
+
     // Start on homepage
-    await page.goto('/');
+    await page.goto(`${BASE}/`);
     await page.waitForLoadState('networkidle');
 
     // Toggle to light theme (or dark if already light)
@@ -291,12 +301,12 @@ test.describe.serial('Theme Toggle', { tag: ['@regression', '@theme'] }, () => {
     // change (theme is in localStorage via usePreferencesStore), not nav
     // mechanics (covered by Header unit tests). Use page.goto() to drive the
     // route change directly so the assertion stays decoupled from nav DOM.
-    await page.goto('/news');
+    await page.goto(`${BASE}/news`);
     await page.waitForLoadState('networkidle');
     expect(await htmlElement.getAttribute('data-theme')).toBe(changedTheme);
 
     // Navigate to the About page
-    await page.goto('/about');
+    await page.goto(`${BASE}/about`);
     await page.waitForLoadState('networkidle');
     expect(await htmlElement.getAttribute('data-theme')).toBe(changedTheme);
   });
