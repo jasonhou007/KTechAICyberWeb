@@ -119,5 +119,13 @@
     "reviewer_verdict": "REVISE-AND-RESUBMIT → must-fix (occlusion) addressed in rev 3 → re-verified visible",
     "auto_merge": false,
     "notes": "FLAGSHIP: paused for human review per user instruction (no auto-merge). Iter-19 occlusion blind spot caught by adversarial reviewer (global bg was fully hidden behind hero); fixed by pivoting to in-flow section + elementFromPoint E2E. origin/main drifted to 04c9917 mid-run; rebase before merge."
+  },
+  "182": {
+    "status": "InProgress",
+    "stage": "planning",
+    "title": "[CYBER] Cyber Ops HUD interactive dashboard",
+    "branch": "autodev-182-cyber-ops-hud",
+    "startedAt": "2026-06-29",
+    "iteration": 21
   }
 }
