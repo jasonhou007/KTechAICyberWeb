@@ -12,10 +12,37 @@
     199
   ],
   "notes": "16 official images extracted (all HTTP 200), 3 converted to webp, 11 award PNGs kept as-is. Logo/branded SVGs (n-img*, arrow99) skipped. Follow-ups #198 (icons), #199 (srcset) filed. STALLED-AND-RESUMED run: commits 1-5 done pre-stall, commit-6 (base-path resolution + E2E + evidence) finished on resume. Gates re-derived: vitest 2044/2044, 96.23% lines, build green (+1.75 kB entry), E2E 7/7 live-DOM, visual-AC + red-tests, i18n 880/880, 0 SEC001. Ready for PR.",
+  "180": {
+    "title": "[CYBER] Add interactive 'AI Solution Forge' configurator (personalized solution recommender)",
+    "status": "Done",
+    "stage": "archived",
+    "iteration": 19,
+    "github_state": "CLOSED",
+    "branch": "autodev-180-solution-forge (merged, branch deleted)",
+    "baseline": "origin/main @ c240c81",
+    "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/208",
+    "merge_sha": "04c9917",
+    "merge_method": "--merge (NOT squash; 13 commits preserved on main)",
+    "deploy_run": "https://github.com/jasonhou007/KTechAICyberWeb/actions/runs/28326474004",
+    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxDFO4 -> Done (98236657)",
+    "commits": ["dd020bf","074c12b","6392678","908d114","e99f1cd","7922211","2d74e05","7996def","652cae6","9163fd6","5a6bbb1","b294a62","b375717"],
+    "honest_results": {
+      "vitest": "71 files / 2115 tests pass (0 fail)",
+      "coverage": "Lines 95.89% (2526/2634), Branches 86.77% (1240/1429)",
+      "build": "vite build green; entry index-D_NAlQX-.js 142.70 kB / gzip 59.15 kB",
+      "i18n_parity": "en 944 = zh 944 (+36 forge keys each; base 908)",
+      "security": "0 Critical, 0 High, SEC001 clean",
+      "shipped_app": "SolutionForge mounted in Home.vue:69 + App.solution-forge-wiring.test.ts 4/4 pass",
+      "visual_ac": "SolutionForge.visual-ac.test.ts 5/5 — CSS-source red-test (comments stripped, keyframes declared+applied), red-test proven live"
+    },
+    "e2e_advisory": "Playwright E2E job red ONLY on firefox/webkit/Mobile Safari due to pre-existing browser-binary-missing infra debt (same 423-error signature on main baseline run 28323125865). solution-forge.spec.ts PASSES 7/7 on chromium + Mobile Chrome. Smoke + Mobile jobs GREEN on the PR. Failure-set diff vs main: EMPTY of real regressions.",
+    "stage6_verdict": "APPROVE (8.0/10). No must-fix. 3 should-fix addressed on autodev-180-review-followup: registry trail (this block), SUMMARY count sync (15/+2748 -> 17/+2835), buildAssemblyTimeline dedup.",
+    "completed_at": "2026-06-28T15:10:04Z"
+  },
   "203": {
     "title": "Self-Driving ambient demo background (always-on Agent pipeline loop)",
     "status": "InProgress",
-    "stage": "security",
+    "stage": "coding",
     "github_state": "OPEN",
     "branch": "autodev-203-self-driving",
     "baseline": "origin/main @ c240c81 (v1.0)",
@@ -32,8 +59,15 @@
     "tests": "71 files / 2119 tests pass",
     "build": "green",
     "e2e": "3/3 pass (auto-play + reduced-motion + global) — verified in isolated worktree",
-    "revision_round": 1,
+    "revision_round": 2,
     "revision_findings_resolved": 4,
-    "notes": "Gap1 glitch + Gap2 parallax + Gap3 CSS-source visual gate (red-proven) + Gap4 E2E executed (phase 2500->1500ms). Concurrent autodev-180 process shares working tree — verify in worktree."
+    "notes": "Gap1 glitch + Gap2 parallax + Gap3 CSS-source visual gate (red-proven) + Gap4 E2E executed (phase 2500->1500ms). Concurrent autodev-180 process shares working tree — verify in worktree.",
+    "security_verdict": "PASS (0 Critical, 0 High)",
+    "revision2_findings": [
+      "MEDIUM-1: Scanlines z-index 1000 paints above Header when globally mounted (visual/contrast)",
+      "MEDIUM-2: StatusReadout.phaseLine computed dead (never surfaced)",
+      "MEDIUM-3: streamingLines tautology (both branches return same array)",
+      "INFO-1/2: optional polish"
+    ]
   }
 }
