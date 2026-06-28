@@ -151,6 +151,7 @@
 
       <div
         class="neural-state neon-text"
+        data-test="neural-state"
         :data-state="inferenceState"
         aria-hidden="true"
       >
