@@ -1809,5 +1809,31 @@
       "value": "{value}%"
     },
     "settled": "已结算"
+  },
+  "selfDriving": {
+    "aria": {
+      "regionLabel": "自动驾驶 Agent 流水线 — 环境演示"
+    },
+    "phases": {
+      "intake": { "title": "议题接入", "status": "收到新建议题" },
+      "triage": { "title": "自动分流", "status": "已自动分类并分配" },
+      "planner": { "title": "规划器", "status": "计划已生成" },
+      "coder": { "title": "编码器", "status": "正在输出代码差异" },
+      "security": { "title": "安全审查", "status": "安全审查通过" },
+      "evaluator": { "title": "评估器", "status": "质量门禁通过" },
+      "merger": { "title": "合并器", "status": "PR 已开启" },
+      "resolved": { "title": "已解决", "status": "议题自动关闭" }
+    },
+    "readout": {
+      "merged": "PR #NNN 已合并 · 自动关闭",
+      "cycling": "循环 {n}",
+      "complete": "循环完成"
+    },
+    "streaming": {
+      "plannerLine": "规划器：正在分析需求…",
+      "coderLine": "编码器：+export function resolve() {",
+      "securityLine": "安全：未发现漏洞",
+      "evalLine": "评估器：8/8 验收标准已达成"
+    }
   }
 }
