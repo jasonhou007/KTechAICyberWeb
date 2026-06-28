@@ -1,7 +1,7 @@
 # #180 — AI Solution Forge configurator (IMPLEMENTATION SUMMARY)
 
 Branch: `autodev-180-solution-forge` (cut from `main` @ c240c81)
-Status: implemented + all gates green + iter-13 review revisions applied (12 commits: 7 feature + 5 review). Pushed to branch (NOT merged — coordinator handles PR/merge).
+Status: **MERGED** to main via PR #208 (`--merge`, merge commit `04c9917`). Issue #180 CLOSED, board card → Done, deploy green. 13 commits landed on main (7 feature + 5 review + 1 docs), each a single logical change; a Stage-6 review-followup branch (`autodev-180-review-followup`) addresses 3 honest-review items (registry trail, SUMMARY count sync, code dedup).
 
 ## What shipped
 
@@ -19,8 +19,11 @@ live system data.
 
 The initial SUMMARY draft miscounted as "9 files, +2370 lines"; it omitted the
 SUMMARY file itself. `git diff main..HEAD --stat | tail -1` at the original 7-commit
-head gave `10 files changed, 2480 insertions(+)`. (After the iter-13 review
-commits this is now 15 files / +2748 — see the "Review revisions" section.)
+head gave `10 files changed, 2480 insertions(+)`. After all review commits +
+REVIEW.md + the evidence-capture script + the registry update, the FINAL count at
+the merge commit `04c9917` (re-derived via `git diff --stat c240c81..04c9917`) is
+**17 files / +2835 insertions** (the prior "15 / +2748" figure was taken mid-review
+and never re-synced to the merge — corrected post Stage-6 review).
 
 | File | Change | Commit |
 |---|---|---|
@@ -123,7 +126,7 @@ feature work was functionally complete:
 | Visual-AC (CSS-source, iter-13 gate) | `SolutionForge.visual-ac.test.ts` reads the .vue source (comments stripped) and asserts each AC5 keyframe is DECLARED AND APPLIED — red-test proof: deleting `forge-arc-spin` `@keyframes` fails the arcs assertion ✓ |
 | Dead-reactive-state | every ref has a template/test consumer; `glitchFlash` bound to `.stage-flash` class; glitch-flash `setTimeout` now cleared on unmount ✓ |
 | Commit-message prose | commit SUBJECTS + BODIES contain no AI/agent/Claude mentions (the required `Co-Authored-By: Claude` trailer is exempt — it is a repo convention, not prose) |
-| Reduced-motion safe | single-beat glitch flash 800ms (<0.9s ceiling); belt-and-suspenders `.reduced-motion` class + `@media` both set `animation: none` ✓ |
+| Reduced-motion safe | Two distinct animations, both motion-safe. (1) `.forge-stage-flash` is a one-shot 800ms box-shadow pulse — a single beat, under the 0.9s ceiling, no strobing. (2) `.forge-glitch` is a 0.3s (~3.33Hz) infinite keyframe on `.glitch-text::before/::after`, but it is a `transform: translate(±2px)` text-tear (NOT a luminance flash), so the WCAG 2.3.1 photosensitive seizure threshold does not apply; it is scoped to the computing/done stage and fully killed by the belt-and-suspenders `.reduced-motion` class + `@media (prefers-reduced-motion: reduce)` (both set `animation: none`). The JS `forge()` additionally skips the rAF loop entirely under reduced motion. ✓ |
 
 ## AC-by-AC status
 
