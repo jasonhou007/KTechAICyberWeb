@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" ref="rootRef" :data-parallax="enabled ? 'on' : null">
     <!-- Animated background grid -->
     <div class="grid-bg"></div>
     <div class="grid-bg grid-bg-2"></div>
@@ -63,11 +63,23 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
+import { useParallax } from '../composables/useParallax'
 import NeuralTerminal from '../components/NeuralTerminal.vue'
 
 const { t } = useLanguage()
+
+// Root scope ref for the reduced-motion-safe mouse-move parallax (#177).
+const rootRef = ref(null)
+const { enabled } = useParallax({
+  rootRef,
+  layers: [
+    { selector: '.grid-bg', intensity: 12 },
+    { selector: '.grid-bg-2', intensity: 6 },
+    { selector: '.cyber-header', intensity: 20 },
+  ],
+})
 
 // Static card catalogs. Keys map to home.whatwedo.group.{group}.{key}.{title|description}.
 const blockchainCards = [
@@ -164,6 +176,20 @@ onMounted(() => {
 @keyframes pulse {
   0%, 100% { opacity: 0.5; transform: scale(1); }
   50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+/* Parallax (#177): additive perf hints. No existing rule is restyled — only
+   will-change and, for the hero layer only, a short eased transition. The grid
+   layers deliberately get NO transform transition because gridMove already
+   animates .grid-bg-2's transform and a transition would fight the keyframe. */
+.grid-bg,
+.grid-bg-2 {
+  will-change: transform;
+}
+
+.cyber-header {
+  will-change: transform;
+  transition: transform 0.15s ease-out;
 }
 
 h1 {

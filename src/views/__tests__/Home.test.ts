@@ -12,6 +12,8 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 import { createRouter, createMemoryHistory } from 'vue-router'
+import fs from 'node:fs'
+import path from 'node:path'
 import { useLanguage } from '../../composables/useLanguage.js'
 import Home from '../Home.vue'
 
@@ -271,6 +273,55 @@ describe('Home.vue', () => {
       expect(text).toContain('致力于成为中国—东盟地区领先的金融科技公司')
       expect(text).toContain('受监管的公共区块链')
       expect(text).toContain('了解更多')
+    })
+  })
+
+  // ============================================
+  // Parallax (AC #177) — visual gate. These source-level assertions make the
+  // test RED if the parallax CSS or the useParallax wiring is deleted. They
+  // complement the composable unit tests by pinning that Home actually opts in.
+  // ============================================
+  describe('Parallax (AC #177)', () => {
+    const homeSource = fs.readFileSync(
+      path.resolve(process.cwd(), 'src', 'views', 'Home.vue'),
+      'utf-8',
+    )
+
+    it('Home uses useParallax (parity with About)', () => {
+      expect(homeSource).toMatch(/from\s+['"]\.\.\/composables\/useParallax['"]/)
+      expect(homeSource).toMatch(/useParallax\s*\(/)
+    })
+
+    it('Home wires useParallax with the grid + hero layers', () => {
+      // The three Home parallax layers per the approved plan.
+      expect(homeSource).toContain('.grid-bg')
+      expect(homeSource).toContain('.grid-bg-2')
+      expect(homeSource).toContain('.cyber-header')
+      // Intensity numbers must be present (grid 12, overlay 6, hero 20).
+      expect(homeSource).toMatch(/intensity:\s*12/)
+      expect(homeSource).toMatch(/intensity:\s*6/)
+      expect(homeSource).toMatch(/intensity:\s*20/)
+    })
+
+    it('Home binds the enabled ref to the root (dead-reactive-state guard)', () => {
+      // rootRef on the root + enabled consumed via a data-attr binding.
+      expect(homeSource).toMatch(/ref=["']rootRef["']/)
+      expect(homeSource).toMatch(/data-parallax/)
+    })
+
+    it('Home parallax CSS source is present (will-change on grid/hero layers)', () => {
+      // Deleting the parallax-targeted will-change rule makes this RED.
+      expect(homeSource).toMatch(/will-change:\s*transform/)
+      // Hero layer must carry a transition (no keyframe conflict there).
+      expect(homeSource).toMatch(/\.cyber-header[^{]*\{[^}]*transition:\s*transform/s)
+    })
+
+    it('Home does NOT add a transform transition to .grid-bg-2 (keyframe conflict)', () => {
+      // The gridMove keyframe already drives .grid-bg-2's transform; a transition
+      // would fight it. Assert the scoped style keeps transition OUT of that rule.
+      const grid2Block = homeSource.match(/\.grid-bg-2\s*\{([^}]*)\}/)
+      expect(grid2Block).not.toBeNull()
+      expect(grid2Block![1]).not.toMatch(/transition:\s*transform/)
     })
   })
 })
