@@ -171,7 +171,6 @@ const {
   runCommand,
   autocomplete,
   navigateHistory,
-  clearOutput,
   open,
   close,
   toggle,
