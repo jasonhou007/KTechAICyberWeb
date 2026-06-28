@@ -48,6 +48,18 @@
         role="img"
         :aria-label="t('neural.aria.regionLabel')"
       >
+        <!-- Layer labels: one per layer (input / hidden / output), so the
+             network reads as labeled layers, not just dots + lines. -->
+        <text
+          v-for="layer in labeledLayers"
+          :key="'label-' + layer.index"
+          data-test="neural-layer-label"
+          class="neural-layer-label"
+          :x="layer.labelX"
+          :y="LABEL_Y"
+          text-anchor="middle"
+        >{{ layer.label }}</text>
+
         <!-- Synapses first so nodes render on top. -->
         <line
           v-for="s in synapses"
@@ -169,6 +181,9 @@ import { useNeuralNet } from '../composables/useNeuralNet.js'
 
 const { t } = useLanguage()
 
+// Y position of the layer labels (above the topmost node row, inside viewBox).
+const LABEL_Y = 12
+
 const {
   layers,
   nodes,
@@ -188,6 +203,16 @@ const {
 // Tracking the hovered/focused node id lets us mark its connected synapses
 // `highlighted` and render the tooltip. Any interaction resets the idle timer
 // via the composable.
+// Per-layer display labels (input / hidden / output), positioned at each
+// layer's x coordinate so the net reads as labeled layers (AC 1.1: >=3
+// labeled layers). labelX mirrors the composable's layout math.
+const labeledLayers = computed(() =>
+  layers.map((layer) => ({
+    index: layer.index,
+    label: t('neural.layers.' + layer.kind + '.label'),
+    labelX: ((layer.index + 1) / (layers.length + 1)) * 320,
+  })),
+)
 const hoveredNodeId = ref(null)
 const hoveredNode = computed(() =>
   hoveredNodeId.value ? nodes.value.find((n) => n.id === hoveredNodeId.value) : null,
@@ -372,6 +397,16 @@ watch(inferenceState, async (state) => {
   stroke: #00ffff;
   stroke-width: 1.8;
   filter: drop-shadow(0 0 4px #00ffff);
+}
+
+/* ---- layer labels -------------------------------------------------------- */
+.neural-layer-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 7px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  fill: #00ffff;
+  opacity: 0.75;
 }
 
 /* ---- nodes --------------------------------------------------------------- */

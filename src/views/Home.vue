@@ -58,6 +58,11 @@
       <section class="neural-terminal-section">
         <NeuralTerminal />
       </section>
+
+      <!-- AI Core neural-network visualizer (#179) -->
+      <section class="neural-core-section">
+        <NeuralCore />
+      </section>
     </div>
   </div>
 </template>
@@ -67,6 +72,7 @@ import { onMounted, ref } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
 import NeuralTerminal from '../components/NeuralTerminal.vue'
+import NeuralCore from '../components/NeuralCore.vue'
 
 const { t } = useLanguage()
 
@@ -437,6 +443,15 @@ h1 {
 
 /* Neural Terminal section */
 .neural-terminal-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 3rem;
+}
+
+/* AI Core neural-network visualizer section (#179) — mirrors the
+   .neural-terminal-section rhythm so the two interactive AI modules read
+   as a coordinated pair on the homepage. */
+.neural-core-section {
   position: relative;
   z-index: 1;
   margin-top: 3rem;
