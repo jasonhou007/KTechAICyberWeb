@@ -1700,5 +1700,76 @@
       "applied": "脉冲已应用 —— 所有指标飙升中"
     },
     "reducedMotion": "减弱动效模式:静态读数,动画已暂停。"
+  },
+  "packetRoute": {
+    "title": "数据包路由",
+    "subtitle": "将数据包从源头路由至目标",
+    "instructions": "旋转管道,连接从源头到目标的路径,然后发送。",
+    "howTo": {
+      "rotate": "点击管道,或用方向键移动光标后按空格旋转。",
+      "transmit": "按 T 键或发送按钮发射数据包。",
+      "hint": "按 H 键或提示按钮高亮一个正确管道。"
+    },
+    "tiles": {
+      "straight": "直通管道",
+      "elbow": "弯头管道",
+      "t": "三通管道",
+      "cross": "十字管道",
+      "empty": "空格",
+      "firewall": "防火墙障碍",
+      "source": "数据源",
+      "target": "数据目标"
+    },
+    "buttons": {
+      "transmit": "发送",
+      "reset": "重置",
+      "next": "下一关",
+      "replay": "重玩",
+      "hint": "提示"
+    },
+    "status": {
+      "idle": "等待路由",
+      "transmitting": "正在发送数据包",
+      "won": "数据传输完成",
+      "wonMeaning": "数据包已送达:路径完成。",
+      "lost": "链路中断",
+      "lostMeaning": "无连通路径:请旋转管道后重试。"
+    },
+    "aria": {
+      "regionLabel": "数据包路由赛博小游戏",
+      "liveRegion": "第 {level} 关:{moves} 步,用时 {seconds} 秒。{status}。",
+      "cursorPosition": "光标位于第 {row} 行,第 {column} 列。",
+      "transmitButton": "发送:沿路径发射数据包",
+      "resetButton": "重置:清空棋盘与计数",
+      "nextButton": "下一关:加载下一谜题",
+      "replayButton": "重玩:重启本关",
+      "hintButton": "提示:高亮一个正确管道",
+      "gridLabel": "数据包路由谜题网格",
+      "tileLabel": "{type},第 {row} 行第 {column} 列,旋转 {rotation}。",
+      "hintAnnounce": "提示:已高亮第 {row} 行第 {column} 列的管道。",
+      "winAnnounce": "数据传输完成。路径完成。",
+      "loseAnnounce": "链路中断。无连通路径。"
+    },
+    "levels": {
+      "l1": {
+        "name": "启动走廊",
+        "description": "一条直通走廊。"
+      },
+      "l2": {
+        "name": "弯道转角",
+        "description": "绕过防火墙转弯。"
+      },
+      "l3": {
+        "name": "枢纽网格",
+        "description": "在三通管道中导航。"
+      }
+    },
+    "scoring": {
+      "moves": "步数",
+      "time": "用时",
+      "best": "最佳",
+      "level": "关卡"
+    },
+    "reducedMotion": "已启用减弱动效:跳过数据包动画,立即显示结果。"
   }
 }
