@@ -240,6 +240,17 @@ describe('CyberImage.vue', () => {
       w.unmount()
     })
 
+    it('passes an empty src through unchanged (defensive guard, line 67)', () => {
+      // `src` is a required prop in normal use, but the resolver's empty-string
+      // guard must still hold if a caller ever passes '' (e.g. a binding that
+      // transiently resolves to empty). Covers the `if (!src) return src` branch.
+      const w = mount(CyberImage, {
+        props: { src: '', alt: 'x' },
+      })
+      expect(w.find('img').attributes('src')).toBe('')
+      w.unmount()
+    })
+
     it('rebases site-root-relative /images/... under a subpath BASE_URL', () => {
       // Simulate the production base /KTechAICyberWeb/.
       vi.stubEnv('BASE_URL', '/KTechAICyberWeb/')

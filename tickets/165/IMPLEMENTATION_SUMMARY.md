@@ -21,7 +21,7 @@ Vite `base` subpath so they render correctly under GitHub Pages.
 3. `e4f86a7` — `#165 Add localized alt text for About/News images (i18n en+zh)`
 4. `186a590` — `#165 Wire CyberImage into About view (hero, feature, awards)`
 5. `8557d60` — `#165 Wire CyberImage into News card + detail`
-6. (this commit) — `#165 Base-path image resolution + E2E live-DOM spec + evidence`
+6. `63462c4` — `#165 Base-path image resolution + E2E live-DOM spec + evidence`
 
 Commit 6 was the work-in-progress when the previous run stalled against an API
 rate limit; this resume finished it (base-path resolution + tests + E2E spec +
