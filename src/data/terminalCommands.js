@@ -67,6 +67,9 @@ export const terminalCommands = [
     i18nKey: 'terminal.commands.hackplanet.response',
     easterEgg: true,
     hidden: true,
+    // The AC/help copy reads "hack the planet"; accept the spaced phrase as an
+    // alias so typing it verbatim also triggers the easter egg (N-1).
+    aliases: ['hack the planet'],
   },
   {
     name: 'konami',
@@ -77,14 +80,21 @@ export const terminalCommands = [
 ]
 
 /**
- * Look up a command by canonical name (case-insensitive).
+ * Look up a command by canonical name OR alias (case-insensitive).
  * @param {string} name
  * @returns {object|undefined}
  */
 export function findCommand(name) {
   if (!name) return undefined
   const lower = String(name).toLowerCase()
-  return terminalCommands.find((cmd) => cmd.name.toLowerCase() === lower)
+  return terminalCommands.find((cmd) => {
+    if (cmd.name.toLowerCase() === lower) return true
+    // Allow alternate spellings / phrases (e.g. 'hack the planet' for hackplanet).
+    if (Array.isArray(cmd.aliases)) {
+      return cmd.aliases.some((a) => a.toLowerCase() === lower)
+    }
+    return false
+  })
 }
 
 /**

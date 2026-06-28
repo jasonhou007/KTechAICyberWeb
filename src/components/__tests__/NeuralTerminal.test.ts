@@ -285,6 +285,22 @@ describe('NeuralTerminal.vue (#161)', () => {
       // The prompt text + the typed command appear in the echo.
       expect(echoed[echoed.length - 1].text()).toContain('news')
     })
+
+    it("typing the spaced phrase 'hack the planet' triggers the hackplanet easter egg (N-1 alias)", async () => {
+      wrapper = mountTerminal()
+      await wrapper.find('[data-test="neural-launcher"]').trigger('click')
+      const input = wrapper.find('[data-test="neural-input"]')
+      await input.setValue('hack the planet')
+      await input.trigger('keydown', { key: 'Enter' })
+      await nextTick()
+      // It resolves to the hackplanet command (not the unknown-command error):
+      // the response is the hackplanet copy + the burst overlay fires.
+      const responses = wrapper.findAll('.terminal-response')
+      expect(responses.length).toBeGreaterThanOrEqual(1)
+      const last = responses[responses.length - 1]
+      expect(last.attributes('data-text').toLowerCase()).not.toContain('not found')
+      expect(wrapper.find('.terminal-burst').exists()).toBe(true)
+    })
   })
 
   // ============================================
