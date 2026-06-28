@@ -569,4 +569,97 @@ describe('About.vue', () => {
       expect(grid2Block![1]).not.toMatch(/transition:\s*transform/)
     })
   })
+
+  // ============================================
+  // About Images (AC #165) — live-DOM assertions that CyberImage is wired
+  // into the About view with the official-site imagery + localized alt text.
+  // Source-level guards turn RED if a figure is deleted or a raw key leaks.
+  // ============================================
+  describe('About Images (AC #165)', () => {
+    it('renders a hero figure wrapping a CyberImage', () => {
+      const heroFigure = wrapper.find('.about-hero figure.cyber-image')
+      expect(heroFigure.exists()).toBe(true)
+      expect(heroFigure.find('img').exists()).toBe(true)
+    })
+
+    it('renders the hero image with the official about-who-we-are asset', () => {
+      const heroImg = wrapper.find('.about-hero figure.cyber-image img')
+      expect(heroImg.exists()).toBe(true)
+      expect(heroImg.attributes('src')).toContain('about-who-we-are.webp')
+    })
+
+    it('renders the hero image with localized alt text (no raw key)', () => {
+      const heroImg = wrapper.find('.about-hero figure.cyber-image img')
+      const alt = heroImg.attributes('alt') || ''
+      // Real localized copy, not the raw dotted key.
+      expect(alt.length).toBeGreaterThan(0)
+      expect(alt).not.toMatch(/^about\./)
+    })
+
+    it('loads the hero image eagerly (above-the-fold)', () => {
+      const heroImg = wrapper.find('.about-hero figure.cyber-image img')
+      expect(heroImg.attributes('loading')).toBe('eager')
+    })
+
+    it('renders a who-we-are feature figure with the regional-fintech asset', () => {
+      const feature = wrapper.find('.who-we-are figure.cyber-image')
+      expect(feature.exists()).toBe(true)
+      expect(feature.find('img').attributes('src')).toContain('about-regional-fintech.webp')
+    })
+
+    it('renders an awards-strip with at least 3 award images inside CyberImage figures', () => {
+      const strip = wrapper.find('.awards-strip')
+      expect(strip.exists()).toBe(true)
+      const awardFigs = strip.findAll('figure.cyber-image')
+      expect(awardFigs.length).toBeGreaterThanOrEqual(3)
+      // Every award img has a non-empty alt resolving from i18n (no raw key)
+      awardFigs.forEach((fig) => {
+        const alt = fig.find('img').attributes('alt') || ''
+        expect(alt.length).toBeGreaterThan(0)
+        expect(alt).not.toMatch(/^about\./)
+      })
+    })
+
+    it('renders all award imgs inside .cyber-image figures (no bare <img>)', () => {
+      // Every image on the About page must be wrapped by CyberImage, never a
+      // stray bare <img>. This guards against partial wiring regressions.
+      const allImgs = wrapper.findAll('img')
+      expect(allImgs.length).toBeGreaterThan(0)
+      allImgs.forEach((img) => {
+        // Walk up to find an ancestor figure.cyber-image. Vue Test Utils does
+        // not expose parents() on a single element easily, so assert that the
+        // rendered html contains every src inside a cyber-image figure by
+        // checking the figure-wrapped img count equals the total img count.
+      })
+      const wrappedImgs = wrapper.findAll('figure.cyber-image img')
+      expect(wrappedImgs.length).toBe(allImgs.length)
+    })
+
+    it('renders a culture image with localized alt', () => {
+      const cultureImg = wrapper.find('figure.cyber-image img[alt*="culture" i], .vision-mission figure.cyber-image img')
+      // The culture figure lives in the vision-mission section.
+      const cultureFig = wrapper.find('.vision-mission figure.cyber-image')
+      expect(cultureFig.exists()).toBe(true)
+      const alt = cultureFig.find('img').attributes('alt') || ''
+      expect(alt.length).toBeGreaterThan(0)
+      expect(alt).not.toMatch(/^about\./)
+      // touch cultureImg var to satisfy no-unused-var without breaking logic
+      expect(cultureImg.exists()).toBe(true)
+    })
+
+    it('never leaks a raw about.* placeholder key into any img alt (regression guard)', () => {
+      const imgs = wrapper.findAll('img')
+      imgs.forEach((img) => {
+        const alt = img.attributes('alt') || ''
+        const rawKeyMatch = alt.match(/\babout\.[a-zA-Z][a-zA-Z0-9.]*/g)
+        expect(rawKeyMatch).toBeNull()
+      })
+    })
+
+    it('does not break the existing heading hierarchy when images are added', () => {
+      // Sanity: the image wiring must not introduce new headings.
+      expect(wrapper.findAll('h1')).toHaveLength(1)
+      expect(wrapper.findAll('h4')).toHaveLength(4)
+    })
+  })
 })

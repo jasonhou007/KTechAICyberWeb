@@ -11,6 +11,14 @@
           {{ t('about.pageTitle') }} <span class="accent">{{ t('about.pageTitleAccent') }}</span>
         </h1>
         <p class="page-subtitle">{{ t('about.pageSubtitle') }}</p>
+        <!-- Hero figure: official-site imagery, eager-loaded (above the fold) -->
+        <figure class="about-hero__figure">
+          <CyberImage
+            src="/images/about/about-who-we-are.webp"
+            :alt="t('about.hero.imageAlt')"
+            eager
+          />
+        </figure>
       </div>
     </section>
 
@@ -40,6 +48,13 @@
             <p>{{ t('about.whoWeAre.servicesList') }}</p>
           </div>
         </div>
+        <!-- Who-we-are feature figure: regional fintech illustration -->
+        <figure class="who-we-are__feature">
+          <CyberImage
+            src="/images/about/about-regional-fintech.webp"
+            :alt="t('about.whoWeAre.featureImageAlt')"
+          />
+        </figure>
       </div>
     </section>
 
@@ -72,6 +87,82 @@
             <div class="badge projects-badge">20+</div>
             <p>{{ t('about.achievements.projects') }}</p>
           </div>
+        </div>
+
+        <!-- Awards strip: official certificate / award images (AC #165) -->
+        <div class="awards-strip" role="list">
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-aaa-credit.png"
+            :alt="t('about.achievements.aaaAlt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-mnc-hq-2020.png"
+            :alt="t('about.achievements.mncAlt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-national-excellent-2020.png"
+            :alt="t('about.achievements.nationalAlt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-national-excellent-2021.png"
+            :alt="t('about.achievements.national2021Alt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-iso9001-quality.png"
+            :alt="t('about.achievements.iso9001Alt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-iso20000-itservice.png"
+            :alt="t('about.achievements.iso20000Alt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-iso27001-infosec.png"
+            :alt="t('about.achievements.iso27001Alt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-shenzhen-fintech-member.png"
+            :alt="t('about.achievements.shenzhenFintechAlt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-guangdong-fintech-member.png"
+            :alt="t('about.achievements.guangdongFintechAlt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-national-hightech.png"
+            :alt="t('about.achievements.hightechAlt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-shenzhen-innovative-sme.png"
+            :alt="t('about.achievements.innovativeSmeAlt')"
+          />
+          <CyberImage
+            class="award-item"
+            className="award-item"
+            src="/images/about/award-shenzhen-specialized-sme.png"
+            :alt="t('about.achievements.specializedSmeAlt')"
+          />
         </div>
       </div>
     </section>
@@ -111,6 +202,14 @@
             <h4>{{ t('about.culture.professional') }}</h4>
           </div>
         </div>
+
+        <!-- Culture image (AC #165) -->
+        <figure class="culture-feature">
+          <CyberImage
+            src="/images/about/culture-icon.png"
+            :alt="t('about.culture.imageAlt')"
+          />
+        </figure>
       </div>
     </section>
 
@@ -164,6 +263,7 @@
 import { ref } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
+import CyberImage from '../components/CyberImage.vue'
 
 const { t } = useLanguage()
 
@@ -555,6 +655,67 @@ const { enabled } = useParallax({
   color: #888;
   text-transform: uppercase;
   letter-spacing: 0.15em;
+}
+
+/* AC #165 — About imagery layout */
+.about-hero__figure {
+  margin: 2rem auto 0;
+  max-width: 720px;
+  width: 100%;
+}
+
+.about-hero__figure :deep(.cyber-image) {
+  width: 100%;
+}
+
+.who-we-are__feature {
+  margin: 3rem auto 0;
+  max-width: 720px;
+  width: 100%;
+}
+
+.who-we-are__feature :deep(.cyber-image) {
+  width: 100%;
+}
+
+/* Awards strip — responsive grid of certificate/award CyberImages */
+.awards-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.awards-strip .award-item,
+.awards-strip :deep(.award-item) {
+  margin: 0;
+}
+
+.culture-feature {
+  margin: 3rem auto 0;
+  max-width: 360px;
+  width: 100%;
+}
+
+.culture-feature :deep(.cyber-image) {
+  width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .awards-strip {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .about-hero__figure,
+  .who-we-are__feature {
+    max-width: 100%;
+  }
+
+  .culture-feature {
+    max-width: 240px;
+  }
 }
 
 /* Responsive */
