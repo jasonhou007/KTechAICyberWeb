@@ -425,17 +425,59 @@ describe('NeuralTerminal.vue (#161)', () => {
   })
 
   // ============================================
-  // Easter egg
+  // Easter egg — burst OVERLAY must render (not just an internal flag).
+  // Asserting the element proves the AC-promised "full-screen glitch/particle
+  // burst" is actually visible; the old test asserted `vm.burst === true`,
+  // which passed against a component that never rendered anything.
   // ============================================
   describe('easter egg burst', () => {
-    it("typing 'coffee' + Enter triggers the easter-egg burst flag", async () => {
+    it("typing 'coffee' + Enter renders the burst overlay element (.terminal-burst)", async () => {
+      wrapper = mountTerminal()
+      await wrapper.find('[data-test="neural-launcher"]').trigger('click')
+      expect(wrapper.find('.terminal-burst').exists()).toBe(false)
+      const input = wrapper.find('[data-test="neural-input"]')
+      await input.setValue('coffee')
+      await input.trigger('keydown', { key: 'Enter' })
+      await nextTick()
+      expect(wrapper.find('.terminal-burst').exists()).toBe(true)
+    })
+
+    it("typing 'sudo' + Enter also renders the burst overlay", async () => {
+      wrapper = mountTerminal()
+      await wrapper.find('[data-test="neural-launcher"]').trigger('click')
+      const input = wrapper.find('[data-test="neural-input"]')
+      await input.setValue('sudo')
+      await input.trigger('keydown', { key: 'Enter' })
+      await nextTick()
+      expect(wrapper.find('.terminal-burst').exists()).toBe(true)
+    })
+
+    it('the burst overlay DISAPPEARS after the reset window (fake timers)', async () => {
+      vi.useFakeTimers()
       wrapper = mountTerminal()
       await wrapper.find('[data-test="neural-launcher"]').trigger('click')
       const input = wrapper.find('[data-test="neural-input"]')
       await input.setValue('coffee')
       await input.trigger('keydown', { key: 'Enter' })
       await nextTick()
-      expect(wrapper.vm.burst).toBe(true)
+      expect(wrapper.find('.terminal-burst').exists()).toBe(true)
+      // The reset watcher clears burst after 1200ms.
+      vi.advanceTimersByTime(1300)
+      await nextTick()
+      expect(wrapper.find('.terminal-burst').exists()).toBe(false)
+    })
+
+    it('the easter-egg response text still prints alongside the burst', async () => {
+      wrapper = mountTerminal()
+      await wrapper.find('[data-test="neural-launcher"]').trigger('click')
+      const input = wrapper.find('[data-test="neural-input"]')
+      await input.setValue('coffee')
+      await input.trigger('keydown', { key: 'Enter' })
+      await nextTick()
+      const responses = wrapper.findAll('.terminal-response')
+      expect(responses.length).toBeGreaterThanOrEqual(1)
+      // The localized coffee response renders (data-text = authoritative copy).
+      expect(responses[responses.length - 1].attributes('data-text').length).toBeGreaterThan(0)
     })
   })
 })

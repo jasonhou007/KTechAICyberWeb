@@ -1,5 +1,19 @@
 <template>
   <div class="neural-terminal-root" data-test="neural-terminal">
+    <!-- Easter-egg burst overlay: a transient full-screen glitch/particle
+         burst fired when a hidden command runs (sudo/coffee/hackplanet/konami).
+         Purely decorative — aria-hidden so AT ignores it. Honors
+         prefers-reduced-motion by rendering a static (non-animated) flash. -->
+    <div
+      v-if="burst"
+      class="terminal-burst"
+      :class="{ 'reduced-motion': prefersReducedMotion }"
+      aria-hidden="true"
+    >
+      <span class="terminal-burst-scan"></span>
+      <span class="terminal-burst-particle" v-for="n in 12" :key="n"></span>
+    </div>
+
     <!-- Floating launcher: opens the console -->
     <button
       type="button"
@@ -833,6 +847,101 @@ onUnmounted(() => {
   .decode-anim::before,
   .decode-anim::after {
     animation: none;
+  }
+}
+
+/* ---- easter-egg burst overlay ---------------------------------------------*/
+/* Fixed full-screen flash + scanline tear + radiating particles, fired when a
+   hidden command runs. Animation auto-clears via the v-if (burst is reset after
+   1200ms). Under prefers-reduced-motion we drop the motion but keep a static
+   neon flash so the feedback is still perceivable. */
+.terminal-burst {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+  animation: terminal-burst-flash 0.9s ease-out forwards;
+}
+
+.terminal-burst-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 0, 255, 0.9),
+    rgba(0, 255, 255, 0.9),
+    transparent
+  );
+  box-shadow: 0 0 16px rgba(255, 0, 255, 0.8);
+  animation: terminal-burst-scan 0.7s linear;
+}
+
+.terminal-burst-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ffff;
+  box-shadow: 0 0 8px #00ffff;
+  --dx: 0px;
+  --dy: 0px;
+  animation: terminal-burst-particle 0.9s ease-out forwards;
+}
+/* Distribute the 12 particles radially via nth-child offsets. */
+.terminal-burst-particle:nth-child(2)  { --dx:  40vw; --dy: -30vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(3)  { --dx: -40vw; --dy: -20vh; }
+.terminal-burst-particle:nth-child(4)  { --dx:  30vw; --dy:  35vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(5)  { --dx: -35vw; --dy:  25vh; }
+.terminal-burst-particle:nth-child(6)  { --dx:  50vw; --dy:   5vh; background:#00ff88; box-shadow:0 0 8px #00ff88; }
+.terminal-burst-particle:nth-child(7)  { --dx: -50vw; --dy:  -5vh; }
+.terminal-burst-particle:nth-child(8)  { --dx:  10vw; --dy: -45vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(9)  { --dx: -10vw; --dy:  45vh; }
+.terminal-burst-particle:nth-child(10) { --dx:  45vw; --dy: -40vh; }
+.terminal-burst-particle:nth-child(11) { --dx: -45vw; --dy:  40vh; background:#00ff88; box-shadow:0 0 8px #00ff88; }
+.terminal-burst-particle:nth-child(12) { --dx:   0vw; --dy:  50vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(13) { --dx:   0vw; --dy: -50vh; }
+
+@keyframes terminal-burst-flash {
+  0%   { background: rgba(255, 0, 255, 0); }
+  10%  { background: rgba(255, 0, 255, 0.35); }
+  30%  { background: rgba(0, 255, 255, 0.25); }
+  100% { background: rgba(0, 0, 0, 0); }
+}
+
+@keyframes terminal-burst-scan {
+  0%   { top: 0; opacity: 1; }
+  100% { top: 100%; opacity: 0.2; }
+}
+
+@keyframes terminal-burst-particle {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); opacity: 0; }
+}
+
+/* Reduced motion: keep a perceivable static flash, drop all motion. */
+.terminal-burst.reduced-motion,
+.terminal-burst.reduced-motion .terminal-burst-scan,
+.terminal-burst.reduced-motion .terminal-burst-particle {
+  animation: none;
+}
+.terminal-burst.reduced-motion {
+  background: rgba(0, 255, 255, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-burst,
+  .terminal-burst-scan,
+  .terminal-burst-particle {
+    animation: none;
+  }
+  .terminal-burst {
+    background: rgba(0, 255, 255, 0.18);
   }
 }
 </style>
