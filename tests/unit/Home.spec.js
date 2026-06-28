@@ -34,12 +34,18 @@ describe('Home.vue', () => {
   }
 
   describe('Cyberpunk structure', () => {
-    it('renders the .home root, grid backgrounds, and cyber header', () => {
+    it('renders the .home root with exactly two layered grid backgrounds', () => {
       const w = mountHome()
       expect(w.find('.home').exists()).toBe(true)
-      expect(w.findAll('.grid-bg').length).toBeGreaterThanOrEqual(1)
+      expect(w.findAll('.grid-bg').length).toBe(2)
       expect(w.find('.grid-bg-2').exists()).toBe(true)
-      expect(w.find('header.cyber-header').exists()).toBe(true)
+    })
+
+    it('renders the cyber header as the radial-pulse carrier inside .home', () => {
+      const w = mountHome()
+      // The hero ::before radial-gradient pulse (About's pattern) needs a real
+      // structural carrier. header.cyber-header is that carrier.
+      expect(w.find('.home header.cyber-header').exists()).toBe(true)
     })
 
     it('keeps neon-text + glitch-text + data-text on the title', () => {
@@ -57,6 +63,24 @@ describe('Home.vue', () => {
       const cta = w.find('.cta')
       expect(cta.exists()).toBe(true)
       expect(cta.find('.cyber-button.neon-border').exists()).toBe(true)
+    })
+
+    it('wraps What We Do in a .section with .section-title.neon-text', () => {
+      const w = mountHome()
+      const whatwedo = w.find('.whatwedo')
+      expect(whatwedo.exists()).toBe(true)
+      expect(whatwedo.classes()).toContain('section')
+      expect(whatwedo.find('h2.section-title.neon-text').exists()).toBe(true)
+    })
+
+    it('applies cyber-card + hover-lift to all six solution cards', () => {
+      const w = mountHome()
+      const cards = w.findAll('.solution-card')
+      expect(cards.length).toBe(6)
+      cards.forEach((card) => {
+        expect(card.classes()).toContain('cyber-card')
+        expect(card.classes()).toContain('hover-lift')
+      })
     })
 
     it('uses a single semantic h1 and at least one section', () => {

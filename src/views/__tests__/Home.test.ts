@@ -55,9 +55,16 @@ describe('Home.vue', () => {
       expect(wrapper.find('.home').exists()).toBe(true)
     })
 
-    it('renders both animated grid backgrounds', () => {
-      expect(wrapper.find('.grid-bg').exists()).toBe(true)
+    it('renders exactly two layered grid backgrounds', () => {
+      expect(wrapper.findAll('.grid-bg').length).toBe(2)
       expect(wrapper.find('.grid-bg-2').exists()).toBe(true)
+    })
+
+    it('renders the cyber header as the radial-pulse carrier inside .home', () => {
+      // The hero ::before radial-gradient pulse (About's pattern) needs a real
+      // structural carrier element. header.cyber-header is that carrier.
+      const header = wrapper.find('.home header.cyber-header')
+      expect(header.exists()).toBe(true)
     })
 
     it('renders the cyber header with neon + glitch title', () => {
@@ -78,6 +85,23 @@ describe('Home.vue', () => {
 
     it('reuses .cyber-card for the hero intro', () => {
       expect(wrapper.find('.cyber-card').exists()).toBe(true)
+    })
+
+    it('wraps the What We Do block in a .section with .section-title.neon-text', () => {
+      const whatwedo = wrapper.find('.whatwedo')
+      expect(whatwedo.exists()).toBe(true)
+      expect(whatwedo.classes()).toContain('section')
+      const heading = whatwedo.find('h2.section-title.neon-text')
+      expect(heading.exists()).toBe(true)
+    })
+
+    it('applies cyber-card + hover-lift to every solution card', () => {
+      const cards = wrapper.findAll('.solution-card')
+      expect(cards.length).toBe(6)
+      cards.forEach((card) => {
+        expect(card.classes()).toContain('cyber-card')
+        expect(card.classes()).toContain('hover-lift')
+      })
     })
 
     it('keeps the neon-border CTA control', () => {

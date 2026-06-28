@@ -16,20 +16,20 @@
 
       <!-- Hero section -->
       <section class="hero">
-        <div class="cyber-card">
+        <div class="cyber-card hover-lift">
           <p class="hero-description">{{ t('home.hero.description') }}</p>
           <p class="hero-description2">{{ t('home.hero.description2') }}</p>
         </div>
       </section>
 
       <!-- What We Do -->
-      <section class="whatwedo">
-        <h2 class="section-heading">{{ t('home.whatwedo.heading') }}</h2>
+      <section class="whatwedo section">
+        <h2 class="section-title neon-text">{{ t('home.whatwedo.heading') }}</h2>
 
         <div class="solution-group">
           <h3 class="group-label">{{ t('home.whatwedo.group.blockchain.label') }}</h3>
           <div class="solution-grid">
-            <div class="solution-card" v-for="item in blockchainCards" :key="item.key">
+            <div class="solution-card cyber-card hover-lift" v-for="item in blockchainCards" :key="item.key">
               <h4>{{ t(`home.whatwedo.group.blockchain.${item.key}.title`) }}</h4>
               <p>{{ t(`home.whatwedo.group.blockchain.${item.key}.description`) }}</p>
             </div>
@@ -39,7 +39,7 @@
         <div class="solution-group">
           <h3 class="group-label">{{ t('home.whatwedo.group.banking.label') }}</h3>
           <div class="solution-grid">
-            <div class="solution-card" v-for="item in bankingCards" :key="item.key">
+            <div class="solution-card cyber-card hover-lift" v-for="item in bankingCards" :key="item.key">
               <h4>{{ t(`home.whatwedo.group.banking.${item.key}.title`) }}</h4>
               <p>{{ t(`home.whatwedo.group.banking.${item.key}.description`) }}</p>
             </div>
@@ -98,13 +98,13 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-  color: #00ff88;
-  font-family: 'Courier New', monospace;
+  color: #00ffcc;
+  font-family: 'Rajdhani', sans-serif;
   position: relative;
   overflow: hidden;
 }
 
-/* Animated grid background */
+/* Two-layer animated grid background (About's pattern: static base + animated overlay) */
 .grid-bg {
   position: absolute;
   top: 0;
@@ -112,57 +112,86 @@ onMounted(() => {
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .grid-bg-2 {
   background-image:
-    linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.01) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.01) 1px, transparent 1px);
   background-size: 100px 100px;
-  animation: gridMove 30s linear infinite reverse;
+  animation: gridMove 20s linear infinite;
 }
 
 @keyframes gridMove {
-  0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-  100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
 }
 
 .content {
   position: relative;
   z-index: 1;
   max-width: 1200px;
+  width: 100%;
   padding: 2rem;
   text-align: center;
 }
 
-/* Header styles */
+/* Header — radial-pulse carrier (About's hero ::before pattern) */
 .cyber-header {
-  margin-bottom: 4rem;
+  position: relative;
+  overflow: hidden;
+  padding: 4rem 1rem 3rem;
+  margin-bottom: 2rem;
+}
+
+.cyber-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 255, 204, 0.1) 0%, transparent 70%);
+  animation: pulse 10s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); }
 }
 
 h1 {
-  font-size: 5rem;
-  font-weight: bold;
+  position: relative;
+  z-index: 1;
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5rem;
+  letter-spacing: 0.2em;
   margin: 0;
+  color: #ffffff;
   text-shadow:
-    0 0 10px #00ff88,
-    0 0 20px #00ff88,
-    0 0 30px #00ff88,
-    0 0 40px #00ff88;
+    0 0 10px #00ffcc,
+    0 0 20px #00ffcc,
+    0 0 30px #00ffcc,
+    0 0 40px #00ffcc;
   animation: neonPulse 2s ease-in-out infinite alternate;
 }
 
 .subtitle {
+  position: relative;
+  z-index: 1;
+  font-family: 'Rajdhani', sans-serif;
   font-size: 1.5rem;
-  color: #00ffff;
+  color: #00ffcc;
   margin-top: 1rem;
-  text-shadow: 0 0 10px #00ffff;
+  text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
 }
 
 /* Glitch effect */
@@ -206,56 +235,85 @@ h1 {
 @keyframes neonPulse {
   from {
     text-shadow:
-      0 0 10px #00ff88,
-      0 0 20px #00ff88,
-      0 0 30px #00ff88;
+      0 0 10px #00ffcc,
+      0 0 20px #00ffcc,
+      0 0 30px #00ffcc;
   }
   to {
     text-shadow:
-      0 0 20px #00ff88,
-      0 0 30px #00ff88,
-      0 0 40px #00ff88,
-      0 0 50px #00ff88,
-      0 0 60px #00ff88;
+      0 0 20px #00ffcc,
+      0 0 30px #00ffcc,
+      0 0 40px #00ffcc,
+      0 0 50px #00ffcc,
+      0 0 60px #00ffcc;
   }
 }
 
-/* Card styles */
-.cyber-card {
-  background: rgba(26, 26, 46, 0.8);
-  border: 2px solid #00ff88;
-  border-radius: 10px;
-  padding: 3rem;
-  box-shadow:
-    0 0 20px rgba(0, 255, 136, 0.3),
-    inset 0 0 20px rgba(0, 255, 136, 0.1);
+/* Section rhythm (About's .section pattern) */
+.section {
+  position: relative;
+  padding: 4rem 5%;
+  z-index: 1;
+}
+
+.section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00ffcc;
+  letter-spacing: 0.15em;
+  text-align: center;
   margin-bottom: 3rem;
+  text-transform: uppercase;
+}
+
+/* Hero section */
+.hero {
+  position: relative;
+  z-index: 1;
+  padding: 2rem 5%;
+}
+
+/* Cyber Card (About's design language) */
+.cyber-card {
+  background: rgba(10, 15, 28, 0.8);
+  border: 1px solid rgba(0, 255, 204, 0.2);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.cyber-card:hover {
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+}
+
+.hover-lift:hover {
+  transform: translateY(-10px);
+}
+
+/* Hero card sizing */
+.hero .cyber-card {
+  padding: 3rem;
+  margin-bottom: 1rem;
   text-align: left;
 }
 
-.cyber-card p {
+.hero .cyber-card p {
+  font-family: 'Rajdhani', sans-serif;
   font-size: 1.2rem;
-  color: #00ffff;
+  color: #b8b8b8;
   line-height: 1.8;
   margin: 0 0 1rem 0;
 }
 
-.cyber-card p:last-child {
+.hero .cyber-card p:last-child {
   margin-bottom: 0;
 }
 
 /* What We Do */
 .whatwedo {
-  margin-bottom: 3rem;
   text-align: left;
-}
-
-.section-heading {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
-  color: #00ff88;
-  text-shadow: 0 0 10px #00ff88;
-  text-align: center;
 }
 
 .solution-group {
@@ -263,8 +321,9 @@ h1 {
 }
 
 .group-label {
-  color: #00ffff;
-  text-shadow: 0 0 10px #00ffff;
+  font-family: 'Orbitron', monospace;
+  color: #00ffcc;
+  text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
@@ -276,18 +335,9 @@ h1 {
 }
 
 .solution-card {
-  background: rgba(26, 26, 46, 0.6);
-  border: 1px solid #00ff88;
-  border-radius: 10px;
   padding: 2rem;
-  transition: all 0.3s ease;
   animation: fadeInUp 0.6s ease forwards;
   opacity: 0;
-}
-
-.solution-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
 }
 
 @keyframes fadeInUp {
@@ -302,27 +352,36 @@ h1 {
 }
 
 .solution-card h4 {
-  color: #00ff88;
+  font-family: 'Orbitron', monospace;
+  color: #00ffcc;
   margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .solution-card p {
-  color: #00ffff;
+  font-family: 'Rajdhani', sans-serif;
+  color: #b8b8b8;
   font-size: 0.95rem;
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-/* Button */
+/* CTA */
+.cta {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 2rem 5%;
+}
+
 .cyber-button {
   display: inline-block;
-  background: rgba(0, 255, 136, 0.1);
-  color: #00ff88;
-  border: 2px solid #00ff88;
+  background: rgba(0, 255, 204, 0.1);
+  color: #00ffcc;
+  border: 2px solid #00ffcc;
   padding: 1rem 3rem;
+  font-family: 'Orbitron', monospace;
   font-size: 1.2rem;
-  font-family: inherit;
   cursor: pointer;
   position: relative;
   overflow: hidden;
@@ -331,17 +390,17 @@ h1 {
 }
 
 .cyber-button:hover {
-  background: rgba(0, 255, 136, 0.2);
-  box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+  background: rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
   transform: scale(1.05);
 }
 
 /* Neon border effect */
 .neon-border {
   box-shadow:
-    0 0 5px #00ff88,
-    0 0 10px #00ff88,
-    inset 0 0 5px rgba(0, 255, 136, 0.2);
+    0 0 5px #00ffcc,
+    0 0 10px #00ffcc,
+    inset 0 0 5px rgba(0, 255, 204, 0.2);
 }
 
 .neon-text {
@@ -352,12 +411,15 @@ h1 {
 
 /* Neural Terminal section */
 .neural-terminal-section {
+  position: relative;
+  z-index: 1;
   margin-top: 3rem;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  h1 { font-size: 3rem; }
+  h1 { font-size: 2.5rem; }
   .solution-grid { grid-template-columns: 1fr; }
+  .section { padding: 3rem 5%; }
 }
 </style>
