@@ -27,14 +27,28 @@
       <span class="neural-launcher-label">{{ t('terminal.launcher.label') }}</span>
     </button>
 
+    <!-- Inert backdrop: covers the page behind the console when open so the
+         dialog is modal-strength (Tab/SR users can't escape into the page).
+         Clicking it closes the console. It sits below the console (z 9000) but
+         above the launcher, and only renders when open, so the launcher stays
+         clickable when closed. -->
+    <div
+      v-if="isOpen"
+      class="terminal-backdrop"
+      data-test="terminal-backdrop"
+      @click="close"
+    ></div>
+
     <!-- The console itself. Stays in the DOM (so it can animate in/out) and is
-         hidden via the .open class + aria-hidden when closed. -->
+         hidden via the .open class + aria-hidden when closed. role="dialog"
+         aria-modal="true" (AC 3.1) + the backdrop above make it modal. -->
     <section
       ref="consoleEl"
       class="neural-console"
       :class="{ open: isOpen, 'reduced-motion': prefersReducedMotion }"
       data-test="neural-console"
-      role="region"
+      role="dialog"
+      aria-modal="true"
       :aria-label="t('terminal.aria.consoleLabel')"
       :aria-hidden="!isOpen"
     >
@@ -543,6 +557,18 @@ onUnmounted(() => {
 
 .neural-launcher-label {
   color: #00ffff;
+}
+
+/* ---- inert backdrop (modal) -----------------------------------------------*/
+/* Renders only when the console is open. Sits above the page (and the launcher
+   once open) but below the console dialog itself, so Tab/SR focus can't escape
+   into the page behind. Clicking it closes the console. */
+.terminal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
 }
 
 /* ---- console shell --------------------------------------------------------*/

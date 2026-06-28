@@ -124,15 +124,49 @@ describe('NeuralTerminal.vue (#161)', () => {
   })
 
   // ============================================
-  // ARIA / region semantics
+  // ARIA / dialog semantics — AC 3.1: modal-strength focus trap. The console
+  // is role="dialog" aria-modal="true" with an inert backdrop so Tab/SR users
+  // cannot escape into the page behind it.
   // ============================================
-  describe('ARIA + region semantics', () => {
-    it('exposes the console as role="region" with a localized aria-label', async () => {
+  describe('ARIA + dialog semantics', () => {
+    it('exposes the console as role="dialog" with aria-modal="true" + a localized aria-label', async () => {
       wrapper = mountTerminal()
       await wrapper.find('[data-test="neural-launcher"]').trigger('click')
       const console = wrapper.find('[data-test="neural-console"]')
-      expect(console.attributes('role')).toBe('region')
+      expect(console.attributes('role')).toBe('dialog')
+      expect(console.attributes('aria-modal')).toBe('true')
       expect(console.attributes('aria-label')).toBeTruthy()
+    })
+
+    it('renders an inert backdrop behind the console when open (and not when closed)', async () => {
+      wrapper = mountTerminal()
+      // Closed: no backdrop.
+      expect(wrapper.find('.terminal-backdrop').exists()).toBe(false)
+      await wrapper.find('[data-test="neural-launcher"]').trigger('click')
+      // Open: backdrop present.
+      const backdrop = wrapper.find('.terminal-backdrop')
+      expect(backdrop.exists()).toBe(true)
+    })
+
+    it('Tab on the last focusable element wraps focus back to the first (modal focus cycle)', async () => {
+      wrapper = mountTerminal()
+      await wrapper.find('[data-test="neural-launcher"]').trigger('click')
+      await nextTick()
+      const console = wrapper.find('[data-test="neural-console"]').element as HTMLElement
+      const focusables = console.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      )
+      expect(focusables.length).toBeGreaterThanOrEqual(2)
+      const first = focusables[0] as HTMLElement
+      const last = focusables[focusables.length - 1] as HTMLElement
+      // Focus the last focusable, then Tab (no shift) — should wrap to first.
+      last.focus()
+      expect(document.activeElement).toBe(last)
+      document.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Tab', shiftKey: false, bubbles: true }),
+      )
+      await nextTick()
+      expect(document.activeElement).toBe(first)
     })
 
     it('the output container is an ARIA live region (aria-live="polite")', async () => {
