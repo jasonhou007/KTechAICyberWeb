@@ -95,6 +95,102 @@
         </div>
       </section>
 
+      <!-- Core Features Section -->
+      <section class="sc__core-features" aria-labelledby="sc-core-features-heading">
+        <h2 id="sc-core-features-heading" class="sc__section-title">
+          {{ t('services.stablecoin.coreFeatures.heading') }}
+        </h2>
+        <div class="sc__cards-grid">
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">🏦</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.coreFeatures.reserveOps.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.coreFeatures.reserveOps.description') }}
+            </p>
+          </article>
+
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">⚙️</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.coreFeatures.mintBurnRails.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.coreFeatures.mintBurnRails.description') }}
+            </p>
+          </article>
+
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">💱</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.coreFeatures.redemptionOps.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.coreFeatures.redemptionOps.description') }}
+            </p>
+          </article>
+
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">🧩</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.coreFeatures.programmability.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.coreFeatures.programmability.description') }}
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Tech Features Section -->
+      <section class="sc__tech-features" aria-labelledby="sc-tech-features-heading">
+        <h2 id="sc-tech-features-heading" class="sc__section-title">
+          {{ t('services.stablecoin.techFeatures.heading') }}
+        </h2>
+        <div class="sc__cards-grid">
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">🏛️</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.techFeatures.issuancePlatform.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.techFeatures.issuancePlatform.description') }}
+            </p>
+          </article>
+
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">🔍</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.techFeatures.complianceMonitoring.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.techFeatures.complianceMonitoring.description') }}
+            </p>
+          </article>
+
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">🌐</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.techFeatures.chainInterop.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.techFeatures.chainInterop.description') }}
+            </p>
+          </article>
+
+          <article class="sc__card">
+            <div class="sc__card-icon neon-border" aria-hidden="true">💼</div>
+            <h3 class="sc__card-title">
+              {{ t('services.stablecoin.techFeatures.treasuryOps.title') }}
+            </h3>
+            <p class="sc__card-description">
+              {{ t('services.stablecoin.techFeatures.treasuryOps.description') }}
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section class="sc__cta" aria-labelledby="sc-cta-heading">
         <h2 id="sc-cta-heading" class="sc__cta-title neon-text">
           {{ t('services.stablecoin.cta.heading') }}
@@ -364,7 +460,9 @@ onMounted(() => {
   text-align: center;
 }
 
-.sc__capabilities {
+.sc__capabilities,
+.sc__core-features,
+.sc__tech-features {
   margin-bottom: 4rem;
 }
 

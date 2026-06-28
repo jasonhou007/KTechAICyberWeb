@@ -102,6 +102,102 @@
         </div>
       </section>
 
+      <!-- Core Features Section -->
+      <section class="cbp__core-features" aria-labelledby="cbp-core-features-heading">
+        <h2 id="cbp-core-features-heading" class="cbp__section-title">
+          {{ t('services.crossBorderPayment.coreFeatures.heading') }}
+        </h2>
+        <div class="cbp__cards-grid">
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">🏦</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.coreFeatures.corridors.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.coreFeatures.corridors.description') }}
+            </p>
+          </article>
+
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">⚡</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.coreFeatures.settlement.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.coreFeatures.settlement.description') }}
+            </p>
+          </article>
+
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">💱</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.coreFeatures.fxOrchestration.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.coreFeatures.fxOrchestration.description') }}
+            </p>
+          </article>
+
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">📋</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.coreFeatures.valueAdded.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.coreFeatures.valueAdded.description') }}
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Tech Features Section -->
+      <section class="cbp__tech-features" aria-labelledby="cbp-tech-features-heading">
+        <h2 id="cbp-tech-features-heading" class="cbp__section-title">
+          {{ t('services.crossBorderPayment.techFeatures.heading') }}
+        </h2>
+        <div class="cbp__cards-grid">
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">🔌</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.techFeatures.apiLayer.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.techFeatures.apiLayer.description') }}
+            </p>
+          </article>
+
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">🛡️</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.techFeatures.complianceEngine.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.techFeatures.complianceEngine.description') }}
+            </p>
+          </article>
+
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">🔄</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.techFeatures.reconciliation.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.techFeatures.reconciliation.description') }}
+            </p>
+          </article>
+
+          <article class="cbp__card">
+            <div class="cbp__card-icon neon-border" aria-hidden="true">🏗️</div>
+            <h3 class="cbp__card-title">
+              {{ t('services.crossBorderPayment.techFeatures.integration.title') }}
+            </h3>
+            <p class="cbp__card-description">
+              {{ t('services.crossBorderPayment.techFeatures.integration.description') }}
+            </p>
+          </article>
+        </div>
+      </section>
+
       <!-- CTA Section -->
       <section class="cbp__cta" aria-labelledby="cbp-cta-heading">
         <h2 id="cbp-cta-heading" class="cbp__cta-title neon-text">
@@ -374,7 +470,9 @@ onMounted(() => {
   text-align: center;
 }
 
-.cbp__capabilities {
+.cbp__capabilities,
+.cbp__core-features,
+.cbp__tech-features {
   margin-bottom: 4rem;
 }
 

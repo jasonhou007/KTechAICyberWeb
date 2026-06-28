@@ -75,6 +75,14 @@ describe('ServiceStablecoin.vue', () => {
       expect(wrapper.find('.sc__capabilities').exists()).toBe(true)
     })
 
+    it('renders the core features section', () => {
+      expect(wrapper.find('.sc__core-features').exists()).toBe(true)
+    })
+
+    it('renders the tech features section', () => {
+      expect(wrapper.find('.sc__tech-features').exists()).toBe(true)
+    })
+
     it('renders the CTA section with a router-link to /contact', () => {
       const cta = wrapper.find('.sc__cta')
       expect(cta.exists()).toBe(true)
@@ -110,6 +118,26 @@ describe('ServiceStablecoin.vue', () => {
     it('renders exactly three capability cards', () => {
       const cards = wrapper.findAll('.sc__capabilities .sc__card')
       expect(cards).toHaveLength(3)
+    })
+
+    it('renders the core features heading via t()', () => {
+      expect(wrapper.text()).toContain(
+        (wrapper.vm as any).t('services.stablecoin.coreFeatures.heading'),
+      )
+    })
+
+    it('renders exactly four core feature cards', () => {
+      expect(wrapper.findAll('.sc__core-features .sc__card')).toHaveLength(4)
+    })
+
+    it('renders the tech features heading via t()', () => {
+      expect(wrapper.text()).toContain(
+        (wrapper.vm as any).t('services.stablecoin.techFeatures.heading'),
+      )
+    })
+
+    it('renders exactly four tech feature cards', () => {
+      expect(wrapper.findAll('.sc__tech-features .sc__card')).toHaveLength(4)
     })
 
     it('renders the CTA button label via t()', () => {

@@ -89,6 +89,14 @@ describe('ServiceCrossBorderPayment.vue', () => {
       expect(wrapper.find('.cbp__capabilities').exists()).toBe(true)
     })
 
+    it('renders the core features section', () => {
+      expect(wrapper.find('.cbp__core-features').exists()).toBe(true)
+    })
+
+    it('renders the tech features section', () => {
+      expect(wrapper.find('.cbp__tech-features').exists()).toBe(true)
+    })
+
     it('renders the CTA section with a router-link to /contact', () => {
       const cta = wrapper.find('.cbp__cta')
       expect(cta.exists()).toBe(true)
@@ -127,6 +135,26 @@ describe('ServiceCrossBorderPayment.vue', () => {
     it('renders exactly three capability cards', () => {
       const cards = wrapper.findAll('.cbp__capabilities .cbp__card')
       expect(cards).toHaveLength(3)
+    })
+
+    it('renders the core features heading via t()', () => {
+      expect(wrapper.text()).toContain(
+        (wrapper.vm as any).t('services.crossBorderPayment.coreFeatures.heading'),
+      )
+    })
+
+    it('renders exactly four core feature cards', () => {
+      expect(wrapper.findAll('.cbp__core-features .cbp__card')).toHaveLength(4)
+    })
+
+    it('renders the tech features heading via t()', () => {
+      expect(wrapper.text()).toContain(
+        (wrapper.vm as any).t('services.crossBorderPayment.techFeatures.heading'),
+      )
+    })
+
+    it('renders exactly four tech feature cards', () => {
+      expect(wrapper.findAll('.cbp__tech-features .cbp__card')).toHaveLength(4)
     })
 
     it('renders the CTA button label via t()', () => {

@@ -759,6 +759,44 @@
           "description": "Sanctions screening, transaction monitoring, and travel-rule messaging integrated into the payment flow, with full audit trails for every leg of the journey."
         }
       },
+      "coreFeatures": {
+        "heading": "Core Features",
+        "corridors": {
+          "title": "Multi-Currency Corridors",
+          "description": "Pre-built payment corridors across major remittance and trade lanes, covering inbound and outbound flows with locally optimized settlement paths."
+        },
+        "settlement": {
+          "title": "Fast Settlement",
+          "description": "Near real-time settlement across connected rails, reducing beneficiary wait times from days to minutes on supported corridors."
+        },
+        "fxOrchestration": {
+          "title": "FX Orchestration",
+          "description": "Centralized FX management with live rate sourcing, configurable spreads, and automated hedging handoffs to treasury for exposure control."
+        },
+        "valueAdded": {
+          "title": "Value-Added Services",
+          "description": "Remittance information, purpose-of-payment validation, and beneficiary verification layered onto every payment for transparency and reconciliation."
+        }
+      },
+      "techFeatures": {
+        "heading": "Technology Features",
+        "apiLayer": {
+          "title": "Unified API Layer",
+          "description": "A single REST and webhook API that abstracts SWIFT, RTP networks, stablecoin rails, and correspondent banks behind consistent payment objects."
+        },
+        "complianceEngine": {
+          "title": "Compliance Engine",
+          "description": "Embedded sanctions screening, transaction monitoring, and travel-rule messaging that execute inside the payment flow with full audit trails."
+        },
+        "reconciliation": {
+          "title": "Reconciliation",
+          "description": "Daily reconciliation with independent attestation, matching ledger entries against rail confirmations and on-chain settlements end to end."
+        },
+        "integration": {
+          "title": "Core-Banking Integration",
+          "description": "Pre-built connectors for core banking and treasury systems, with event-driven webhooks that plug cross-border flows into existing back offices."
+        }
+      },
       "cta": {
         "heading": "Modernize Your Cross-Border Payments",
         "description": "Ready to consolidate your cross-border payment rails onto one compliant platform? Let's design your corridor roadmap together.",
@@ -792,6 +830,44 @@
           "description": "Native on-chain settlement with automated proof-of-reserves, NAV reporting, and audit exports for fund administrators and regulators."
         }
       },
+      "coreFeatures": {
+        "heading": "Core Features",
+        "walletArchitecture": {
+          "title": "Wallet Architecture",
+          "description": "Hierarchical wallet structures with segregated warm and cold tiers, designed to balance day-to-day operational access with hardened long-term storage."
+        },
+        "keyGovernance": {
+          "title": "Key Governance",
+          "description": "Policy-driven approval workflows with quorum controls, role separation, and full audit trails over every signing and key-rotation event."
+        },
+        "settlementReporting": {
+          "title": "Settlement & Reporting",
+          "description": "Native on-chain settlement paired with automated NAV, proof-of-reserves, and audit exports that keep fund administrators and regulators in sync."
+        },
+        "assetSupport": {
+          "title": "Asset Support",
+          "description": "Custody for major digital assets across multiple chains, with structured onboarding for new tokens as institutional demand and compliance allow."
+        }
+      },
+      "techFeatures": {
+        "heading": "Technology Features",
+        "mpcStack": {
+          "title": "MPC Stack",
+          "description": "Multi-party-computation threshold signatures across hardware-backed nodes that eliminate single points of key compromise while keeping signing latency low."
+        },
+        "policyEngine": {
+          "title": "Policy Engine",
+          "description": "A configurable policy engine enforcing transaction limits, allowlists, and multi-party approvals before any signing request is authorized."
+        },
+        "integrations": {
+          "title": "Integrations",
+          "description": "Connectors for trading venues, OTC desks, and fund-administration platforms so custodied assets move smoothly across institutional workflows."
+        },
+        "observability": {
+          "title": "Observability",
+          "description": "End-to-end transaction and key-event logging with tamper-evident audit trails, enabling investigation, reconciliation, and regulatory reporting."
+        }
+      },
       "cta": {
         "heading": "Custody Digital Assets With Confidence",
         "description": "Ready to launch an institutional digital-asset custody program? Let's design your governance and key-management architecture together.",
@@ -823,6 +899,44 @@
         "c3": {
           "title": "On-Chain Programmability",
           "description": "Multi-chain issuance, smart-contract-based compliance controls, and composable payment rails that plug stablecoin liquidity into wallets, exchanges, and merchant networks."
+        }
+      },
+      "coreFeatures": {
+        "heading": "Core Features",
+        "reserveOps": {
+          "title": "Reserve Operations",
+          "description": "Segregated reserve custody with daily reconciliation and independent attestation, keeping every token in circulation backed by high-quality liquid assets."
+        },
+        "mintBurnRails": {
+          "title": "Mint & Burn Rails",
+          "description": "Policy-driven mint and burn controls anchored to KYC-verified accounts, with transparent on-chain records of every supply change."
+        },
+        "redemptionOps": {
+          "title": "Redemption Operations",
+          "description": "On-demand redemption rails that return fiat to verified holders, with banking-rail integration and clear redemption windows."
+        },
+        "programmability": {
+          "title": "Programmability",
+          "description": "Smart-contract-based compliance controls and composable payment primitives that embed policy directly into stablecoin money movement."
+        }
+      },
+      "techFeatures": {
+        "heading": "Technology Features",
+        "issuancePlatform": {
+          "title": "Issuance Platform",
+          "description": "A managed issuance platform covering mint/burn orchestration, reserve accounting, and operator console for licensed stablecoin issuers."
+        },
+        "complianceMonitoring": {
+          "title": "Compliance Monitoring",
+          "description": "Continuous on-chain monitoring for sanctioned addresses, freeze/seize controls, and travel-rule capture aligned to jurisdictional requirements."
+        },
+        "chainInterop": {
+          "title": "Chain Interoperability",
+          "description": "Native bridging across supported chains with consistent identity and compliance state, so stablecoin liquidity moves without policy gaps."
+        },
+        "treasuryOps": {
+          "title": "Treasury Operations",
+          "description": "Reserve and treasury tooling with automated reconciliation, liquidity forecasting, and audit exports for monetary-authority reporting."
         }
       },
       "cta": {

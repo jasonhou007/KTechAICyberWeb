@@ -75,6 +75,14 @@ describe('ServiceDigitalAssetCustody.vue', () => {
       expect(wrapper.find('.dac__capabilities').exists()).toBe(true)
     })
 
+    it('renders the core features section', () => {
+      expect(wrapper.find('.dac__core-features').exists()).toBe(true)
+    })
+
+    it('renders the tech features section', () => {
+      expect(wrapper.find('.dac__tech-features').exists()).toBe(true)
+    })
+
     it('renders the CTA section with a router-link to /contact', () => {
       const cta = wrapper.find('.dac__cta')
       expect(cta.exists()).toBe(true)
@@ -110,6 +118,26 @@ describe('ServiceDigitalAssetCustody.vue', () => {
     it('renders exactly three capability cards', () => {
       const cards = wrapper.findAll('.dac__capabilities .dac__card')
       expect(cards).toHaveLength(3)
+    })
+
+    it('renders the core features heading via t()', () => {
+      expect(wrapper.text()).toContain(
+        (wrapper.vm as any).t('services.digitalAssetCustody.coreFeatures.heading'),
+      )
+    })
+
+    it('renders exactly four core feature cards', () => {
+      expect(wrapper.findAll('.dac__core-features .dac__card')).toHaveLength(4)
+    })
+
+    it('renders the tech features heading via t()', () => {
+      expect(wrapper.text()).toContain(
+        (wrapper.vm as any).t('services.digitalAssetCustody.techFeatures.heading'),
+      )
+    })
+
+    it('renders exactly four tech feature cards', () => {
+      expect(wrapper.findAll('.dac__tech-features .dac__card')).toHaveLength(4)
     })
 
     it('renders the CTA button label via t()', () => {

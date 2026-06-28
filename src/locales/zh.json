@@ -759,6 +759,44 @@
           "description": "将制裁筛查、交易监控与 Travel Rule 报文整合进支付流程,为每一跳提供完整审计轨迹。"
         }
       },
+      "coreFeatures": {
+        "heading": "核心功能",
+        "corridors": {
+          "title": "多币种通道",
+          "description": "覆盖主要汇款与贸易通道的预置支付通道,支持本地化清算路径的跨境双向资金流转。"
+        },
+        "settlement": {
+          "title": "快速清算",
+          "description": "在已连接的通道上实现近实时清算,将收款人到账等待时间从数天缩短至数分钟。"
+        },
+        "fxOrchestration": {
+          "title": "外汇编排",
+          "description": "集中化的外汇管理,结合实时报价获取、可配置点差与对资金部的自动对冲移交,实现敞口管控。"
+        },
+        "valueAdded": {
+          "title": "增值服务",
+          "description": "为每一笔支付叠加汇款附言、付款用途校验与收款人核验,提升透明度与对账效率。"
+        }
+      },
+      "techFeatures": {
+        "heading": "技术特性",
+        "apiLayer": {
+          "title": "统一 API 层",
+          "description": "通过单一 REST 与 Webhook API,以一致的支付对象抽象 SWIFT、实时支付网络、稳定币通道与代理银行。"
+        },
+        "complianceEngine": {
+          "title": "合规引擎",
+          "description": "将制裁筛查、交易监控与 Travel Rule 报文嵌入支付流程内执行,并保留完整审计轨迹。"
+        },
+        "reconciliation": {
+          "title": "对账",
+          "description": "每日对账与独立审计,将账本条目与通道确认及链上清算结果进行端到端匹配。"
+        },
+        "integration": {
+          "title": "核心银行集成",
+          "description": "面向核心银行与资金系统的预置连接器,以事件驱动 Webhook 将跨境资金流接入既有后台。"
+        }
+      },
       "cta": {
         "heading": "升级您的跨境支付能力",
         "description": "准备将跨境支付通道整合到统一合规平台上?让我们一起规划您的通道路线图。",
@@ -792,6 +830,44 @@
           "description": "原生链上清算,自动化的储备金证明、NAV 报告与审计导出,面向基金行政管理方与监管机构。"
         }
       },
+      "coreFeatures": {
+        "heading": "核心功能",
+        "walletArchitecture": {
+          "title": "钱包架构",
+          "description": "分层钱包结构,隔离的热钱包与冷钱包层级,兼顾日常运营访问与强化的长期存储。"
+        },
+        "keyGovernance": {
+          "title": "密钥治理",
+          "description": "策略驱动的审批流程,具备法定人数控制、角色分离,并对每一次签名与密钥轮换保留完整审计轨迹。"
+        },
+        "settlementReporting": {
+          "title": "清算与报告",
+          "description": "原生链上清算,配合自动化的 NAV、储备金证明与审计导出,使基金行政管理方与监管机构保持同步。"
+        },
+        "assetSupport": {
+          "title": "资产支持",
+          "description": "跨多条链托管主流数字资产,并在机构需求与合规允许时按结构化流程接入新代币。"
+        }
+      },
+      "techFeatures": {
+        "heading": "技术特性",
+        "mpcStack": {
+          "title": "MPC 技术栈",
+          "description": "跨硬件支撑节点的多方计算门限签名,消除单点密钥泄露风险,同时保持低签名延迟。"
+        },
+        "policyEngine": {
+          "title": "策略引擎",
+          "description": "可配置的策略引擎,在任一签名请求获得授权前强制执行交易限额、白名单与多方审批。"
+        },
+        "integrations": {
+          "title": "集成",
+          "description": "面向交易所、场外交易台与基金行政管理平台的连接器,使托管资产在机构工作流间顺畅流转。"
+        },
+        "observability": {
+          "title": "可观测性",
+          "description": "端到端的交易与密钥事件日志,具备防篡改审计轨迹,支持调查、对账与监管报告。"
+        }
+      },
       "cta": {
         "heading": "安心托管数字资产",
         "description": "准备启动机构级数字资产托管计划?让我们一起设计治理与密钥管理架构。",
@@ -823,6 +899,44 @@
         "c3": {
           "title": "链上可编程性",
           "description": "多链发行、基于智能合约的合规控制,以及可组合的支付通道,将稳定币流动性接入钱包、交易所与商户网络。"
+        }
+      },
+      "coreFeatures": {
+        "heading": "核心功能",
+        "reserveOps": {
+          "title": "储备运营",
+          "description": "隔离的储备托管,每日对账与独立审计,确保每一枚流通代币均由优质流动性资产足额支撑。"
+        },
+        "mintBurnRails": {
+          "title": "铸造与销毁通道",
+          "description": "以 KYC 实名为锚的策略驱动铸造与销毁控制,每一次供应量变动均保留透明的链上记录。"
+        },
+        "redemptionOps": {
+          "title": "赎回运营",
+          "description": "面向已核验持有人的按需赎回通道,具备银行通道集成与清晰的赎回窗口。"
+        },
+        "programmability": {
+          "title": "可编程性",
+          "description": "基于智能合约的合规控制与可组合支付原语,将策略直接嵌入稳定币资金流动之中。"
+        }
+      },
+      "techFeatures": {
+        "heading": "技术特性",
+        "issuancePlatform": {
+          "title": "发行平台",
+          "description": "托管式发行平台,覆盖铸造/销毁编排、储备记账与面向持牌稳定币发行方的运营控制台。"
+        },
+        "complianceMonitoring": {
+          "title": "合规监控",
+          "description": "针对受制裁地址的持续链上监控、冻结/扣押控制,以及符合司法管辖要求的 Travel Rule 采集。"
+        },
+        "chainInterop": {
+          "title": "跨链互操作",
+          "description": "在已支持的链之间原生桥接,保持一致的身份与合规状态,使稳定币流动性无策略缺口地流转。"
+        },
+        "treasuryOps": {
+          "title": "资金运营",
+          "description": "储备与资金管理工具,具备自动化对账、流动性预测与面向货币当局报告的审计导出。"
         }
       },
       "cta": {
