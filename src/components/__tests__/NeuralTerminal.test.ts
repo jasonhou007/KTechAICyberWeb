@@ -186,8 +186,9 @@ describe('NeuralTerminal.vue (#161)', () => {
         last.classes().includes('glitch-text') ||
         last.classes().includes('decode-anim')
       expect(cyberStyled).toBe(true)
-      // The localized help response text is rendered (not a raw key).
-      expect(last.text()).not.toContain('terminal.commands')
+      // The resolved help response copy (data-text holds the final value,
+      // robust against the mid-flight decode scramble) is not a raw key.
+      expect(last.attributes('data-text')).not.toContain('terminal.commands')
     })
 
     it("typing 'about' + Enter renders the KTech description in the response", async () => {
@@ -199,8 +200,9 @@ describe('NeuralTerminal.vue (#161)', () => {
       await nextTick()
       const responses = wrapper.findAll('.terminal-response')
       expect(responses.length).toBeGreaterThanOrEqual(1)
-      // about copy mentions KTech.
-      expect(wrapper.text().toLowerCase()).toContain('ktech')
+      // The resolved about copy (data-text) mentions KTech.
+      const last = responses[responses.length - 1]
+      expect(last.attributes('data-text').toLowerCase()).toContain('ktech')
     })
 
     it("typing 'clear' + Enter empties the visible output", async () => {
@@ -228,8 +230,13 @@ describe('NeuralTerminal.vue (#161)', () => {
       await nextTick()
       const responses = wrapper.findAll('.terminal-response')
       expect(responses.length).toBeGreaterThanOrEqual(1)
-      // The unknown-error copy is rendered (contains 'not found' in EN).
-      expect(wrapper.text().toLowerCase()).toContain('not found')
+      // The response's resolved copy lives on its data-text attribute (the
+      // decode animation may still be mid-scramble on the visible text node,
+      // so data-text is the authoritative user-readable value).
+      const last = responses[responses.length - 1]
+      expect(last.attributes('data-text').toLowerCase()).toContain('not found')
+      // The typed command is interpolated into the error.
+      expect(last.attributes('data-text')).toContain('zzznotreal')
     })
 
     it('the typed command is echoed in the output with the prompt', async () => {

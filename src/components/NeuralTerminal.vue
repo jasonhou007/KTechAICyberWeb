@@ -1,0 +1,795 @@
+<template>
+  <div class="neural-terminal-root" data-test="neural-terminal">
+    <!-- Floating launcher: opens the console -->
+    <button
+      type="button"
+      class="neural-launcher neon-text"
+      data-test="neural-launcher"
+      :aria-label="t('terminal.launcher.ariaLabel')"
+      :aria-expanded="isOpen"
+      @click="toggle"
+    >
+      <span class="neural-launcher-glyph" aria-hidden="true">&gt;_</span>
+      <span class="neural-launcher-label">{{ t('terminal.launcher.label') }}</span>
+    </button>
+
+    <!-- The console itself. Stays in the DOM (so it can animate in/out) and is
+         hidden via the .open class + aria-hidden when closed. -->
+    <section
+      ref="consoleEl"
+      class="neural-console"
+      :class="{ open: isOpen, 'reduced-motion': prefersReducedMotion }"
+      data-test="neural-console"
+      role="region"
+      :aria-label="t('terminal.aria.consoleLabel')"
+      :aria-hidden="!isOpen"
+    >
+      <div class="neural-matrix" :class="{ active: activity > 0 }" aria-hidden="true"></div>
+      <Scanlines />
+
+      <header class="neural-console-bar">
+        <span class="neural-console-title neon-text">{{ t('terminal.launcher.label') }}</span>
+        <button
+          type="button"
+          class="neural-close"
+          data-test="neural-close"
+          :aria-label="t('terminal.aria.closeButton')"
+          @click="close"
+        >
+          ×
+        </button>
+      </header>
+
+      <!-- Output: ARIA live region so screen readers announce each response. -->
+      <div
+        class="neural-output"
+        data-test="neural-output"
+        role="status"
+        aria-live="polite"
+        :aria-label="t('terminal.aria.outputLive')"
+        ref="outputEl"
+      >
+        <div
+          v-for="line in output"
+          :key="line.id"
+          class="terminal-line"
+          :class="lineClass(line)"
+        >
+          <!-- echoed user input: prompt + raw text -->
+          <template v-if="line.type === 'input'">
+            <span class="terminal-prompt neon-text">{{ t('terminal.prompt') }}</span>
+            <span class="terminal-input-text">{{ line.raw }}</span>
+          </template>
+
+          <!-- boot / system line -->
+          <template v-else-if="line.type === 'system'">
+            <span class="terminal-system neon-text">{{ resolveSystem(line) }}</span>
+          </template>
+
+          <!-- response line: cyberpunk styled + decode animation -->
+          <template v-else>
+            <span
+              class="terminal-response neon-text glitch-text"
+              :data-text="resolveResponse(line)"
+              :class="{ 'decode-anim': !prefersReducedMotion }"
+            >{{ decodeText(line) }}</span>
+          </template>
+        </div>
+
+        <!-- "AI thinking" beat before longer responses -->
+        <div v-if="thinking" class="terminal-thinking" :aria-label="t('terminal.aria.thinking')">
+          <span class="terminal-thinking-dot"></span>
+          <span class="terminal-thinking-dot"></span>
+          <span class="terminal-thinking-dot"></span>
+        </div>
+      </div>
+
+      <!-- Input row -->
+      <div class="neural-input-row">
+        <span class="terminal-prompt neon-text" aria-hidden="true">{{ t('terminal.prompt') }}</span>
+        <input
+          :id="inputId"
+          ref="inputEl"
+          v-model="input"
+          class="neural-input"
+          data-test="neural-input"
+          type="text"
+          :placeholder="t('terminal.placeholder')"
+          :aria-label="t('terminal.aria.inputLabel')"
+          autocomplete="off"
+          spellcheck="false"
+          @keydown="onInputKeydown"
+          @input="bumpActivity"
+        />
+        <span
+          class="terminal-cursor"
+          :class="{ blink: !prefersReducedMotion }"
+          aria-hidden="true"
+        >{{ t('terminal.cursor') }}</span>
+      </div>
+
+      <!-- Mobile command chips: tap-driven palette under the mobile breakpoint -->
+      <div
+        v-if="isMobile"
+        class="neural-chips"
+        data-test="neural-chips"
+        :aria-label="t('terminal.mobile.paletteTitle')"
+      >
+        <span class="neural-chips-title">{{ t('terminal.mobile.paletteTitle') }}</span>
+        <div class="neural-chips-list">
+          <button
+            v-for="cmd in chipCommands"
+            :key="cmd.name"
+            type="button"
+            class="terminal-chip cyber-button"
+            @click="runChip(cmd.name)"
+          >
+            {{ chipLabel(cmd.name) }}
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import Scanlines from './Scanlines.vue'
+import { useLanguage } from '../composables/useLanguage'
+import { useTerminal } from '../composables/useTerminal.js'
+
+const { t } = useLanguage()
+
+// --- terminal brain ---------------------------------------------------------
+const {
+  input,
+  output,
+  isOpen,
+  activity,
+  burst,
+  prefersReducedMotion,
+  visibleCommands,
+  runCommand,
+  autocomplete,
+  navigateHistory,
+  clearOutput,
+  open,
+  close,
+  toggle,
+  bumpActivity,
+  pushSystem,
+} = useTerminal()
+
+// Stable id for the input's <label> association (we use aria-label too, but
+// keep the id available for an explicit label if the markup grows).
+const inputId = 'neural-terminal-input'
+
+// --- refs -------------------------------------------------------------------
+const consoleEl = ref(null)
+const inputEl = ref(null)
+const outputEl = ref(null)
+
+// --- mobile breakpoint ------------------------------------------------------
+// Matches the scoped @media query below. Driven by matchMedia so the chips
+// palette appears/disappears reactively without a resize listener.
+const isMobile = ref(false)
+let mobileMq = null
+const onMobileChange = (e) => {
+  isMobile.value = !!(e && e.matches)
+}
+
+// --- "AI thinking" beat -----------------------------------------------------
+// Insert a brief thinking indicator before pushing a longer response so the
+// console reads like a real neural link. Cleared as soon as the response is in
+// the output buffer.
+const thinking = ref(false)
+
+// --- decode / scramble animation -------------------------------------------
+// Per-line scramble state. We track a map of lineId -> currently-displayed
+// (possibly scrambled) string so the decode animation can mutate one line
+// without disturbing others. Under prefers-reduced-motion we render the final
+// text immediately and never schedule a timer.
+const decodeState = ref(new Map())
+let decodeTimer = null
+
+const SCRAMBLE_CHARS = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ0123456789ABCDEF'
+
+function resolveResponse(line) {
+  // The unknown-error response interpolates the typed command.
+  if (line.i18nKey === 'terminal.errors.unknown' && line.raw) {
+    return t('terminal.errors.unknown').replace('{cmd}', line.raw)
+  }
+  return t(line.i18nKey)
+}
+
+function resolveSystem(line) {
+  return t(line.i18nKey)
+}
+
+function decodeText(line) {
+  // Under reduced motion OR if no decode state exists yet, show the final text.
+  const final = resolveResponse(line)
+  if (prefersReducedMotion.value) return final
+  const shown = decodeState.value.get(line.id)
+  return shown !== undefined ? shown : final
+}
+
+function startDecodeFor(line) {
+  if (prefersReducedMotion.value) return
+  const target = resolveResponse(line)
+  if (!target) return
+  // Scramble for a handful of frames, then settle on the final text.
+  let frame = 0
+  const totalFrames = Math.min(12, Math.max(4, Math.ceil(target.length / 2)))
+  const tick = () => {
+    let out = ''
+    for (let i = 0; i < target.length; i++) {
+      const settled = i < (frame / totalFrames) * target.length
+      out += settled
+        ? target[i]
+        : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]
+    }
+    decodeState.value.set(line.id, out)
+    // Force reactivity on the Map.
+    decodeState.value = new Map(decodeState.value)
+    frame++
+    if (frame <= totalFrames) {
+      decodeTimer = setTimeout(tick, 28)
+    } else {
+      decodeState.value.set(line.id, target)
+      decodeState.value = new Map(decodeState.value)
+    }
+  }
+  tick()
+}
+
+// --- output line styling ----------------------------------------------------
+function lineClass(line) {
+  if (line.type === 'input') return 'terminal-input-line'
+  if (line.type === 'system') return 'terminal-system-line'
+  return 'terminal-response-line'
+}
+
+// --- watch new responses: trigger decode + auto-scroll ----------------------
+watch(
+  () => output.value.length,
+  async (count, prev) => {
+    if (count <= prev) return
+    const last = output.value[count - 1]
+    if (last && last.type === 'response') {
+      // Defer the decode slightly so the line mounts first.
+      await nextTick()
+      startDecodeFor(last)
+    }
+    await nextTick()
+    if (outputEl.value) outputEl.value.scrollTop = outputEl.value.scrollHeight
+  },
+)
+
+// --- "thinking" beat: show the indicator briefly before longer responses ---
+// We watch for new input echoes; if a response is likely "longer" (the known
+// content commands), we flash the indicator for a beat. This is cosmetic and
+// is skipped under reduced motion to avoid a flashing element.
+watch(
+  () => output.value.length,
+  async (count, prev) => {
+    if (count <= prev || prefersReducedMotion.value) {
+      thinking.value = false
+      return
+    }
+    const last = output.value[count - 1]
+    if (!last) return
+    if (last.type === 'input') {
+      const longer = ['about', 'services', 'ai', 'news', 'contact']
+      if (longer.includes(String(last.raw).toLowerCase())) {
+        thinking.value = true
+        setTimeout(() => {
+          thinking.value = false
+        }, 220)
+      }
+    }
+  },
+)
+
+// --- input key handling -----------------------------------------------------
+function onInputKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault()
+    runCommand()
+    return
+  }
+  if (e.key === 'ArrowUp') {
+    e.preventDefault()
+    input.value = navigateHistory('up')
+    return
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault()
+    input.value = navigateHistory('down')
+    return
+  }
+  if (e.key === 'Tab') {
+    e.preventDefault()
+    const filled = autocomplete()
+    input.value = filled
+    return
+  }
+}
+
+// --- mobile chips -----------------------------------------------------------
+// All public commands are surfaced as chips on mobile (including clear, so a
+// mobile user can reset the buffer without a keyboard).
+const chipCommands = computed(() => visibleCommands.value)
+
+function chipLabel(name) {
+  // Command name stays English; the chip palette title is localized.
+  return name
+}
+
+function runChip(name) {
+  input.value = name
+  // small visual beat then execute
+  runCommand()
+  bumpActivity()
+}
+
+// --- focus management + Esc-to-close (scoped to when open) ------------------
+function onDocKeydown(e) {
+  if (!isOpen.value) return
+  if (e.key === 'Escape') {
+    e.preventDefault()
+    close()
+    return
+  }
+  // Focus trap: when Tabbing past the last focusable element inside the
+  // console, wrap back to the input.
+  if (e.key === 'Tab' && consoleEl.value) {
+    const focusables = consoleEl.value.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    )
+    if (focusables.length === 0) return
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault()
+      last.focus()
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault()
+      first.focus()
+    }
+  }
+}
+
+// --- boot sequence ----------------------------------------------------------
+let bootTimers = []
+function runBootSequence() {
+  if (prefersReducedMotion.value) {
+    // Under reduced motion, push the boot lines instantly and move on.
+    pushSystem('terminal.boot.line1')
+    pushSystem('terminal.boot.line2')
+    pushSystem('terminal.boot.line3')
+    pushSystem('terminal.boot.line4')
+    pushSystem('terminal.intro')
+    return
+  }
+  const lines = [
+    'terminal.boot.line1',
+    'terminal.boot.line2',
+    'terminal.boot.line3',
+    'terminal.boot.line4',
+    'terminal.intro',
+  ]
+  lines.forEach((key, i) => {
+    const id = setTimeout(() => {
+      pushSystem(key)
+    }, 180 * (i + 1))
+    bootTimers.push(id)
+  })
+}
+
+// --- when the console opens: focus input + boot if fresh -------------------
+watch(isOpen, async (openState) => {
+  if (openState) {
+    await nextTick()
+    if (inputEl.value) inputEl.value.focus()
+    // Boot only once per session (when output is empty).
+    if (output.value.length === 0) {
+      runBootSequence()
+    }
+  }
+})
+
+// --- burst visual: clear after a beat so it can re-fire --------------------
+watch(burst, (v) => {
+  if (v) {
+    setTimeout(() => {
+      burst.value = false
+    }, 1200)
+  }
+})
+
+// --- lifecycle --------------------------------------------------------------
+onMounted(() => {
+  // prefers-reduced-motion + mobile matchMedia are wired in useTerminal for
+  // motion; the mobile breakpoint is read here (the composable doesn't know
+  // about the chip palette's breakpoint).
+  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+    mobileMq = window.matchMedia('(max-width: 768px)')
+    isMobile.value = !!mobileMq.matches
+    if (mobileMq.addEventListener) {
+      mobileMq.addEventListener('change', onMobileChange)
+    } else if (mobileMq.addListener) {
+      mobileMq.addListener(onMobileChange)
+    }
+  }
+  document.addEventListener('keydown', onDocKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', onDocKeydown)
+  if (decodeTimer) clearTimeout(decodeTimer)
+  bootTimers.forEach((id) => clearTimeout(id))
+  if (mobileMq) {
+    if (mobileMq.removeEventListener) {
+      mobileMq.removeEventListener('change', onMobileChange)
+    } else if (mobileMq.removeListener) {
+      mobileMq.removeListener(onMobileChange)
+    }
+  }
+})
+</script>
+
+<style scoped>
+.neural-terminal-root {
+  font-family: 'Courier New', 'Consolas', monospace;
+}
+
+/* ---- launcher -------------------------------------------------------------*/
+.neural-launcher {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 9000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  background: rgba(10, 10, 20, 0.85);
+  color: #00ffff;
+  border: 1px solid #00ffff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  box-shadow:
+    0 0 8px rgba(0, 255, 255, 0.4),
+    inset 0 0 6px rgba(0, 255, 255, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.neural-launcher:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 18px rgba(0, 255, 255, 0.7),
+    inset 0 0 10px rgba(0, 255, 255, 0.25);
+}
+
+.neural-launcher-glyph {
+  font-weight: bold;
+  color: #ff00ff;
+  text-shadow: 0 0 8px #ff00ff;
+}
+
+.neural-launcher-label {
+  color: #00ffff;
+}
+
+/* ---- console shell --------------------------------------------------------*/
+.neural-console {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 5rem;
+  width: min(640px, calc(100vw - 3rem));
+  max-height: min(70vh, 560px);
+  display: none;
+  flex-direction: column;
+  background: rgba(5, 8, 14, 0.96);
+  border: 1px solid #00ffff;
+  border-radius: 8px;
+  overflow: hidden;
+  z-index: 9001;
+  box-shadow:
+    0 0 24px rgba(0, 255, 255, 0.35),
+    0 0 60px rgba(255, 0, 255, 0.15);
+  font-family: inherit;
+  color: #c8ffe8;
+}
+
+.neural-console.open {
+  display: flex;
+}
+
+/* ---- matrix bg ------------------------------------------------------------*/
+.neural-matrix {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgba(0, 255, 136, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 136, 0.18) 1px, transparent 1px);
+  background-size: 24px 24px;
+  transition: opacity 0.4s ease, background-size 0.4s ease;
+}
+
+.neural-matrix.active {
+  opacity: 0.28;
+  background-size: 18px 18px;
+}
+
+/* ---- console bar ----------------------------------------------------------*/
+.neural-console-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.85rem;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 255, 255, 0.12),
+    rgba(255, 0, 255, 0.08)
+  );
+  border-bottom: 1px solid rgba(0, 255, 255, 0.35);
+}
+
+.neural-console-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #00ffff;
+}
+
+.neural-close {
+  background: transparent;
+  border: 1px solid rgba(255, 0, 255, 0.5);
+  color: #ff66ff;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.neural-close:hover {
+  box-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
+}
+
+/* ---- output ---------------------------------------------------------------*/
+.neural-output {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0.85rem 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.terminal-line {
+  margin-bottom: 0.35rem;
+  word-break: break-word;
+}
+
+.terminal-prompt {
+  margin-right: 0.4rem;
+  color: #00ff88;
+  text-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
+}
+
+.terminal-input-text {
+  color: #ffffff;
+}
+
+.terminal-system {
+  color: #ffcc00;
+  text-shadow: 0 0 6px rgba(255, 204, 0, 0.5);
+}
+
+.terminal-response {
+  display: inline-block;
+  color: #c8ffe8;
+  position: relative;
+}
+
+/* neon-text (shared convention from Home.vue) -------------------------------*/
+.neon-text {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor;
+}
+
+/* glitch-text pseudo layers -------------------------------------------------*/
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.glitch-text::before {
+  color: #ff00ff;
+  transform: translate(-1px, 0);
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.glitch-text::after {
+  color: #00ffff;
+  transform: translate(1px, 0);
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+/* decode animation toggles the glitch layers via the .decode-anim class ----*/
+.decode-anim::before,
+.decode-anim::after {
+  animation: terminal-glitch 0.35s steps(2) infinite;
+}
+
+@keyframes terminal-glitch {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-2px, 1px); }
+  100% { transform: translate(2px, -1px); }
+}
+
+/* ---- thinking dots --------------------------------------------------------*/
+.terminal-thinking {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin: 0.2rem 0;
+}
+
+.terminal-thinking-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ffff;
+  box-shadow: 0 0 6px #00ffff;
+  animation: terminal-think 1s ease-in-out infinite;
+}
+
+.terminal-thinking-dot:nth-child(2) { animation-delay: 0.15s; }
+.terminal-thinking-dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes terminal-think {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+/* ---- input row ------------------------------------------------------------*/
+.neural-input-row {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid rgba(0, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.neural-input {
+  flex: 1 1 auto;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #c8ffe8;
+  font-family: inherit;
+  font-size: 0.95rem;
+  caret-color: #00ff88;
+}
+
+.neural-input::placeholder {
+  color: rgba(0, 255, 255, 0.45);
+}
+
+.terminal-cursor {
+  margin-left: 0.3rem;
+  color: #00ff88;
+}
+
+.terminal-cursor.blink {
+  animation: terminal-blink 1s steps(2) infinite;
+}
+
+@keyframes terminal-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* ---- mobile chips ---------------------------------------------------------*/
+.neural-chips {
+  position: relative;
+  z-index: 2;
+  padding: 0.5rem 0.75rem 0.75rem;
+  border-top: 1px solid rgba(0, 255, 136, 0.3);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.neural-chips-title {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #00ffff;
+  margin-bottom: 0.4rem;
+}
+
+.neural-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.terminal-chip {
+  padding: 0.35rem 0.7rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.08);
+  border: 1px solid #00ff88;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.terminal-chip:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+/* ---- mobile breakpoint ----------------------------------------------------*/
+@media (max-width: 768px) {
+  .neural-launcher-label {
+    display: none;
+  }
+  .neural-launcher {
+    padding: 0.6rem 0.85rem;
+  }
+  .neural-console {
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+    bottom: 4.5rem;
+  }
+}
+
+/* ---- reduced motion -------------------------------------------------------*/
+.neural-console.reduced-motion .decode-anim::before,
+.neural-console.reduced-motion .decode-anim::after {
+  animation: none;
+  display: none;
+}
+
+.neural-console.reduced-motion .terminal-cursor.blink {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neural-launcher,
+  .neural-matrix {
+    transition: none;
+  }
+  .decode-anim::before,
+  .decode-anim::after {
+    animation: none;
+  }
+}
+</style>
