@@ -224,7 +224,11 @@ const matrixOpacity = computed(() => {
 // without disturbing others. Under prefers-reduced-motion we render the final
 // text immediately and never schedule a timer.
 const decodeState = ref(new Map())
-let decodeTimer = null
+// Track EVERY outstanding decode-chain timer id in a Set (not a single shared
+// id) so rapid typing — which fires several decode chains in parallel — can't
+// orphan the earlier chains. On unmount we clear them all. (S-3: the old
+// single-id scheme overwrote the id each tick, leaving earlier chains leaked.)
+const decodeTimers = new Set()
 
 const SCRAMBLE_CHARS = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ0123456789ABCDEF'
 
@@ -268,7 +272,13 @@ function startDecodeFor(line) {
     decodeState.value = new Map(decodeState.value)
     frame++
     if (frame <= totalFrames) {
-      decodeTimer = setTimeout(tick, 28)
+      // Track this timer id so it can be cleared on unmount (and self-removes
+      // from the Set when it fires, so the Set only ever holds PENDING timers).
+      const id = setTimeout(() => {
+        decodeTimers.delete(id)
+        tick()
+      }, 28)
+      decodeTimers.add(id)
     } else {
       decodeState.value.set(line.id, target)
       decodeState.value = new Map(decodeState.value)
@@ -475,7 +485,10 @@ onUnmounted(() => {
     clearInterval(activityDecayTimer)
     activityDecayTimer = null
   }
-  if (decodeTimer) clearTimeout(decodeTimer)
+  // Clear EVERY outstanding decode-chain timer (rapid typing can leave several
+  // chains in flight; the Set tracks them all so none leak on unmount). S-3.
+  decodeTimers.forEach((id) => clearTimeout(id))
+  decodeTimers.clear()
   bootTimers.forEach((id) => clearTimeout(id))
   if (mobileMq) {
     if (mobileMq.removeEventListener) {

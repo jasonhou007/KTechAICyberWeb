@@ -480,4 +480,51 @@ describe('NeuralTerminal.vue (#161)', () => {
       expect(responses[responses.length - 1].attributes('data-text').length).toBeGreaterThan(0)
     })
   })
+
+  // ============================================
+  // Decode-timer lifecycle — rapid typing must not orphan timers (S-3). The
+  // old code stored a single shared `decodeTimer` id; a second decode
+  // overwrote it, orphaning the first chain so it couldn't be cleared on
+  // unmount. We assert: after multiple rapid decodes + unmount, NO decode
+  // setTimeout callback remains pending (unmount cleared them all).
+  // ============================================
+  describe('decode timer lifecycle (S-3 no-leak)', () => {
+    it('clears ALL pending decode timers on unmount after rapid typing (no orphaned chains)', async () => {
+      vi.useFakeTimers()
+      wrapper = mountTerminal()
+      await wrapper.find('[data-test="neural-launcher"]').trigger('click')
+      const input = wrapper.find('[data-test="neural-input"]')
+      // Fire several decodes back-to-back. Each response schedules a chain of
+      // setTimeout(tick, 28) calls; under the old single-shared-id scheme only
+      // the LAST chain's id was tracked, so the earlier chains leaked (their
+      // ids were overwritten and could not be cleared on unmount).
+      await input.setValue('help')
+      await input.trigger('keydown', { key: 'Enter' })
+      await nextTick()
+      await input.setValue('about')
+      await input.trigger('keydown', { key: 'Enter' })
+      await nextTick()
+      await input.setValue('services')
+      await input.trigger('keydown', { key: 'Enter' })
+      await nextTick()
+
+      // Pending fake timers BEFORE unmount: decode chains + the activity-decay
+      // interval + any thinking timer. This is the population a clean unmount
+      // must drain.
+      const timersBefore = vi.getTimerCount()
+      expect(timersBefore).toBeGreaterThan(0)
+
+      // Unmount — onUnmounted must clear EVERY outstanding decode + decay timer.
+      // Under the old code the orphaned first/second decode chains stayed
+      // pending (their ids were never tracked), so timersAfter stayed > 0.
+      wrapper.unmount()
+      wrapper = undefined as any
+
+      expect(vi.getTimerCount()).toBe(0)
+
+      // Belt-and-suspenders: advancing timers after unmount must be a no-op
+      // (no leaked callback mutates unmounted state / throws).
+      expect(() => vi.advanceTimersByTime(2000)).not.toThrow()
+    })
+  })
 })
