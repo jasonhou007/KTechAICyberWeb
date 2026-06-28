@@ -66,6 +66,18 @@ vi.mock('../components/ThemeToggle.vue', () => ({
 vi.mock('../components/SkipLink.vue', () => ({
   default: { name: 'SkipLink', template: '<div class="skip-stub"></div>' },
 }))
+// Header.vue owns the routed nav (#164). It is mounted for real + asserted
+// end-to-end (dropdown triggers, language toggle, mobile drawer) in its own
+// suite AND in the shipped-app wiring test (App.nav-wiring.test.ts). Here we
+// stub it so this theme-focused test stays decoupled from Header internals
+// (it calls useRouter(), which this suite's vue-router mock intentionally
+// omits — stubbing Header avoids coupling the theme contract to nav plumbing).
+vi.mock('../components/Header.vue', () => ({
+  default: {
+    name: 'Header',
+    template: '<nav class="header-stub"><slot name="toolbar" /></nav>',
+  },
+}))
 
 const App = (await import('../App.vue')).default
 

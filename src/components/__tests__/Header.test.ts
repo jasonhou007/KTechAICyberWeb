@@ -33,9 +33,12 @@ import Header from '../Header.vue'
 // submenu item clicks resolve without a live router instance. The mock
 // replaces vue-router wholesale, so we use a custom inline router-link stub
 // (the library RouterLinkStub depends on vue-router's real RouterLink).
-const pushMock = vi.fn()
+const { pushMock, afterEachMock } = vi.hoisted(() => ({
+  pushMock: vi.fn(),
+  afterEachMock: vi.fn(() => vi.fn()), // afterEach returns an unsubscribe
+}))
 vi.mock('vue-router', () => ({
-  useRouter: () => ({ push: pushMock }),
+  useRouter: () => ({ push: pushMock, afterEach: afterEachMock }),
 }))
 
 // Inline router-link stub: renders <a :href="to"> with slotted text, mirroring
@@ -301,6 +304,94 @@ describe('Header.vue', () => {
       await toggle.trigger('click')
       await toggle.trigger('click')
       expect(links.classes()).not.toContain('mobile-open')
+    })
+  })
+
+  // ============================================
+  // Mobile drawer a11y (M3) — focus management + close-on-navigate
+  // ============================================
+  describe('Mobile drawer a11y (M3)', () => {
+    it('exposes role="dialog" on the .nav-links panel', () => {
+      expect(wrapper.find('.nav-links').attributes('role')).toBe('dialog')
+    })
+
+    it('exposes aria-modal="true" on the panel', () => {
+      expect(wrapper.find('.nav-links').attributes('aria-modal')).toBe('true')
+    })
+
+    it('exposes a non-empty aria-label on the panel', () => {
+      const panel = wrapper.find('.nav-links')
+      expect(panel.attributes('aria-label')).toBeTruthy()
+    })
+
+    it('moves focus into the panel when the drawer opens', async () => {
+      // Mount with the panel attached to the document so .focus() is observable.
+      const attached = mount(Header, {
+        attachTo: document.body,
+        global: { stubs: { 'router-link': RouterLinkStub } },
+      })
+      try {
+        const aToggle = attached.find('.nav-toggle')
+        const panel = attached.find('.nav-links').element as HTMLElement
+        const firstFocusable = panel.querySelector(
+          'a[href], button:not([disabled])',
+        ) as HTMLElement
+        const focusSpy = vi.spyOn(firstFocusable, 'focus')
+        await aToggle.trigger('click')
+        expect(focusSpy).toHaveBeenCalled()
+      } finally {
+        attached.unmount()
+      }
+    })
+
+    it('restores focus to the hamburger when the drawer closes', async () => {
+      const attached = mount(Header, {
+        attachTo: document.body,
+        global: { stubs: { 'router-link': RouterLinkStub } },
+      })
+      try {
+        const aToggle = attached.find('.nav-toggle')
+        const aToggleEl = aToggle.element as HTMLElement
+        const focusSpy = vi.spyOn(aToggleEl, 'focus')
+
+        await aToggle.trigger('click') // open
+        await aToggle.trigger('click') // close
+        expect(focusSpy).toHaveBeenCalled()
+      } finally {
+        attached.unmount()
+      }
+    })
+
+    it('closes the drawer when a top-level nav link is clicked', async () => {
+      const links = wrapper.find('.nav-links')
+      await wrapper.find('.nav-toggle').trigger('click')
+      expect(links.classes()).toContain('mobile-open')
+
+      // Click the Home link (first top-level routed item).
+      await wrapper.find('ul.nav-links > li:nth-child(1) a').trigger('click')
+      expect(links.classes()).not.toContain('mobile-open')
+    })
+
+    it('closes the drawer on Escape and restores focus to the toggle', async () => {
+      const attached = mount(Header, {
+        attachTo: document.body,
+        global: { stubs: { 'router-link': RouterLinkStub } },
+      })
+      try {
+        const aToggle = attached.find('.nav-toggle')
+        const aToggleEl = aToggle.element as HTMLElement
+        const focusSpy = vi.spyOn(aToggleEl, 'focus')
+
+        await aToggle.trigger('click')
+        expect(attached.find('.nav-links').classes()).toContain('mobile-open')
+
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+        await attached.vm.$nextTick()
+        expect(attached.find('.nav-links').classes()).not.toContain('mobile-open')
+        expect(focusSpy).toHaveBeenCalled()
+      } finally {
+        attached.unmount()
+      }
     })
   })
 

@@ -70,9 +70,10 @@ test.describe('Accessibility', () => {
     await homePage.goto();
 
     // The app renders a SkipLink (a.skip-link -> #main-content) and a top nav
-    // with class .cyber-nav (the old .nav selector no longer exists). Verify
-    // the nav landmark is present and keyboard reachable.
-    await expect(homePage.page.locator('.cyber-nav')).toBeVisible();
+    // rendered by Header.vue as <nav id="navbar"> (#164 nav overhaul — the
+    // old inline App.vue .cyber-nav was replaced by <Header /> in the wiring
+    // commit). Verify the nav landmark is present and keyboard reachable.
+    await expect(homePage.page.locator('nav#navbar')).toBeVisible();
 
     // Tabbing should land on a real focusable element (the skip link is the
     // first focusable element on the page).

@@ -26,9 +26,10 @@ test.describe('Router base prefix (#140)', () => {
   test('home page renders real content under the base path', async ({ page }) => {
     await page.goto(BASE);
 
-    // The navbar is rendered by App.vue for every route — if the router failed
-    // to mount under the base, even this would be missing (blank page).
-    await expect(page.locator('.cyber-nav')).toBeVisible();
+    // The navbar is rendered for every route by Header.vue (mounted in App.vue
+    // via <Header />, #164 nav overhaul) — if the router failed to mount under
+    // the base, even this would be missing (blank page).
+    await expect(page.locator('nav#navbar')).toBeVisible();
 
     // Home-specific content: the hero <h1> only exists when the Home view
     // mounts. Before the #140 fix the router matched no route under the
@@ -46,7 +47,7 @@ test.describe('Router base prefix (#140)', () => {
   test('deep sub-route renders under the base path (not blank)', async ({ page }) => {
     await page.goto(`${BASE}about`);
 
-    await expect(page.locator('.cyber-nav')).toBeVisible();
+    await expect(page.locator('nav#navbar')).toBeVisible();
     // About view must mount and render a heading. We don't pin exact text
     // (i18n may be EN or ZH), but a blank page has no h1/h2 at all.
     await expect(page.locator('h1, h2').first()).toBeVisible();
@@ -57,7 +58,7 @@ test.describe('Router base prefix (#140)', () => {
   test('unknown route renders NotFound (not blank)', async ({ page }) => {
     await page.goto(`${BASE}this-route-does-not-exist-140`);
 
-    await expect(page.locator('.cyber-nav')).toBeVisible();
+    await expect(page.locator('nav#navbar')).toBeVisible();
     // NotFound view must render its landmark. The 404 message is i18n-driven;
     // assert the dedicated container exists rather than blankness.
     await expect(page.locator('.not-found')).toBeVisible();

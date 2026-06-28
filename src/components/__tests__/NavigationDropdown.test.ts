@@ -26,8 +26,27 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, VueWrapper } from '@vue/test-utils'
 
 // Router push spy exposed via a mocked useRouter() so the component's
-// navigateTo() handler resolves without a full router instance.
-const pushMock = vi.fn()
+// navigateTo() handler resolves without a full router instance. RouterLink
+// is stubbed via global.stubs (below) so the submenu items render as
+// focusable <a :href="route"> elements — the M1 fix makes each item a
+// <router-link>. Using vi.hoisted keeps the stub + spy accessible inside the
+// hoisted vi.mock factory.
+const { pushMock, RouterLinkStub } = vi.hoisted(() => {
+  const push = vi.fn()
+  const stub = {
+    name: 'RouterLink',
+    props: { to: { type: [String, Object], default: '' } },
+    computed: {
+      href() {
+        return typeof this.to === 'string'
+          ? this.to
+          : (this.to && this.to.path) || ''
+      },
+    },
+    template: '<a :href="href"><slot /></a>',
+  }
+  return { pushMock: push, RouterLinkStub: stub }
+})
 vi.mock('vue-router', () => ({
   useRouter: () => ({ push: pushMock }),
 }))
@@ -45,6 +64,11 @@ function createWrapper(props: Record<string, unknown> = {}) {
       label: 'About Us',
       items: baseItems,
       ...props,
+    },
+    global: {
+      stubs: {
+        RouterLink: RouterLinkStub,
+      },
     },
   })
 }
@@ -181,6 +205,29 @@ describe('NavigationDropdown.vue', () => {
       expect(wrapper.vm.isOpen).toBe(false)
     })
 
+    it('S5: a click-opened (pinned) menu survives a desktop mouseleave', async () => {
+      // Hover + click previously disagreed on state: opening by click then
+      // moving the mouse away would close the menu unexpectedly. After the
+      // unified model, click-open pins the menu so hover-leave cannot close it.
+      const root = wrapper.find('.nav-dropdown')
+      const trigger = wrapper.find('.dropdown-trigger')
+      // Pin open via click.
+      await trigger.trigger('click')
+      expect(wrapper.vm.isOpen).toBe(true)
+
+      await root.trigger('mouseleave')
+      expect(wrapper.vm.isOpen).toBe(true)
+      expect(wrapper.find('.dropdown-menu').exists()).toBe(true)
+    })
+
+    it('S5: hovering open then mouseleave still closes (hover path unchanged)', async () => {
+      const root = wrapper.find('.nav-dropdown')
+      await root.trigger('mouseenter')
+      expect(wrapper.vm.isOpen).toBe(true)
+      await root.trigger('mouseleave')
+      expect(wrapper.vm.isOpen).toBe(false)
+    })
+
     it('does not open on mouseenter at mobile widths (<=768)', async () => {
       Object.defineProperty(window, 'innerWidth', {
         configurable: true,
@@ -207,27 +254,27 @@ describe('NavigationDropdown.vue', () => {
   // ============================================
   // Navigation
   // ============================================
+  // After M1, items are <router-link> rendered as <a :href="route">. Clicking
+  // a link is a native navigation (not router.push), so we assert the
+  // user-visible effect: each item exposes the correct href, and clicking an
+  // item closes the menu. The href IS the navigation contract.
   describe('Navigation', () => {
-    it('calls router.push with the item route and closes on item click', async () => {
+    it('renders each item as an <a> with the correct route href and closes on click', async () => {
       await wrapper.find('.dropdown-trigger').trigger('click')
-      const firstItem = wrapper.findAll('.dropdown-item')[0]
-      await firstItem.trigger('click')
+      const items = wrapper.findAll('.dropdown-item')
+      expect(items[0].element.tagName.toLowerCase()).toBe('a')
+      expect(items[0].attributes('href')).toBe('/about')
+      expect(items[1].attributes('href')).toBe('/group')
 
-      expect(pushMock).toHaveBeenCalledTimes(1)
-      expect(pushMock).toHaveBeenCalledWith('/about')
+      await items[0].trigger('click')
       expect(wrapper.vm.isOpen).toBe(false)
     })
 
-    it('navigates to each item route independently', async () => {
+    it('renders a distinct href per item route', async () => {
       await wrapper.find('.dropdown-trigger').trigger('click')
-
-      // Re-open between clicks because clicking an item closes the menu.
-      await wrapper.findAll('.dropdown-item')[1].trigger('click')
-      expect(pushMock).toHaveBeenLastCalledWith('/group')
-
-      await wrapper.find('.dropdown-trigger').trigger('click')
-      await wrapper.findAll('.dropdown-item')[0].trigger('click')
-      expect(pushMock).toHaveBeenLastCalledWith('/about')
+      const items = wrapper.findAll('.dropdown-item')
+      expect(items[0].attributes('href')).toBe('/about')
+      expect(items[1].attributes('href')).toBe('/group')
     })
   })
 
@@ -331,23 +378,42 @@ describe('NavigationDropdown.vue', () => {
   })
 
   // ============================================
-  // Accessibility
+  // Accessibility — M2: aria-expanded / aria-haspopup live on the TRIGGER
+  // button (not the wrapper div), per WCAG disclosure/menu pattern. The
+  // trigger also exposes aria-controls pointing at the menu's id.
   // ============================================
   describe('Accessibility', () => {
-    it('sets aria-haspopup="true" on the root container', () => {
+    it('sets aria-haspopup="menu" on the TRIGGER button (not the wrapper)', () => {
+      expect(
+        wrapper.find('.dropdown-trigger').attributes('aria-haspopup'),
+      ).toBe('menu')
+      // The wrapper div must NOT carry the aria attributes anymore.
       expect(wrapper.find('.nav-dropdown').attributes('aria-haspopup')).toBe(
-        'true',
+        undefined,
       )
     })
 
-    it('reflects isOpen through aria-expanded on the root container', async () => {
-      const root = wrapper.find('.nav-dropdown')
-      expect(root.attributes('aria-expanded')).toBe('false')
+    it('reflects isOpen through aria-expanded on the TRIGGER button', async () => {
+      const trigger = wrapper.find('.dropdown-trigger')
+      expect(trigger.attributes('aria-expanded')).toBe('false')
+      expect(wrapper.find('.nav-dropdown').attributes('aria-expanded')).toBe(
+        undefined,
+      )
 
       await wrapper.find('.dropdown-trigger').trigger('click')
-      expect(wrapper.find('.nav-dropdown').attributes('aria-expanded')).toBe(
-        'true',
-      )
+      expect(
+        wrapper.find('.dropdown-trigger').attributes('aria-expanded'),
+      ).toBe('true')
+    })
+
+    it('exposes aria-controls on the trigger pointing at the menu id', async () => {
+      const trigger = wrapper.find('.dropdown-trigger')
+      const controls = trigger.attributes('aria-controls')
+      expect(controls).toBeTruthy()
+
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const menu = wrapper.find('.dropdown-menu')
+      expect(menu.attributes('id')).toBe(controls)
     })
 
     it('uses the close-label aria-label when open', async () => {
@@ -427,6 +493,11 @@ describe('NavigationDropdown.vue', () => {
           label: 'Our Solutions',
           ...groupedProps,
         },
+        global: {
+          stubs: {
+            RouterLink: RouterLinkStub,
+          },
+        },
       })
     }
 
@@ -473,15 +544,15 @@ describe('NavigationDropdown.vue', () => {
       w.unmount()
     })
 
-    it('calls router.push with the clicked group item route and closes', async () => {
+    it('renders the clicked group item as an <a> with the correct route href and closes', async () => {
       const w = createGroupedWrapper()
       await w.find('.dropdown-trigger').trigger('click')
       // Group1 has 2 items (indexes 0,1); group2 has 4 items (indexes 2-5).
       // Cross-border-payment is the 2nd item of group2 -> index 3.
       const items = w.findAll('.dropdown-item')
+      expect(items[3].element.tagName.toLowerCase()).toBe('a')
+      expect(items[3].attributes('href')).toBe('/services/cross-border-payment')
       await items[3].trigger('click')
-      expect(pushMock).toHaveBeenCalledTimes(1)
-      expect(pushMock).toHaveBeenCalledWith('/services/cross-border-payment')
       expect(w.vm.isOpen).toBe(false)
       w.unmount()
     })
@@ -515,6 +586,84 @@ describe('NavigationDropdown.vue', () => {
       const loose = w.findAll('.dropdown-menu > .dropdown-item')
       expect(loose).toHaveLength(0)
       w.unmount()
+    })
+  })
+
+  // ============================================
+  // Keyboard Operability (AC7 — WCAG 2.1 AA)
+  // ============================================
+  // This is the regression test that SHOULD have caught M1: dropdown items
+  // shipped as <div> (not focusable), so a keyboard user could open the menu
+  // but never reach or activate an item. Each assertion below drives the real
+  // DOM and would FAIL against the pre-revision component.
+  describe('Keyboard Operability (AC7)', () => {
+    it('renders submenu items as focusable elements (a/button), not bare divs', async () => {
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const items = wrapper.findAll('.dropdown-item')
+      const focusableTags = ['a', 'button']
+      items.forEach((item) => {
+        const tag = item.element.tagName.toLowerCase()
+        expect(focusableTags).toContain(tag)
+      })
+    })
+
+    it('exposes role="menu" on the open menu and role="menuitem" on each item', async () => {
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      expect(wrapper.find('.dropdown-menu').attributes('role')).toBe('menu')
+      wrapper.findAll('.dropdown-item').forEach((item) => {
+        expect(item.attributes('role')).toBe('menuitem')
+      })
+    })
+
+    it('closes the menu when an item is activated via Enter key', async () => {
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const firstItem = wrapper.findAll('.dropdown-item')[0]
+      // The router-link handles navigation on Enter; the component closes.
+      await firstItem.trigger('keydown', { key: 'Enter' })
+      expect(wrapper.vm.isOpen).toBe(false)
+    })
+
+    it('closes the menu when an item is activated via Space key', async () => {
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const firstItem = wrapper.findAll('.dropdown-item')[0]
+      await firstItem.trigger('keydown', { key: ' ' })
+      expect(wrapper.vm.isOpen).toBe(false)
+    })
+
+    it('moves focus to the next item on ArrowDown', async () => {
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const items = wrapper.findAll('.dropdown-item')
+      const focusSpy0 = vi.spyOn(items[0].element as HTMLElement, 'focus')
+      const focusSpy1 = vi.spyOn(items[1].element as HTMLElement, 'focus')
+
+      // ArrowDown on item 0 should focus item 1.
+      await items[0].trigger('keydown', { key: 'ArrowDown' })
+      expect(focusSpy1).toHaveBeenCalled()
+      focusSpy0.mockRestore()
+      focusSpy1.mockRestore()
+    })
+
+    it('moves focus to the previous item on ArrowUp', async () => {
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const items = wrapper.findAll('.dropdown-item')
+      const focusSpy0 = vi.spyOn(items[0].element as HTMLElement, 'focus')
+
+      // ArrowUp on item 1 should wrap/focus item 0.
+      await items[1].trigger('keydown', { key: 'ArrowUp' })
+      expect(focusSpy0).toHaveBeenCalled()
+      focusSpy0.mockRestore()
+    })
+
+    it('renders each item as a router-link with the correct href (active-route highlight, AC6)', async () => {
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      const items = wrapper.findAll('.dropdown-item')
+      // RouterLink renders <a :href="route">. The stub here is the inline
+      // RouterLinkStub-like rendering; with the real vue-router mock we expect
+      // <a> with the item route as href.
+      items.forEach((item, idx) => {
+        expect(item.element.tagName.toLowerCase()).toBe('a')
+        expect(item.attributes('href')).toBe(baseItems[idx].route)
+      })
     })
   })
 

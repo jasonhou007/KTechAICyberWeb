@@ -109,7 +109,8 @@
     },
     "menu": {
       "open": "打开菜单",
-      "close": "关闭菜单"
+      "close": "关闭菜单",
+      "label": "网站导航"
     },
     "groups": {
       "banking": "银行业解决方案",

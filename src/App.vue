@@ -12,17 +12,18 @@
     <!-- Skip Link for Accessibility -->
     <SkipLink />
 
-    <nav class="cyber-nav" :aria-label="t('a11y.navLabel')">
-      <div class="nav-logo">{{ t('nav.logo') }}</div>
-      <div class="nav-links">
-        <router-link to="/">{{ t('nav.home') }}</router-link>
-        <router-link to="/about">{{ t('nav.about') }}</router-link>
-        <router-link to="/news">{{ t('nav.news') }}</router-link>
-        <router-link to="/contact">{{ t('nav.contact') }}</router-link>
+    <!-- Site navigation (#164 nav overhaul).
+         Header.vue ships the 6 routed items (Home / About Us / News /
+         Our Solutions / Join Us / Contact) with dropdowns + mobile hamburger.
+         The language + theme toggles live here in App.vue so the hard-won
+         EN/中文 + dark/light toggles remain visible next to the nav regardless
+         of how Header is wired. -->
+    <Header>
+      <template #toolbar>
         <LanguageSwitcher />
         <ThemeToggle />
-      </div>
-    </nav>
+      </template>
+    </Header>
     <main id="main-content" class="main-content" :aria-label="t('a11y.mainLabel')" role="main">
       <router-view />
     </main>
@@ -60,13 +61,15 @@ import { usePreferencesStore } from './stores/preferences'
 import LanguageSwitcher from './components/LanguageSwitcher.vue'
 import ThemeToggle from './components/ThemeToggle.vue'
 import SkipLink from './components/SkipLink.vue'
+import Header from './components/Header.vue'
 
 export default {
   name: 'App',
   components: {
     LanguageSwitcher,
     ThemeToggle,
-    SkipLink
+    SkipLink,
+    Header
   },
   setup() {
     const route = useRoute()
@@ -164,34 +167,14 @@ export default {
 
 <style scoped>
 .app { min-height: 100vh; display: flex; flex-direction: column; }
-.cyber-nav {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 1.5rem 3rem; background: rgba(10, 10, 15, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-  position: sticky; top: 0; z-index: 100;
+/* Header.vue's nav is position: fixed, so it floats above the page and would
+ * cover the top of <main> content. Reserve space equal to the nav height
+ * (logo line-height + vertical padding ≈ 5rem) so routed pages start below
+ * the fixed header instead of being hidden under it. */
+.main-content {
+  flex: 1;
+  padding-top: 5rem;
 }
-.nav-logo {
-  font-family: 'Orbitron', monospace; font-size: 1.5rem; font-weight: 700;
-  color: #e0e0e0; letter-spacing: 0.2em;
-}
-.nav-logo .accent { color: #00f0ff; }
-.nav-links { display: flex; gap: 2rem; }
-.nav-links a {
-  font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; font-weight: 500;
-  color: #e0e0e0; text-decoration: none; text-transform: uppercase;
-  letter-spacing: 0.15em; padding: 0.5rem 1rem;
-  border: 1px solid transparent; transition: all 0.3s ease;
-}
-.nav-links a:hover {
-  color: #00f0ff; border-color: rgba(0, 240, 255, 0.3);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
-}
-.nav-links a.router-link-active,
-.nav-links a[aria-current="page"] {
-  color: #00f0ff; border-color: rgba(0, 240, 255, 0.5);
-}
-.main-content { flex: 1; }
 .cyber-footer {
   padding: 2rem 3rem; background: rgba(10, 10, 15, 0.8);
   border-top: 1px solid rgba(0, 240, 255, 0.2);

@@ -86,30 +86,48 @@ describe('NavigationDropdown.vue', () => {
     })
   })
 
+  // M2 (#164 review): aria-expanded / aria-haspopup live on the TRIGGER
+  // button (WCAG disclosure/menu pattern), not the wrapper .nav-dropdown div.
+  // The earlier assertions against .nav-dropdown encoded the pre-revision bug
+  // and broke once the attributes moved to their correct element.
   describe('Accessibility', () => {
-    it('has aria-expanded attribute', () => {
+    it('exposes aria-expanded on the TRIGGER button (not the wrapper)', () => {
       wrapper = mount(NavigationDropdown, {
         props: { label: 'Test', items: mockItems },
         global: { plugins: [router] }
       })
-      expect(wrapper.find('.nav-dropdown').attributes('aria-expanded')).toBe('false')
+      expect(wrapper.find('.dropdown-trigger').attributes('aria-expanded')).toBe('false')
+      // The wrapper div must no longer carry the attribute.
+      expect(wrapper.find('.nav-dropdown').attributes('aria-expanded')).toBeUndefined()
     })
 
-    it('updates aria-expanded when opened', async () => {
+    it('updates aria-expanded on the trigger when opened', async () => {
       wrapper = mount(NavigationDropdown, {
         props: { label: 'Test', items: mockItems },
         global: { plugins: [router] }
       })
       await wrapper.find('.dropdown-trigger').trigger('click')
-      expect(wrapper.find('.nav-dropdown').attributes('aria-expanded')).toBe('true')
+      expect(wrapper.find('.dropdown-trigger').attributes('aria-expanded')).toBe('true')
     })
 
-    it('has aria-haspopup attribute', () => {
+    it('exposes aria-haspopup="menu" on the TRIGGER button (not the wrapper)', () => {
       wrapper = mount(NavigationDropdown, {
         props: { label: 'Test', items: mockItems },
         global: { plugins: [router] }
       })
-      expect(wrapper.find('.nav-dropdown').attributes('aria-haspopup')).toBe('true')
+      expect(wrapper.find('.dropdown-trigger').attributes('aria-haspopup')).toBe('menu')
+      expect(wrapper.find('.nav-dropdown').attributes('aria-haspopup')).toBeUndefined()
+    })
+
+    it('exposes aria-controls on the trigger pointing at the menu id', async () => {
+      wrapper = mount(NavigationDropdown, {
+        props: { label: 'Test', items: mockItems },
+        global: { plugins: [router] }
+      })
+      const controls = wrapper.find('.dropdown-trigger').attributes('aria-controls')
+      expect(controls).toBeTruthy()
+      await wrapper.find('.dropdown-trigger').trigger('click')
+      expect(wrapper.find('.dropdown-menu').attributes('id')).toBe(controls)
     })
   })
 
