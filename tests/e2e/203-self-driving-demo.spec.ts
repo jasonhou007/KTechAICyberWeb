@@ -42,7 +42,7 @@ test.describe('#203 Self-Driving ambient demo background', () => {
     const firstIter = await root.getAttribute('data-loop-iteration')
     expect(firstPhase).toBeTruthy()
 
-    // Poll for a phase change within ~8s (a full phase is ~2.5s, plus margin
+    // Poll for a phase change within ~8s (a full phase is ~1500ms, plus margin
     // for rAF scheduling + the network-idle settle). The demo must move on its
     // own — no click/hover/scroll anywhere in this test.
     await expect

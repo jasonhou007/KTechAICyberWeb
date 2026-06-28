@@ -226,7 +226,7 @@ describe('SelfDrivingDemo', () => {
     const root = wrapper.find('[data-selfdriving-root]')
     const first = root.attributes('data-current-phase')
 
-    // Step enough 16ms frames to cross PHASE_DURATION_MS (2500ms).
+    // Step enough 16ms frames to cross PHASE_DURATION_MS (1500ms).
     let t = 0
     for (let i = 0; i < 200; i++) {
       t += 16
