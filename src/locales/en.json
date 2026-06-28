@@ -84,7 +84,6 @@
     "news": "News",
     "logo": "KTECH.AI",
     "services": "Services",
-    "honors": "Honors",
     "contact": "Contact",
     "dropdown": {
       "open": "Open menu",
@@ -1190,26 +1189,6 @@
     "founded": "Founded",
     "capital": "Registered Capital (RMB)",
     "projects": "Projects Delivered"
-  },
-  "honors": {
-    "title": "Honors & Qualifications",
-    "subtitle": "Professional certifications · Trusted partner",
-    "highTech": "National High-Tech Enterprise",
-    "highTechDesc": "High-Tech Enterprise Certification",
-    "hq": "Shenzhen Multinational HQ",
-    "hqDesc": "First-batch recognized enterprise",
-    "aaa": "AAA-Rated Credit Enterprise",
-    "aaaDesc": "Highest-tier credit rating",
-    "iso9001": "ISO 9001 Certified",
-    "iso9001Desc": "Quality Management System",
-    "iso27001": "ISO 27001 Certified",
-    "iso27001Desc": "Information Security Management System",
-    "iso20000": "ISO 20000 Certified",
-    "iso20000Desc": "IT Service Management System",
-    "specialized": "Shenzhen SRDI Enterprise",
-    "specializedDesc": "Specialized, Refined, Differential, Innovative SME",
-    "member": "Shenzhen FinTech Association",
-    "memberDesc": "Member Unit"
   },
   "culture": {
     "title": "Vision · Mission · Culture",

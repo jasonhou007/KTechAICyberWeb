@@ -84,7 +84,6 @@
     "news": "新闻",
     "logo": "KTECH.AI",
     "services": "服务",
-    "honors": "荣誉",
     "contact": "联系",
     "dropdown": {
       "open": "打开菜单",
@@ -1190,26 +1189,6 @@
     "founded": "成立年份",
     "capital": "注册资本（元）",
     "projects": "建设项目"
-  },
-  "honors": {
-    "title": "荣誉资质",
-    "subtitle": "专业认证 · 值得信赖",
-    "highTech": "国家高新技术企业",
-    "highTechDesc": "高新技术企业认证",
-    "hq": "深圳市跨国公司总部",
-    "hqDesc": "第一批认定企业",
-    "aaa": "AAA级信用企业",
-    "aaaDesc": "信用评级最高等级",
-    "iso9001": "ISO9001认证",
-    "iso9001Desc": "质量管理体系认证",
-    "iso27001": "ISO27001认证",
-    "iso27001Desc": "信息安全管理体系",
-    "iso20000": "ISO20000认证",
-    "iso20000Desc": "IT服务管理体系",
-    "specialized": "深圳市专精特新",
-    "specializedDesc": "专精特新中小企业",
-    "member": "深圳市金融科技协会",
-    "memberDesc": "会员单位"
   },
   "culture": {
     "title": "愿景·使命·文化",

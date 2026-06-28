@@ -19,7 +19,7 @@
  * ServiceBigData, ServiceRetailLending, SupplyChainFinance,
  * ServiceProjectManagement, NotFound), leaving ~324 t() calls unguarded.
  *
- * Note: the Home sub-components (Hero, Honors, Services, Culture, Contact,
+ * Note: the Home sub-components (Hero, Services, Culture, Contact,
  * Footer, Header, NavigationDropdown) previously declared a LOCAL t() map that
  * bypassed useLanguage entirely. They have since been migrated onto the shared
  * useLanguage() composable, so we now mount each of them directly (in both en
@@ -51,7 +51,6 @@ import NewsSection from '../../src/components/NewsSection.vue'
 
 // The 8 components migrated from local t() maps onto useLanguage().
 import Hero from '../../src/components/Hero.vue'
-import Honors from '../../src/components/Honors.vue'
 import ServicesSection from '../../src/components/Services.vue'
 import Culture from '../../src/components/Culture.vue'
 import ContactSection from '../../src/components/Contact.vue'
@@ -151,7 +150,7 @@ describe('No raw i18n placeholder keys leak into rendered views', () => {
 
 // Transition stub that renders its children, so v-if content is visible for
 // components that gate real copy behind a loading Transition (Hero, Services,
-// Culture, Contact, Honors).
+// Culture, Contact).
 const transitionSlotStub = {
   render() {
     return h('div', { class: 'transition-stub' }, this.$slots.default ? this.$slots.default() : [])
@@ -164,10 +163,9 @@ const router = createRouter({
   routes: [{ path: '/', component: { template: '<div/>' } }],
 })
 
-describe('Migrated components (Hero, Honors, Services, Culture, Contact, Footer, Header, NavigationDropdown) leak no raw keys', () => {
+describe('Migrated components (Hero, Services, Culture, Contact, Footer, ...) leak no raw keys', () => {
   const migratedComponents = [
     { name: 'Hero', component: Hero, stubs: { Transition: transitionSlotStub } },
-    { name: 'Honors', component: Honors, stubs: { Transition: transitionSlotStub } },
     { name: 'Services (section)', component: ServicesSection, stubs: { Transition: transitionSlotStub } },
     { name: 'Culture', component: Culture, stubs: { Transition: transitionSlotStub } },
     { name: 'Contact (section)', component: ContactSection, stubs: { Transition: transitionSlotStub } },
