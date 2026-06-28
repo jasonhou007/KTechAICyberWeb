@@ -1812,8 +1812,9 @@
   },
   "selfDriving": {
     "aria": {
-      "regionLabel": "自动驾驶 Agent 流水线 — 环境演示"
+      "regionLabel": "自动驾驶开发流水线 — 实时演示"
     },
+    "heading": "自动驾驶开发流水线",
     "phases": {
       "intake": { "title": "议题接入", "status": "收到新建议题" },
       "triage": { "title": "自动分流", "status": "已自动分类并分配" },

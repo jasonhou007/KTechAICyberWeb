@@ -1812,8 +1812,9 @@
   },
   "selfDriving": {
     "aria": {
-      "regionLabel": "Self-driving agent pipeline — ambient demo"
+      "regionLabel": "Self-driving dev pipeline — live demo"
     },
+    "heading": "Self-Driving Dev Pipeline",
     "phases": {
       "intake": { "title": "Intake", "status": "New issue received" },
       "triage": { "title": "Triage", "status": "Auto-triaged & assigned" },
