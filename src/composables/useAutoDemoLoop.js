@@ -39,7 +39,11 @@ import { ref, computed, readonly, onMounted, onUnmounted } from 'vue'
 // ---------------------------------------------------------------------------
 
 // Linear phase order; the loop wraps RESOLVED -> INTAKE seamlessly.
-const PHASES = [
+// EXPORTED as the single source of truth so PipelineTrack (and any future
+// consumer) imports it instead of re-declaring a copy that could desync on a
+// rename (iter-13 de-dup: this array was duplicated verbatim in
+// PipelineTrack.vue).
+export const PHASES = [
   'intake',
   'triage',
   'planner',

@@ -10,18 +10,9 @@
  * @ticket #203
  */
 import PipelineCard from './PipelineCard.vue'
-
-// Phase order matches useAutoDemoLoop.PHASES exactly.
-const PHASES = [
-  'intake',
-  'triage',
-  'planner',
-  'coder',
-  'security',
-  'evaluator',
-  'merger',
-  'resolved',
-]
+// Single source of truth: import the phase order from the composable that
+// drives the FSM, so a rename there can't desync this rail (iter-13 de-dup).
+import { PHASES } from '../../composables/useAutoDemoLoop'
 
 // Map each phase to an EXISTING cyber palette CSS variable. Rotating the
 // accent across the rail gives each stage a distinct identity without
