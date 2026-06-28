@@ -95,6 +95,102 @@
         </div>
       </section>
 
+      <!-- Core Features Section -->
+      <section class="dac__core-features" aria-labelledby="dac-core-features-heading">
+        <h2 id="dac-core-features-heading" class="dac__section-title">
+          {{ t('services.digitalAssetCustody.coreFeatures.heading') }}
+        </h2>
+        <div class="dac__cards-grid">
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">📁</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.coreFeatures.walletArchitecture.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.coreFeatures.walletArchitecture.description') }}
+            </p>
+          </article>
+
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">🔐</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.coreFeatures.keyGovernance.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.coreFeatures.keyGovernance.description') }}
+            </p>
+          </article>
+
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">📊</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.coreFeatures.settlementReporting.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.coreFeatures.settlementReporting.description') }}
+            </p>
+          </article>
+
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">🪙</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.coreFeatures.assetSupport.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.coreFeatures.assetSupport.description') }}
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Tech Features Section -->
+      <section class="dac__tech-features" aria-labelledby="dac-tech-features-heading">
+        <h2 id="dac-tech-features-heading" class="dac__section-title">
+          {{ t('services.digitalAssetCustody.techFeatures.heading') }}
+        </h2>
+        <div class="dac__cards-grid">
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">🧩</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.techFeatures.mpcStack.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.techFeatures.mpcStack.description') }}
+            </p>
+          </article>
+
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">⚙️</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.techFeatures.policyEngine.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.techFeatures.policyEngine.description') }}
+            </p>
+          </article>
+
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">🔗</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.techFeatures.integrations.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.techFeatures.integrations.description') }}
+            </p>
+          </article>
+
+          <article class="dac__card">
+            <div class="dac__card-icon neon-border" aria-hidden="true">📈</div>
+            <h3 class="dac__card-title">
+              {{ t('services.digitalAssetCustody.techFeatures.observability.title') }}
+            </h3>
+            <p class="dac__card-description">
+              {{ t('services.digitalAssetCustody.techFeatures.observability.description') }}
+            </p>
+          </article>
+        </div>
+      </section>
+
       <section class="dac__cta" aria-labelledby="dac-cta-heading">
         <h2 id="dac-cta-heading" class="dac__cta-title neon-text">
           {{ t('services.digitalAssetCustody.cta.heading') }}
@@ -364,7 +460,9 @@ onMounted(() => {
   text-align: center;
 }
 
-.dac__capabilities {
+.dac__capabilities,
+.dac__core-features,
+.dac__tech-features {
   margin-bottom: 4rem;
 }
 
