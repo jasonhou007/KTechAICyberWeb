@@ -1365,15 +1365,13 @@
       "line1": "[ 启动 ] 正在初始化神经接口 ……",
       "line2": "[ 认证 ] 访客会话已在 ktech.ai 授权",
       "line3": "[ 链路 ] 量子通道已同步",
-      "line4": "[ 就绪 ] 终端已上线。",
-      "done": "所有系统正常，待命中。"
+      "line4": "[ 就绪 ] 终端已上线。"
     },
     "aria": {
       "consoleLabel": "AI 神经终端命令控制台",
       "outputLive": "终端输出",
       "closeButton": "关闭终端",
       "inputLabel": "终端命令输入框",
-      "historyLabel": "命令历史导航：上方向键查看上一条，下方向键查看下一条",
       "thinking": "AI 正在处理你的请求"
     },
     "errors": {
@@ -1382,63 +1380,49 @@
     "mobile": {
       "paletteTitle": "常用命令",
       "chips": {
-        "help": "help",
-        "about": "about",
-        "services": "services",
-        "ai": "ai",
-        "news": "news",
-        "contact": "contact",
-        "clear": "clear"
+        "help": "帮助",
+        "about": "关于",
+        "services": "服务",
+        "ai": "智能",
+        "news": "新闻",
+        "contact": "联系",
+        "clear": "清屏"
       }
     },
     "commands": {
       "help": {
-        "label": "help",
         "response": "可用命令：help、about、services、ai、news、contact、clear。彩蛋就藏在网格之中。终端正在注视着你。"
       },
       "about": {
-        "label": "about",
         "response": "KTech AI Cyber：泰京银行（KBank）在中国的科技子公司。我们将区块链、跨境支付、数字资产托管、稳定币发行、大数据与零售借贷融合为一套金融神经系统。立志成为中国与东盟领先的金融科技公司。"
       },
       "services": {
-        "label": "services",
         "response": "服务栈已上线：区块链基础设施、跨境支付网关、数字资产托管、稳定币发行、供应链金融、零售借贷、大数据风控智能。各模块均支持热插拔。"
       },
       "ai": {
-        "label": "ai",
         "response": "AI 层：神经风控评分、交易图谱异常检测、自然语言合规审查、流动性预测路由。模型每个周期在活账本上重训。"
       },
       "news": {
-        "label": "news",
         "response": "最新动态：KTech 持续拓展东盟走廊，深化托管与稳定币轨道。请前往「新闻」频道获取全文传输。"
       },
       "contact": {
-        "label": "contact",
         "response": "建立通道：访问联系页，或发送邮件至 ops@ktech.ai。优先使用加密线路。我们将在一个周期内回复。"
       },
       "clear": {
-        "label": "clear",
         "response": "正在清空终端缓冲区 …… 屏幕已清空。"
       },
       "sudo": {
-        "label": "sudo",
         "response": "想得很美，访客。根权限仅开放给架构师。你的尝试已被写入网格日志。"
       },
       "coffee": {
-        "label": "coffee",
-        "response": "正在冲泡合成浓缩咖啡 …… 99% 咖啡因，1% 霓虎。神经核心运转加速。"
+        "response": "正在冲泡合成浓缩咖啡 …… 99% 咖啡因，1% 霓虹。神经核心运转加速。"
       },
       "hackplanet": {
-        "label": "hackplanet",
         "response": "黑客全球。网格亮起。你感到数据在你体内奔流。"
       },
       "konami": {
-        "label": "konami",
         "response": "↑↑↓↓←→←→BA。科拉米代码已接受。本次会话获赠 30 个额外周期。"
       }
-    },
-    "easterEgg": {
-      "burst": "彩蛋触发：神经翼发！"
     }
   }
 }

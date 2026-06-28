@@ -1365,15 +1365,13 @@
       "line1": "[ BOOT ] Initializing neural interface ...",
       "line2": "[ AUTH  ] Guest session authorized @ ktech.ai",
       "line3": "[ LINK  ] Quantum channel synchronized",
-      "line4": "[ READY ] Terminal online.",
-      "done": "All systems nominal. Standing by."
+      "line4": "[ READY ] Terminal online."
     },
     "aria": {
       "consoleLabel": "AI Neural Terminal command console",
       "outputLive": "Terminal output",
       "closeButton": "Close terminal",
       "inputLabel": "Terminal command input",
-      "historyLabel": "Command history navigation: arrow up for previous, arrow down for next",
       "thinking": "AI is processing your request"
     },
     "errors": {
@@ -1393,52 +1391,38 @@
     },
     "commands": {
       "help": {
-        "label": "help",
         "response": "Available commands: help, about, services, ai, news, contact, clear. Easter eggs hidden in the grid. The terminal is watching."
       },
       "about": {
-        "label": "about",
         "response": "KTech AI Cyber: a China-based technology subsidiary of KASIKORNBANK (KBank). We fuse blockchain, cross-border payment, digital asset custody, stablecoin, big data and retail lending into one fintech nervous system. Determined to become a leading fintech company in China and ASEAN."
       },
       "services": {
-        "label": "services",
         "response": "Service stack online: blockchain infrastructure, cross-border payment rails, digital asset custody, stablecoin issuance, supply-chain finance, retail lending, big-data risk intelligence. Each module is hot-swappable."
       },
       "ai": {
-        "label": "ai",
         "response": "AI layer: neural risk scoring, anomaly detection across transaction graphs, natural-language compliance review, predictive liquidity routing. Models retrain on the live ledger every cycle."
       },
       "news": {
-        "label": "news",
         "response": "Latest signal: KTech continues expanding ASEAN corridors and deepening custody + stablecoin rails. Visit the News channel for full transmissions."
       },
       "contact": {
-        "label": "contact",
         "response": "Open a channel: visit the Contact page, or transmit to ops@ktech.ai. Encrypted lines preferred. We answer within one cycle."
       },
       "clear": {
-        "label": "clear",
         "response": "Wiping terminal buffer ... screen cleared."
       },
       "sudo": {
-        "label": "sudo",
         "response": "Nice try, guest. Root access is reserved for the architects. Your attempt has been logged into the grid."
       },
       "coffee": {
-        "label": "coffee",
         "response": "Brewing synthetic espresso ... 99% caffeine, 1% neon. The neural core runs faster now."
       },
       "hackplanet": {
-        "label": "hackplanet",
         "response": "HACK THE PLANET. The grid lights up. You feel the data flow through you."
       },
       "konami": {
-        "label": "konami",
         "response": "↑↑↓↓←→←→BA. Konami code accepted. 30 extra cycles granted to this session."
       }
-    },
-    "easterEgg": {
-      "burst": "Easter egg triggered: neural burst!"
     }
   }
 }

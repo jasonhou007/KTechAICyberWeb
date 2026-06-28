@@ -55,7 +55,6 @@ export function useTerminal() {
   const historyIndex = ref(-1)
 
   const isOpen = ref(false)
-  const hasBooted = ref(false)
 
   // Reactive matrix background intensity. Each keystroke bumps it; it decays
   // on an interval set up by the view (the composable just exposes the value).
@@ -248,11 +247,6 @@ export function useTerminal() {
     activity.value += 1
   }
 
-  // --- boot helper: view pushes boot lines as system output ---------------
-  function markBooted() {
-    hasBooted.value = true
-  }
-
   return {
     // state
     input,
@@ -260,7 +254,6 @@ export function useTerminal() {
     history,
     historyIndex,
     isOpen,
-    hasBooted,
     activity,
     burst,
     prefersReducedMotion,
@@ -275,9 +268,8 @@ export function useTerminal() {
     close,
     toggle,
     bumpActivity,
-    markBooted,
-    // output helpers (view uses these for boot/intro lines)
+    // output helpers (view uses pushSystem for boot/intro lines; pushResponse
+    // is internal-only, used by runCommandText, so it is NOT exported).
     pushSystem,
-    pushResponse,
   }
 }

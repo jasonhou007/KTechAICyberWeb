@@ -1,18 +1,37 @@
 #!/usr/bin/env node
 /**
  * @file check-i18n-keys.mjs
- * @description i18n invariant check (no deps, Node ESM).
+ * @description i18n invariant check (no deps, Node ESM). TWO invariants:
  *
- * Loads src/locales/en.json + zh.json, walks every .vue file under src/, extracts
- * every `t('dotted.key')` literal call, and asserts each key resolves (nested
- * dot-lookup) in BOTH en and zh. Exits non-zero with a list of any missing
- * keys; exits 0 if clean.
+ * PASS 1 — referenced-but-missing: loads src/locales/en.json + zh.json, walks
+ *   every .vue/.js/.ts file under src/, extracts every `t('dotted.key')`
+ *   literal call, and asserts each key resolves (nested dot-lookup) in BOTH en
+ *   and zh. Catches typos / deleted keys still called via t().
  *
- * This is the invariant coder/evaluator agents should run before merge. It
- * complements (but is stricter than) tests/unit/no-raw-i18n-placeholders.spec.js:
- * the spec only catches raw keys that actually render with 3+ dotted segments,
- * whereas this script catches EVERY t('...') literal at the source level,
- * including keys used in computed/attributes/non-rendered branches.
+ * PASS 2 — defined-but-unreferenced (ORPHAN): every locale leaf must be reached
+ *   by at least one t() call. A leaf is "referenced" if EITHER:
+ *     (a) its full dotted path appears as a string literal somewhere in src/
+ *         (covers static t() calls, registry `i18nKey:` fields, and
+ *         pushSystem('a.b.c') pushes — all of these are literals fed to t() at
+ *         runtime); OR
+ *     (b) one of its ANCESTOR prefixes appears as a literal prefix (covers
+ *         dynamic concatenation like t('terminal.mobile.chips.' + name), where
+ *         the literal 'terminal.mobile.chips.' prefix marks all
+ *         terminal.mobile.chips.* leaves as reached).
+ *   Any leaf matching neither is flagged as an orphan.
+ *
+ * Heuristic trade-off (PASS 2b): the prefix rule OVER-approximates — if one
+ * sibling leaf is reached dynamically, all siblings are considered referenced.
+ * This can hide a true orphan but never false-flags a wired key, which is the
+ * property that keeps the build green on legitimate dynamic wiring. PASS 2a
+ * (full literal) catches the common exact cases (registry i18nKey, pushSystem).
+ *
+ * Exits non-zero with a list of any missing keys AND/OR orphans; exits 0 if both
+ * invariants are clean. This is the invariant coder/evaluator agents should run
+ * before merge. It complements (but is stricter than)
+ * tests/unit/no-raw-i18n-placeholders.spec.js: the spec only catches raw keys
+ * that actually render with 3+ dotted segments, whereas this script catches
+ * EVERY t('...') literal at the source level, plus dead translated keys.
  *
  * Usage:  node scripts/check-i18n-keys.mjs
  */
@@ -57,8 +76,12 @@ function resolveKey(obj, dottedPath) {
   return undefined
 }
 
-// --- Recursive .vue file walker -------------------------------------------
-function walkVueFiles(dir, acc = []) {
+// --- Recursive source-file walker (.vue + .js + .ts) -----------------------
+// We scan JS/TS too (not just .vue) because i18n keys are also passed to t()
+// at runtime from data modules (e.g. terminalCommands.js `i18nKey:` fields) and
+// composables (pushSystem('terminal.boot.line1')). Limiting to .vue would miss
+// those and falsely flag their leaves as orphan.
+function walkSrcFiles(dir, acc = []) {
   let entries
   try {
     entries = readdirSync(dir)
@@ -74,10 +97,18 @@ function walkVueFiles(dir, acc = []) {
       continue
     }
     if (st.isDirectory()) {
-      // Skip node_modules / dist / .git if they ever appear under src.
+      // Skip node_modules / dist / .git if they ever appear under src, and
+      // __tests__ dirs (test fixtures intentionally reference nonexistent keys
+      // to exercise the missing-key fallback — they are NOT production refs).
       if (name === 'node_modules' || name === 'dist' || name.startsWith('.')) continue
-      walkVueFiles(full, acc)
-    } else if (name.endsWith('.vue')) {
+      if (name === '__tests__') continue
+      walkSrcFiles(full, acc)
+    } else if (
+      (name.endsWith('.vue') || name.endsWith('.js') || name.endsWith('.ts')) &&
+      !name.endsWith('.test.ts') && !name.endsWith('.test.js') &&
+      !name.endsWith('.spec.ts') && !name.endsWith('.spec.js')
+    ) {
+      // Skip .test/.spec files for the same reason as __tests__ dirs above.
       acc.push(full)
     }
   }
@@ -107,15 +138,76 @@ function extractKeys(source) {
   return keys
 }
 
-// --- Main ------------------------------------------------------------------
-const vueFiles = walkVueFiles(SRC)
+// --- Extract EVERY dotted string literal (for dynamic-ref + orphan check) --
+// For the orphan-leaf check we need more than just t('...') calls: i18n keys
+// are also fed to t() dynamically, e.g.
+//   - registry fields:   i18nKey: 'terminal.commands.help.response'
+//   - system pushes:     pushSystem('terminal.boot.line1')
+//   - concatenated:      t('terminal.mobile.chips.' + name)
+// We collect two sets:
+//   1. fullLiteralKeys — complete dotted string literals (covers registry +
+//      pushSystem + static t() calls). A leaf is referenced if it appears here.
+//   2. literalPrefixes  — every prefix of those literals ending in '.' (covers
+//      concatenated refs: the literal 'terminal.mobile.chips.' prefix marks all
+//      leaves under terminal.mobile.chips.* as referenced, since at least one
+//      is reached dynamically). This is a conservative over-approximation: it
+//      can hide a true orphan if a sibling leaf is never actually built at
+//      runtime, but it never FALSE-FLAGS a wired key, which is the property we
+//      need (the check must not break the build on legitimate dynamic wiring).
+const DOTTED_LITERAL_PATTERN = /['"`]([a-z][a-z0-9_]*(?:\.[a-z0-9_]+)+)['"`]/gi
 
+function extractAllDottedLiterals(source) {
+  const full = new Set()
+  let m
+  DOTTED_LITERAL_PATTERN.lastIndex = 0
+  while ((m = DOTTED_LITERAL_PATTERN.exec(source)) !== null) {
+    full.add(m[1])
+  }
+  return full
+}
+
+// Build the set of literal prefixes (a.b.c. for every full literal a.b.c).
+function prefixesOf(dotted) {
+  const out = new Set()
+  const segs = dotted.split('.')
+  for (let i = 1; i < segs.length; i++) {
+    out.add(segs.slice(0, i).join('.') + '.')
+  }
+  return out
+}
+
+// --- Walk a locale JSON tree into a flat list of leaf dotted-paths ----------
+function collectLeaves(obj, prefix = '', acc = []) {
+  for (const k of Object.keys(obj)) {
+    const v = obj[k]
+    const path = prefix ? `${prefix}.${k}` : k
+    if (v !== null && typeof v === 'object' && !Array.isArray(v)) {
+      collectLeaves(v, path, acc)
+    } else {
+      acc.push(path)
+    }
+  }
+  return acc
+}
+
+// --- Main ------------------------------------------------------------------
+const srcFiles = walkSrcFiles(SRC)
+
+// PASS 1 — referenced-but-missing: every static t('...') literal must resolve
+// in BOTH locales. (This is the original invariant; it catches typos / deleted
+// keys that are still called.)
 /** @type {Array<{file: string, key: string, missingIn: string[]}>} */
 const violations = []
 let totalKeysChecked = 0
 const seenPerFile = new Map()
 
-for (const file of vueFiles) {
+// Also accumulate the union of ALL dotted string literals across src/ — used by
+// the orphan check in PASS 2 (covers dynamic refs via registry fields,
+// pushSystem(), and t('prefix' + var) concatenation).
+const allLiteralKeys = new Set()
+const allLiteralPrefixes = new Set()
+
+for (const file of srcFiles) {
   const source = readFileSync(file, 'utf8')
   const keys = extractKeys(source)
   const rel = relative(ROOT, file).split(sep).join('/')
@@ -130,20 +222,82 @@ for (const file of vueFiles) {
     }
   }
   seenPerFile.set(rel, deduped.length)
+
+  // Feed the orphan-check reference sets from THIS file's dotted literals.
+  for (const lit of extractAllDottedLiterals(source)) {
+    allLiteralKeys.add(lit)
+    for (const p of prefixesOf(lit)) allLiteralPrefixes.add(p)
+  }
 }
 
-if (violations.length === 0) {
-  const fileCount = vueFiles.length
+// PASS 2 — defined-but-unreferenced (ORPHAN) leaves: every locale leaf should
+// be reached by at least one t() call (static OR dynamic). A leaf is referenced
+// if its full path is a literal key, OR its parent prefix is a literal prefix
+// (the dynamic-concatenation case: t('terminal.mobile.chips.' + name) makes the
+// 'terminal.mobile.chips.' prefix literal, covering all chips.* leaves).
+//
+// Heuristic trade-off (documented): the prefix rule OVER-approximates — if one
+// sibling leaf is reached dynamically, all siblings are considered referenced.
+// This can hide a true orphan but never false-flags a wired key, which is the
+// property that keeps the build green on legitimate dynamic wiring. The full-
+// literal rule (registry i18nKey, pushSystem) catches the common exact cases.
+const enLeaves = collectLeaves(en)
+const zhLeaves = collectLeaves(zh)
+
+/** @type {Array<{key: string, locale: string}>} */
+const orphans = []
+function isReferenced(leaf) {
+  if (allLiteralKeys.has(leaf)) return true
+  // Check every ancestor prefix: if 'a.b.' is a literal prefix, leaf 'a.b.c' is
+  // considered dynamically referenced.
+  const segs = leaf.split('.')
+  for (let i = 1; i < segs.length; i++) {
+    if (allLiteralPrefixes.has(segs.slice(0, i).join('.') + '.')) return true
+  }
+  return false
+}
+for (const leaf of enLeaves) {
+  if (!isReferenced(leaf)) orphans.push({ key: leaf, locale: 'en' })
+}
+for (const leaf of zhLeaves) {
+  if (!isReferenced(leaf)) orphans.push({ key: leaf, locale: 'zh' })
+}
+// Dedupe: report each orphan key once (it's an orphan in both locales typically).
+const orphanKeys = [...new Set(orphans.map((o) => o.key))].sort()
+
+const hasMissingViolations = violations.length > 0
+const hasOrphans = orphanKeys.length > 0
+
+if (!hasMissingViolations && !hasOrphans) {
+  const fileCount = srcFiles.length
   console.log(
-    `i18n keys OK: ${totalKeysChecked} unique t() key(s) across ${fileCount} .vue file(s) all resolve in en.json + zh.json.`
+    `i18n keys OK: ${totalKeysChecked} unique t() key(s) across ${fileCount} source file(s) all resolve in en.json + zh.json; no orphan leaves (${enLeaves.length} en / ${zhLeaves.length} zh leaves all referenced).`
   )
   process.exit(0)
 }
 
-console.error(`i18n key check FAILED: ${violations.length} missing key(s).\n`)
-console.error('Missing keys (file -> key [missing in]):')
-for (const v of violations) {
-  console.error(`  ${v.file} -> ${v.key}  [missing in: ${v.missingIn.join(', ')}]`)
+if (hasMissingViolations) {
+  console.error(`i18n key check FAILED: ${violations.length} missing key(s).\n`)
+  console.error('Missing keys (file -> key [missing in]):')
+  for (const v of violations) {
+    console.error(`  ${v.file} -> ${v.key}  [missing in: ${v.missingIn.join(', ')}]`)
+  }
+  console.error(
+    `\nTotal: ${violations.length} missing-key violation(s) across ${srcFiles.length} source file(s).`,
+  )
 }
-console.error(`\nTotal: ${violations.length} violation(s) across ${vueFiles.length} .vue file(s).`)
+
+if (hasOrphans) {
+  console.error(`\ni18n ORPHAN check FAILED: ${orphanKeys.length} defined-but-unreferenced leaf key(s).\n`)
+  console.error('Orphan keys (defined + translated but never t()-referenced):')
+  for (const k of orphanKeys) {
+    console.error(`  ${k}`)
+  }
+  console.error(
+    `\nThese keys are dead weight. Either wire them via t() (statically or via a\n` +
+      `dynamic prefix like t('a.b.' + name)), or delete them from BOTH en.json and\n` +
+      `zh.json. See scripts/check-i18n-keys.mjs header for the dynamic-ref heuristic.`,
+  )
+}
+
 process.exit(1)

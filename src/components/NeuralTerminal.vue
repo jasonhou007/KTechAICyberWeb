@@ -1,5 +1,19 @@
 <template>
   <div class="neural-terminal-root" data-test="neural-terminal">
+    <!-- Easter-egg burst overlay: a transient full-screen glitch/particle
+         burst fired when a hidden command runs (sudo/coffee/hackplanet/konami).
+         Purely decorative — aria-hidden so AT ignores it. Honors
+         prefers-reduced-motion by rendering a static (non-animated) flash. -->
+    <div
+      v-if="burst"
+      class="terminal-burst"
+      :class="{ 'reduced-motion': prefersReducedMotion }"
+      aria-hidden="true"
+    >
+      <span class="terminal-burst-scan"></span>
+      <span class="terminal-burst-particle" v-for="n in 12" :key="n"></span>
+    </div>
+
     <!-- Floating launcher: opens the console -->
     <button
       type="button"
@@ -13,18 +27,37 @@
       <span class="neural-launcher-label">{{ t('terminal.launcher.label') }}</span>
     </button>
 
+    <!-- Inert backdrop: covers the page behind the console when open so the
+         dialog is modal-strength (Tab/SR users can't escape into the page).
+         Clicking it closes the console. It sits below the console (z 9000) but
+         above the launcher, and only renders when open, so the launcher stays
+         clickable when closed. -->
+    <div
+      v-if="isOpen"
+      class="terminal-backdrop"
+      data-test="terminal-backdrop"
+      @click="close"
+    ></div>
+
     <!-- The console itself. Stays in the DOM (so it can animate in/out) and is
-         hidden via the .open class + aria-hidden when closed. -->
+         hidden via the .open class + aria-hidden when closed. role="dialog"
+         aria-modal="true" (AC 3.1) + the backdrop above make it modal. -->
     <section
       ref="consoleEl"
       class="neural-console"
       :class="{ open: isOpen, 'reduced-motion': prefersReducedMotion }"
       data-test="neural-console"
-      role="region"
+      role="dialog"
+      aria-modal="true"
       :aria-label="t('terminal.aria.consoleLabel')"
       :aria-hidden="!isOpen"
     >
-      <div class="neural-matrix" :class="{ active: activity > 0 }" aria-hidden="true"></div>
+      <div
+        class="neural-matrix"
+        :class="{ active: activity > 0, idle: activity === 0 }"
+        :style="{ opacity: matrixOpacity }"
+        aria-hidden="true"
+      ></div>
       <Scanlines />
 
       <header class="neural-console-bar">
@@ -152,7 +185,6 @@ const {
   runCommand,
   autocomplete,
   navigateHistory,
-  clearOutput,
   open,
   close,
   toggle,
@@ -184,13 +216,32 @@ const onMobileChange = (e) => {
 // the output buffer.
 const thinking = ref(false)
 
+// --- matrix reactivity (AC 1.6) ---------------------------------------------
+// Each keystroke bumps `activity` (in the composable); here we (a) bind the
+// matrix opacity to it so more keystrokes = more intense, and (b) DECAY it on
+// an interval so the matrix relaxes back to idle when the user stops. The
+// decay lives in the view (the composable just exposes the raw level).
+const MATRIX_BASE_OPACITY = 0.12
+const MATRIX_STEP = 0.02 // extra opacity per keystroke
+const ACTIVITY_DECAY_MS = 150
+let activityDecayTimer = null
+
+const matrixOpacity = computed(() => {
+  // More keystrokes = brighter matrix, capped so it never washes out.
+  return MATRIX_BASE_OPACITY + Math.min(activity.value, 20) * MATRIX_STEP
+})
+
 // --- decode / scramble animation -------------------------------------------
 // Per-line scramble state. We track a map of lineId -> currently-displayed
 // (possibly scrambled) string so the decode animation can mutate one line
 // without disturbing others. Under prefers-reduced-motion we render the final
 // text immediately and never schedule a timer.
 const decodeState = ref(new Map())
-let decodeTimer = null
+// Track EVERY outstanding decode-chain timer id in a Set (not a single shared
+// id) so rapid typing — which fires several decode chains in parallel — can't
+// orphan the earlier chains. On unmount we clear them all. (S-3: the old
+// single-id scheme overwrote the id each tick, leaving earlier chains leaked.)
+const decodeTimers = new Set()
 
 const SCRAMBLE_CHARS = 'ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍ0123456789ABCDEF'
 
@@ -234,7 +285,13 @@ function startDecodeFor(line) {
     decodeState.value = new Map(decodeState.value)
     frame++
     if (frame <= totalFrames) {
-      decodeTimer = setTimeout(tick, 28)
+      // Track this timer id so it can be cleared on unmount (and self-removes
+      // from the Set when it fires, so the Set only ever holds PENDING timers).
+      const id = setTimeout(() => {
+        decodeTimers.delete(id)
+        tick()
+      }, 28)
+      decodeTimers.add(id)
     } else {
       decodeState.value.set(line.id, target)
       decodeState.value = new Map(decodeState.value)
@@ -322,8 +379,10 @@ function onInputKeydown(e) {
 const chipCommands = computed(() => visibleCommands.value)
 
 function chipLabel(name) {
-  // Command name stays English; the chip palette title is localized.
-  return name
+  // The chip DISPLAY label is localized user-facing UI text (AC: UI text must be
+  // localized). Clicking the chip still runs the canonical English command name
+  // (the protocol), so runChip receives cmd.name, not the localized label.
+  return t('terminal.mobile.chips.' + name)
 }
 
 function runChip(name) {
@@ -423,11 +482,26 @@ onMounted(() => {
     }
   }
   document.addEventListener('keydown', onDocKeydown)
+  // AC 1.6: decay the activity level so the matrix relaxes back to idle when
+  // the user stops typing. The composable only exposes `activity`; the view
+  // owns the decay cadence (per the composable's JSDoc).
+  activityDecayTimer = setInterval(() => {
+    if (activity.value > 0) {
+      activity.value = Math.max(0, activity.value - 1)
+    }
+  }, ACTIVITY_DECAY_MS)
 })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', onDocKeydown)
-  if (decodeTimer) clearTimeout(decodeTimer)
+  if (activityDecayTimer) {
+    clearInterval(activityDecayTimer)
+    activityDecayTimer = null
+  }
+  // Clear EVERY outstanding decode-chain timer (rapid typing can leave several
+  // chains in flight; the Set tracks them all so none leak on unmount). S-3.
+  decodeTimers.forEach((id) => clearTimeout(id))
+  decodeTimers.clear()
   bootTimers.forEach((id) => clearTimeout(id))
   if (mobileMq) {
     if (mobileMq.removeEventListener) {
@@ -485,6 +559,18 @@ onUnmounted(() => {
   color: #00ffff;
 }
 
+/* ---- inert backdrop (modal) -----------------------------------------------*/
+/* Renders only when the console is open. Sits above the page (and the launcher
+   once open) but below the console dialog itself, so Tab/SR focus can't escape
+   into the page behind. Clicking it closes the console. */
+.terminal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+}
+
 /* ---- console shell --------------------------------------------------------*/
 .neural-console {
   position: fixed;
@@ -511,11 +597,14 @@ onUnmounted(() => {
 }
 
 /* ---- matrix bg ------------------------------------------------------------*/
+/* Opacity is driven by the bound inline style (matrixOpacity), so the class
+   rules here only carry the grid-spacing + idle-pulse state effects. AC 1.6:
+   more keystrokes => brighter (inline opacity) + tighter grid (.active); idle
+   => relaxed grid (.idle) with a slow neural pulse. */
 .neural-matrix {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.12;
   background-image:
     linear-gradient(rgba(0, 255, 136, 0.18) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 136, 0.18) 1px, transparent 1px);
@@ -524,8 +613,16 @@ onUnmounted(() => {
 }
 
 .neural-matrix.active {
-  opacity: 0.28;
   background-size: 18px 18px;
+}
+
+.neural-matrix.idle {
+  animation: terminal-matrix-pulse 4s ease-in-out infinite;
+}
+
+@keyframes terminal-matrix-pulse {
+  0%, 100% { filter: brightness(0.9); }
+  50% { filter: brightness(1.15); }
 }
 
 /* ---- console bar ----------------------------------------------------------*/
@@ -790,6 +887,101 @@ onUnmounted(() => {
   .decode-anim::before,
   .decode-anim::after {
     animation: none;
+  }
+}
+
+/* ---- easter-egg burst overlay ---------------------------------------------*/
+/* Fixed full-screen flash + scanline tear + radiating particles, fired when a
+   hidden command runs. Animation auto-clears via the v-if (burst is reset after
+   1200ms). Under prefers-reduced-motion we drop the motion but keep a static
+   neon flash so the feedback is still perceivable. */
+.terminal-burst {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+  animation: terminal-burst-flash 0.9s ease-out forwards;
+}
+
+.terminal-burst-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 0, 255, 0.9),
+    rgba(0, 255, 255, 0.9),
+    transparent
+  );
+  box-shadow: 0 0 16px rgba(255, 0, 255, 0.8);
+  animation: terminal-burst-scan 0.7s linear;
+}
+
+.terminal-burst-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #00ffff;
+  box-shadow: 0 0 8px #00ffff;
+  --dx: 0px;
+  --dy: 0px;
+  animation: terminal-burst-particle 0.9s ease-out forwards;
+}
+/* Distribute the 12 particles radially via nth-child offsets. */
+.terminal-burst-particle:nth-child(2)  { --dx:  40vw; --dy: -30vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(3)  { --dx: -40vw; --dy: -20vh; }
+.terminal-burst-particle:nth-child(4)  { --dx:  30vw; --dy:  35vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(5)  { --dx: -35vw; --dy:  25vh; }
+.terminal-burst-particle:nth-child(6)  { --dx:  50vw; --dy:   5vh; background:#00ff88; box-shadow:0 0 8px #00ff88; }
+.terminal-burst-particle:nth-child(7)  { --dx: -50vw; --dy:  -5vh; }
+.terminal-burst-particle:nth-child(8)  { --dx:  10vw; --dy: -45vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(9)  { --dx: -10vw; --dy:  45vh; }
+.terminal-burst-particle:nth-child(10) { --dx:  45vw; --dy: -40vh; }
+.terminal-burst-particle:nth-child(11) { --dx: -45vw; --dy:  40vh; background:#00ff88; box-shadow:0 0 8px #00ff88; }
+.terminal-burst-particle:nth-child(12) { --dx:   0vw; --dy:  50vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(13) { --dx:   0vw; --dy: -50vh; }
+
+@keyframes terminal-burst-flash {
+  0%   { background: rgba(255, 0, 255, 0); }
+  10%  { background: rgba(255, 0, 255, 0.35); }
+  30%  { background: rgba(0, 255, 255, 0.25); }
+  100% { background: rgba(0, 0, 0, 0); }
+}
+
+@keyframes terminal-burst-scan {
+  0%   { top: 0; opacity: 1; }
+  100% { top: 100%; opacity: 0.2; }
+}
+
+@keyframes terminal-burst-particle {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); opacity: 0; }
+}
+
+/* Reduced motion: keep a perceivable static flash, drop all motion. */
+.terminal-burst.reduced-motion,
+.terminal-burst.reduced-motion .terminal-burst-scan,
+.terminal-burst.reduced-motion .terminal-burst-particle {
+  animation: none;
+}
+.terminal-burst.reduced-motion {
+  background: rgba(0, 255, 255, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-burst,
+  .terminal-burst-scan,
+  .terminal-burst-particle {
+    animation: none;
+  }
+  .terminal-burst {
+    background: rgba(0, 255, 255, 0.18);
   }
 }
 </style>
