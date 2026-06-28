@@ -1540,5 +1540,53 @@
         "response": "↑↑↓↓←→←→BA。科拉米代码已接受。本次会话获赠 30 个额外周期。"
       }
     }
+  },
+  "neural": {
+    "title": "KTech 神经核心",
+    "subtitle": "实时神经推理 — 观看网络思考",
+    "aria": {
+      "regionLabel": "KTech 神经核心神经网络可视化",
+      "description": "一个可交互的神经网络。悬停或聚焦节点以查看其层级与功能。激活“运行推理”以观看数据包传播至解码决策。",
+      "nodeLabel": "层级 {layer}，功能 {function}",
+      "synapseHighlighted": "{count} 条突触已高亮",
+      "runInferenceButton": "运行神经推理",
+      "inferenceRunning": "推理传播中",
+      "inferenceDone": "推理完成",
+      "readout": "解码后的推理读数"
+    },
+    "layers": {
+      "input": {
+        "label": "数据摄取",
+        "function": "摄取"
+      },
+      "hidden": {
+        "label": "风控 / 机器学习模型",
+        "function": "建模"
+      },
+      "output": {
+        "label": "决策",
+        "function": "决策"
+      }
+    },
+    "runInference": "运行推理",
+    "inferenceState": {
+      "idle": "就绪",
+      "running": "传播中…",
+      "done": "已解码"
+    },
+    "readout": {
+      "label": "输出",
+      "approve": "通过",
+      "review": "复审",
+      "flag": "标记",
+      "confidenceSuffix": "%"
+    },
+    "tooltip": {
+      "layer": "层级",
+      "function": "功能"
+    },
+    "glitch": {
+      "complete": "推理完成"
+    }
   }
 }

@@ -1540,5 +1540,53 @@
         "response": "↑↑↓↓←→←→BA. Konami code accepted. 30 extra cycles granted to this session."
       }
     }
+  },
+  "neural": {
+    "title": "KTech AI Core",
+    "subtitle": "Live neural inference — watch the network think",
+    "aria": {
+      "regionLabel": "KTech AI Core neural network visualizer",
+      "description": "An interactive neural network. Hover or focus a node to inspect its layer and function. Activate Run Inference to watch a data packet propagate to a decoded decision.",
+      "nodeLabel": "Layer {layer}, function {function}",
+      "synapseHighlighted": "{count} synapses highlighted",
+      "runInferenceButton": "Run neural inference",
+      "inferenceRunning": "Inference propagating",
+      "inferenceDone": "Inference complete",
+      "readout": "Decoded inference readout"
+    },
+    "layers": {
+      "input": {
+        "label": "Data Ingestion",
+        "function": "ingestion"
+      },
+      "hidden": {
+        "label": "Risk / ML Models",
+        "function": "modeling"
+      },
+      "output": {
+        "label": "Decision",
+        "function": "decision"
+      }
+    },
+    "runInference": "Run Inference",
+    "inferenceState": {
+      "idle": "Ready",
+      "running": "Propagating…",
+      "done": "Decoded"
+    },
+    "readout": {
+      "label": "OUTPUT",
+      "approve": "APPROVE",
+      "review": "REVIEW",
+      "flag": "FLAG",
+      "confidenceSuffix": "%"
+    },
+    "tooltip": {
+      "layer": "Layer",
+      "function": "Function"
+    },
+    "glitch": {
+      "complete": "INFERENCE COMPLETE"
+    }
   }
 }
