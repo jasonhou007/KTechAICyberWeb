@@ -78,6 +78,14 @@ const HEAVY_LOAD_CONSECUTIVE = 5
 // Frames under the threshold in a row clear the heavy-load state.
 const HEAVY_LOAD_RECOVERY_FRAMES = 5
 
+// Neutral single-frame delta (~16.7ms at 60fps) used to clamp an absurdly
+// large delta (e.g. a throttled background tab dumping a multi-second gap) so
+// the phase clock never fast-forwards multiple phases in one frame. INFO-2:
+// this MUST be under HEAVY_LOAD_FRAME_MS — the earlier clamp fell back to
+// HEAVY_LOAD_FRAME_MS (50ms) itself, so a single clamp on resume registered as
+// a jank frame and could spuriously trip the heavy-load throttle.
+const NEUTRAL_FRAME_MS = 16.7
+
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
 const VISIBILITY_EVENT = 'visibilitychange'
 
@@ -191,6 +199,17 @@ export function useAutoDemoLoop() {
     let delta = timestamp - lastFrameTime
     lastFrameTime = timestamp
 
+    // Defend against any path that yields a huge delta (e.g. a throttled
+    // background tab dumping a multi-second gap on resume) by clamping BEFORE
+    // the heavy-load + phase-clock logic below, so one clamped frame neither
+    // fast-forwards multiple phases nor registers as a jank frame. INFO-2: the
+    // clamp value MUST be a neutral single frame (~16.7ms, < HEAVY_LOAD_FRAME_MS)
+    // — the earlier clamp fell back to HEAVY_LOAD_FRAME_MS (50ms) itself, so a
+    // single resume clamp counted as jank and could spuriously trip the
+    // heavy-load throttle. Clamping up here also keeps the jank assessment honest
+    // (the clamped value is what both the phase clock and the counter see).
+    if (delta > PHASE_DURATION_MS) delta = NEUTRAL_FRAME_MS
+
     // Heavy-load detection. A janky frame (>50ms) bumps the counter; a smooth
     // frame clears it. Sustained jank flips throttleLevel to 'half'; sustained
     // smooth frames recover to 'full'.
@@ -203,13 +222,6 @@ export function useAutoDemoLoop() {
         heavyFrames = 0
       }
     }
-
-    // Tab was hidden then visible again: when we cancelled on hide, lastFrameTime
-    // was frozen. On resume we reset it to 0, so the first resume frame took the
-    // early-return branch above and we only land here with a small delta. But
-    // defend against any path that yields a huge delta (e.g. throttled tabs)
-    // by clamping so we never fast-forward multiple phases in one frame.
-    if (delta > PHASE_DURATION_MS) delta = HEAVY_LOAD_FRAME_MS
 
     const factor = throttleLevel.value === 'half' ? HALF_FACTOR : 1
     phaseElapsedMs.value += delta * factor

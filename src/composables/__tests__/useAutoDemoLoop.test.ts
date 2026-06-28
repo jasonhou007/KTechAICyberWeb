@@ -508,4 +508,42 @@ describe('useAutoDemoLoop()', () => {
     expect(io.unobserve).toHaveBeenCalledWith(first)
     wrapper.unmount()
   })
+
+  // 11. delta clamp falls back to a neutral frame, not a jank frame (INFO-2) --
+
+  it('INFO-2: an absurdly large delta is clamped to a neutral frame (no fast-forward, no false jank)', () => {
+    mockMatchMedia({ '(prefers-reduced-motion: reduce)': false })
+    const raf = queueRAF()
+    mockIntersectionObserver()
+    const { wrapper, getApi } = mountHost()
+    const { phaseId, phaseIndex, throttleLevel, phaseDurationMs } = getApi()
+
+    // Establish a baseline with one normal frame.
+    let t = 16
+    raf.step(t)
+
+    // Deliver a delta FAR larger than PHASE_DURATION_MS — e.g. a background tab
+    // that was throttled and resumed with a multi-second gap. The clamp must
+    // reduce this to a NEUTRAL single frame so the phase clock does not
+    // fast-forward multiple phases in one step.
+    const gap = phaseDurationMs * 3 // well over one full phase
+    t += gap
+    raf.step(t)
+
+    // The phase did NOT jump past the first boundary (no multi-phase skip).
+    expect(phaseIndex.value).toBeLessThanOrEqual(1)
+    expect(phaseId.value).not.toBe('resolved')
+
+    // Now feed several consecutive huge-gap frames. Each is clamped to the
+    // neutral value; only if that clamp is < HEAVY_LOAD_FRAME_MS (50ms) do they
+    // avoid registering as jank. The OLD clamp fell back to 50ms exactly, so 5
+    // consecutive clamped frames would trip throttleLevel to 'half'. With the
+    // neutral (~16.7ms) clamp the throttle must stay 'full'.
+    for (let i = 0; i < 6; i++) {
+      t += gap
+      raf.step(t)
+    }
+    expect(throttleLevel.value).toBe('full')
+    wrapper.unmount()
+  })
 })
