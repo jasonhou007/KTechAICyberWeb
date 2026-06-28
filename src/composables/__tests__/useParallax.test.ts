@@ -350,31 +350,56 @@ describe('useParallax()', () => {
       'accessibility.css',
     )
     let cssSource: string
+    // Active CSS only — comments stripped. Without this, a commented-out rule
+    // (e.g. `/* [data-parallax="on"] { transform: none } */`) would still match
+    // the substring assertions below, creating a silent false-negative where the
+    // WCAG-critical neutralization could vanish while the gate stays green.
+    // (Iter-15 reviewer should-fix S1: harden the iter-13 visual gate template.)
+    let activeCss: string
 
     beforeEach(() => {
       cssSource = fs.readFileSync(cssPath, 'utf-8')
+      activeCss = cssSource.replace(/\/\*[\s\S]*?\*\//g, '')
     })
 
     it('contains a [data-parallax="on"] selector inside the reduced-motion block', () => {
       // Slice the reduced-motion media block out of the file so we can assert the
       // rule lives INSIDE it (not in a stray location).
-      const reducedIdx = cssSource.indexOf('@media (prefers-reduced-motion: reduce)')
+      const reducedIdx = activeCss.indexOf('@media (prefers-reduced-motion: reduce)')
       expect(reducedIdx).toBeGreaterThan(-1)
-      const nextMediaIdx = cssSource.indexOf('@media', reducedIdx + 1)
-      const blockEnd = nextMediaIdx === -1 ? cssSource.length : nextMediaIdx
-      const reducedBlock = cssSource.slice(reducedIdx, blockEnd)
+      const nextMediaIdx = activeCss.indexOf('@media', reducedIdx + 1)
+      const blockEnd = nextMediaIdx === -1 ? activeCss.length : nextMediaIdx
+      const reducedBlock = activeCss.slice(reducedIdx, blockEnd)
 
       expect(reducedBlock).toContain('[data-parallax="on"]')
     })
 
     it('forces transform:none under reduced-motion for parallax layers', () => {
-      const reducedIdx = cssSource.indexOf('@media (prefers-reduced-motion: reduce)')
-      const nextMediaIdx = cssSource.indexOf('@media', reducedIdx + 1)
-      const blockEnd = nextMediaIdx === -1 ? cssSource.length : nextMediaIdx
-      const reducedBlock = cssSource.slice(reducedIdx, blockEnd)
+      const reducedIdx = activeCss.indexOf('@media (prefers-reduced-motion: reduce)')
+      const nextMediaIdx = activeCss.indexOf('@media', reducedIdx + 1)
+      const blockEnd = nextMediaIdx === -1 ? activeCss.length : nextMediaIdx
+      const reducedBlock = activeCss.slice(reducedIdx, blockEnd)
 
       // The rule must neutralize any transform a prior frame applied.
       expect(reducedBlock).toMatch(/transform:\s*none/)
+    })
+
+    it('rejects a commented-out rule (the rule must be ACTIVE css, not a comment)', () => {
+      // Regression guard: if someone deletes the active block and leaves only a
+      // `/* [data-parallax="on"] { transform: none !important } */` comment, this
+      // gate must fail. We simulate that by re-stripping comments from a fixture
+      // where the active rule is replaced by a comment, and asserting the
+      // stripped result contains neither selector nor declaration.
+      const sabotaged = cssSource.replace(
+        /\[data-parallax="on"\][\s\S]*?\}/,
+        '/* [data-parallax="on"] { transform: none !important; transition: none !important; } */',
+      )
+      const sabotagedActive = sabotaged.replace(/\/\*[\s\S]*?\*\//g, '')
+
+      // The sabotaged (comment-only) fixture must NOT satisfy the active rule.
+      expect(sabotagedActive).not.toContain('[data-parallax="on"]')
+      // Sanity: the real source, stripped, MUST still contain it.
+      expect(activeCss).toContain('[data-parallax="on"]')
     })
   })
 })
