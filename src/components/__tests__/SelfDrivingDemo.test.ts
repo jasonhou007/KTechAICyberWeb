@@ -342,4 +342,106 @@ describe('SelfDrivingDemo', () => {
     expect(nearStyle).toMatch(/translate3d\(0(?:\.00)?px/)
     wrapper.unmount()
   })
+
+  // -------------------------------------------------------------------------
+  // MEDIUM-3 — streaming feed tracks the live phase (no tautology)
+  // The earlier streamingLines was `if (isStatic) return all; return all` —
+  // both branches returned the identical array, so the feed was static even
+  // though the docstring claimed it "rotates the visible set based on the
+  // current phase". Now the live-phase line is promoted to index 0 so it is
+  // revealed first as StreamingCode types in.
+  // -------------------------------------------------------------------------
+
+  // Helper: step the rAF clock forward by `ms` milliseconds in 16ms frames.
+  // The clock is carried in `state.t` so successive calls produce monotonically
+  // increasing timestamps (the FSM compares frame deltas against lastFrameTime,
+  // so a clock that resets would yield zero/negative deltas and stall the loop).
+  function stepMs(
+    raf: ReturnType<typeof deferredRAF>,
+    ms: number,
+    state: { t: number },
+  ) {
+    const frames = Math.ceil(ms / 16) + 2
+    for (let i = 0; i < frames; i++) {
+      state.t += 16
+      raf.step(state.t)
+    }
+  }
+
+  it('MEDIUM-3: the streaming feed promotes the live-phase line to the front', async () => {
+    installMatchMedia({ reduce: false })
+    const raf = deferredRAF()
+    const { setLanguage } = useLanguage()
+    setLanguage('en')
+
+    const wrapper = mount(SelfDrivingDemo, { attachTo: document.body })
+    await nextTick()
+
+    const clock = { t: 0 }
+    // Advance the FSM past 2 phase boundaries (PHASE_DURATION_MS=1500ms) to
+    // land on `planner` (phaseIndex 2).
+    stepMs(raf, 3100, clock)
+    await nextTick()
+
+    const root = () => wrapper.find('[data-selfdriving-root]')
+    expect(root().attributes('data-current-phase')).toBe('planner')
+
+    // The first streaming line must be the planner line — proving the feed
+    // reordered to foreground the live stage.
+    const lines = () => wrapper.findAll('.streaming-code-line')
+    expect(lines().length).toBeGreaterThan(0)
+    expect(lines()[0].text()).toContain('planner:')
+
+    // Advance one more boundary to `coder` (phaseIndex 3) and the first line
+    // must now be the coder line — the rotation actually tracks the phase.
+    stepMs(raf, 1600, clock)
+    await nextTick()
+    expect(root().attributes('data-current-phase')).toBe('coder')
+    expect(wrapper.findAll('.streaming-code-line')[0].text()).toContain('coder:')
+
+    wrapper.unmount()
+  })
+
+  it('MEDIUM-3: streaming lines change between two phases (not a static set)', async () => {
+    installMatchMedia({ reduce: false })
+    const raf = deferredRAF()
+    const { setLanguage } = useLanguage()
+    setLanguage('en')
+
+    const wrapper = mount(SelfDrivingDemo, { attachTo: document.body })
+    await nextTick()
+    const clock = { t: 0 }
+    stepMs(raf, 3100, clock)
+    await nextTick()
+    const plannerFirst = wrapper.findAll('.streaming-code-line')[0].text()
+
+    stepMs(raf, 1600, clock)
+    await nextTick()
+    const coderFirst = wrapper.findAll('.streaming-code-line')[0].text()
+
+    // The first line MUST differ between the two phases — this is the exact
+    // assertion that the old tautology (`return all; return all`) would FAIL,
+    // because both phases would have produced the identical planner-first array.
+    expect(plannerFirst).not.toBe(coderFirst)
+    expect(plannerFirst).toContain('planner:')
+    expect(coderFirst).toContain('coder:')
+    wrapper.unmount()
+  })
+
+  it('MEDIUM-3: under reduced motion the streaming feed keeps its natural order (no promotion)', async () => {
+    installMatchMedia({ reduce: true })
+    neverRAF()
+    const { setLanguage } = useLanguage()
+    setLanguage('en')
+
+    const wrapper = mount(SelfDrivingDemo, { attachTo: document.body })
+    await nextTick()
+    // Static branch: phase never advances, and the full set is shown in its
+    // natural order (planner first), regardless of the (frozen) phaseId.
+    const lines = wrapper.findAll('.streaming-code-line')
+    expect(lines.length).toBe(4)
+    expect(lines[0].text()).toContain('planner:')
+    expect(lines[3].text()).toContain('evaluator:')
+    wrapper.unmount()
+  })
 })

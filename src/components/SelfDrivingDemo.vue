@@ -92,8 +92,19 @@ const progress = computed(() => {
 })
 
 // The streaming lines (pre-translated) shown alongside the coder-ish phases.
-// Rotate the visible set based on the current phase so the feed narrates the
-// live stage; under reduced motion the full set is shown statically.
+// The feed tracks the LIVE phase (MEDIUM-3 — the earlier body was a tautology:
+// `if (isStatic) return all; return all` returned the identical array from
+// both branches). We promote the line matching the current phaseId to the
+// front so StreamingCode — which reveals lines by progress starting at index 0
+// — surfaces the live stage first as the feed types in. Under reduced motion
+// the full set is shown in its natural order (no promotion needed; the static
+// key-frame is already legible).
+const STREAMING_PHASE_KEYS = {
+  planner: 'plannerLine',
+  coder: 'coderLine',
+  security: 'securityLine',
+  evaluator: 'evalLine',
+}
 const streamingLines = computed(() => {
   const all = [
     t('selfDriving.streaming.plannerLine'),
@@ -102,7 +113,13 @@ const streamingLines = computed(() => {
     t('selfDriving.streaming.evalLine'),
   ]
   if (isStatic.value) return all
-  return all
+  const activeKey = STREAMING_PHASE_KEYS[phaseId.value]
+  if (!activeKey) return all
+  const activeLine = t(`selfDriving.streaming.${activeKey}`)
+  // Promote the live-phase line to index 0; keep the rest in their original
+  // relative order so the feed reads as a stable console that foregrounds the
+  // current stage.
+  return [activeLine, ...all.filter((l) => l !== activeLine)]
 })
 
 // Which readout key the StatusReadout shows: merged at the resolved phase,
