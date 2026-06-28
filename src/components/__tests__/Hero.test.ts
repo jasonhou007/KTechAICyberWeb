@@ -149,7 +149,7 @@ describe('Hero.vue', () => {
     it('displays hero subtitle/description', () => {
       const subtitle = wrapper.find('.hero-subtitle')
       expect(subtitle.exists()).toBe(true)
-      expect(subtitle.text()).toContain('Kaitai Vision Information Technology')
+      expect(subtitle.text()).toContain('KASIKORN VISION INFORMATION TECHNOLOGY')
     })
 
     it('renders hero stats container', () => {
@@ -474,7 +474,7 @@ describe('Hero.vue', () => {
 
     it('translates hero description', () => {
       const subtitle = wrapper.find('.hero-subtitle')
-      expect(subtitle.text()).toContain('Kaitai Vision Information Technology')
+      expect(subtitle.text()).toContain('KASIKORN VISION INFORMATION TECHNOLOGY')
       expect(subtitle.text()).toContain('Shenzhen')
     })
 

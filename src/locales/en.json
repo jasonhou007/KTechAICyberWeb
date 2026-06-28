@@ -121,7 +121,7 @@
     "status": "ONLINE",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
-    "companyName": "Kaitai Vision Information Technology Co., Ltd."
+    "companyName": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)"
   },
   "home": {
     "title": "Determined to Become a Leading Fintech Company in China ASEAN Region",
@@ -195,11 +195,13 @@
     "whoWeAre": {
       "title": "Who We Are",
       "companyName": "Company Name",
-      "companyInfo": "Kaitai Vision Information Technology Co., Ltd. — a fintech and AI company headquartered in Shenzhen.",
+      "companyInfo": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech) — a fintech and AI company headquartered in Shenzhen.",
       "parentCompany": "Parent Company",
       "parentInfo": "Backed by an established financial services group with deep expertise across banking and credit markets.",
       "capital": "Registered Capital",
-      "capitalAmount": "RMB 50 million",
+      "capitalAmount": "RMB 300 million",
+      "established": "Established",
+      "establishedDate": "June 2020",
       "services": "Core Services",
       "servicesList": "Supply chain finance, retail lending platforms, and big data & AI solutions for financial institutions.",
       "featureImageAlt": "Regional leading fintech platform illustration"
@@ -1206,7 +1208,7 @@
   "hero": {
     "title": "KaiTech",
     "subtitle": "KBRIGHT FINTECH",
-    "description": "Kaitai Vision Information Technology Co., Ltd. was established in Luohu District, Shenzhen in June 2020 by Thailand's KASIKORN Bank Group, with a registered capital of RMB 300 million. It is among the first batch of multinational-company headquarters enterprises recognized by Shenzhen."
+    "description": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech) was established in Luohu District, Shenzhen in June 2020 by Thailand's KASIKORN Bank Group, with a registered capital of RMB 300 million. It is among the first batch of multinational-company headquarters enterprises recognized by Shenzhen."
   },
   "stats": {
     "founded": "Founded",

@@ -199,7 +199,9 @@
       "parentCompany": "母公司",
       "parentInfo": "依托于一家在银行与信贷领域拥有深厚积累的成熟金融服务集团。",
       "capital": "注册资本",
-      "capitalAmount": "人民币 5000 万元",
+      "capitalAmount": "3亿元人民币",
+      "established": "成立时间",
+      "establishedDate": "2020年6月",
       "services": "核心服务",
       "servicesList": "面向金融机构的供应链金融、零售贷款平台及大数据与人工智能解决方案。",
       "featureImageAlt": "区域性领先金融科技平台示意图"

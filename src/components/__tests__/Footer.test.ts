@@ -86,7 +86,7 @@ describe('Footer.vue', () => {
       const text = wrapper.text()
 
       // Assert: Company name is present
-      expect(text).toContain('Kaitai Vision Information Technology Co., Ltd.')
+      expect(text).toContain('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
     })
 
     it('displays copyright information correctly', () => {
@@ -103,7 +103,7 @@ describe('Footer.vue', () => {
 
       // Assert: Element exists and contains correct text
       expect(companyNameEl.exists()).toBe(true)
-      expect(companyNameEl.text()).toBe('Kaitai Vision Information Technology Co., Ltd.')
+      expect(companyNameEl.text()).toBe('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
     })
 
     it('renders copyright in footer-copyright div', () => {
@@ -121,7 +121,7 @@ describe('Footer.vue', () => {
       const copyrightEl = wrapper.find('.footer-copyright')
 
       // Assert: No extra whitespace
-      expect(companyNameEl.text()).toBe('Kaitai Vision Information Technology Co., Ltd.')
+      expect(companyNameEl.text()).toBe('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
       expect(copyrightEl.text()).toBe('© 2025 KTech AI. All systems operational.')
     })
   })
@@ -210,7 +210,7 @@ describe('Footer.vue', () => {
       const result = wrapper.vm.t('footer.companyName')
 
       // Assert: Returns the English copy from en.json
-      expect(result).toBe('Kaitai Vision Information Technology Co., Ltd.')
+      expect(result).toBe('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
     })
 
     it('translates copyright key correctly', () => {
@@ -261,7 +261,7 @@ describe('Footer.vue', () => {
       // Assert: All wrappers mount successfully
       wrappers.forEach((w) => {
         expect(w.exists()).toBe(true)
-        expect(w.text()).toContain('Kaitai Vision Information Technology Co., Ltd.')
+        expect(w.text()).toContain('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
       })
 
       // Cleanup: Unmount all
@@ -277,7 +277,7 @@ describe('Footer.vue', () => {
       const newWrapper = mount(Footer)
 
       // Assert: Still renders correctly
-      expect(newWrapper.text()).toContain('Kaitai Vision Information Technology Co., Ltd.')
+      expect(newWrapper.text()).toContain('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
       expect(newWrapper.text()).toContain('© 2025 KTech AI')
 
       // Cleanup
@@ -318,7 +318,7 @@ describe('Footer.vue', () => {
       const footerText = wrapper.find('.footer-text')
 
       // Assert: Contains only company name
-      expect(footerText.text()).toBe('Kaitai Vision Information Technology Co., Ltd.')
+      expect(footerText.text()).toBe('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
     })
 
     it('footer-copyright element contains copyright', () => {
@@ -359,7 +359,7 @@ describe('Footer.vue', () => {
       expect(html).toContain('footer')
       expect(html).toContain('footer-text')
       expect(html).toContain('footer-copyright')
-      expect(html).toContain('Kaitai Vision Information Technology Co., Ltd.')
+      expect(html).toContain('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
       expect(html).toContain('© 2025 KTech AI')
     })
   })

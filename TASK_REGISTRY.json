@@ -1,4 +1,35 @@
 {
+  "issue": 205,
+  "205": {
+    "title": "[bug] Correct KTech company facts: capital 300M (was 50M), full KASIKORN VISION name, founding date",
+    "status": "InProgress",
+    "stage": "validation",
+    "iteration": 20,
+    "github_state": "OPEN",
+    "branch": "autodev-205-company-facts",
+    "baseline": "origin/main @ 7717d87",
+    "started_at": "2026-06-28",
+    "type": "bug (content / i18n correction)",
+    "closes_acs_of": 159,
+    "commits": [],
+    "honest_results": {
+      "vitest": "71 files / 2116 tests pass (0 fail)",
+      "build": "vite build green (About-BPuc0_D5.js 8.92 kB)",
+      "i18n_parity": "en 946 = zh 946 (+2 each: established + establishedDate); check-i18n-keys.mjs OK",
+      "shipped_app": "Playwright 5/5 on running app — en capital/name/established + zh (toggle) capital/established",
+      "no_old_values": "grep '50 million|Kaitai Vision|5000 万' src/ -> 0 matches",
+      "evidence": "tickets/205/evidence/{before,after}-about-facts.png"
+    },
+    "facts_corrected": {
+      "capital_en": "RMB 50 million -> RMB 300 million",
+      "capital_zh": "人民币 5000 万元 -> 3亿元人民币",
+      "name_en": "Kaitai Vision Information Technology Co., Ltd. -> KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)",
+      "name_zh": "开泰远景信息科技有限公司 (already correct, unchanged)",
+      "established_en": "(absent) -> Established: June 2020 (new 5th card)",
+      "established_zh": "(absent) -> 成立时间: 2020年6月"
+    },
+    "notes": "S-sized content/i18n fix. TDD red->green. Inline coordinator execution (proportionate)."
+  },
   "issue": 165,
   "title": "[ASSETS] Extract and Implement About & News Section Images",
   "branch": "autodev-165-assets",
@@ -25,7 +56,21 @@
     "merge_method": "--merge (NOT squash; 13 commits preserved on main)",
     "deploy_run": "https://github.com/jasonhou007/KTechAICyberWeb/actions/runs/28326474004",
     "board_card": "PVTI_lAHOB5DQUc4BboAJzgxDFO4 -> Done (98236657)",
-    "commits": ["dd020bf","074c12b","6392678","908d114","e99f1cd","7922211","2d74e05","7996def","652cae6","9163fd6","5a6bbb1","b294a62","b375717"],
+    "commits": [
+      "dd020bf",
+      "074c12b",
+      "6392678",
+      "908d114",
+      "e99f1cd",
+      "7922211",
+      "2d74e05",
+      "7996def",
+      "652cae6",
+      "9163fd6",
+      "5a6bbb1",
+      "b294a62",
+      "b375717"
+    ],
     "honest_results": {
       "vitest": "71 files / 2115 tests pass (0 fail)",
       "coverage": "Lines 95.89% (2526/2634), Branches 86.77% (1240/1429)",
@@ -59,7 +104,7 @@
     "tests": "71 files / 2119 tests pass",
     "build": "green",
     "e2e": "3/3 pass (auto-play + reduced-motion + global) — verified in isolated worktree",
-    "revision_round": 2,
+    "revision_round": 3,
     "revision_findings_resolved": 4,
     "notes": "Gap1 glitch + Gap2 parallax + Gap3 CSS-source visual gate (red-proven) + Gap4 E2E executed (phase 2500->1500ms). Concurrent autodev-180 process shares working tree — verify in worktree.",
     "security_verdict": "PASS (0 Critical, 0 High)",
@@ -68,6 +113,15 @@
       "MEDIUM-2: StatusReadout.phaseLine computed dead (never surfaced)",
       "MEDIUM-3: streamingLines tautology (both branches return same array)",
       "INFO-1/2: optional polish"
+    ],
+    "reviewer_verdict": "REVISE-AND-RESUBMIT (Overall 8.1/10)",
+    "reviewer_must_fix": "OCCLUSION: all 8 pipeline cards occluded by hero/header/content on home+/about routes (elementFromPoint confirms). Defeats AC1 \"product demos itself\". Coordinator independently verified.",
+    "reviewer_should_fix": [
+      "No elementFromPoint visibility test (regression risk)",
+      "PHASES duplicated in useAutoDemoLoop.js + PipelineTrack.vue",
+      "Stale 2500ms comments (now 1500ms)",
+      "StatusReadout {n} single-replace fragile",
+      "Legacy addListener branch uncovered"
     ]
   }
 }

@@ -43,6 +43,11 @@
             <p>{{ t('about.whoWeAre.capitalAmount') }}</p>
           </div>
           <div class="content-card cyber-card">
+            <div class="card-icon neon-border">📅</div>
+            <h3>{{ t('about.whoWeAre.established') }}</h3>
+            <p>{{ t('about.whoWeAre.establishedDate') }}</p>
+          </div>
+          <div class="content-card cyber-card">
             <div class="card-icon neon-border">🚀</div>
             <h3>{{ t('about.whoWeAre.services') }}</h3>
             <p>{{ t('about.whoWeAre.servicesList') }}</p>

@@ -118,21 +118,21 @@ describe('About.vue', () => {
       )
     })
 
-    it('renders exactly four content cards', () => {
+    it('renders exactly five content cards', () => {
       const cards = wrapper.findAll('.who-we-are .content-card')
-      expect(cards).toHaveLength(4)
+      expect(cards).toHaveLength(5)
     })
 
     it('renders each card with a circular neon-border icon', () => {
       const icons = wrapper.findAll('.who-we-are .card-icon.neon-border')
-      expect(icons).toHaveLength(4)
+      expect(icons).toHaveLength(5)
     })
 
     it('renders the company name card heading and info', () => {
       const cards = wrapper.findAll('.who-we-are .content-card')
       expect(cards[0].find('h3').text()).toBe('Company Name')
       expect(cards[0].find('p').text()).toBe(
-        'Kaitai Vision Information Technology Co., Ltd. — a fintech and AI company headquartered in Shenzhen.',
+        'KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech) — a fintech and AI company headquartered in Shenzhen.',
       )
     })
 
@@ -147,13 +147,19 @@ describe('About.vue', () => {
     it('renders the capital card heading and amount', () => {
       const cards = wrapper.findAll('.who-we-are .content-card')
       expect(cards[2].find('h3').text()).toBe('Registered Capital')
-      expect(cards[2].find('p').text()).toBe('RMB 50 million')
+      expect(cards[2].find('p').text()).toBe('RMB 300 million')
+    })
+
+    it('renders the established card heading and date', () => {
+      const cards = wrapper.findAll('.who-we-are .content-card')
+      expect(cards[3].find('h3').text()).toBe('Established')
+      expect(cards[3].find('p').text()).toBe('June 2020')
     })
 
     it('renders the services card heading and list', () => {
       const cards = wrapper.findAll('.who-we-are .content-card')
-      expect(cards[3].find('h3').text()).toBe('Core Services')
-      expect(cards[3].find('p').text()).toBe(
+      expect(cards[4].find('h3').text()).toBe('Core Services')
+      expect(cards[4].find('p').text()).toBe(
         'Supply chain finance, retail lending platforms, and big data & AI solutions for financial institutions.',
       )
     })
@@ -380,8 +386,8 @@ describe('About.vue', () => {
 
     it('uses h3 for content card, VMC card, and service card headings', () => {
       const h3s = wrapper.findAll('h3')
-      // 4 content cards + 2 VMC cards + 3 service cards = 9
-      expect(h3s.length).toBe(9)
+      // 5 content cards + 2 VMC cards + 3 service cards = 10
+      expect(h3s.length).toBe(10)
       h3s.forEach((el) => {
         expect(el.element.tagName.toLowerCase()).toBe('h3')
       })
@@ -447,8 +453,8 @@ describe('About.vue', () => {
 
     it('applies cyber-card to content, culture, and service cards', () => {
       const cards = wrapper.findAll('.cyber-card')
-      // 4 content cards + 4 culture items + 3 service cards = 11
-      expect(cards.length).toBe(11)
+      // 5 content cards + 4 culture items + 3 service cards = 12
+      expect(cards.length).toBe(12)
     })
 
     it('applies neon-border to the circular card icons', () => {
