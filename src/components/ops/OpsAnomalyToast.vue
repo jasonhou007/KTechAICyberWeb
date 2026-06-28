@@ -26,14 +26,22 @@ const { t } = useLanguage()
     <div
       v-if="state !== 'idle' && anomaly"
       class="ops-anomaly-toast"
-      :class="{ 'ops-glitch': !reducedMotion, 'ops-investigating': state === 'investigating' }"
+      :class="{ 'ops-investigating': state === 'investigating' }"
       role="alert"
       aria-live="assertive"
       data-test="ops-anomaly-toast"
       :aria-label="ariaLabel"
     >
       <div class="ops-anomaly-head">
-        <span class="ops-anomaly-title" :data-text="t(titleKey)">{{ t(titleKey) }}</span>
+        <!-- Glitch is applied to the TITLE element only (not the container) so
+             the action buttons stay stable and clickable — a perpetual transform
+             on the container would make Playwright's stability check never
+             settle. -->
+        <span
+          class="ops-anomaly-title"
+          :class="{ 'ops-glitch': !reducedMotion }"
+          :data-text="t(titleKey)"
+        >{{ t(titleKey) }}</span>
         <span class="ops-anomaly-state">{{ state }}</span>
       </div>
       <p class="ops-anomaly-drilldown">{{ t(drilldownKey) }}</p>

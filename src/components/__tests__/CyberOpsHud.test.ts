@@ -194,4 +194,64 @@ describe('CyberOpsHud.vue — view DOM (#182)', () => {
     const eventsAfter = w.findAll('[data-test="ops-event-list"] .ops-event-item').length
     expect(eventsAfter).toBeGreaterThan(eventsBefore)
   })
+
+  // --------------------------------------------------------------------------
+  // Detail-panel branch coverage: each widget key renders its focused panel.
+  // --------------------------------------------------------------------------
+  it('detail panel: expanding sparkline renders the sparkline branch', async () => {
+    const w = await mountHud()
+    await w.find('[data-test="ops-widget"][data-key="sparkline"]').trigger('click')
+    await nextTick()
+    const panel = w.find('[data-test="ops-detail-panel"]')
+    expect(panel.exists()).toBe(true)
+    // The sparkline branch renders >=1 sparkline svg inside the detail body.
+    expect(panel.findAll('.ops-sparkline').length).toBeGreaterThan(0)
+  })
+
+  it('detail panel: expanding request-flow renders the request-flow branch (desktop)', async () => {
+    const w = await mountHud()
+    // requestflow widget only renders on desktop (default matchMedia = desktop).
+    const rfWidget = w.find('[data-test="ops-widget"][data-key="requestflow"]')
+    expect(rfWidget.exists()).toBe(true)
+    await rfWidget.trigger('click')
+    await nextTick()
+    const panel = w.find('[data-test="ops-detail-panel"]')
+    expect(panel.exists()).toBe(true)
+    expect(panel.find('[data-test="ops-request-flow"]').exists()).toBe(true)
+  })
+
+  it('detail panel: expanding eventlog renders the eventlog branch', async () => {
+    const w = await mountHud()
+    await w.find('[data-test="ops-widget"][data-key="eventlog"]').trigger('click')
+    await nextTick()
+    const panel = w.find('[data-test="ops-detail-panel"]')
+    expect(panel.exists()).toBe(true)
+    // The eventlog branch renders the event log inside the detail body.
+    expect(panel.find('[data-test="ops-event-log"]').exists()).toBe(true)
+  })
+
+  it('detail panel: keyboard Enter on a widget card expands it (AC 3.1 keyboard)', async () => {
+    const w = await mountHud()
+    expect(w.find('[data-test="ops-detail-panel"]').exists()).toBe(false)
+    await w.find('[data-test="ops-widget"][data-key="gauge"]').trigger('keydown', { key: 'Enter' })
+    await nextTick()
+    expect(w.find('[data-test="ops-detail-panel"]').exists()).toBe(true)
+  })
+
+  it('pulse button applies a transient applied state then clears', async () => {
+    vi.useFakeTimers()
+    try {
+      const w = await mountHud()
+      await w.find('[data-test="ops-pulse-button"]').trigger('click')
+      await nextTick()
+      // The applied class is set immediately after a pulse.
+      expect(w.find('[data-test="ops-pulse-button"]').classes()).toContain('ops-pulse-applied')
+      // After the timeout (2200ms) the applied state clears.
+      vi.advanceTimersByTime(2300)
+      await nextTick()
+      expect(w.find('[data-test="ops-pulse-button"]').classes()).not.toContain('ops-pulse-applied')
+    } finally {
+      vi.useRealTimers()
+    }
+  })
 })

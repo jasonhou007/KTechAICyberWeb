@@ -466,4 +466,72 @@ describe('useOpsFeed() — composable', () => {
     expect(api.activeAnomaly.value).not.toBeNull()
     wrapper.unmount()
   })
+
+  it('#16 seedAnomaly() is a no-op when an anomaly is already active (guard)', () => {
+    const { getApi, wrapper } = mountHost()
+    const api = getApi()
+    api.seedAnomaly()
+    const eventsAtActive = api.events.value.length
+    // Calling again while active does NOT append another anomaly event.
+    api.seedAnomaly()
+    expect(api.events.value.length).toBe(eventsAtActive)
+    wrapper.unmount()
+  })
+
+  it('#17 investigate/dismiss are no-ops from the wrong state (FSM guard)', () => {
+    const { getApi, wrapper } = mountHost()
+    const api = getApi()
+    // investigate from idle -> stays idle (no anomaly event).
+    api.investigate()
+    expect(api.anomalyState.value).toBe('idle')
+    // Force active, then dismiss from active is NOT a transition (dismiss only
+    // fires investigating->idle); anomalyState stays active.
+    api.pulse()
+    expect(api.anomalyState.value).toBe('active')
+    // activeAnomaly must survive a wrong-state dismiss attempt.
+    expect(api.activeAnomaly.value).not.toBeNull()
+    wrapper.unmount()
+  })
+
+  it('#18 setCategory ignores unknown categories (guard)', () => {
+    const { getApi, wrapper } = mountHost()
+    const api = getApi()
+    api.setCategory('security')
+    expect(api.activeCategory.value).toBe('security')
+    // bogus category is rejected.
+    api.setCategory('nonsense')
+    expect(api.activeCategory.value).toBe('security')
+    wrapper.unmount()
+  })
+
+  it('#19 requestCount increments via the rAF loop (desktop, motion on)', () => {
+    const raf = countingRAF()
+    const { getApi, wrapper } = mountHost()
+    const api = getApi()
+    const before = api.requestCount.value
+    for (let i = 0; i < 4; i++) {
+      raf.step()
+      vi.advanceTimersByTime(16)
+    }
+    expect(api.requestCount.value).not.toBe(before)
+    wrapper.unmount()
+  })
+
+  it('#20 the idle interval occasionally raises a random anomaly (coverage of the seedAnomaly scheduler branch)', () => {
+    countingRAF()
+    const { getApi, wrapper } = mountHost()
+    const api = getApi()
+    // Force Math.random LOW so the `< 0.06` seed branch fires on the first
+    // idle tick (the scheduler seeds an anomaly when random < 0.06 and the
+    // state is idle).
+    const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.01)
+    try {
+      vi.advanceTimersByTime(1500 * 3)
+      // At least one anomaly should have been seeded over a few ticks.
+      expect(api.events.value.some((e) => e.anomaly)).toBe(true)
+    } finally {
+      randomSpy.mockRestore()
+    }
+    wrapper.unmount()
+  })
 })

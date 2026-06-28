@@ -38,7 +38,7 @@ function timeLabel(ts) {
         :class="{ active: activeCategory === c }"
         :data-key="c"
         :data-test="`ops-tab-${c}`"
-        @click="emit('set-category', c)"
+        @click.stop="emit('set-category', c)"
       >{{ t('opsHud.categories.' + c) }}</button>
     </div>
     <ol
