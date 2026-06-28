@@ -231,7 +231,7 @@
 </template>
 
 <script setup>
-import { computed, watch, ref, nextTick } from 'vue'
+import { computed, watch, ref, nextTick, onUnmounted } from 'vue'
 import Scanlines from './Scanlines.vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useSolutionForge } from '../composables/useSolutionForge.js'
@@ -289,13 +289,26 @@ function buildAssemblySteps(rec, reducedMotion) {
 // seizure-risk ceiling and is a single beat (no strobing). Bound to the stage
 // as a CSS class so the flash is a real DOM effect, not an orphan ref.
 const glitchFlash = ref(false)
+// Track the one-shot glitch-flash timer so it can be cleared on unmount
+// (Security Low finding: an unguarded setTimeout keeps a closure alive after
+// the component is gone). Cleared in onUnmounted below.
+let glitchFlashTimer = null
 watch(assemblyState, async (state) => {
   if (state === 'done' && !prefersReducedMotion.value) {
     glitchFlash.value = true
     await nextTick()
-    setTimeout(() => {
+    if (glitchFlashTimer) clearTimeout(glitchFlashTimer)
+    glitchFlashTimer = setTimeout(() => {
       glitchFlash.value = false
+      glitchFlashTimer = null
     }, 800)
+  }
+})
+
+onUnmounted(() => {
+  if (glitchFlashTimer) {
+    clearTimeout(glitchFlashTimer)
+    glitchFlashTimer = null
   }
 })
 </script>
