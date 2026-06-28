@@ -51,9 +51,12 @@ const PHASES = [
 ]
 
 // How long each phase stays current before advancing. Tuned so a full cycle
-// (~20s) is long enough to read each stage but short enough that the loop is
-// visibly "alive" within a few seconds of load.
-const PHASE_DURATION_MS = 2500
+// is long enough to read each stage but short enough that (a) the loop is
+// visibly "alive" within a few seconds of load and (b) the seamless wrap
+// (RESOLVED->INTAKE, the strongest "alive" signal) is reached within a ~30s
+// observation window even under the half-speed heavy-load throttle. At 1500ms
+// a full-speed cycle is ~12s and a half-throttle cycle ~24s, both with margin.
+const PHASE_DURATION_MS = 1500
 
 // Under 'half' throttle we advance the phase clock at 50% speed so the demo
 // visibly slows (the AC asks for slow-mo under load), but never freezes.

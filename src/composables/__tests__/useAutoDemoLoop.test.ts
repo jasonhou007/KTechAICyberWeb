@@ -217,11 +217,12 @@ describe('useAutoDemoLoop()', () => {
     const raf = queueRAF()
     mockIntersectionObserver()
     const { wrapper, getApi } = mountHost()
-    const { phaseId, phaseIndex, phaseElapsedMs } = getApi()
+    const { phaseId, phaseIndex, phaseElapsedMs, phaseDurationMs } = getApi()
 
-    // PHASE_DURATION_MS is tuned so a full phase completes in a few frames.
-    // We step frames at 16ms intervals until the phase flips.
-    const PHASE_MS = 2500
+    // phaseDurationMs is the composable's own configured phase length (no
+    // hardcoded mirror of the constant here, so tuning it never desyncs the
+    // test). We step frames at 16ms intervals until the phase flips.
+    const PHASE_MS = phaseDurationMs
     let t = 0
     const seen: string[] = [phaseId.value]
     // Step enough frames to cross at least two phase boundaries.
@@ -249,13 +250,15 @@ describe('useAutoDemoLoop()', () => {
     const raf = queueRAF()
     mockIntersectionObserver()
     const { wrapper, getApi } = mountHost()
-    const { phaseId, loopIteration } = getApi()
+    const { phaseId, loopIteration, phaseDurationMs } = getApi()
 
-    // Step through an entire cycle (8 phases * PHASE_MS) + a little extra.
-    const TOTAL = 8 * 2500 + 500
+    // Step through an entire cycle (8 phases * phaseDurationMs) + a little
+    // extra. Derive from the composable's own config so tuning the constant
+    // never desyncs this test.
     let t = 0
     let wrapped = false
-    for (let i = 0; i < 2000 && !wrapped; i++) {
+    const maxFrames = Math.ceil((8 * phaseDurationMs + 500) / 16) + 50
+    for (let i = 0; i < maxFrames && !wrapped; i++) {
       t += 16
       raf.step(t)
       // When loopIteration increments past 0 we have wrapped at least once.
