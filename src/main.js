@@ -11,12 +11,13 @@ import App from './App.vue'
 
 // Home is the LCP route AND the entry view users hit on '/'. It MUST be eager:
 // its JS and CSS land in the synchronous initial bundle so the footer's layout
-// is stable from first paint. Lazy-loading Home (#18) split its CSS into a
-// separate async chunk that arrived after initial paint and re-flowed
-// footer.cyber-footer, spiking CLS from 0.054 (passing) to 0.196 (failing >
-// 0.1). Keeping Home eager fixes the CLS regression while preserving the
-// LCP/FCP wins (LCP 2539->1861ms, FCP 2539->1684ms) — those gains come from
-// the OTHER 17 routes below being lazy, not from Home.
+// is stable from first paint. An earlier revision of #18 lazy-loaded Home
+// too, splitting its CSS into a separate async chunk that arrived after
+// initial paint and re-flowed footer.cyber-footer, spiking CLS above the 0.1
+// budget. Keeping Home eager fixes that CLS regression while preserving the
+// bundle win that comes from the OTHER 17 routes below being lazy — not Home.
+// (Per the #18 adversarial review: do not cite device-specific Lighthouse
+// deltas in code comments — they go stale and were mislabeled once already.)
 import Home from './views/Home.vue'
 
 // Route-level code splitting: every non-Home view is a lazy dynamic import so
