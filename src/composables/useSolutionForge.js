@@ -426,12 +426,15 @@ export function useSolutionForge() {
     assemblyState: readonly(assemblyState),
     computeProgress,
     scrambleText,
-    verdictTarget,
     recommendation,
     forge,
     reroll,
     reset,
     // motion
     prefersReducedMotion,
+    // NOTE: `verdictTarget` is deliberately kept INTERNAL — it drives the
+    // scramble text inside the composable but no view or test reads it off the
+    // public API. Trimmed per evaluator nit (iter-13 review). (`seed` is kept
+    // public because composable test #9 asserts it increments on reroll.)
   }
 }
