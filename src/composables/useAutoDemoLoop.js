@@ -3,7 +3,7 @@
  * @description Reactive brain for the Self-Driving ambient demo background (#203).
  *
  * Owns the always-on, no-click-required pipeline loop that auto-demonstrates
- * the autonomous Agent pipeline:
+ * the autonomous dev pipeline:
  *   INTAKE -> TRIAGE -> PLANNER -> CODER -> SECURITY -> EVALUATOR -> MERGER
  *          -> RESOLVED -> (wrap) -> INTAKE ...
  *

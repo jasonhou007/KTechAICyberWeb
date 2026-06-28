@@ -2,7 +2,7 @@
 /**
  * @component SelfDrivingDemo
  * @description Always-on, looping, NO-CLICK-REQUIRED ambient background that
- * auto-demonstrates the autonomous Agent pipeline (#203).
+ * auto-demonstrates the autonomous dev pipeline (#203).
  *
  *   INTAKE -> TRIAGE -> PLANNER -> CODER -> SECURITY -> EVALUATOR -> MERGER
  *          -> RESOLVED -> (seamless wrap) -> INTAKE ...
