@@ -7,12 +7,11 @@
 
     <!-- Featured Image -->
     <div class="news-card__image-wrapper">
-      <img
+      <CyberImage
         v-if="!isLoading && article.image"
         :src="article.image"
-        :alt="article.title"
-        class="news-card__image"
-        loading="lazy"
+        :alt="t(article.altKey) || article.title"
+        className="news-card__image"
       />
       <div v-else class="news-card__image-skeleton"></div>
       <div class="news-card__image-overlay" aria-hidden="true"></div>
@@ -49,6 +48,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useLanguage } from '../i18n'
+import CyberImage from './CyberImage.vue'
 
 const props = defineProps({
   article: {
@@ -135,14 +135,25 @@ const categoryLabel = computed(() => {
   overflow: hidden;
 }
 
+/* The featured image is now rendered by CyberImage (figure.news-card__image).
+   Size the figure to fill the wrapper and let the inner img cover it. */
 .news-card__image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.news-card__image :deep(.cyber-image__img) {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.news-card:hover .news-card__image {
+.news-card:hover .news-card__image :deep(.cyber-image__img) {
   transform: scale(1.05);
 }
 

@@ -1,0 +1,56 @@
+vite v5.4.21 building for production...
+transforming...
+✓ 117 modules transformed.
+node_modules/@vueuse/core/dist/index.js (3362:0): A comment
+
+"/* #__PURE__ */"
+
+in "node_modules/@vueuse/core/dist/index.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+node_modules/@vueuse/core/dist/index.js (5780:22): A comment
+
+"/* #__PURE__ */"
+
+in "node_modules/@vueuse/core/dist/index.js" contains an annotation that Rollup cannot interpret due to the position of the comment. The comment will be removed to avoid issues.
+rendering chunks...
+computing gzip size...
+dist/index.html                                       13.47 kB │ gzip:  4.01 kB
+dist/assets/NotFound-B8iLn57_.css                      1.34 kB │ gzip:  0.58 kB
+dist/assets/Terms-BJS1rojw.css                         2.20 kB │ gzip:  0.61 kB
+dist/assets/PrivacyPolicy-D2CmClux.css                 2.21 kB │ gzip:  0.61 kB
+dist/assets/JoinUs-W1MUqMPn.css                        4.42 kB │ gzip:  1.13 kB
+dist/assets/ServiceProjectManagement-DLIcyTPV.css      5.79 kB │ gzip:  1.44 kB
+dist/assets/About-CLXhhObL.css                         6.53 kB │ gzip:  1.53 kB
+dist/assets/Blockchain-DeK8gSYx.css                    6.86 kB │ gzip:  1.64 kB
+dist/assets/ServiceStablecoin-B3BtHJJK.css             7.14 kB │ gzip:  1.74 kB
+dist/assets/ServiceCrossBorderPayment-LiF57oui.css     7.22 kB │ gzip:  1.75 kB
+dist/assets/ServiceDigitalAssetCustody-DGZoBWnd.css    7.22 kB │ gzip:  1.75 kB
+dist/assets/Contact-DXvC568_.css                       7.42 kB │ gzip:  1.70 kB
+dist/assets/PositionList-BfrehAnY.css                  8.43 kB │ gzip:  1.64 kB
+dist/assets/News-DrlggL8m.css                          8.61 kB │ gzip:  1.96 kB
+dist/assets/SupplyChainFinance-NjP1PnKW.css            9.14 kB │ gzip:  1.92 kB
+dist/assets/NewsDetail-CvlWNYU_.css                    9.17 kB │ gzip:  1.78 kB
+dist/assets/ServiceBigData-Bh2QzmJ3.css                9.54 kB │ gzip:  2.04 kB
+dist/assets/ServiceRetailLending-C-JFs6de.css          9.55 kB │ gzip:  2.04 kB
+dist/assets/index-DDHfWITo.css                        30.85 kB │ gzip:  6.49 kB
+dist/assets/NotFound-CWE6EZCB.js                       0.87 kB │ gzip:  0.51 kB
+dist/assets/Blockchain-DNZnwOWc.js                     3.78 kB │ gzip:  1.13 kB
+dist/assets/ServiceProjectManagement-TjFEYOOh.js       3.98 kB │ gzip:  1.28 kB
+dist/assets/Terms-BdoDb-eq.js                          4.65 kB │ gzip:  0.95 kB
+dist/assets/JoinUs-DDML812q.js                         4.79 kB │ gzip:  1.18 kB
+dist/assets/PrivacyPolicy-CVHr3loW.js                  4.81 kB │ gzip:  0.96 kB
+dist/assets/News-BecoJmJF.js                           6.13 kB │ gzip:  2.27 kB
+dist/assets/About-DMC8xNr9.js                          6.23 kB │ gzip:  1.65 kB
+dist/assets/news-BdXCPtOM.js                           7.09 kB │ gzip:  2.98 kB
+dist/assets/NewsDetail-wcZRQYsY.js                     7.21 kB │ gzip:  2.71 kB
+dist/assets/ServiceStablecoin-AvsZ1P13.js              8.00 kB │ gzip:  1.90 kB
+dist/assets/ServiceCrossBorderPayment-BhoJ4eof.js      8.39 kB │ gzip:  1.89 kB
+dist/assets/ServiceDigitalAssetCustody-CWiqoggr.js     8.45 kB │ gzip:  1.92 kB
+dist/assets/PositionList-DTqKxlXi.js                   8.69 kB │ gzip:  2.65 kB
+dist/assets/SupplyChainFinance-Bs4gZI17.js             9.08 kB │ gzip:  1.89 kB
+dist/assets/positions-jDkhfTxn.js                     10.04 kB │ gzip:  5.30 kB
+dist/assets/ServiceRetailLending-ikSyavYK.js          11.08 kB │ gzip:  2.31 kB
+dist/assets/Contact-CEUuvfEk.js                       11.14 kB │ gzip:  2.87 kB
+dist/assets/ServiceBigData-BPXqO8kF.js                11.15 kB │ gzip:  2.36 kB
+dist/assets/vendor-DlI8CcZP.js                       105.32 kB │ gzip: 41.00 kB
+dist/assets/index-BmrQM4gk.js                        117.47 kB │ gzip: 50.67 kB
+✓ built in 1.04s

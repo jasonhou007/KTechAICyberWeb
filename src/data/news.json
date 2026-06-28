@@ -7,7 +7,8 @@
     "content": "# ISO27001 Certification Achievement\n\nWe are thrilled to announce that KTech has successfully achieved ISO27001 certification, the international standard for information security management. This milestone represents our unwavering commitment to protecting our clients' data and maintaining the highest standards of security.\n\n## What This Means for Our Clients\n\nThe ISO27001 certification demonstrates that KTech has implemented comprehensive security controls and risk management processes. This includes:\n\n- **Information Security Policies**: Formalized policies and procedures\n- **Risk Assessment**: Systematic identification and mitigation of security risks\n- **Asset Management**: Proper protection of organizational assets\n- **Access Control**: Controlled access to information systems\n- **Physical Security**: Secure facilities and infrastructure\n\n## Our Ongoing Commitment\n\nAchieving certification is just the beginning. We continuously improve our security practices through regular audits and updates to our security framework.\n\n## About ISO27001\n\nISO/IEC 27001 is an international standard on how to manage information security. The standard was originally published jointly by the International Organization for Standardization (ISO) and the International Electrotechnical Commission (IEC).\n\nFor more information about our security practices, please contact our security team.",
     "date": "2024-01-15",
     "category": "Company News",
-    "image": "/images/news/iso-certification.webp",
+    "image": "/images/news/news-iso27001-official.webp",
+    "altKey": "news.articleAlts.iso27001",
     "author": "KTech Team"
   },
   {
@@ -19,6 +20,7 @@
     "date": "2024-01-10",
     "category": "Industry Insights",
     "image": "/images/news/blockchain-finance.webp",
+    "altKey": "news.articleAlts.blockchain",
     "author": "KTech Research Team"
   },
   {
@@ -30,6 +32,7 @@
     "date": "2024-01-08",
     "category": "Events",
     "image": "/images/news/fintech-conference.webp",
+    "altKey": "news.articleAlts.fintechSummit",
     "author": "KTech Events Team"
   },
   {
@@ -41,6 +44,7 @@
     "date": "2024-01-05",
     "category": "Technology Updates",
     "image": "/images/news/ai-fintech.webp",
+    "altKey": "news.articleAlts.aiFintech",
     "author": "KTech AI Team"
   }
 ]

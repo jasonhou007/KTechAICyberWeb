@@ -32,6 +32,10 @@ vi.mock('../../i18n', () => {
     'news.categories.industry': 'Industry Insights',
     'news.categories.technology': 'Technology Updates',
     'news.categories.events': 'Events',
+    'news.articleAlts.iso27001': 'KTech ISO27001 information security certification announcement',
+    'news.articleAlts.blockchain': 'Blockchain technology reshaping financial services illustration',
+    'news.articleAlts.fintechSummit': 'Fintech Innovation Summit 2024 conference stage',
+    'news.articleAlts.aiFintech': 'AI-powered financial services solutions illustration',
   }
 
   // t(key) resolves known keys to their English value and falls back to the
@@ -53,6 +57,7 @@ const baseArticle = {
   date: '2026-06-15',
   category: 'Company News',
   slug: 'ktech-launches-new-platform',
+  altKey: 'news.articleAlts.iso27001',
 }
 
 // Stub router-link so the component renders without vue-router and we can
@@ -148,18 +153,21 @@ describe('NewsCard.vue', () => {
     })
 
     it('renders featured image when image is provided', () => {
-      const img = wrapper.find('img.news-card__image')
+      const img = wrapper.find('figure.cyber-image img')
       expect(img.exists()).toBe(true)
     })
 
     it('sets the image src to the article image', () => {
-      const img = wrapper.find('.news-card__image')
+      const img = wrapper.find('figure.cyber-image img')
       expect(img.attributes('src')).toBe(baseArticle.image)
     })
 
-    it('uses article title as image alt text', () => {
-      const img = wrapper.find('.news-card__image')
-      expect(img.attributes('alt')).toBe(baseArticle.title)
+    it('uses the localized alt (from t(article.altKey)) for the image alt text', () => {
+      const img = wrapper.find('figure.cyber-image img')
+      // AC #165: alt flows through t(article.altKey), not article.title.
+      expect(img.attributes('alt')).toBe(
+        'KTech ISO27001 information security certification announcement',
+      )
     })
 
     it('renders the article title in the content section', () => {
@@ -209,7 +217,7 @@ describe('NewsCard.vue', () => {
     it('shows skeleton instead of image in loading state', () => {
       const loadingWrapper = createWrapper({ isLoading: true })
       expect(loadingWrapper.find('.news-card__image-skeleton').exists()).toBe(true)
-      expect(loadingWrapper.find('.news-card__image').exists()).toBe(false)
+      expect(loadingWrapper.find('figure.cyber-image').exists()).toBe(false)
       loadingWrapper.unmount()
     })
 
@@ -218,7 +226,7 @@ describe('NewsCard.vue', () => {
         article: { ...baseArticle, image: '' },
       })
       expect(noImage.find('.news-card__image-skeleton').exists()).toBe(true)
-      expect(noImage.find('.news-card__image').exists()).toBe(false)
+      expect(noImage.find('figure.cyber-image').exists()).toBe(false)
       noImage.unmount()
     })
 
@@ -297,7 +305,7 @@ describe('NewsCard.vue', () => {
     })
 
     it('provides alt text for the featured image', () => {
-      const img = wrapper.find('.news-card__image')
+      const img = wrapper.find('figure.cyber-image img')
       expect(img.attributes('alt')).toBeTruthy()
     })
   })
@@ -379,7 +387,7 @@ describe('NewsCard.vue', () => {
       wrapper.unmount()
       const reWrapper = createWrapper()
       expect(reWrapper.text()).toContain(baseArticle.title)
-      expect(reWrapper.find('.news-card__image').exists()).toBe(true)
+      expect(reWrapper.find('figure.cyber-image').exists()).toBe(true)
       reWrapper.unmount()
     })
 
@@ -403,12 +411,55 @@ describe('NewsCard.vue', () => {
   })
 
   // ============================================
+  // AC #165 — CyberImage wiring (live-DOM assertions)
+  // ============================================
+  describe('CyberImage wiring (AC #165)', () => {
+    it('renders the featured image inside a figure.cyber-image (no bare <img>)', () => {
+      const fig = wrapper.find('.news-card__image-wrapper figure.cyber-image')
+      expect(fig.exists()).toBe(true)
+      // The img lives inside the CyberImage figure
+      expect(fig.find('img').exists()).toBe(true)
+    })
+
+    it('passes article.image as the CyberImage src', () => {
+      const img = wrapper.find('figure.cyber-image img')
+      expect(img.attributes('src')).toBe(baseArticle.image)
+    })
+
+    it('passes t(article.altKey) as the CyberImage alt (not the title)', () => {
+      const img = wrapper.find('figure.cyber-image img')
+      const alt = img.attributes('alt') || ''
+      expect(alt).toBe(
+        'KTech ISO27001 information security certification announcement',
+      )
+      // The alt is NOT the title (regression guard against reverting to alt=title)
+      expect(alt).not.toBe(baseArticle.title)
+      // No raw dotted key leaks
+      expect(alt).not.toMatch(/^news\./)
+    })
+
+    it('defaults the card image to loading="lazy"', () => {
+      const img = wrapper.find('figure.cyber-image img')
+      expect(img.attributes('loading')).toBe('lazy')
+    })
+
+    it('still renders the skeleton when image is missing (loading fallback intact)', () => {
+      const noImage = createWrapper({
+        article: { ...baseArticle, image: '' },
+      })
+      expect(noImage.find('.news-card__image-skeleton').exists()).toBe(true)
+      expect(noImage.find('figure.cyber-image').exists()).toBe(false)
+      noImage.unmount()
+    })
+  })
+
+  // ============================================
   // Component Structure
   // ============================================
   describe('Component Structure', () => {
     it('has correct DOM hierarchy for the image section', () => {
       const imageWrapper = wrapper.find('.news-card__image-wrapper')
-      expect(imageWrapper.find('.news-card__image').exists()).toBe(true)
+      expect(imageWrapper.find('figure.cyber-image img').exists()).toBe(true)
       expect(imageWrapper.find('.news-card__image-overlay').exists()).toBe(true)
     })
 

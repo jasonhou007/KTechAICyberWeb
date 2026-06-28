@@ -173,6 +173,9 @@
     "pageTitle": "关于",
     "pageTitleAccent": "KTECH",
     "pageSubtitle": "一家致力于为下一个十年打造智能金融系统的金融科技与人工智能企业。",
+    "hero": {
+      "imageAlt": "象征 KTech 智能金融愿景的赛博朋克都市图景"
+    },
     "mission": {
       "heading": "我们的使命",
       "description": "KTech 致力于构建变革性的 AI 解决方案，不断突破可能性的边界。"
@@ -183,6 +186,7 @@
     },
     "culture": {
       "title": "我们的文化",
+      "imageAlt": "企业文化",
       "customer": "客户至上",
       "agile": "敏捷创新",
       "collaboration": "开放协作",
@@ -197,7 +201,8 @@
       "capital": "注册资本",
       "capitalAmount": "人民币 5000 万元",
       "services": "核心服务",
-      "servicesList": "面向金融机构的供应链金融、零售贷款平台及大数据与人工智能解决方案。"
+      "servicesList": "面向金融机构的供应链金融、零售贷款平台及大数据与人工智能解决方案。",
+      "featureImageAlt": "区域性领先金融科技平台示意图"
     },
     "achievements": {
       "title": "我们的成就",
@@ -206,7 +211,19 @@
       "firstMnc": "首家为跨国金融机构交付 AI 驱动风险引擎的公司。",
       "iso9001": "通过 ISO 9001 质量管理体系认证。",
       "iso27001": "通过 ISO 27001 信息安全管理体系认证。",
-      "iso20000": "通过 ISO 20000 IT 服务管理体系认证。"
+      "iso20000": "通过 ISO 20000 IT 服务管理体系认证。",
+      "aaaAlt": "AAA 信用企业认证证书",
+      "mncAlt": "跨国公司深圳地区总部",
+      "nationalAlt": "全国优秀企业奖",
+      "national2021Alt": "2021-2022 年度全国优秀企业",
+      "iso9001Alt": "ISO 9001 质量管理体系证书",
+      "iso20000Alt": "ISO 20000 IT 服务管理证书",
+      "iso27001Alt": "ISO 27001 信息安全证书",
+      "shenzhenFintechAlt": "深圳市金融科技协会会员单位",
+      "guangdongFintechAlt": "广东省金融科技协会会员单位",
+      "hightechAlt": "国家高新技术企业",
+      "innovativeSmeAlt": "深圳市创新型中小企业",
+      "specializedSmeAlt": "深圳市专精特新中小企业"
     },
     "serviceProvider": {
       "title": "我们的业务",
@@ -276,7 +293,13 @@
     "breadcrumb": "首页 > 新闻",
     "learnMore": "了解更多",
     "ktechNews": "开泰科技动态",
-    "kbtgNews": "KBTG 动态"
+    "kbtgNews": "KBTG 动态",
+    "articleAlts": {
+      "iso27001": "KTech 通过 ISO27001 信息安全认证公告",
+      "blockchain": "区块链技术重塑金融服务示意图",
+      "fintechSummit": "2024 金融科技创新峰会现场",
+      "aiFintech": "人工智能驱动的金融服务解决方案示意图"
+    }
   },
   "services": {
     "backToServices": "返回服务",

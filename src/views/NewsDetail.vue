@@ -52,12 +52,12 @@
 
       <!-- Featured Image -->
       <figure class="news-detail__figure" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
-        <img
+        <CyberImage
           v-if="article.image"
           :src="article.image"
-          :alt="article.title"
-          class="news-detail__image"
-          itemprop="url"
+          :alt="t(article.altKey) || article.title"
+          eager
+          className="news-detail__image"
         />
         <figcaption class="news-detail__caption" itemprop="caption">
           {{ article.title }}
@@ -125,6 +125,7 @@
 import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLanguage } from '../i18n'
+import CyberImage from '../components/CyberImage.vue'
 import newsData from '../data/news.json'
 
 const props = defineProps({
@@ -534,13 +535,21 @@ onMounted(() => {
   position: relative;
 }
 
+/* The featured image is rendered by CyberImage (figure.news-detail__image).
+   Size the figure and let the inner img cover it. */
 .news-detail__image {
   width: 100%;
   height: auto;
   max-height: 500px;
-  object-fit: cover;
   border-radius: 8px;
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  overflow: hidden;
+}
+
+.news-detail__image :deep(.cyber-image__img) {
+  width: 100%;
+  height: auto;
+  max-height: 500px;
+  object-fit: cover;
 }
 
 .news-detail__caption {

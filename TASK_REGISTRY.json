@@ -1,0 +1,12 @@
+{
+  "issue": 165,
+  "title": "[ASSETS] Extract and Implement About & News Section Images",
+  "branch": "autodev-165-assets",
+  "status": "InProgress",
+  "stage": "validation",
+  "iteration": 18,
+  "startedAt": "2026-06-28",
+  "resumedAt": "2026-06-28",
+  "followUpIssues": [198, 199],
+  "notes": "16 official images extracted (all HTTP 200), 3 converted to webp, 11 award PNGs kept as-is. Logo/branded SVGs (n-img*, arrow99) skipped. Follow-ups #198 (icons), #199 (srcset) filed. STALLED-AND-RESUMED run: commits 1-5 done pre-stall, commit-6 (base-path resolution + E2E + evidence) finished on resume. Gates re-derived: vitest 2044/2044, 96.23% lines, build green (+1.75 kB entry), E2E 7/7 live-DOM, visual-AC + red-tests, i18n 880/880, 0 SEC001. Ready for PR."
+}

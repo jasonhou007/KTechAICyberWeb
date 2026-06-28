@@ -173,6 +173,9 @@
     "pageTitle": "ABOUT",
     "pageTitleAccent": "KTECH",
     "pageSubtitle": "A fintech and AI company engineering intelligent financial systems for the next decade.",
+    "hero": {
+      "imageAlt": "Cyberpunk cityscape representing KTech's vision for intelligent finance"
+    },
     "mission": {
       "heading": "Our Mission",
       "description": "KTech is dedicated to building transformative AI solutions that push the boundaries of what's possible."
@@ -183,6 +186,7 @@
     },
     "culture": {
       "title": "Our Culture",
+      "imageAlt": "Company culture",
       "customer": "Customer First",
       "agile": "Agile Innovation",
       "collaboration": "Open Collaboration",
@@ -197,7 +201,8 @@
       "capital": "Registered Capital",
       "capitalAmount": "RMB 50 million",
       "services": "Core Services",
-      "servicesList": "Supply chain finance, retail lending platforms, and big data & AI solutions for financial institutions."
+      "servicesList": "Supply chain finance, retail lending platforms, and big data & AI solutions for financial institutions.",
+      "featureImageAlt": "Regional leading fintech platform illustration"
     },
     "achievements": {
       "title": "Our Achievements",
@@ -206,7 +211,19 @@
       "firstMnc": "First to deliver an AI-driven risk engine for a multinational financial institution.",
       "iso9001": "ISO 9001 certified for quality management systems.",
       "iso27001": "ISO 27001 certified for information security management.",
-      "iso20000": "ISO 20000 certified for IT service management."
+      "iso20000": "ISO 20000 certified for IT service management.",
+      "aaaAlt": "AAA Credit Enterprise certification",
+      "mncAlt": "MNC Regional Headquarters in Shenzhen",
+      "nationalAlt": "National Excellent Enterprise award",
+      "national2021Alt": "National Excellent Enterprise 2021-2022",
+      "iso9001Alt": "ISO 9001 Quality Management certificate",
+      "iso20000Alt": "ISO 20000 IT Service Management certificate",
+      "iso27001Alt": "ISO 27001 Information Security certificate",
+      "shenzhenFintechAlt": "Shenzhen FinTech Association member",
+      "guangdongFintechAlt": "Guangdong FinTech Association member",
+      "hightechAlt": "National High-tech Enterprise",
+      "innovativeSmeAlt": "Shenzhen Innovative SME",
+      "specializedSmeAlt": "Shenzhen Specialized SME"
     },
     "serviceProvider": {
       "title": "What We Do",
@@ -276,7 +293,13 @@
     "breadcrumb": "Home > News",
     "learnMore": "Learn More",
     "ktechNews": "KTech News",
-    "kbtgNews": "KBTG News"
+    "kbtgNews": "KBTG News",
+    "articleAlts": {
+      "iso27001": "KTech ISO27001 information security certification announcement",
+      "blockchain": "Blockchain technology reshaping financial services illustration",
+      "fintechSummit": "Fintech Innovation Summit 2024 conference stage",
+      "aiFintech": "AI-powered financial services solutions illustration"
+    }
   },
   "services": {
     "backToServices": "Back to Services",

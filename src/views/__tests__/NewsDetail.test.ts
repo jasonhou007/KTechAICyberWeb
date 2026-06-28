@@ -41,6 +41,8 @@ const mockTranslations: Record<string, string> = {
   'news.categories.industry': 'Industry Insights',
   'news.categories.technology': 'Technology Updates',
   'news.categories.events': 'Events',
+  'news.articleAlts.iso27001': 'KTech ISO27001 information security certification announcement',
+  'news.articleAlts.related': 'Related article image',
 }
 
 vi.mock('../../i18n', () => ({
@@ -94,6 +96,7 @@ vi.mock('../../data/news.json', () => ({
     date: '2024-01-15',
     category: 'Company News',
     image: '/images/news/iso.webp',
+    altKey: 'news.articleAlts.iso27001',
     author: 'KTech Team',
   },
   {
@@ -105,6 +108,7 @@ vi.mock('../../data/news.json', () => ({
     date: '2024-02-01',
     category: 'Company News',
     image: '/images/news/second.webp',
+    altKey: 'news.articleAlts.related',
     author: 'KTech Team',
   },
   {
@@ -116,6 +120,7 @@ vi.mock('../../data/news.json', () => ({
     date: '2024-03-01',
     category: 'Company News',
     image: '/images/news/third.webp',
+    altKey: 'news.articleAlts.related',
     author: 'KTech Team',
   },
   {
@@ -127,6 +132,7 @@ vi.mock('../../data/news.json', () => ({
     date: '2024-04-01',
     category: 'Industry Insights',
     image: '/images/news/industry.webp',
+    altKey: 'news.articleAlts.related',
     author: 'Research Team',
   },
 ],
@@ -263,11 +269,25 @@ describe('NewsDetail.vue', () => {
       expect(author.text()).toContain('KTech Team')
     })
 
-    it('renders the featured image with the article title as alt text', () => {
-      const img = wrapper.find('.news-detail__image')
+    it('renders the featured image inside a CyberImage figure with localized alt', () => {
+      // AC #165: the featured <img> is now wrapped by CyberImage (figure.cyber-image)
+      // and the alt flows through t(article.altKey), not the article title.
+      const fig = wrapper.find('figure.news-detail__figure figure.cyber-image')
+      expect(fig.exists()).toBe(true)
+      const img = fig.find('img')
       expect(img.exists()).toBe(true)
       expect(img.attributes('src')).toBe('/images/news/iso.webp')
-      expect(img.attributes('alt')).toBe('KTech Achieves ISO27001 Certification')
+      // Alt comes from t(article.altKey) for the ISO article
+      expect(img.attributes('alt')).toBe(
+        'KTech ISO27001 information security certification announcement',
+      )
+      // Regression guard: alt is NOT the title
+      expect(img.attributes('alt')).not.toBe('KTech Achieves ISO27001 Certification')
+    })
+
+    it('loads the featured image eagerly (above-the-fold)', () => {
+      const img = wrapper.find('figure.cyber-image img')
+      expect(img.attributes('loading')).toBe('eager')
     })
 
     it('renders the markdown content into HTML (headings, list, blockquote, link)', () => {
