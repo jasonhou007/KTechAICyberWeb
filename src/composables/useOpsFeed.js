@@ -255,48 +255,71 @@ export function useOpsFeed() {
   // rAF loop — single shared animation driver (gauge + sparkline + requestflow)
   // =========================================================================
 
+  // Re-entrancy + sync-rAF guards:
+  //  - `inTick`: a tick must NOT re-enter itself within the same frame.
+  //  - `scheduling`: guards the bottom-of-tick re-schedule. Under a SYNCHRONOUS
+  //    rAF mock (e.g. NeuralCore.spec.js, which fires the callback inline),
+  //    `requestAnimationFrame(tick)` would synchronously call `tick` again and
+  //    an idle loop recurses forever. By marking `scheduling` around the rAF
+  //    call, a synchronously-re-entered tick sees it set and bails out of the
+  //    chain — the next REAL frame (or interval) resumes the loop. Under
+  //    async rAF the callback fires later, after `scheduling` is cleared, so
+  //    normal animation proceeds.
+  let inTick = false
+  let scheduling = false
+  let running = false
+
   function tick(now) {
-    // 1. Gauge: if a pulse is active, uptime follows pulseSpikeValue; otherwise
-    //    it idles at baseline with a tiny breathing drift so the needle feels
-    //    alive (still bounded, transform-only render).
-    if (pulseActive && pulseStart !== null) {
-      uptime.value = pulseSpikeValue(BASELINE_UPTIME, now - pulseStart)
-      // Latency spikes INVERSELY (stress): rises then decays.
-      const phase = now - pulseStart
-      if (phase < SPIKE_RISE_MS + SETTLE_MS) {
-        const stress = Math.max(0, 1 - phase / (SPIKE_RISE_MS + SETTLE_MS))
-        latency.value = BASELINE_LATENCY * (1 + 2 * stress) // up to 3x baseline
-      } else {
-        latency.value = BASELINE_LATENCY
+    if (inTick) return
+    inTick = true
+    try {
+      // 1. Gauge: if a pulse is active, uptime follows pulseSpikeValue; otherwise
+      //    it idles at baseline with a tiny breathing drift so the needle feels
+      //    alive (still bounded, transform-only render).
+      if (pulseActive && pulseStart !== null) {
+        uptime.value = pulseSpikeValue(BASELINE_UPTIME, now - pulseStart)
+        // Latency spikes INVERSELY (stress): rises then decays.
+        const phase = now - pulseStart
+        if (phase < SPIKE_RISE_MS + SETTLE_MS) {
+          const stress = Math.max(0, 1 - phase / (SPIKE_RISE_MS + SETTLE_MS))
+          latency.value = BASELINE_LATENCY * (1 + 2 * stress) // up to 3x baseline
+        } else {
+          latency.value = BASELINE_LATENCY
+        }
+        // Throughput spikes UP then settles.
+        if (phase < SPIKE_RISE_MS + SETTLE_MS) {
+          const boost = Math.max(0, 1 - phase / (SPIKE_RISE_MS + SETTLE_MS))
+          throughput.value = BASELINE_THROUGHPUT * (1 + 1.5 * boost)
+        } else {
+          throughput.value = BASELINE_THROUGHPUT
+        }
+        // Pulse settled — clear the flag so the gauge returns to breathing.
+        if (now - pulseStart >= SPIKE_RISE_MS + SETTLE_MS) {
+          pulseActive = false
+        }
+      } else if (!prefersReducedMotion.value) {
+        // Tiny breathing drift around baseline (no rAF under reduced motion — but
+        // we only get here when rAF is running, i.e. motion is allowed).
+        uptime.value = Math.max(95, Math.min(100, BASELINE_UPTIME + (Math.random() - 0.5) * 0.1))
       }
-      // Throughput spikes UP then settles.
-      if (phase < SPIKE_RISE_MS + SETTLE_MS) {
-        const boost = Math.max(0, 1 - phase / (SPIKE_RISE_MS + SETTLE_MS))
-        throughput.value = BASELINE_THROUGHPUT * (1 + 1.5 * boost)
-      } else {
-        throughput.value = BASELINE_THROUGHPUT
+
+      // 2. Request-flow: increment the particle counter (view renders translateX).
+      if (!prefersReducedMotion.value && !isMobile.value) {
+        requestCount.value = (requestCount.value + 1) % 1000
       }
-      // Pulse settled — clear the flag so the gauge returns to breathing.
-      if (now - pulseStart >= SPIKE_RISE_MS + SETTLE_MS) {
-        pulseActive = false
-      }
-    } else if (!prefersReducedMotion.value) {
-      // Tiny breathing drift around baseline (no rAF under reduced motion — but
-      // we only get here when rAF is running, i.e. motion is allowed).
-      uptime.value = Math.max(95, Math.min(100, BASELINE_UPTIME + (Math.random() - 0.5) * 0.1))
+    } finally {
+      inTick = false
     }
 
-    // 2. Request-flow: increment the particle counter (view renders translateX).
-    if (!prefersReducedMotion.value && !isMobile.value) {
-      requestCount.value = (requestCount.value + 1) % 1000
-    }
-
-    if (running) {
-      rafHandle = window.requestAnimationFrame(tick)
+    if (running && !scheduling) {
+      scheduling = true
+      try {
+        rafHandle = window.requestAnimationFrame(tick)
+      } finally {
+        scheduling = false
+      }
     }
   }
-
-  let running = false
 
   function startRAF() {
     if (prefersReducedMotion.value) return // NEVER under reduced motion
