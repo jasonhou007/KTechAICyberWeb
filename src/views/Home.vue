@@ -68,6 +68,11 @@
       <section class="solution-forge-section">
         <SolutionForge />
       </section>
+
+      <!-- Cyber Ops HUD interactive mission-control dashboard (#182) -->
+      <section class="cyber-ops-hud-section">
+        <CyberOpsHud data-test="cyber-ops-hud" />
+      </section>
     </div>
   </div>
 </template>
@@ -79,6 +84,7 @@ import { useParallax } from '../composables/useParallax'
 import NeuralTerminal from '../components/NeuralTerminal.vue'
 import NeuralCore from '../components/NeuralCore.vue'
 import SolutionForge from '../components/SolutionForge.vue'
+import CyberOpsHud from '../components/CyberOpsHud.vue'
 
 const { t } = useLanguage()
 
@@ -466,6 +472,14 @@ h1 {
 /* AI Solution Forge configurator section (#180) — same rhythm as the AI Core
    section so the three interactive modules stack consistently. */
 .solution-forge-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 3rem;
+}
+
+/* Cyber Ops HUD section (#182) — same rhythm as the AI modules above so the
+   interactive HUD stacks consistently on the homepage. */
+.cyber-ops-hud-section {
   position: relative;
   z-index: 1;
   margin-top: 3rem;
