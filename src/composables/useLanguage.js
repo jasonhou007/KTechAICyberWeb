@@ -50,11 +50,30 @@ export function useLanguage() {
     setLanguage(newLang)
   }
 
-  // Get translation by key
-  function t(key) {
+  // Get translation by key.
+  //
+  // #190 R3: optional `params` interpolates {name} placeholders in the resolved
+  // string. The original signature was `t(key)` with no params argument, so
+  // callers like t('theme.toggleWithState', { state }) passed {state} into a
+  // parameter the function never read — the literal "{state}" placeholder
+  // survived into the rendered aria-label (Lighthouse evidence). Six source
+  // callers depend on this contract (ThemeToggle, LanguageSwitcher, NeuralCore,
+  // NeonPulse, PacketRoute x3), so the fix is a general optional-params path.
+  // Callers that don't pass params are unaffected.
+  function t(key, params) {
     const langTranslations = translations.value[currentLanguage.value] || {}
     const value = getNestedValue(langTranslations, key)
-    return value || key
+    // Missing key -> return the key string itself as fallback (legacy contract).
+    if (value === undefined || value === null) return key
+    if (typeof value !== 'string') return value
+    if (!params || typeof params !== 'object') return value
+    let out = value
+    for (const [name, val] of Object.entries(params)) {
+      // Replace all occurrences of {name} with the param value. Bound once per
+      // name; escaping the name guards against regex metacharacters in the key.
+      out = out.split(`{${name}}`).join(String(val))
+    }
+    return out
   }
 
   // Current language display

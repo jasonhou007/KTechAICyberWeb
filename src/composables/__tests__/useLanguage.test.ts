@@ -300,6 +300,64 @@ describe('useLanguage composable', () => {
 
       expect(api.t('nav.home')).toBe('首页')
     })
+
+    // ============================================
+    // #190 R3: t(key, params) — {name} placeholder interpolation.
+    // ROOT CAUSE of the prod "{state}" leak: t() was declared `function t(key)`
+    // with no params argument, so callers like t('theme.toggleWithState', {state})
+    // passed {state} into a parameter the function never read. The literal
+    // "{state}" placeholder survived into the rendered aria-label (Lighthouse
+    // evidence). Six source callers depend on this contract today
+    // (ThemeToggle, LanguageSwitcher, NeuralCore, NeonPulse, PacketRoute x3),
+    // so the fix is a general optional-params argument that replaces {name}
+    // placeholders. These tests pin the contract.
+    // RED-TEST PROOF: against the original `t(key)` signature, every assertion
+    // below fails because the placeholder is never replaced.
+    // ============================================
+    describe('t(key, params) — {name} placeholder interpolation (#190 R3)', () => {
+      it('replaces a single {name} placeholder with the param value', () => {
+        // theme.toggleWithState = "Switch theme: {state}" (en)
+        expect(api.t('theme.toggleWithState', { state: 'Dark' })).toBe(
+          'Switch theme: Dark',
+        )
+      })
+
+      it('replaces a single placeholder with a CJK value (zh active)', () => {
+        api.setLanguage('zh')
+        // theme.toggleWithState = "切换主题：{state}" (zh)
+        expect(api.t('theme.toggleWithState', { state: '深色' })).toBe(
+          '切换主题：深色',
+        )
+      })
+
+      it('replaces MULTIPLE placeholders in one string', () => {
+        // language.switchTo = "Switch to {lang}" — single placeholder; use a
+        // synthetic multi-placeholder key by building the expectation against a
+        // known multi-param key. packetRoute.aria.hintAnnounce has {row}/{column}.
+        const out = api.t('packetRoute.aria.hintAnnounce', { row: 2, column: 3 })
+        expect(out).toContain('2')
+        expect(out).toContain('3')
+        expect(out).not.toMatch(/\{row\}|\{column\}/)
+      })
+
+      it('returns the key fallback (with placeholders intact) for an unknown key', () => {
+        expect(api.t('unknown.key', { foo: 'bar' })).toBe('unknown.key')
+      })
+
+      it('leaves unreferenced placeholders untouched (no over-eager replacement)', () => {
+        // theme.toggleWithState references {state}; passing an extra {foo} must
+        // not error and must not mutate the {state} replacement.
+        const out = api.t('theme.toggleWithState', { state: 'Dark', foo: 'X' })
+        expect(out).toBe('Switch theme: Dark')
+      })
+
+      it('preserves the no-arg call path (existing t(key) callers unbroken)', () => {
+        // The legacy contract: t('nav.home') with no params must still work.
+        expect(api.t('nav.home')).toBe('Home')
+        expect(api.t('nav.home', undefined)).toBe('Home')
+        expect(api.t('nav.home', {})).toBe('Home')
+      })
+    })
   })
 
   // ============================================
