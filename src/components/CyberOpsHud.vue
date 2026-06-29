@@ -462,8 +462,6 @@ function widgetLabel(key) {
 /* ---- reduced motion: kill every animation (AC 3.2, seizure-safe) -------- */
 @media (prefers-reduced-motion: reduce) {
   .cyber-ops-hud .ops-scanlines,
-  .cyber-ops-hud .ops-needle,
-  .cyber-ops-hud .ops-glitch,
   .cyber-ops-hud * {
     animation: none !important;
   }
@@ -471,9 +469,7 @@ function widgetLabel(key) {
 
 /* Class-guard belt-and-suspenders (the .reduced-motion class is applied to the
    root when prefersReducedMotion is true). */
-.reduced-motion .ops-scanlines,
-.reduced-motion .ops-glitch,
-.reduced-motion .ops-needle {
+.reduced-motion .ops-scanlines {
   animation: none !important;
 }
 
