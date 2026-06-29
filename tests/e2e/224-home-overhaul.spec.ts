@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
 /**
  * #224 — Home overhaul live-DOM E2E.
@@ -101,13 +102,6 @@ test.describe('#224 Home overhaul — live shipped app', () => {
   test('below-the-fold modules are absent before scroll and appear after', async ({ page }) => {
     // Each heavy module is wrapped in <LazySection data-test="lazy-<name>">.
     // Before scroll, the slot (the inner component) must NOT be mounted.
-    const lazyWrappers = [
-      'lazy-neural-terminal',
-      'lazy-neural-core',
-      'lazy-solution-forge',
-      'lazy-cyber-ops-hud',
-      'lazy-neon-pulse',
-    ]
     // The inner-component data-test hooks that the components themselves emit.
     const innerHooks = [
       'cyber-ops-hud',
@@ -119,21 +113,21 @@ test.describe('#224 Home overhaul — live shipped app', () => {
       await expect(page.locator(`[data-test="${hook}"]`)).toHaveCount(0)
     }
 
-    // 2. Force-scroll each lazy wrapper's center into view, then wait for the
-    //    IntersectionObserver callback to mount the inner component. We use
-    //    scrollIntoView (NOT scrollIntoViewIfNeeded, which is a no-op if the
-    //    1px sentinel is technically on-screen) and Playwright's auto-retrying
-    //    expect() (NOT a fixed waitForTimeout) so the test tolerates dev-server
-    //    cold-start / IO-callback latency without flaking.
-    for (const w of lazyWrappers) {
-      const locator = page.locator(`[data-test="${w}"]`)
-      if ((await locator.count()) > 0) {
-        await locator.first().evaluate((el) => el.scrollIntoView({ block: 'center' }))
-      }
-    }
+    // 2. Trigger the mount of CyberOpsHud + NeonPulse via the shared
+    //    mountLazySection helper (focus-driven, with a scroll cascade
+    //    fallback). A raw scrollIntoView loop is NOT reliable on headless
+    //    chromium: each unmounted wrapper is only a 200px placeholder, so the
+    //    browser's max-scroll cannot bring the bottom-most sentinel (NeonPulse)
+    //    within the IntersectionObserver rootMargin until earlier sections
+    //    mount and grow the document — and a tight synchronous scroll loop
+    //    does not yield between iterations to let that growth happen. The
+    //    focusin path (WCAG 2.1.1 keyboard-mount) triggers the mount in place
+    //    with zero scrolling and zero sibling side-effects, and is the same
+    //    path the 21 adapted component specs (#161/#179/#180/#182/#186) use.
+    await mountLazySection(page, 'lazy-cyber-ops-hud', 'cyber-ops-hud')
+    await mountLazySection(page, 'lazy-neon-pulse', 'neon-pulse')
 
-    // 3. After scroll, CyberOpsHud + NeonPulse (which both emit data-test
-    //    hooks) must be present. Auto-retry up to the default expect timeout.
+    // 3. Both inner components are now mounted.
     await expect(page.locator('[data-test="cyber-ops-hud"]')).toHaveCount(1)
     await expect(page.locator('[data-test="neon-pulse"]')).toHaveCount(1)
   })
