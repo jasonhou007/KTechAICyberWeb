@@ -466,7 +466,7 @@ const handleSubmit = () => {
 }
 
 .page-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
   color: #e0e0e0;
@@ -480,7 +480,7 @@ const handleSubmit = () => {
 }
 
 .page-subtitle {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.2rem;
   color: #888;
 }
@@ -488,7 +488,7 @@ const handleSubmit = () => {
 /* Breadcrumb */
 .breadcrumb {
   padding: 1rem 5%;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #666;
 }
@@ -505,7 +505,7 @@ const handleSubmit = () => {
 
 /* Section Title */
 .section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   color: #00f0ff;
   letter-spacing: 0.15em;
@@ -527,7 +527,7 @@ const handleSubmit = () => {
 
 .form-label {
   display: block;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -543,7 +543,7 @@ const handleSubmit = () => {
 .form-input {
   width: 100%;
   padding: 0.75rem 1rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #e0e0e0;
   background: rgba(10, 10, 20, 0.8);
@@ -588,14 +588,14 @@ select.form-input option {
 .form-textarea {
   min-height: 8rem;
   resize: vertical;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   line-height: 1.5;
 }
 
 .error-message {
   display: block;
   margin-top: 0.5rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: #ff4444;
 }
@@ -608,7 +608,7 @@ select.form-input option {
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #aaa;
   cursor: pointer;
@@ -623,7 +623,7 @@ select.form-input option {
 .submit-button {
   width: 100%;
   padding: 1rem 2rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 600;
   color: #00f0ff;
@@ -651,7 +651,7 @@ select.form-input option {
 .submit-message {
   margin-top: 1.5rem;
   padding: 1rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   border-radius: 5px;
   text-align: center;
@@ -704,7 +704,7 @@ select.form-input option {
 }
 
 .info-item h3 {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -714,7 +714,7 @@ select.form-input option {
 }
 
 .info-item p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: #aaa;
   line-height: 1.6;
@@ -738,7 +738,7 @@ select.form-input option {
 }
 
 .social-label {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #666;
   text-transform: uppercase;
@@ -759,7 +759,7 @@ select.form-input option {
 }
 
 .demo-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
   color: #00f0ff;
@@ -769,7 +769,7 @@ select.form-input option {
 }
 
 .demo-description {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   color: #aaa;
   line-height: 1.8;
@@ -799,7 +799,7 @@ select.form-input option {
 }
 
 .feature-number {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2.5rem;
   font-weight: 700;
   color: #00f0ff;
@@ -808,7 +808,7 @@ select.form-input option {
 }
 
 .demo-feature h3 {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -818,7 +818,7 @@ select.form-input option {
 
 .demo-button {
   padding: 1rem 3rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   font-weight: 600;
   color: #00f0ff;

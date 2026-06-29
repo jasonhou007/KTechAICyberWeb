@@ -363,7 +363,7 @@ onUnmounted(() => {
   gap: 0.5rem;
   padding: 1rem 0;
   margin-bottom: 2rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
 }
 
@@ -392,7 +392,7 @@ onUnmounted(() => {
 }
 
 .position-list__title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
   color: #e0e0e0;
@@ -401,7 +401,7 @@ onUnmounted(() => {
 }
 
 .position-list__title-accent {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.2rem;
   color: #00f0ff;
   text-transform: uppercase;
@@ -432,7 +432,7 @@ onUnmounted(() => {
 }
 
 .filter-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   color: #00f0ff;
   letter-spacing: 0.15em;
@@ -445,7 +445,7 @@ onUnmounted(() => {
 
 .filter-search label {
   display: block;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   color: #aaa;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
@@ -457,7 +457,7 @@ onUnmounted(() => {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(0, 240, 255, 0.3);
   color: #e0e0e0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -473,7 +473,7 @@ onUnmounted(() => {
 
 .filter-group label {
   display: block;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   color: #aaa;
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
@@ -485,7 +485,7 @@ onUnmounted(() => {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(0, 240, 255, 0.3);
   color: #e0e0e0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   transition: border-color 0.3s ease;
 }
 
@@ -500,7 +500,7 @@ onUnmounted(() => {
   align-items: center;
   padding-top: 1rem;
   border-top: 1px solid rgba(0, 240, 255, 0.2);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #aaa;
 }
@@ -510,7 +510,7 @@ onUnmounted(() => {
   background: rgba(0, 240, 255, 0.1);
   border: 1px solid rgba(0, 240, 255, 0.3);
   color: #00f0ff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -548,7 +548,7 @@ onUnmounted(() => {
 }
 
 .position-card__title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.3rem;
   color: #e0e0e0;
   letter-spacing: 0.1em;
@@ -566,7 +566,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #888;
 }
@@ -576,7 +576,7 @@ onUnmounted(() => {
 }
 
 .position-card__description {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.6;
   color: #aaa;
@@ -591,7 +591,7 @@ onUnmounted(() => {
 }
 
 .position-card__salary {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: #00f0ff;
 }
@@ -601,7 +601,7 @@ onUnmounted(() => {
   background: rgba(139, 0, 255, 0.2);
   border: 1px solid rgba(139, 0, 255, 0.4);
   color: #8b00ff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -613,7 +613,7 @@ onUnmounted(() => {
   background: transparent;
   border: 1px solid rgba(0, 240, 255, 0.4);
   color: #00f0ff;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   letter-spacing: 0.15em;
   cursor: pointer;
@@ -637,7 +637,7 @@ onUnmounted(() => {
 }
 
 .empty-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   color: #e0e0e0;
   letter-spacing: 0.1em;
@@ -645,7 +645,7 @@ onUnmounted(() => {
 }
 
 .empty-message {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #888;
   margin-bottom: 2rem;
@@ -656,7 +656,7 @@ onUnmounted(() => {
   background: rgba(0, 240, 255, 0.1);
   border: 1px solid rgba(0, 240, 255, 0.4);
   color: #00f0ff;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   letter-spacing: 0.15em;
   cursor: pointer;
@@ -726,7 +726,7 @@ onUnmounted(() => {
 }
 
 .position-modal__title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   color: #e0e0e0;
   letter-spacing: 0.15em;
@@ -736,7 +736,7 @@ onUnmounted(() => {
 .position-modal__meta {
   display: flex;
   gap: 1rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #888;
   margin-bottom: 2rem;
@@ -747,7 +747,7 @@ onUnmounted(() => {
 }
 
 .position-modal__section h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   color: #00f0ff;
   letter-spacing: 0.1em;
@@ -755,7 +755,7 @@ onUnmounted(() => {
 }
 
 .position-modal__section p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.8;
   color: #aaa;
@@ -770,7 +770,7 @@ onUnmounted(() => {
   position: relative;
   padding-left: 1.5rem;
   margin-bottom: 0.5rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.6;
   color: #aaa;
@@ -793,7 +793,7 @@ onUnmounted(() => {
 .position-modal__share {
   flex: 1;
   padding: 1rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   letter-spacing: 0.15em;
   cursor: pointer;

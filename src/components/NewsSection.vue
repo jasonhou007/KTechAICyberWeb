@@ -96,7 +96,7 @@ const newsItems = [
 }
 
 .section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2.5rem;
   font-weight: 700;
   color: #00ffcc;
@@ -169,7 +169,7 @@ const newsItems = [
 }
 
 .card-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.3rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -195,7 +195,7 @@ const newsItems = [
 }
 
 .cta-text {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
   color: #00ffcc;

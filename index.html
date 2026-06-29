@@ -47,89 +47,12 @@
 
   <title>开泰科技 - KBight Fintech | 金融科技创新</title>
   <style>
-    :root{--bg:#0a0f1c;--bg-s:#0d1a2d;--cyan:#00ffcc;--magenta:#ff00aa;--txt:#e0e8ff;--txt2:#8a9acc;--font-d:'Clash Display',system-ui,sans-serif;--font-b:'Satoshi',system-ui,sans-serif}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    html{scroll-behavior:smooth;scroll-padding-top:80px}
-    body{font-family:var(--font-b);background:var(--bg);color:var(--txt);min-height:100vh;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-    #loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s,visibility .6s}
-    #loading.hidden{opacity:0;visibility:hidden;pointer-events:none}
-    .loader-logo{font-family:var(--font-d);font-size:3rem;font-weight:700;color:var(--cyan);text-shadow:0 0 20px var(--cyan);animation:pulse 2s ease-in-out infinite;letter-spacing:.2em}
-    @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1;text-shadow:0 0 40px var(--cyan),0 0 60px var(--cyan)}}
-    .nav{position:fixed;inset:0 auto auto 0;right:0;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:1.5rem 4rem;background:rgba(10,15,28,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,204,.2);transition:all .3s ease}
-    .nav.scrolled{padding:1rem 4rem;box-shadow:0 4px 20px rgba(0,255,204,.1)}
-    .nav-logo{font-family:var(--font-d);font-size:1.5rem;font-weight:700;color:var(--txt);letter-spacing:.1em;text-decoration:none;transition:color .3s ease;text-shadow:0 0 10px transparent}
-    .nav-logo:hover{color:var(--cyan);text-shadow:0 0 20px var(--cyan)}
-    .nav-logo .accent{color:var(--cyan);text-shadow:0 0 20px var(--cyan)}
-    .nav-links{display:flex;gap:2rem;list-style:none}
-    .nav-links a{color:var(--txt2);text-decoration:none;font-size:.9rem;transition:color .3s ease;position:relative;padding:.25rem 0}
-    .nav-links a:hover,.nav-links a:focus{color:var(--cyan);outline:none}
-    .nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--cyan);transition:width .3s ease}
-    .nav-links a:hover::after,.nav-links a:focus::after{width:100%}
-    .hero{min-height:100vh;display:flex;align-items:center;padding:0 8%;position:relative;overflow:hidden}
-    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,255,204,.1) 0%,transparent 50%),radial-gradient(ellipse at 80% 50%,rgba(255,0,170,.08) 0%,transparent 50%);animation:bgShift 10s ease-in-out infinite alternate}
-    @keyframes bgShift{0%{opacity:.8}100%{opacity:1}}
-    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,204,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,204,.03) 1px,transparent 1px);background-size:50px 50px;opacity:.5}
-    .hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-    .particle{position:absolute;width:2px;height:2px;background:var(--cyan);border-radius:50%;opacity:0;animation:float 8s ease-in-out infinite;box-shadow:0 0 4px var(--cyan)}
-    @keyframes float{0%{opacity:0;transform:translateY(100vh)}10%{opacity:.6}90%{opacity:.6}100%{opacity:0;transform:translateY(-100px)}}
-    .hero-content{flex:1;z-index:10;position:relative}
-    .hero-title{font-family:var(--font-d);font-size:clamp(2.5rem,6vw,5rem);font-weight:700;line-height:1.1;margin-bottom:2rem}
-    .hero-title .main{display:block;color:var(--txt);letter-spacing:.15em;animation:glitch 3s ease-in-out infinite}
-    @keyframes glitch{0%,90%,100%{transform:translateX(0)}92%{transform:translateX(-2px)}94%{transform:translateX(2px)}96%{transform:translateX(-1px)}98%{transform:translateX(1px)}}
-    .hero-title .accent{display:block;color:var(--cyan);text-shadow:0 0 30px var(--cyan);letter-spacing:.2em}
-    .hero-subtitle{font-size:1.2rem;color:var(--txt2);margin-bottom:3rem;max-width:600px;line-height:1.8}
-    .hero-stats{display:flex;gap:4rem;margin-top:4rem;flex-wrap:wrap}
-    .stat-item{text-align:left}
-    .stat-number{font-family:var(--font-d);font-size:2.5rem;font-weight:700;color:var(--cyan);text-shadow:0 0 20px var(--cyan);transition:transform .3s ease}
-    .stat-item:hover .stat-number{transform:scale(1.05)}
-    .stat-label{font-size:.9rem;color:var(--txt2);margin-top:.5rem}
-    .section{padding:8rem 8%;position:relative}
-    .section-title{font-family:var(--font-d);font-size:2.5rem;text-align:center;color:var(--cyan);margin-bottom:1rem;text-shadow:0 0 30px var(--cyan)}
-    .section-subtitle{text-align:center;color:var(--txt2);margin-bottom:4rem;font-size:1.1rem}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
-    .card{background:rgba(13,26,45,.6);border:1px solid rgba(0,255,204,.2);padding:2.5rem;transition:all .4s ease;position:relative;overflow:hidden}
-    .card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(0,255,204,.1),transparent);transition:left .6s ease}
-    .card:hover::before{left:100%}
-    .card:hover{border-color:rgba(0,255,204,.5);transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,255,204,.15)}
-    .card-icon{font-size:2.5rem;margin-bottom:1.5rem;display:inline-block;transition:transform .3s ease}
-    .card:hover .card-icon{transform:scale(1.1) rotate(5deg)}
-    .card h3{font-family:var(--font-d);font-size:1.2rem;margin-bottom:1rem;color:var(--txt)}
-    .card p{color:var(--txt2);line-height:1.7}
-    .honors{background:rgba(13,26,45,.3)}
-    .honor-badge{background:rgba(0,255,204,.05);border:1px solid rgba(0,255,204,.3);padding:2rem;text-align:center;transition:all .4s ease}
-    .honor-badge:hover{background:rgba(0,255,204,.15);border-color:var(--cyan);box-shadow:0 0 40px rgba(0,255,204,.3);transform:translateY(-5px) scale(1.02)}
-    .honor-icon{font-size:3rem;margin-bottom:1rem;transition:transform .3s ease}
-    .honor-badge:hover .honor-icon{transform:scale(1.2) rotate(10deg)}
-    .honor-badge h4{font-family:var(--font-d);font-size:1rem;color:var(--txt);margin-bottom:.5rem}
-    .honor-badge span{font-size:.85rem;color:var(--cyan)}
-    .contact{background:rgba(13,26,45,.3)}
-    .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
-    .contact-item{text-align:center;padding:2rem;background:rgba(0,255,204,.05);border:1px solid rgba(0,255,204,.2);transition:all .3s ease}
-    .contact-item:hover{border-color:var(--cyan);box-shadow:0 0 30px rgba(0,255,204,.2);transform:translateY(-5px)}
-    .contact-icon{font-size:2.5rem;margin-bottom:1rem}
-    .contact-item h4{font-family:var(--font-d);font-size:1rem;color:var(--txt);margin-bottom:.5rem}
-    .contact-item p{color:var(--txt2);font-size:.9rem}
-    .footer{padding:3rem 8%;background:rgba(10,15,28,.9);border-top:1px solid rgba(0,255,204,.2);text-align:center}
-    .footer-text{color:var(--txt);font-size:1rem;font-family:var(--font-d)}
-    .footer-copyright{margin-top:1rem;color:var(--txt2);font-size:.8rem}
-    .scanlines{position:fixed;inset:0;pointer-events:none;z-index:1000;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,204,.01) 2px,rgba(0,255,204,.01) 4px);opacity:.3}
-    .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s cubic-bezier(.4,0,.2,1),transform .6s cubic-bezier(.4,0,.2,1)}
-    .fade-in.visible{opacity:1;transform:translateY(0)}
-    .stagger:nth-child(1){transition-delay:0s}
-    .stagger:nth-child(2){transition-delay:.05s}
-    .stagger:nth-child(3){transition-delay:.1s}
-    .stagger:nth-child(4){transition-delay:.15s}
-    .stagger:nth-child(5){transition-delay:.2s}
-    .stagger:nth-child(6){transition-delay:.25s}
-    .stagger:nth-child(7){transition-delay:.3s}
-    .stagger:nth-child(8){transition-delay:.35s}
-    @media(max-width:768px){
-      .nav,.hero,.section{padding-left:1rem;padding-right:1rem}
-      .nav-links{display:none}
-      .hero-title{font-size:2rem}
-      .hero-stats,.grid,.contact-grid{grid-template-columns:1fr;gap:2rem}
-    }
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    /* Critical-path no-FOUC block (#188): paints the dark background before
+       the JS bundle hydrates. The pre-Vue skeleton selectors that used to
+       live here were dead — Vue mounts #app and renders its own components —
+       and have been purged. Only the background-paint rule is kept. */
+    :root{--bg:#0a0f1c;--cyan:#00ffcc}
+    body{background:var(--bg)}
   </style>
 
   <!-- JSON-LD Structured Data -->

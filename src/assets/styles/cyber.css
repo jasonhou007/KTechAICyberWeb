@@ -1,22 +1,10 @@
-/* Cyberpunk Styling */
-:root {
-  /* Default to dark theme */
-  --bg-primary: #0a0a0a;
-  --bg-secondary: #1a1a2e;
-  --bg-gradient-start: #0a0a0a;
-  --bg-gradient-mid: #1a1a2e;
-  --bg-gradient-end: #16213e;
-  --text-primary: #e0e0e0;
-  --text-secondary: #00ffff;
-  --neon-green: #00ff88;
-  --neon-blue: #00ffff;
-  --neon-pink: #ff00ff;
-  --card-bg: rgba(26, 26, 46, 0.8);
-  --card-border: rgba(0, 255, 136, 0.3);
-  --nav-bg: rgba(10, 10, 15, 0.8);
-  --glow-color: rgba(0, 255, 136, 0.4);
-  --shadow-color: rgba(0, 0, 0, 0.5);
-}
+/* Cyberpunk Styling.
+ * NOTE (#188): the previous `:root { /* Default to dark theme *\/ ... }` block
+ * was byte-identical to `[data-theme="dark"]` below and has been removed.
+ * App.vue always sets <html data-theme="dark|light"> synchronously on mount
+ * (treating the default 'cyber' theme as dark), so the dark values are always
+ * authored via [data-theme="dark"]; the bare :root copy was dead. The critical
+ * no-FOUC background is handled by the minimal inline <style> in index.html. */
 
 /* Dark Theme (Default) */
 [data-theme="dark"] {
@@ -86,6 +74,10 @@
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
+  /* Intentional cyber terminal-monospace body font (#188 font consolidation
+   * deliberately preserves this — NOT consolidated onto --font-body, which is
+   * the Rajdhani UI font). Mirrors the 'Courier New' terminal blocks in
+   * NeuralCore / NeuralTerminal / SolutionForge. */
   font-family: 'Courier New', monospace;
   line-height: 1.6;
 }

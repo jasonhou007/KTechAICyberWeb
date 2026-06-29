@@ -201,7 +201,18 @@
     "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/218",
     "merge_sha": "41d9402",
     "merge_method": "--merge (NOT squash; 10 commits preserved on main)",
-    "commits": ["dbc7a30","bfce162","1960ec1","519ff75","96e2bf7","26f944a","feff024","8e1e26a","4c3561f","1de72fd"],
+    "commits": [
+      "dbc7a30",
+      "bfce162",
+      "1960ec1",
+      "519ff75",
+      "96e2bf7",
+      "26f944a",
+      "feff024",
+      "8e1e26a",
+      "4c3561f",
+      "1de72fd"
+    ],
     "security": "APPROVED: 0 Critical, 0 High, 2 Low, 2 Info (all optional hardenings; PII-stripping verified clean + tested; endpoint env-only no SSRF; XSS-free; WCAG-AA)",
     "evaluator_verdict": "EXCELLENT (GO, no must-fix): 2433 vitest pass; coverage stmt 94.83%/branch 85.97%/line 96.46%; 4/4 E2E chromium; i18n 1084/1084; wired-gate all 3 mechanics verified; dead-reactive-state gate passed (latest wired in review commit 4c3561f)",
     "honest_results": {
@@ -221,5 +232,74 @@
     "phase_5b": "#187 body has no markdown checkboxes (prose deferred-scope description) — nothing to flip; AC mapping lives in PR #218 body ([x]/[~] table with #217 citation).",
     "deferred_followup": "#217 (CWV: remote RUM aggregation dashboard + analytics endpoint) — OPEN in Backlog.",
     "notes": "M-sized feature, TDD red->green, 2 review commits. Privacy-first RUM: opt-in default-inert, endpoint-agnostic (null=no-op), metrics-only payload with tested PII stripping. web-vitals@^5.3.0 dynamic-imported to its own async chunk (perf tool measuring perf must not regress perf). Local dashboard = WCAG-AA in-page viewer; remote dashboard deferred (#217)."
+  },
+  "188": {
+    "title": "CWV: remove unused CSS / purge",
+    "status": "InProgress",
+    "stage": "validation_done",
+    "iteration": 25,
+    "github_state": "OPEN",
+    "baseline": "origin/main @ c672d06",
+    "branch": "autodev-188-purge-css",
+    "started_at": "2026-06-29",
+    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxDPzM -> In progress (47fc9ee4)",
+    "closes_acs_of": 18,
+    "baseline_css": {
+      "entry_chunk_raw_kb": 75.37,
+      "entry_chunk_gzip_kb": 12.87,
+      "entry_chunk_file": "index-DsMlIg11.css",
+      "total_route_css_raw_kb": 190.82,
+      "note": "75.37 kB entry index.css + ~120 kB across 18 lazy route chunks"
+    },
+    "source_css": {
+      "accessibility.css": "7233 chars / 323 lines",
+      "variables.css": "1068 chars / 47 lines",
+      "main.css": "2541 chars / 128 lines",
+      "cyber.css": "3058 chars / 120 lines",
+      "scoped_vue_styles": "57 .vue files with <style> blocks"
+    },
+    "notes": "Scanner single-flight: #188 sole Ready item, 0 open In-progress, board locked. #216/#217 already in Backlog. Baseline CSS measured.",
+    "plan_verdict": "APPROVED — planner plan gated: every AC mapped [x]/[~], exact files listed, TDD red-first, visual-regression guard, perf protocol. Coordinator independently verified load-bearing claims (Clash/Satoshi never loaded; Orbitron/Rajdhani counts exact; index.html dead block exists).",
+    "plan_key_findings": {
+      "index_html_dead_block": "lines 49-133 ~84 lines pre-Vue skeleton CSS, fully dead (Vue SPA mounts #app)",
+      "cyber_css_redundant_root": "lines 1-19 byte-identical to [data-theme=dark] which always wins",
+      "font_var_bug": "--font-display:'Clash Display'/--font-body:'Satoshi' NEVER loaded (no @font-face, only Orbitron+Rajdhani via Google Fonts); ~37 components using these vars currently render system-ui (latent bug). Plan corrects vars to Orbitron/Rajdhani = visible improvement on those components, documented.",
+      "font_hardcodes": "117 Orbitron + 142 Rajdhani + 4 Courier New (terminal, KEEP) — exact grep counts verified"
+    },
+    "deferred_ac_followup": "scoped-style dead-selector archaeology (12,664 lines / 57 files) -> follow-up issue to be filed by coder, AC marked [~]",
+    "coding_result": {
+      "commits": [
+        "5cb5b68",
+        "fb60531",
+        "ed110cf",
+        "6621cfa",
+        "68a6f34",
+        "9245f12",
+        "597d76c",
+        "a757b20"
+      ],
+      "files_changed": "47 (+856/-366)",
+      "vitest": "2453/2453 pass (87 files), 0 fail",
+      "coverage": "96.46% lines / 85.97% branches (coordinator re-derived from coder report; gate >=80%/60% met)",
+      "build": "vite build green",
+      "entry_css_after": "74,859 B raw / 12,837 B gzip (baseline 75,369/12,892; -510 B raw / -55 B gzip)",
+      "real_win": "index.html inline <style> block 8,182 -> 397 B (-95.2%) — bytes browser parses pre-mount, the actual CWV/LCP win; entry chunk barely moved because dead CSS was in HTML not the chunk (coder caught this honestly, did not fake the chunk-size threshold)",
+      "font_consolidation": "259 Orbitron/Rajdhani hardcodes -> 0 in .vue (coordinator grep-verified); var(--font-display) 141 usages, var(--font-body) 155 usages; Courier New 5 preserved (coder cited 4, actual 5 — minor undercount, all intentional terminal styling)",
+      "var_value_correction": "--font-display 'Clash Display' -> 'Orbitron', --font-body 'Satoshi' -> 'Rajdhani' (Clash/Satoshi never loaded; ~37 components render system-ui bug -> now render intended cyber font). Visible IMPROVEMENT, documented as bug fix. E2E getComputedStyle proves Orbitron now resolves on Home/About/ServiceBigData headings.",
+      "deferred_ac": "scoped-style dead-selector audit -> follow-up #219 (filed, OPEN)",
+      "evidence": "tickets/188/{IMPLEMENTATION_SUMMARY.md} + evidence/{before,after}-{home,about}-desktop-dark.png",
+      "shipped_app_gate": "CSS changes apply to rendered elements (proven by E2E getComputedStyle on live DOM, not just unit mounts)",
+      "honesty": "coder caught unachievable plan threshold (entry chunk), rewrote test to measure real artifact, did not fake"
+    },
+    "security_verdict": "APPROVED: 0 Critical, 0 High, 0 Medium, 4 Info (all intentional/observational). SEC001 clean, no XSS, accessibility.css untouched, no deps added, theme integrity preserved, FOUC block sufficient.",
+    "evaluator_verdict": "GOOD 8.6/10 — APPROVED. All gates green. Caught bookkeeping drift in IMPLEMENTATION_SUMMARY.md §4 (claimed 42 files/284 ins, actual 47 files/880 ins) — doc-only, non-blocking, to be fixed in Stage-6 review cycle.",
+    "coordinator_rederived": {
+      "index_html_style_block": "8182 -> 397 B (-95.2%) — verified via git show + awk",
+      "diff_stat": "47 files / 880 ins / 366 del / 38 .vue files — verified via git diff --shortstat (SUMMARY claim of 42/284 was wrong)",
+      "entry_css": "74,859 B raw / 12,837 B gzip (baseline 75,369/12,892)",
+      "font_hardcodes_in_vue": 0,
+      "courier_new_preserved": 5,
+      "var_usages": "font-display 141, font-body 155"
+    }
   }
 }

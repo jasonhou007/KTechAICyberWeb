@@ -352,7 +352,7 @@ watch(status, (s) => {
 }
 
 .pulse-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.6rem;
   color: var(--neon-pink);
   margin: 0;
@@ -361,7 +361,7 @@ watch(status, (s) => {
 }
 
 .pulse-subtitle {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--text-secondary);
   margin: 0.3rem 0 0 0;
@@ -379,7 +379,7 @@ watch(status, (s) => {
 }
 
 .pulse-btn {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   color: var(--neon-green);
   background: rgba(0, 0, 0, 0.3);
@@ -427,7 +427,7 @@ watch(status, (s) => {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: var(--text-secondary);
   cursor: pointer;
@@ -455,7 +455,7 @@ watch(status, (s) => {
 }
 
 .pulse-slider-label {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: var(--text-secondary);
   letter-spacing: 0.06em;
@@ -483,7 +483,7 @@ watch(status, (s) => {
 .pulse-db {
   position: relative;
   z-index: 1;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.85rem;
   color: var(--neon-green);
   letter-spacing: 0.1em;
@@ -503,7 +503,7 @@ watch(status, (s) => {
   margin: 0.2rem auto 0 auto;
 }
 .pulse-bass-label {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   color: var(--neon-pink);
   letter-spacing: 0.12em;
@@ -528,7 +528,7 @@ watch(status, (s) => {
 .pulse-mic-live {
   position: relative;
   z-index: 1;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--neon-green);
   letter-spacing: 0.08em;
@@ -541,7 +541,7 @@ watch(status, (s) => {
 .pulse-offscreen-hint {
   position: relative;
   z-index: 1;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--neon-pink);
   letter-spacing: 0.06em;
@@ -554,7 +554,7 @@ watch(status, (s) => {
 .pulse-mobile-note {
   position: relative;
   z-index: 1;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--text-secondary);
   letter-spacing: 0.05em;
@@ -566,7 +566,7 @@ watch(status, (s) => {
 .pulse-status {
   position: relative;
   z-index: 1;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: var(--text-secondary);
   margin: 0;
@@ -583,7 +583,7 @@ watch(status, (s) => {
 .pulse-notice {
   position: relative;
   z-index: 1;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   margin: 0.6rem 0 0 0;
   padding: 0.4rem 0.8rem;
@@ -595,7 +595,7 @@ watch(status, (s) => {
 .pulse-reduced-note {
   position: relative;
   z-index: 1;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--text-secondary);
   margin: 0.6rem 0 0 0;

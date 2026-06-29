@@ -97,7 +97,7 @@ onMounted(() => {
 }
 
 .logo-text {
-  font-family: var(--font-display, 'Orbitron', monospace);
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
   color: #e0e0e0;
@@ -188,7 +188,7 @@ onMounted(() => {
 }
 
 .progress-text {
-  font-family: var(--font-body, 'Rajdhani', sans-serif);
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: var(--cyan, #00f0ff);
   text-align: right;

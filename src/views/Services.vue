@@ -140,7 +140,7 @@ onMounted(() => {
   padding: 6rem 2rem 4rem;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   color: #00ff88;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   position: relative;
   overflow: hidden;
 }
@@ -204,7 +204,7 @@ onMounted(() => {
   font-size: 1.5rem;
   color: #00ffff;
   margin-top: 1.5rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   text-shadow: 0 0 10px #00ffff;
   letter-spacing: 0.15em;
 }
@@ -326,7 +326,7 @@ onMounted(() => {
 
 /* Service title */
 .service-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.3rem;
   font-weight: 700;
   color: #00ff88;
@@ -337,7 +337,7 @@ onMounted(() => {
 
 /* Service description */
 .service-description {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #00ffff;
   line-height: 1.6;
@@ -354,7 +354,7 @@ onMounted(() => {
 }
 
 .service-features li {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #a0a0a0;
   padding: 0.4rem 0;
@@ -379,7 +379,7 @@ onMounted(() => {
   display: inline-block;
   margin-top: 1rem;
   padding: 0.6rem 1.4rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.8rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -405,7 +405,7 @@ onMounted(() => {
   border: 2px solid #00ff88;
   padding: 1.2rem 3.5rem;
   font-size: 1.2rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   letter-spacing: 0.15em;
   cursor: pointer;
   position: relative;

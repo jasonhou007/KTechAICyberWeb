@@ -204,7 +204,7 @@ export default {
   border-top: 1px solid rgba(0, 240, 255, 0.2);
 }
 .footer-content { display: flex; justify-content: space-between; align-items: center; }
-.footer-text { font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; color: #b0b0b0; }
+.footer-text { font-family: var(--font-body); font-size: 0.9rem; color: #b0b0b0; }
 .footer-link {
   margin-left: 1rem;
   color: #00f0ff;

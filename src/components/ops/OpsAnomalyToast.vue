@@ -83,7 +83,7 @@ const { t } = useLanguage()
 }
 
 .ops-anomaly-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   color: var(--neon-pink);
   text-shadow: 0 0 6px var(--neon-pink);
@@ -91,7 +91,7 @@ const { t } = useLanguage()
 }
 
 .ops-anomaly-state {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -99,7 +99,7 @@ const { t } = useLanguage()
 }
 
 .ops-anomaly-drilldown {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--text-primary);
   margin: 0 0 0.5rem 0;
@@ -115,7 +115,7 @@ const { t } = useLanguage()
   background: transparent;
   border: 1px solid var(--neon-pink);
   color: var(--neon-pink);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   padding: 0.25rem 0.6rem;
   cursor: pointer;

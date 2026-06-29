@@ -48,7 +48,7 @@ function positionFor(phase) {
 }
 
 .ops-request-flow-label {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--text-secondary);
   text-transform: uppercase;

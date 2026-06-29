@@ -41,7 +41,7 @@ const handleClick = (event) => {
   background: var(--skip-link-bg, #0a0a0a);
   color: var(--skip-link-text, #00f0ff);
   text-decoration: none;
-  font-family: var(--font-body, 'Rajdhani', sans-serif);
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.1em;

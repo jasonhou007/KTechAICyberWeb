@@ -26,7 +26,7 @@ defineEmits(['pulse'])
   background: rgba(0, 255, 136, 0.1);
   color: var(--neon-green);
   border: 1px solid var(--neon-green);
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.85rem;
   padding: 0.5rem 1.2rem;
   cursor: pointer;

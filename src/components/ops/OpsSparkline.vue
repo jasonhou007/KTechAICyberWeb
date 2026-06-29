@@ -79,7 +79,7 @@ const strokeVar = computed(() => (props.color === 'blue' ? 'var(--neon-blue)' : 
 }
 
 .ops-sparkline-label {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -87,7 +87,7 @@ const strokeVar = computed(() => (props.color === 'blue' ? 'var(--neon-blue)' : 
 }
 
 .ops-sparkline-value {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   color: var(--text-primary);
 }

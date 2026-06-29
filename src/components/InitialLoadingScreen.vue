@@ -71,7 +71,7 @@ defineProps({
 }
 
 .logo-text {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
   color: #e0e0e0;
@@ -162,7 +162,7 @@ defineProps({
 }
 
 .progress-text {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #00f0ff;
   text-align: right;

@@ -375,7 +375,7 @@ const { enabled } = useParallax({
 }
 
 .page-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
   color: #ffffff;
@@ -390,7 +390,7 @@ const { enabled } = useParallax({
 }
 
 .page-subtitle {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.3rem;
   color: #a0a0a0;
   max-width: 600px;
@@ -398,7 +398,7 @@ const { enabled } = useParallax({
 }
 
 .section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
   color: #00ffcc;
@@ -426,14 +426,14 @@ const { enabled } = useParallax({
 }
 
 .content-card h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: #00ffcc;
   margin-bottom: 0.5rem;
 }
 
 .content-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: #a0a0a0;
   line-height: 1.6;
@@ -531,7 +531,7 @@ const { enabled } = useParallax({
 }
 
 .achievement-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #a0a0a0;
 }
@@ -556,14 +556,14 @@ const { enabled } = useParallax({
 }
 
 .vmc-card h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   color: #00ffcc;
   margin-bottom: 0.5rem;
 }
 
 .vmc-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #a0a0a0;
 }
@@ -586,7 +586,7 @@ const { enabled } = useParallax({
 }
 
 .culture-item h4 {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #e0e0e0;
   text-transform: uppercase;
@@ -605,7 +605,7 @@ const { enabled } = useParallax({
 }
 
 .service-number {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
   opacity: 0.2;
@@ -615,7 +615,7 @@ const { enabled } = useParallax({
 }
 
 .service-card h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: #00ffcc;
   margin-bottom: 1rem;
@@ -623,7 +623,7 @@ const { enabled } = useParallax({
 }
 
 .service-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: #a0a0a0;
   line-height: 1.6;
@@ -647,7 +647,7 @@ const { enabled } = useParallax({
 }
 
 .stat-value {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
   color: #00ffcc;
@@ -655,7 +655,7 @@ const { enabled } = useParallax({
 }
 
 .stat-label {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #888;
   text-transform: uppercase;

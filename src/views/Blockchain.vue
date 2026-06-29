@@ -169,7 +169,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #888;
 }
@@ -189,7 +189,7 @@ onMounted(() => {
 }
 
 .page-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 3.5rem;
   font-weight: 700;
   color: #e0e0e0;
@@ -207,7 +207,7 @@ onMounted(() => {
 }
 
 .page-subtitle {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.5rem;
   color: #888;
   max-width: 800px;
@@ -227,7 +227,7 @@ onMounted(() => {
 }
 
 .section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2.2rem;
   font-weight: 600;
   color: #00f0ff;
@@ -238,7 +238,7 @@ onMounted(() => {
 }
 
 .overview-text {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.2rem;
   color: #aaa;
   text-align: center;
@@ -272,7 +272,7 @@ onMounted(() => {
 }
 
 .overview-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   color: #ccc;
   line-height: 1.6;
@@ -333,7 +333,7 @@ onMounted(() => {
 }
 
 .feature-card h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.3rem;
   color: #00f0ff;
   margin-bottom: 1rem;
@@ -341,7 +341,7 @@ onMounted(() => {
 }
 
 .feature-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #999;
   line-height: 1.6;
@@ -378,7 +378,7 @@ onMounted(() => {
 }
 
 .benefit-number {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2.5rem;
   font-weight: 700;
   color: #00f0ff;
@@ -387,7 +387,7 @@ onMounted(() => {
 }
 
 .benefit-item h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   color: #e0e0e0;
   margin-bottom: 0.8rem;
@@ -395,7 +395,7 @@ onMounted(() => {
 }
 
 .benefit-item p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #999;
   line-height: 1.6;
@@ -418,7 +418,7 @@ onMounted(() => {
 }
 
 .cta h2 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   color: #00f0ff;
   margin-bottom: 1.5rem;
@@ -427,7 +427,7 @@ onMounted(() => {
 }
 
 .cta p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   color: #aaa;
   margin-bottom: 2rem;
@@ -440,7 +440,7 @@ onMounted(() => {
   border: 2px solid #00f0ff;
   padding: 1rem 3rem;
   font-size: 1.1rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   letter-spacing: 0.1em;
   cursor: pointer;

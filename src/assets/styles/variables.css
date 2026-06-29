@@ -12,9 +12,14 @@
   --text-primary: #e0e8ff;
   --text-secondary: #8a9acc;
 
-  /* Fonts */
-  --font-display: 'Clash Display', system-ui, sans-serif;
-  --font-body: 'Satoshi', system-ui, sans-serif;
+  /* Fonts.
+   * 'Clash Display'/'Satoshi' were never @font-face loaded and never <link>-ed,
+   * so every var(--font-display/-body) consumer resolved to the system-ui
+   * fallback — the cyber display font was silently broken across the site.
+   * Corrected to Orbitron/Rajdhani, which ARE loaded via the Google Fonts
+   * <link> in index.html (#188). */
+  --font-display: 'Orbitron', system-ui, sans-serif;
+  --font-body: 'Rajdhani', system-ui, sans-serif;
 
   /* Spacing */
   --spacing-xs: 0.5rem;

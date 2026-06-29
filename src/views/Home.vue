@@ -141,7 +141,7 @@ onMounted(() => {
   justify-content: center;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   color: #00ffcc;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   position: relative;
   overflow: hidden;
 }
@@ -225,7 +225,7 @@ onMounted(() => {
 h1 {
   position: relative;
   z-index: 1;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 700;
   text-transform: uppercase;
@@ -243,7 +243,7 @@ h1 {
 .subtitle {
   position: relative;
   z-index: 1;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.5rem;
   color: #00ffcc;
   margin-top: 1rem;
@@ -313,7 +313,7 @@ h1 {
 }
 
 .section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
   color: #00ffcc;
@@ -356,7 +356,7 @@ h1 {
 }
 
 .hero .cyber-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.2rem;
   color: #b8b8b8;
   line-height: 1.8;
@@ -377,7 +377,7 @@ h1 {
 }
 
 .group-label {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   color: #00ffcc;
   text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
   margin-bottom: 1rem;
@@ -408,14 +408,14 @@ h1 {
 }
 
 .solution-card h4 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   color: #00ffcc;
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
 }
 
 .solution-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   color: #b8b8b8;
   font-size: 0.95rem;
   margin: 0;
@@ -436,7 +436,7 @@ h1 {
   color: #00ffcc;
   border: 2px solid #00ffcc;
   padding: 1rem 3rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   cursor: pointer;
   position: relative;

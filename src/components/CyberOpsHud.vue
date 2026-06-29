@@ -316,7 +316,7 @@ function widgetLabel(key) {
 }
 
 .ops-hud-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.6rem;
   color: var(--neon-green);
   margin: 0;
@@ -325,7 +325,7 @@ function widgetLabel(key) {
 }
 
 .ops-hud-subtitle {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--text-secondary);
   margin: 0.3rem 0 0 0;
@@ -410,7 +410,7 @@ function widgetLabel(key) {
 }
 
 .ops-detail-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1rem;
   color: var(--neon-green);
   margin: 0 0 0.8rem 0;
@@ -439,7 +439,7 @@ function widgetLabel(key) {
   position: relative;
   z-index: 1;
   text-align: center;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--text-secondary);
   margin: 0.8rem 0 0 0;

@@ -117,7 +117,7 @@ const categoryLabel = computed(() => {
   right: 1rem;
   background: rgba(0, 240, 255, 0.9);
   color: #0a0a0f;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0.75rem;
@@ -189,7 +189,7 @@ const categoryLabel = computed(() => {
   background: rgba(10, 10, 15, 0.8);
   border: 1px solid rgba(0, 240, 255, 0.3);
   color: #00f0ff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 500;
   padding: 0.25rem 0.75rem;
@@ -208,7 +208,7 @@ const categoryLabel = computed(() => {
 }
 
 .news-card__title {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.25rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -222,7 +222,7 @@ const categoryLabel = computed(() => {
 }
 
 .news-card__excerpt {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: #b0b0b0;
   margin: 0;
@@ -241,7 +241,7 @@ const categoryLabel = computed(() => {
   gap: 0.5rem;
   margin-top: auto;
   padding: 1rem 1.5rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 500;
   color: #00f0ff;

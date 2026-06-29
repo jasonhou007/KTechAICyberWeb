@@ -54,7 +54,7 @@ export default {
 }
 
 .code {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: clamp(5rem, 18vw, 12rem);
   font-weight: 700;
   line-height: 1;
@@ -63,7 +63,7 @@ export default {
 }
 
 .title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 4vw, 2.5rem);
   color: #e0e0e0;
   margin: 0 0 1rem 0;
@@ -72,7 +72,7 @@ export default {
 }
 
 .message {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.2rem;
   color: #b0b0b0;
   margin: 0 0 2.5rem 0;
@@ -80,7 +80,7 @@ export default {
 
 .home-link {
   display: inline-block;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   font-weight: 600;
   text-transform: uppercase;
