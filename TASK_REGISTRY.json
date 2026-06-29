@@ -344,6 +344,10 @@
       "62e603e",
       "d62567d",
       "73cb922"
-    ]
+    ],
+    "prFollowup": 230,
+    "mergeShaFollowup": "2a6df3b",
+    "postMergeFlakeFixes": "PR #230 (4 commits): 187-rum-beacon firefox history-flush race + theme.spec transition-smoothness wall-clock->DOM-signal + 2000ms CI-realistic threshold + theme.spec dark/light-theme resolved --bg-primary var harden. Post-merge main run 28387659155 (verifying).",
+    "failuresAfterFinal": "0 (PR #230 run 28386693428: 297 passed, 0 ✘ incl retries)"
   }
 }
