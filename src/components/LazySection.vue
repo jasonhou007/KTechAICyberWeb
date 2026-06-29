@@ -11,8 +11,18 @@ import { useIntersectionObserver } from '../composables/useIntersectionObserver'
 //   wrapper — the module is pre-loaded just before it enters the viewport.
 // dataTest: forwarded to the wrapper so E2E/unit tests can target the lazy
 //   boundary deterministically (e.g. [data-test="lazy-neural-core"]).
+// tag validator: <component :is="tag"> can instantiate any resolved name, so
+//   restrict it to safe native landmark/wrapper tags. Defense-in-depth against
+//   a future caller passing 'script', 'img', or an arbitrary component id.
+//   NOTE: inlined (not a module const) because <script setup>'s defineProps is
+//   hoisted and cannot reference locally declared variables.
 const props = defineProps({
-  tag: { type: String, default: 'section' },
+  tag: {
+    type: String,
+    default: 'section',
+    validator: (v) =>
+      ['section', 'div', 'article', 'aside', 'main'].includes(v),
+  },
   rootMargin: { type: String, default: '200px' },
   threshold: { type: Number, default: 0.01 },
   dataTest: { type: String, default: '' },

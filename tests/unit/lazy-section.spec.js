@@ -211,4 +211,42 @@ describe('LazySection.vue', () => {
     // even before the slot renders.
     expect(wrapper.classes()).toContain('lazy-section')
   })
+
+  it('rejects a tag outside the safe whitelist (defense-in-depth validator)', async () => {
+    // The tag prop drives <component :is="tag">, which can instantiate any
+    // resolved component name. Restrict it to a whitelist of safe native
+    // landmark/wrapper tags so a future caller cannot pass 'script', 'img',
+    // or an arbitrary component identifier. Vue emits a console warning when
+    // a custom validator returns false.
+    delete global.IntersectionObserver
+    delete window.IntersectionObserver
+
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    mountLazy({ tag: 'script' })
+    await flushPromises()
+    expect(warnSpy).toHaveBeenCalled()
+    const warned = warnSpy.mock.calls
+      .map(c => String(c[0]))
+      .join('\n')
+    expect(warned).toMatch(/Invalid prop.*tag/)
+    warnSpy.mockRestore()
+  })
+
+  it('accepts every whitelisted tag without warning', async () => {
+    // Whitelist must not regress the documented tag set — every safe native
+    // landmark/wrapper tag passes the validator silently.
+    delete global.IntersectionObserver
+    delete window.IntersectionObserver
+
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    for (const tag of ['section', 'div', 'article', 'aside', 'main']) {
+      const w = mountLazy({ tag, dataTest: `lazy-tag-${tag}` })
+      await flushPromises()
+      expect(w.find(`${tag}[data-test="lazy-tag-${tag}"]`).exists()).toBe(true)
+    }
+    const propWarnings = warnSpy.mock.calls
+      .filter(c => String(c[0]).match(/Invalid prop.*tag/))
+    expect(propWarnings).toHaveLength(0)
+    warnSpy.mockRestore()
+  })
 })
