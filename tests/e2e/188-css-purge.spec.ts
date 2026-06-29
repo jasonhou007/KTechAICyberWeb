@@ -36,7 +36,8 @@ import { test, expect, type Page } from '@playwright/test'
 const BASE = '/KTechAICyberWeb/'
 const HOME = `${BASE}`
 const ABOUT = `${BASE}about`
-const SERVICE_BIG_DATA = `${BASE}services/big-data`
+// Route is /services/big-data-ai (see src/main.js), NOT /services/big-data.
+const SERVICE_BIG_DATA = `${BASE}services/big-data-ai`
 
 /** Read the resolved font-family of the first element matching `selector`. */
 async function computedFontFamily(page: Page, selector: string): Promise<string> {
@@ -93,28 +94,27 @@ test.describe('#188 CSS purge — visual no-regression', () => {
     await page.waitForLoadState('networkidle')
 
     const htmlBefore = await page.locator('html').getAttribute('data-theme')
-    // Sample a neon-text element whose color is driven by --text-secondary /
-    // --neon-* (theme-keyed). Its computed color must change on toggle.
-    const sampleSelector = 'h1.neon-text'
-    await page.locator(sampleSelector).scrollIntoViewIfNeeded().catch(() => {})
-    const colorBefore = await page
-      .locator(sampleSelector)
-      .first()
-      .evaluate((el) => getComputedStyle(el).color)
+    // Sample body color, which is driven by --text-primary via cyber.css
+    // (`body { color: var(--text-primary) }`). --text-primary IS theme-keyed
+    // (dark #e0e0e0 vs light #1a1a2e), so the computed color MUST change on
+    // toggle — proving the [data-theme=light] block in cyber.css still applies
+    // after the :root dedup. (Home h1.neon-text is hardcoded #ffffff and would
+    // NOT change, so it is not a valid sample.)
+    const colorBefore = await page.evaluate(
+      () => getComputedStyle(document.body).color
+    )
 
     // Click the theme toggle and assert [data-theme] flips.
     await page.locator('.theme-toggle').click()
     const htmlAfter = await page.locator('html').getAttribute('data-theme')
     expect(htmlAfter, 'data-theme must change after toggle click').not.toBe(htmlBefore)
 
-    // Color-driven-by-theme must also change (proves the [data-theme=light]
-    // block in cyber.css still applies after the :root dedup).
-    const colorAfter = await page
-      .locator(sampleSelector)
-      .first()
-      .evaluate((el) => getComputedStyle(el).color)
-    console.log('\n[188] theme toggle:', htmlBefore, '->', htmlAfter, '; color', colorBefore, '->', colorAfter)
-    expect(colorAfter, 'sample element color must change with theme').not.toBe(colorBefore)
+    // Color-driven-by-theme must also change.
+    const colorAfter = await page.evaluate(
+      () => getComputedStyle(document.body).color
+    )
+    console.log('\n[188] theme toggle:', htmlBefore, '->', htmlAfter, '; body color', colorBefore, '->', colorAfter)
+    expect(colorAfter, 'body color must change with theme (--text-primary is theme-keyed)').not.toBe(colorBefore)
   })
 
   test('no pageerror console errors on Home after purge', async ({ page }) => {
