@@ -67,6 +67,15 @@ export const FFT_SIZE = 256
 // --- particles -------------------------------------------------------------
 const PARTICLES_DESKTOP = 80
 const PARTICLES_MOBILE = 32
+/** Hard cap on the transient particle array (prevents unbounded growth under
+ *  a runaway beat detector). Exported via the module for test pinning. */
+export const PARTICLE_CAP = 200
+/** Frames a transient burst particle lives before it is filtered out. */
+const PARTICLE_LIFE_FRAMES = 30
+/** Max outward speed (px/frame) of a burst particle. */
+const PARTICLE_MAX_SPEED = 6
+/** Neon palette for burst particles (cycles). */
+const PARTICLE_COLORS = ['#00ff88', '#ff00ff', '#00ffff', '#ffff00']
 
 // --- media queries / device class ------------------------------------------
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
@@ -402,6 +411,11 @@ export function useAudioPulse() {
   const bassNow = ref(0) // current bass energy 0..255
   const flash = ref(false) // glitch flash overlay lit this frame
 
+  // Transient particle burst (AC 1d). Each beat pushes N outward-flying
+  // particles here; tick() ages + renders them each frame and filters the dead.
+  // Capped to PARTICLE_CAP so a runaway beat detector can't grow the array.
+  const particles = ref([])
+
   const canvasRef = ref(null)
 
   // --- engine handles (created lazily in engage) ---------------------------
@@ -464,6 +478,10 @@ export function useAudioPulse() {
 
       // (6) mean level (drives the static spectrum under reduced motion too).
       level.value = meanByte(freqData)
+
+      // (6b) age + move the transient burst particles (AC 1d) BEFORE draw so the
+      // rendered frame reflects post-step positions; dead particles are filtered.
+      updateTransientParticles()
 
       // (7) draw the active mode onto the canvas.
       draw(mode.value, freqData, energy)
@@ -533,6 +551,9 @@ export function useAudioPulse() {
     if (currentMode === 'spectrum') drawSpectrum(ctx2d, w, h, data)
     else if (currentMode === 'radial') drawRadial(ctx2d, w, h, data, energy)
     else drawParticles(ctx2d, w, h, data)
+    // Transient burst overlay (AC 1d): drawn in EVERY mode so a beat explosion
+    // is visible regardless of the selected visualizer mode.
+    drawTransientParticles(ctx2d)
   }
 
   function drawSpectrum(ctx2d, w, h, data) {
@@ -579,13 +600,79 @@ export function useAudioPulse() {
     }
   }
 
-  /** Spawns `n` particle pings (rendered next frame by drawParticles). */
+  /**
+   * Spawns `n` transient burst particles at the canvas centre, each with a
+   * random outward angle, neon colour, and short life. They are aged + rendered
+   * every frame by updateTransientParticles() and filtered out when their life
+   * hits zero. The array is capped at PARTICLE_CAP. AC 1d: a beat must produce a
+   * VISIBLE outward particle explosion. Reduced-motion callers pass n=0
+   * (particleCount(isMobile, true) === 0) so nothing spawns.
+   */
   function spawnParticles(n) {
-    // Particle burst is a transient visual cue; the canvas particle field is
-    // already drawn each frame from freqData. We expose the count via the
-    // `level` proxy so the component can render an extra flash ring. Kept
-    // minimal — the visual flash itself (flash=true) is the primary cue.
-    void n
+    if (n <= 0) return
+    const canvas = canvasRef.value
+    const cx = (canvas && canvas.width) ? canvas.width / 2 : 150
+    const cy = (canvas && canvas.height) ? canvas.height / 2 : 75
+    const next = particles.value.slice()
+    for (let i = 0; i < n; i++) {
+      if (next.length >= PARTICLE_CAP) break
+      const angle = Math.random() * Math.PI * 2
+      const speed = 1 + Math.random() * PARTICLE_MAX_SPEED
+      next.push({
+        x: cx,
+        y: cy,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        life: PARTICLE_LIFE_FRAMES,
+        maxLife: PARTICLE_LIFE_FRAMES,
+        size: 2 + Math.random() * 3,
+        color: PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)],
+      })
+    }
+    particles.value = next
+  }
+
+  /**
+   * Ages + moves every transient particle one frame, then filters out the dead
+   * (life <= 0). Called once per tick BEFORE draw() so the rendered frame
+   * reflects the post-step positions. Mutates particles.value with a fresh
+   * filtered array so Vue reactivity fires (and the test can observe the drain).
+   */
+  function updateTransientParticles() {
+    const list = particles.value
+    if (list.length === 0) return
+    const next = []
+    for (const p of list) {
+      const life = p.life - 1
+      if (life <= 0) continue
+      p.life = life
+      p.x += p.vx
+      p.y += p.vy
+      // Slight deceleration so the burst settles instead of flying forever.
+      p.vx *= 0.96
+      p.vy *= 0.96
+      next.push(p)
+    }
+    particles.value = next
+  }
+
+  /**
+   * Renders the transient burst particles on top of the active mode. Alpha fades
+   * with remaining life so the burst visibly dissipates. Called from draw() in
+   * EVERY mode so a beat explosion is visible regardless of the selected mode
+   * (the AC says "visible glitch + particle burst on the beat").
+   */
+  function drawTransientParticles(ctx2d) {
+    const list = particles.value
+    if (!list || list.length === 0) return
+    ctx2d.save()
+    for (const p of list) {
+      const alpha = Math.max(0, p.life / p.maxLife)
+      ctx2d.globalAlpha = alpha
+      ctx2d.fillStyle = p.color
+      ctx2d.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size)
+    }
+    ctx2d.restore()
   }
 
   // =========================================================================
@@ -718,6 +805,7 @@ export function useAudioPulse() {
     flash.value = false
     level.value = 0
     bassNow.value = 0
+    particles.value = []
     status.value = transitionStatus(status.value, 'stop') // -> idle
   }
 
@@ -834,6 +922,7 @@ export function useAudioPulse() {
     level,
     bassNow,
     flash,
+    particles: readonly(particles),
     canvasRef,
     // actions
     engage,

@@ -777,6 +777,174 @@ describe('useAudioPulse() — composable factory', () => {
 
     wrapper.unmount()
   })
+
+  // -------------------------------------------------------------------------
+  // FIX 1 (AC 1d — particle burst): spawnParticles must actually spawn
+  // transient particles that the user can see explode outward on a beat, then
+  // die over frames. Before the fix spawnParticles(n) was `void n` (no-op) so
+  // the burst AC was silently dropped. These tests prove the burst is real.
+  // -------------------------------------------------------------------------
+  describe('#15 FIX 1 — particle burst (AC 1d)', () => {
+    /** A FakeAudioContext whose analyser returns controllable freq data so a
+     *  rising-edge beat can be driven deterministically. */
+    function beatyAudio() {
+      let frame = 0
+      class BeatyAnalyser {
+        fftSize = FFT_SIZE
+        frequencyBinCount = FFT_SIZE / 2
+        connect() { return this }
+        disconnect() {}
+        getByteFrequencyData(arr: Uint8Array) {
+          // Frame 0: silence (lastEnergy starts at 0, below threshold).
+          // Frame 1+: bass bins saturated well above BASS_THRESHOLD (180) ->
+          // a rising edge -> detectBeat fires on frame 1.
+          const v = frame === 0 ? 0 : 220
+          frame++
+          for (let i = 0; i < arr.length; i++) arr[i] = v
+        }
+      }
+      class Ctx {
+        sampleRate = 44100
+        currentTime = 0
+        state = 'running'
+        destination = { connect() { return this }, disconnect() {} }
+        resume() { return Promise.resolve() }
+        createGain() { return new FakeGainNode() }
+        createOscillator() { return new FakeOscillator() }
+        createBiquadFilter() { return new FakeBiquadFilter() }
+        createAnalyser() { return new BeatyAnalyser() }
+        close() { return Promise.resolve() }
+      }
+      ;(globalThis as any).AudioContext = Ctx as any
+    }
+
+    it('#15a a beat spawns transient particles (count > 0 after burst)', async () => {
+      beatyAudio()
+      const raf = countingRAF()
+      const { getApi, wrapper } = mountHost()
+      const api = getApi()
+      // A canvas + 2d context so draw()/particle rendering runs.
+      ;(api.canvasRef as any).value = {
+        width: 300, height: 150,
+        getContext: () => ({
+          clearRect() {}, fillRect() {}, save() {}, restore() {},
+          beginPath() {}, moveTo() {}, lineTo() {}, closePath() {},
+          stroke() {}, fill() {}, arc() {},
+        }),
+      }
+      await api.engage()
+      await vi.advanceTimersByTimeAsync(0)
+      expect(api.status.value).toBe('playing')
+
+      // Frame 0: silence. No particles yet.
+      raf.step()
+      const before = api.particles.value.length
+      expect(before).toBe(0)
+
+      // Frame 1: rising-edge beat fires -> spawnParticles runs -> particles
+      // appear in the array (the transient burst the user sees).
+      raf.step()
+      const after = api.particles.value.length
+      expect(after).toBeGreaterThan(0)
+      wrapper.unmount()
+    })
+
+    it('#15b particles die over frames (life decremented, dead filtered)', async () => {
+      beatyAudio()
+      const raf = countingRAF()
+      const { getApi, wrapper } = mountHost()
+      const api = getApi()
+      ;(api.canvasRef as any).value = {
+        width: 300, height: 150,
+        getContext: () => ({
+          clearRect() {}, fillRect() {}, save() {}, restore() {},
+          beginPath() {}, moveTo() {}, lineTo() {}, closePath() {},
+          stroke() {}, fill() {}, arc() {},
+        }),
+      }
+      await api.engage()
+      await vi.advanceTimersByTimeAsync(0)
+
+      // Burn frame 0 (silence) so the NEXT frame is a clean rising beat.
+      raf.step()
+      // Frame 1: beat -> burst spawns.
+      raf.step()
+      const spawned = api.particles.value.length
+      expect(spawned).toBeGreaterThan(0)
+
+      // Step many frames; each frame decrements life and filters dead
+      // particles. After enough frames the array must shrink (particles die).
+      let lastCount = spawned
+      let shrankAtLeastOnce = false
+      for (let i = 0; i < 200; i++) {
+        // Defeat the refractory/flash gate so beats can keep firing and
+        // re-seeding; regardless, individual particles still age out. We assert
+        // the array eventually becomes EMPTY (all transient particles die when
+        // no fresh beat re-seeds within their lifetime).
+        raf.step()
+        const now = api.particles.value.length
+        if (now < lastCount) shrankAtLeastOnce = true
+        lastCount = now
+      }
+      // Either it shrank mid-flight OR drained fully — both prove death logic.
+      expect(shrankAtLeastOnce || api.particles.value.length === 0).toBe(true)
+      // After a long quiet stretch (no new beats — refractory + the rising-edge
+      // requirement means beats eventually stop) all particles drain to 0.
+      // Step well past every particle's lifetime.
+      for (let i = 0; i < 400; i++) raf.step()
+      expect(api.particles.value.length).toBe(0)
+      wrapper.unmount()
+    })
+
+    it('#15c particle array is capped (no unbounded growth under repeated beats)', async () => {
+      beatyAudio()
+      const raf = countingRAF()
+      const { getApi, wrapper } = mountHost()
+      const api = getApi()
+      ;(api.canvasRef as any).value = {
+        width: 300, height: 150,
+        getContext: () => ({
+          clearRect() {}, fillRect() {}, save() {}, restore() {},
+          beginPath() {}, moveTo() {}, lineTo() {}, closePath() {},
+          stroke() {}, fill() {}, arc() {},
+        }),
+      }
+      await api.engage()
+      await vi.advanceTimersByTimeAsync(0)
+      // Drive many frames; even if beats re-fire, the array must never exceed
+      // the documented cap (PARTICLES cap = 200).
+      let maxObserved = 0
+      for (let i = 0; i < 500; i++) {
+        raf.step()
+        const n = api.particles.value.length
+        if (n > maxObserved) maxObserved = n
+      }
+      expect(maxObserved).toBeLessThanOrEqual(200)
+      wrapper.unmount()
+    })
+
+    it('#15d reduced-motion: no particles ever spawn (burst path short-circuited)', async () => {
+      mockMatchMedia({ '(prefers-reduced-motion: reduce)': true })
+      beatyAudio()
+      const raf = countingRAF()
+      const { getApi, wrapper } = mountHost()
+      const api = getApi()
+      ;(api.canvasRef as any).value = {
+        width: 300, height: 150,
+        getContext: () => ({
+          clearRect() {}, fillRect() {}, save() {}, restore() {},
+          beginPath() {}, moveTo() {}, lineTo() {}, closePath() {},
+          stroke() {}, fill() {}, arc() {},
+        }),
+      }
+      await api.engage()
+      await vi.advanceTimersByTimeAsync(0)
+      for (let i = 0; i < 50; i++) raf.step()
+      // particleCount(isMobile, true) === 0 => spawnParticles(0) => no growth.
+      expect(api.particles.value.length).toBe(0)
+      wrapper.unmount()
+    })
+  })
 })
 
 // ---------------------------------------------------------------------------
