@@ -69,14 +69,39 @@ vi.stubGlobal('requestAnimationFrame', ((cb: FrameRequestCallback) => {
 }) as any)
 vi.stubGlobal('cancelAnimationFrame', (() => {}) as any)
 
-// No-op IntersectionObserver (happy-dom ships one; replace to avoid spurious
-// offscreen throttle during the unit mount).
+// #224: SolutionForge is now lazy-mounted inside <LazySection>, which NEEDS
+// IntersectionObserver to fire so the slot renders. The global polyfill
+// (tests/setup-intersection-observer.js) already fires isIntersecting=true on
+// observe(); re-stub the SAME fire-on-observe behaviour here so this file's
+// earlier no-op mock (added when SolutionForge mounted eagerly and its own IO
+// throttled) does not override the global and leave the lazy slot hidden.
+// The fire is deferred to a microtask so the composable registers first.
 vi.stubGlobal(
   'IntersectionObserver',
   class {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
+    observed = new Set()
+    callback: (e: any[], o: any) => void
+    constructor(cb: (e: any[], o: any) => void) {
+      this.callback = cb
+    }
+    observe(el: any) {
+      if (!el) return
+      this.observed.add(el)
+      Promise.resolve().then(() => {
+        if (this.observed.has(el)) {
+          this.callback(
+            [{ isIntersecting: true, target: el, intersectionRatio: 1 }],
+            this,
+          )
+        }
+      })
+    }
+    unobserve(el: any) {
+      this.observed.delete(el)
+    }
+    disconnect() {
+      this.observed.clear()
+    }
     takeRecords() {
       return []
     }
@@ -127,6 +152,18 @@ describe('App.vue -> SolutionForge wiring (#180 shipped-app gate)', () => {
     const wrapper = mount(App, { global: { plugins: [pinia, router] } })
     await flushPromises()
     await wrapper.vm.$nextTick()
+    // #224: SolutionForge is now lazy-mounted inside <LazySection> on Home.
+    // The IO polyfill fires on the microtask queue and the defineAsyncComponent
+    // chunk resolves on a later macrotask. Under parallel test load a fixed
+    // sleep is flaky, so POLL until the lazy slot appears (bounded — fails
+    // fast if the wiring is genuinely broken).
+    const deadline = Date.now() + 3000
+    while (Date.now() < deadline) {
+      await flushPromises()
+      await wrapper.vm.$nextTick()
+      if (wrapper.find('[data-test="solution-forge"]').exists()) break
+      await new Promise((r) => setTimeout(r, 25))
+    }
     return wrapper
   }
 

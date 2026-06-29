@@ -489,15 +489,22 @@ describe('NeuralCore.vue (#179)', () => {
 
   // ========================================================================
   // SHIPPED-APP GATE (iter 9) — NeuralCore must be rendered by Home.vue.
+  // #224 update: Home now lazy-mounts NeuralCore via defineAsyncComponent +
+  // <LazySection>. The static `import NeuralCore` became a dynamic import
+  // (`() => import('...NeuralCore.vue')`), so the gate accepts EITHER form.
+  // The <NeuralCore template tag is unchanged (it sits inside <LazySection>).
   // ========================================================================
   describe('shipped-app gate: NeuralCore is wired into Home.vue', () => {
-    // (a) static: Home.vue imports + renders <NeuralCore
-    it('assertion (a): Home.vue source contains <NeuralCore', () => {
+    // (a) static: Home.vue imports (static OR dynamic) + renders <NeuralCore
+    it('assertion (a): Home.vue source contains <NeuralCore (static or dynamic import)', () => {
       const homeSrc = fs.readFileSync(homePath, 'utf-8')
-      // The component is imported AND used in the template. The import line
-      // plus the template tag both reference NeuralCore.
-      expect(homeSrc).toMatch(/import\s+NeuralCore\b/)
+      // The component is referenced in the template.
       expect(homeSrc).toMatch(/<NeuralCore\b/)
+      // And imported — either the pre-#224 static form OR the #224 lazy
+      // defineAsyncComponent dynamic-import form.
+      const staticImport = /import\s+NeuralCore\b/.test(homeSrc)
+      const dynamicImport = /import\(['"][^'"]*NeuralCore\.vue['"]\)/.test(homeSrc)
+      expect(staticImport || dynamicImport).toBe(true)
     })
 
     // (b) live DOM: mounting the REAL Home renders [data-test="neural-core"].
@@ -512,8 +519,15 @@ describe('NeuralCore.vue (#179)', () => {
       setLanguage('en')
       const Home = (await import('../../views/Home.vue')).default
       const home = mount(Home, { attachTo: document.body })
-      await flushPromises()
-      await nextTick()
+      // #224: NeuralCore is lazy-mounted; POLL until the slot appears
+      // (bounded — robust under parallel test load).
+      const deadline = Date.now() + 2000
+      while (Date.now() < deadline) {
+        await flushPromises()
+        await nextTick()
+        if (home.find('[data-test="neural-core"]').exists()) break
+        await new Promise((r) => setTimeout(r, 25))
+      }
       expect(home.find('[data-test="neural-core"]').exists()).toBe(true)
       // The neural-core lives inside the home tree, not teleported to a sibling.
       expect(home.find('.home [data-test="neural-core"]').exists()).toBe(true)

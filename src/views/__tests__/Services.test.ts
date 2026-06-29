@@ -229,10 +229,22 @@ describe('Services.vue', () => {
       w.unmount()
     })
 
-    it('gates the is-visible class on the IntersectionObserver (inactive under happy-dom)', () => {
-      // No IntersectionObserver in the test env => no card ever becomes visible.
-      wrapper.findAll('article.service-card').forEach((card) => {
-        expect(card.classes()).not.toContain('is-visible')
+    it('gates the is-visible class on the IntersectionObserver (fires via polyfill)', async () => {
+      // #224: the global IntersectionObserver polyfill
+      // (tests/setup-intersection-observer.js) fires isIntersecting=true on
+      // observe(), so — unlike the prior "happy-dom has no IO" assumption —
+      // the Services cards DO become visible once the microtask callback flushes.
+      // Assert the honest behavior: after the IO fires, every card gains
+      // is-visible. (If the polyfill were removed/broken, the cards would stay
+      // hidden and this test would fail — still a regression gate on the
+      // IO-driven reveal, just inverted to match the polyfilled env.)
+      await wrapper.vm.$nextTick()
+      await new Promise((resolve) => setTimeout(resolve, 0))
+      await wrapper.vm.$nextTick()
+      const cards = wrapper.findAll('article.service-card')
+      expect(cards.length).toBeGreaterThan(0)
+      cards.forEach((card) => {
+        expect(card.classes()).toContain('is-visible')
       })
     })
 

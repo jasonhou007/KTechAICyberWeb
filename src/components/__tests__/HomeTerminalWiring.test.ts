@@ -25,6 +25,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, VueWrapper, flushPromises } from '@vue/test-utils'
 import { nextTick } from 'vue'
+import { createRouter, createMemoryHistory } from 'vue-router'
+import { createPinia } from 'pinia'
 
 // matchMedia is required by useTerminal (reduced motion) and the mobile
 // breakpoint. happy-dom lacks it; install a benign default.
@@ -52,9 +54,29 @@ describe('Home.vue -> NeuralTerminal wiring (#161 shipped-app gate)', () => {
 
   const mountHome = async () => {
     const Home = (await import('../../views/Home.vue')).default
-    wrapper = mount(Home)
-    await flushPromises()
-    await nextTick()
+    // #224: NeuralTerminal is now lazy-mounted inside <LazySection>. Mount with
+    // a real router + pinia (mirrors Home.spec.js) so the terminal's composable
+    // dependencies initialise cleanly; the IntersectionObserver polyfill fires
+    // on the microtask queue and the defineAsyncComponent chunk resolves on a
+    // later macrotask — wait ~200ms + flush so the slot's
+    // [data-test="neural-terminal"] is present before the wiring assertions.
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [
+        { path: '/', component: Home },
+        { path: '/about', component: { template: '<div/>' } },
+      ],
+    })
+    wrapper = mount(Home, { global: { plugins: [createPinia(), router] } })
+    // #224: NeuralTerminal is lazy-mounted; POLL until the slot appears
+    // (bounded — robust under parallel test load where a fixed sleep flakes).
+    const deadline = Date.now() + 2000
+    while (Date.now() < deadline) {
+      await flushPromises()
+      await nextTick()
+      if (wrapper.find('[data-test="neural-terminal"]').exists()) break
+      await new Promise((r) => setTimeout(r, 25))
+    }
     return wrapper
   }
 
