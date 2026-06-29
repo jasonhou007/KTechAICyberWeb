@@ -51,13 +51,17 @@
 - [x] **Parity** — en = zh = 1047 leaves.
 
 ## Honest risks / known gaps
-1. **Branch coverage gate (84.52% global)** is below the configured 85% threshold —
+1. **Branch coverage gate (~84.5% global, observed band 84.52–84.57%)** is below the configured 85% threshold —
    but this is a PRE-EXISTING baseline condition (the repo fails the 85% branch
    threshold at origin/main too; vitest reports it and exits 0). **Per-file, the
    new files split:** `SettlementStream.vue` is 100% branches (8/8), but
    `useSettlementStream.js` is 71.4% branches (85/119) — the uncovered arms are
    defensive SSR `typeof`/fallback guards + reduced-motion `else` branches, not
-   core logic. The AC is ≥80% LINES (met at 96.8%). Optional follow-up: test the
+   core logic. The AC is ≥80% LINES (met at ~96.6–96.9%; verbatim `vitest run
+   --coverage` stdout on `autodev-206-revise`: `All files | 95.08 | 84.52 | 95.25
+   | 96.64`; the Lines/Branches figures drift a few tenths run-to-run because the
+   IO/matchMedia branch arcs fire non-deterministically in jsdom — observed band
+   Lines 96.64–96.88%, Branches 84.52–84.57%). Optional follow-up: test the
    SSR/fallback arms to lift the composable's branch coverage.
 2. **Performance 85/100 desktop** (Lighthouse `--preset=desktop`, formFactor
    verified, JSON saved at `tickets/206/evidence/lighthouse-desktop-206.report.json`).

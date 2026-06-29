@@ -52,11 +52,18 @@ Every returned ref (`packets`, `latestBlock`, `recentBlocks`, `settledCount`,
 ```
 Test Files  91 passed (91)
 Tests       2454 passed (2454)
-Statements  95.27% (3913/4107)
+Statements  95.08% (3905/4107)
 Branches    84.52% (1852/2191)   [global; pre-existing baseline miss — fails at origin/main too]
-Functions   95.65% (705/737)
-Lines       96.8%  (3667/3788)
+Functions   95.25% (702/737)
+Lines       96.64% (3661/3788)
 ```
+Verbatim from `vitest run --coverage` stdout (re-derived on `autodev-206-revise`):
+`All files | 95.08 | 84.52 | 95.25 | 96.64`.
+**Run-to-run drift note:** the global Lines/Branches figures oscillate by a few
+tenths across runs because the IO/matchMedia/visibilitychange branch arcs fire
+non-deterministically in jsdom. Observed band over 3 consecutive runs on this
+branch: Lines 96.64–96.88% (3661–3670/3788); Branches 84.52–84.57% (1852–1853/2191).
+Any value in that band is a real measurement, not a rounding — cite the run.
 Per-file coverage (new files, recomputed from `coverage/coverage-final.json` because the istanbul text table truncates long filenames):
 - `components/SettlementStream.vue`: statements 32/32 (100.0%), branches 8/8 (100.0%), functions 9/9 (100.0%)
 - `composables/useSettlementStream.js`: statements 189/207 (91.3%), branches 85/119 (71.4%), functions 25/27 (92.6%)
