@@ -45,28 +45,46 @@ test.describe('About & News images (AC #165)', () => {
       const count = await awardFigs.count()
       expect(count).toBeGreaterThanOrEqual(3)
 
-      // Every award image actually loaded
+      // Every award image actually loaded. The CyberImage component defaults
+      // to loading="lazy", so below-the-fold images are not fetched until they
+      // scroll into view, and firefox decodes them later than chromium even
+      // once fetched. Scroll each into view (forces the lazy fetch) then poll
+      // naturalWidth until the image is both complete and decoded (>0).
+      // Cross-browser E2E #222.
       for (let i = 0; i < count; i++) {
         const img = awardFigs.nth(i).locator('img')
-        const naturalWidth = await img.evaluate(
-          (el: HTMLImageElement) => el.naturalWidth,
-        )
-        expect(naturalWidth).toBeGreaterThan(0)
+        await img.scrollIntoViewIfNeeded()
+        await expect.poll(
+          async () => img.evaluate((el: HTMLImageElement) => (el.complete ? el.naturalWidth : 0)),
+          { timeout: 5000, message: 'award image should decode (naturalWidth > 0)' },
+        ).toBeGreaterThan(0)
       }
     })
 
     test('About who-we-are feature image and culture image render', async ({ page }) => {
       await page.goto(`${BASE}about`)
 
+      // The CyberImage component defaults to loading="lazy". On firefox the
+      // culture image (below the fold on the 1280x720 viewport) is `hidden`
+      // until scrolled into view, so toBeVisible() fails before naturalWidth
+      // is even read; and once fetched, firefox decodes slower than chromium.
+      // Scroll each into view first (forces the lazy fetch), then poll
+      // naturalWidth until complete + decoded. Cross-browser E2E #222.
       const feature = page.locator('.who-we-are figure.cyber-image img').first()
+      await feature.scrollIntoViewIfNeeded()
       await expect(feature).toBeVisible()
-      const featW = await feature.evaluate((el: HTMLImageElement) => el.naturalWidth)
-      expect(featW).toBeGreaterThan(0)
+      await expect.poll(
+        async () => feature.evaluate((el: HTMLImageElement) => (el.complete ? el.naturalWidth : 0)),
+        { timeout: 5000, message: 'feature image should decode (naturalWidth > 0)' },
+      ).toBeGreaterThan(0)
 
       const culture = page.locator('.vision-mission figure.cyber-image img').first()
+      await culture.scrollIntoViewIfNeeded()
       await expect(culture).toBeVisible()
-      const cultW = await culture.evaluate((el: HTMLImageElement) => el.naturalWidth)
-      expect(cultW).toBeGreaterThan(0)
+      await expect.poll(
+        async () => culture.evaluate((el: HTMLImageElement) => (el.complete ? el.naturalWidth : 0)),
+        { timeout: 5000, message: 'culture image should decode (naturalWidth > 0)' },
+      ).toBeGreaterThan(0)
     })
 
     test('News card images render inside CyberImage figures', async ({ page }) => {
