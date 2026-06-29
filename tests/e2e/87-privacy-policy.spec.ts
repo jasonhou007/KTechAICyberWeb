@@ -66,8 +66,14 @@ test.describe('Privacy Policy Page (#87)', () => {
   test('includes contact details', async ({ page }) => {
     await page.goto('/');
     await page.click('.cyber-footer .footer-link');
+    // Web-first assertion: PrivacyPolicy.vue renders exactly two .contact-line
+    // elements (email + address, lines 126-127). The previous `.count().resolves`
+    // form is a non-retrying anti-pattern — it snapshots the DOM once instead of
+    // auto-retrying until mounted, so on a slow page mount it could observe <2
+    // and fail. `toHaveCount(2)` is both stricter (exact count) and more robust
+    // (web-first retry). Cross-browser E2E #222.
     const contactLines = page.locator('.contact-line');
-    await expect(contactLines.count()).resolves.toBeGreaterThanOrEqual(2);
+    await expect(contactLines).toHaveCount(2);
   });
 
   test('uses exactly one h1 for the page title (accessibility)', async ({ page }) => {
