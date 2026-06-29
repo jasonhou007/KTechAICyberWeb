@@ -1800,7 +1800,8 @@
     "notice": {
       "micDenied": "Microphone access denied — falling back to synth.",
       "micPrompting": "Requesting microphone access…",
-      "iosAudio": "Reduced motion: visual effects are disabled."
+      "reducedMotion": "Reduced motion: visual effects are disabled.",
+      "iosAudio": "Note: on iOS, audio may require the device ringer to be unmuted before engaging."
     },
     "aria": {
       "regionLabel": "Neon Pulse audio-reactive visualizer",

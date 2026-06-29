@@ -231,7 +231,7 @@ watch(status, (s) => {
     >{{ t(notice.messageKey) }}</p>
 
     <p v-if="prefersReducedMotion" class="pulse-reduced-note" data-test="pulse-reduced-note">
-      {{ t('pulse.notice.iosAudio') }}
+      {{ t('pulse.notice.reducedMotion') }}
     </p>
 
     <!-- Visually-hidden description for assistive tech (canvas is decorative) -->

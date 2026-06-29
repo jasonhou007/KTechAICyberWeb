@@ -11,6 +11,7 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { nextTick } from 'vue'
 import NeonPulse from '../NeonPulse.vue'
 
 // matchMedia / rAF mocks so mount + engage are deterministic.
@@ -217,6 +218,35 @@ describe('NeonPulse.vue — component DOM', () => {
     const w = mountPulse()
     expect(w.find('[data-test="pulse-canvas"]').exists()).toBe(true)
     expect(w.find('[data-test="pulse-db"]').exists()).toBe(true)
+    w.unmount()
+  })
+
+  it('canvas is decorative (aria-hidden) and a visually-hidden description exposes aria.description', () => {
+    const w = mountPulse()
+    // M1 security fix: canvas is aria-hidden (live data is in the ARIA live region).
+    const canvas = w.find('[data-test="pulse-canvas"]')
+    expect(canvas.attributes('aria-hidden')).toBe('true')
+    expect(canvas.attributes('role')).toBeUndefined()
+    // The description text still reaches AT via a visually-hidden <p>.
+    const desc = w.find('[data-test="neon-pulse"] p.visually-hidden')
+    expect(desc.exists()).toBe(true)
+    expect(desc.text()).not.toContain('pulse.')
+    w.unmount()
+  })
+
+  it('reduced-motion notice uses the dedicated reducedMotion key (not the iOS-audio key)', async () => {
+    // Mount with prefers-reduced-motion: reduce enabled.
+    mockMatchMedia({ '(prefers-reduced-motion: reduce)': true })
+    const w = mountPulse()
+    await nextTick()
+    const note = w.find('[data-test="pulse-reduced-note"]')
+    expect(note.exists()).toBe(true)
+    // The rendered text must NOT leak a raw key...
+    expect(note.text()).not.toContain('pulse.')
+    // ...and must be the reduced-motion copy (en fixture), proving L1 fix.
+    expect(note.text().toLowerCase()).toContain('reduced')
+    // Restore the default mock for subsequent tests.
+    mockMatchMedia({ '(prefers-reduced-motion: reduce)': false })
     w.unmount()
   })
 

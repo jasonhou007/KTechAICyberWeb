@@ -1800,7 +1800,8 @@
     "notice": {
       "micDenied": "麦克风访问被拒绝 — 已回退至合成器。",
       "micPrompting": "正在请求麦克风访问…",
-      "iosAudio": "减弱动效：视觉效果已禁用。"
+      "reducedMotion": "减弱动效：视觉效果已禁用。",
+      "iosAudio": "提示：iOS 上启动前可能需要先取消设备静音。"
     },
     "aria": {
       "regionLabel": "霓虹脉冲音频反应可视化器",
