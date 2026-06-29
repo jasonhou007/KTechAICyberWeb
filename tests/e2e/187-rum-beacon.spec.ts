@@ -118,16 +118,23 @@ test.describe.serial('#187 RUM beacon', () => {
   test('DISABLE STOPS GROWTH: enable -> disable -> navigate -> history frozen', async ({ page }) => {
     // Enable + push one metric.
     await page.locator('[data-test="rum-toggle"]').click()
+    await expect(page.locator('[data-test="rum-toggle"]')).toHaveAttribute('aria-pressed', 'true')
     await page.evaluate(() => {
       ;(window as any).__rum.triggerMetric('LCP', 2000, 'good')
       ;(window as any).__rum.flush()
     })
+    // firefox under CI load can take longer than 2s to flush the metric into
+    // the reactive history ref (the enable-toggle click + reactive update +
+    // triggerMetric + flush race). Wait for the toggle's aria-pressed='true'
+    // BEFORE pushing (done above), and give the poll a longer window + finer
+    // interval so the history is observed as soon as it settles. Cross-browser
+    // E2E #222 (pre-existing firefox flake surfaced on main post-#228 merge).
     await expect.poll(async () => {
       return await page.evaluate(() => {
         const h = (window as any).__rum?.history
         return Array.isArray(h) ? h.length : (h?.value?.length ?? 0)
       })
-    }, { timeout: 2000, intervals: [200] }).toBeGreaterThanOrEqual(1)
+    }, { timeout: 5000, intervals: [100] }).toBeGreaterThanOrEqual(1)
 
     // Disable the toggle.
     await page.locator('[data-test="rum-toggle"]').click()
