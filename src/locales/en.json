@@ -1789,5 +1789,25 @@
     "a11y": {
       "liveStatus": "Performance monitoring status"
     }
+  },
+  "settlementStream": {
+    "ariaLabel": "Ambient cross-border settlement stream visualizing live payment rails and blockchain settlement",
+    "nodes": {
+      "china": "China",
+      "thailand": "Thailand",
+      "singapore": "Singapore",
+      "malaysia": "Malaysia"
+    },
+    "blocks": {
+      "title": "Block Settlement"
+    },
+    "fx": {
+      "title": "FX Ticker"
+    },
+    "liquidity": {
+      "title": "Liquidity Pool",
+      "value": "{value}%"
+    },
+    "settled": "Settled"
   }
 }
