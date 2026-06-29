@@ -203,7 +203,7 @@ function formatTime(ts) {
 
 <style scoped>
 .rum-dashboard {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   color: var(--color-text-secondary, #b0b0b0);
 }
 .rum-toggle {

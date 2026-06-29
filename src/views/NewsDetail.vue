@@ -312,7 +312,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   flex-wrap: wrap;
 }
@@ -433,14 +433,14 @@ onMounted(() => {
 }
 
 .news-detail__not-found-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.75rem;
   color: #e0e0e0;
   margin: 0 0 1rem 0;
 }
 
 .news-detail__not-found-text {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   color: #b0b0b0;
   margin: 0 0 2rem 0;
@@ -454,7 +454,7 @@ onMounted(() => {
   border-radius: 6px;
   color: #00f0ff;
   text-decoration: none;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -487,7 +487,7 @@ onMounted(() => {
   background: rgba(0, 240, 255, 0.1);
   border: 1px solid rgba(0, 240, 255, 0.3);
   color: #00f0ff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 500;
   padding: 0.375rem 0.875rem;
@@ -498,7 +498,7 @@ onMounted(() => {
 }
 
 .news-detail__title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
   color: #e0e0e0;
@@ -512,7 +512,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.75rem;
   flex-wrap: wrap;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: #b0b0b0;
 }
@@ -554,7 +554,7 @@ onMounted(() => {
 
 .news-detail__caption {
   margin-top: 0.75rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   color: #b0b0b0;
   text-align: center;
@@ -567,7 +567,7 @@ onMounted(() => {
 }
 
 .news-detail__markdown {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.8;
   color: #e0e0e0;
@@ -576,7 +576,7 @@ onMounted(() => {
 .news-detail__markdown :deep(h1),
 .news-detail__markdown :deep(h2),
 .news-detail__markdown :deep(h3) {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-weight: 600;
   color: #e0e0e0;
   margin-top: 2rem;
@@ -661,7 +661,7 @@ onMounted(() => {
   border: 1px solid rgba(0, 240, 255, 0.3);
   border-radius: 6px;
   color: #e0e0e0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -689,7 +689,7 @@ onMounted(() => {
   gap: 0.5rem;
   color: #00f0ff;
   text-decoration: none;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -718,7 +718,7 @@ onMounted(() => {
 }
 
 .news-detail__related-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -772,7 +772,7 @@ onMounted(() => {
 }
 
 .news-detail__related-title-text {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -785,7 +785,7 @@ onMounted(() => {
 }
 
 .news-detail__related-date {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: #b0b0b0;
 }

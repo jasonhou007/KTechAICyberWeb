@@ -72,7 +72,7 @@ const selectCategory = (category) => {
 }
 
 .news-filter__button {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 500;
   padding: 0.625rem 1.25rem;

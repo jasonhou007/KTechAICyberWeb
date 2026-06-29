@@ -221,7 +221,7 @@ const features = [
 }
 
 .hero-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2.5rem;
   font-weight: 700;
   color: #00ffcc;
@@ -231,14 +231,14 @@ const features = [
 }
 
 .hero-subtitle {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.3rem;
   color: #a0a0a0;
 }
 
 /* Section Titles */
 .section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
   color: #00ffcc;
@@ -262,7 +262,7 @@ const features = [
 }
 
 .overview-text {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.2rem;
   line-height: 1.8;
   color: #a0a0a0;
@@ -300,14 +300,14 @@ const features = [
 }
 
 .capability-card h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: #00ffcc;
   margin-bottom: 0.5rem;
 }
 
 .capability-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: #a0a0a0;
   line-height: 1.6;
@@ -341,7 +341,7 @@ const features = [
   background: rgba(0, 255, 204, 0.1);
   border: 2px solid rgba(0, 255, 204, 0.3);
   border-radius: 50%;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 700;
   color: #00ffcc;
@@ -349,14 +349,14 @@ const features = [
 }
 
 .step-content h3 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   color: #00ffcc;
   margin-bottom: 0.5rem;
 }
 
 .step-content p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   color: #a0a0a0;
   line-height: 1.6;
@@ -381,7 +381,7 @@ const features = [
   background: rgba(10, 15, 28, 0.8);
   border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: 5px;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   color: #e0e0e0;
 }
 
@@ -405,14 +405,14 @@ const features = [
 }
 
 .cta-card h2 {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.8rem;
   color: #00ffcc;
   margin-bottom: 1rem;
 }
 
 .cta-card p {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   color: #a0a0a0;
   margin-bottom: 2rem;
@@ -437,7 +437,7 @@ const features = [
 }
 
 .cta-button span:first-child {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
   color: #00ffcc;

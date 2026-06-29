@@ -119,7 +119,7 @@ const displayValue = computed(() => props.value.toFixed(1))
 }
 
 .ops-gauge-value {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.4rem;
   color: var(--neon-green);
   text-shadow: 0 0 5px var(--neon-green);
@@ -131,7 +131,7 @@ const displayValue = computed(() => props.value.toFixed(1))
 }
 
 .ops-gauge-label {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--text-secondary);
   text-transform: uppercase;

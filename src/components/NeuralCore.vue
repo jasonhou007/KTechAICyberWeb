@@ -391,7 +391,7 @@ onUnmounted(() => {
 }
 
 .neural-core-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.4rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -441,7 +441,7 @@ onUnmounted(() => {
 
 /* ---- layer labels -------------------------------------------------------- */
 .neural-layer-label {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 7px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -629,7 +629,7 @@ onUnmounted(() => {
 }
 
 .neural-glitch-text {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   letter-spacing: 0.2em;
   color: #00ffff;

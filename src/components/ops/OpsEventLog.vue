@@ -80,7 +80,7 @@ function timeLabel(ts) {
   background: transparent;
   border: 1px solid var(--card-border);
   color: var(--text-secondary);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   padding: 0.2rem 0.5rem;
   cursor: pointer;
@@ -110,7 +110,7 @@ function timeLabel(ts) {
   padding: 0;
   max-height: 140px;
   overflow-y: auto;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.72rem;
 }
 

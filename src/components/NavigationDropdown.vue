@@ -219,7 +219,7 @@ defineExpose({ isOpen, menuRef, open, close })
   background: transparent;
   border: none;
   color: #00f0ff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
@@ -290,7 +290,7 @@ defineExpose({ isOpen, menuRef, open, close })
 
 .dropdown-group-heading {
   padding: 0.5rem 1rem 0.25rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;

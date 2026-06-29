@@ -155,7 +155,7 @@ const handleLoadMore = () => {
 }
 
 .news-list__empty-text {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1.1rem;
   color: #b0b0b0;
   margin: 0;
@@ -168,7 +168,7 @@ const handleLoadMore = () => {
 }
 
 .news-list__button {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
   padding: 0.875rem 2rem;

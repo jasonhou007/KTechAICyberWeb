@@ -55,7 +55,7 @@ const handleToggle = () => {
   border: 1px solid rgba(0, 240, 255, 0.3);
   border-radius: 5px;
   color: var(--neon-blue, #00f0ff);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;

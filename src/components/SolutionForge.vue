@@ -320,7 +320,7 @@ onUnmounted(() => {
   margin-bottom: 1rem;
 }
 .forge-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.4rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -348,7 +348,7 @@ onUnmounted(() => {
   margin: 0;
 }
 .forge-legend {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -518,7 +518,7 @@ onUnmounted(() => {
   z-index: 2;
 }
 .forge-module {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -543,7 +543,7 @@ onUnmounted(() => {
   text-align: center;
 }
 .forge-scramble-text {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.1rem;
   letter-spacing: 0.2em;
   color: #00ffff;
@@ -622,7 +622,7 @@ onUnmounted(() => {
   background: rgba(10, 15, 28, 0.85);
 }
 .forge-result-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -675,7 +675,7 @@ onUnmounted(() => {
   text-shadow: 0 0 6px rgba(255, 0, 255, 0.5);
 }
 .forge-verdict {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   letter-spacing: 0.1em;
   text-align: center;
@@ -695,7 +695,7 @@ onUnmounted(() => {
 .forge-reroll,
 .forge-reset {
   padding: 0.5rem 1rem;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   color: #00ffff;

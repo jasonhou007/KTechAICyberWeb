@@ -386,7 +386,7 @@ onMounted(() => {
   overflow: hidden;
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   color: #e0e0e0;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   padding: 2rem;
 }
 
@@ -457,7 +457,7 @@ onMounted(() => {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 2rem;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.9rem;
   flex-wrap: wrap;
 }
@@ -521,7 +521,7 @@ onMounted(() => {
 }
 
 .bd__hero-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 1rem 0;
@@ -550,7 +550,7 @@ onMounted(() => {
   border-radius: 6px;
   color: #00f0ff;
   text-decoration: none;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -567,7 +567,7 @@ onMounted(() => {
 
 /* Section Titles */
 .bd__section-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -651,7 +651,7 @@ onMounted(() => {
 }
 
 .bd__card-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 600;
   color: #00f0ff;
@@ -683,7 +683,7 @@ onMounted(() => {
 }
 
 .bd__stat-value {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2.5rem;
   font-weight: 700;
   color: #00f0ff;
@@ -728,7 +728,7 @@ onMounted(() => {
 }
 
 .bd__step-number {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.8rem;
   font-weight: 700;
   color: #00f0ff;
@@ -743,7 +743,7 @@ onMounted(() => {
 }
 
 .bd__step-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 600;
   color: #e0e0e0;
@@ -768,7 +768,7 @@ onMounted(() => {
 }
 
 .bd__cta-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
   color: #00f0ff;
@@ -792,7 +792,7 @@ onMounted(() => {
   border-radius: 6px;
   color: #00f0ff;
   text-decoration: none;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -819,7 +819,7 @@ onMounted(() => {
   gap: 0.5rem;
   color: #00f0ff;
   text-decoration: none;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 500;
   text-transform: uppercase;

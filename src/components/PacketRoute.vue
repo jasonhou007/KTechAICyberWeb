@@ -359,7 +359,7 @@ onBeforeUnmount(() => {
 }
 
 .packet-title {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.6rem;
   color: var(--neon-green);
   margin: 0;
@@ -368,7 +368,7 @@ onBeforeUnmount(() => {
 }
 
 .packet-subtitle {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.95rem;
   color: var(--text-secondary);
   margin: 0.3rem 0;
@@ -376,7 +376,7 @@ onBeforeUnmount(() => {
 }
 
 .packet-instructions {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin: 0.3rem 0 0 0;
@@ -395,7 +395,7 @@ onBeforeUnmount(() => {
 }
 
 .readout-chip {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.75rem;
   color: var(--neon-green);
   border: 1px solid var(--card-border);
@@ -506,7 +506,7 @@ onBeforeUnmount(() => {
 .firewall-mark {
   position: relative;
   z-index: 1;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   color: var(--neon-pink);
   text-shadow: 0 0 6px var(--neon-pink);
   font-size: 1.2rem;
@@ -527,7 +527,7 @@ onBeforeUnmount(() => {
 /* Endpoint cells (source/target) — fixed, glowing. */
 .packet-endpoint {
   background: rgba(0, 255, 136, 0.08);
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.55rem;
   color: var(--neon-green);
   text-shadow: 0 0 4px var(--neon-green);
@@ -575,7 +575,7 @@ onBeforeUnmount(() => {
 }
 
 .packet-btn {
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 0.85rem;
   color: var(--neon-green);
   background: rgba(0, 0, 0, 0.3);
@@ -613,7 +613,7 @@ onBeforeUnmount(() => {
   text-align: center;
 }
 .packet-howto li {
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   color: var(--text-secondary);
   opacity: 0.8;
@@ -630,7 +630,7 @@ onBeforeUnmount(() => {
 
 .feedback-text {
   display: block;
-  font-family: 'Orbitron', monospace;
+  font-family: var(--font-display);
   font-size: 1.4rem;
   letter-spacing: 0.15em;
 }
@@ -664,7 +664,7 @@ onBeforeUnmount(() => {
 
 .feedback-meaning {
   display: block;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.85rem;
   color: var(--text-secondary);
   margin-top: 0.3rem;
@@ -674,7 +674,7 @@ onBeforeUnmount(() => {
   position: relative;
   z-index: 1;
   text-align: center;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--text-secondary);
   margin: 0.8rem 0 0 0;
