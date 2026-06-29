@@ -75,6 +75,12 @@ const rows = computed(() => {
 
 const hasHistory = computed(() => rows.value.length > 0)
 
+// Most-recent individual reading (any one of the 5 metrics). Bound to
+// rum.latest on the live template path — this is what makes the composable's
+// exported `latest` a real consumer (iter-10 dead-reactive-state gate). null
+// until the first metric lands.
+const latestMetric = computed(() => rum.latest.value || null)
+
 function metricLabel(name) {
   return t(`rum.dashboard.metric.${name}`)
 }
@@ -126,6 +132,26 @@ function formatTime(ts) {
         {{ t('rum.dashboard.title') }}
       </h3>
       <p class="rum-description">{{ t('rum.dashboard.description') }}</p>
+
+      <!-- Latest-reading readout: at-a-glance current status, distinct from the
+           historical table below. Bound to rum.latest (the most-recent single
+           metric reported) so the composable's exported `latest` has a live
+           template consumer (iter-10 dead-reactive-state gate). -->
+      <p
+        v-if="latestMetric"
+        class="rum-latest"
+        data-test="rum-latest"
+        :data-rating="latestMetric.rating"
+      >
+        <span class="rum-latest-label">{{ t('rum.dashboard.latestTitle') }}:</span>
+        <span class="rum-latest-metric">{{ metricLabel(latestMetric.name) }}</span>
+        <span class="rum-latest-value">{{ latestMetric.value }}</span>
+        <span class="rum-latest-rating">{{ ratingLabel(latestMetric.rating) }}</span>
+      </p>
+      <p v-else class="rum-latest rum-latest-empty" data-test="rum-latest">
+        <span class="rum-latest-label">{{ t('rum.dashboard.latestTitle') }}:</span>
+        {{ t('rum.dashboard.noLatest') }}
+      </p>
 
       <div
         class="rum-status"
@@ -242,6 +268,40 @@ function formatTime(ts) {
   text-align: left;
   padding: 0.2rem 0.4rem;
   border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+}
+.rum-latest {
+  font-size: 0.78rem;
+  margin: 0 0 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  align-items: baseline;
+  padding: 0.25rem 0.4rem;
+  border-left: 2px solid rgba(0, 240, 255, 0.4);
+  background: rgba(0, 240, 255, 0.04);
+}
+.rum-latest-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #00f0ff;
+  font-size: 0.7rem;
+}
+.rum-latest-metric {
+  color: var(--color-text-secondary, #b0b0b0);
+}
+.rum-latest-value {
+  font-weight: 600;
+  color: #e0e0e0;
+}
+.rum-latest-rating {
+  font-size: 0.72rem;
+}
+.rum-latest[data-rating='good'] .rum-latest-rating { color: #00ff88; }
+.rum-latest[data-rating='needs-improvement'] .rum-latest-rating { color: #ffaa00; }
+.rum-latest[data-rating='poor'] .rum-latest-rating { color: #ff4444; }
+.rum-latest-empty {
+  color: #888;
+  font-style: italic;
 }
 .rum-table tr[data-rating='good'] td:last-child {
   color: #00ff88;

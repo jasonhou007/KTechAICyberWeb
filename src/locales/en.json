@@ -1827,6 +1827,8 @@
     "dashboard": {
       "title": "Performance monitor",
       "description": "Real-user Core Web Vitals for this page. Metrics are collected locally and sent only if an endpoint is configured.",
+      "latestTitle": "Latest reading",
+      "noLatest": "No reading yet.",
       "metric": {
         "LCP": "Largest Contentful Paint",
         "CLS": "Cumulative Layout Shift",

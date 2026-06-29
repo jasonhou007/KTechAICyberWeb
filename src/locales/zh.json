@@ -1827,6 +1827,8 @@
     "dashboard": {
       "title": "性能监控",
       "description": "本页面的真实用户核心网页指标。指标在本地收集，仅在配置了上报端点时才会发送。",
+      "latestTitle": "最新读数",
+      "noLatest": "暂无读数。",
       "metric": {
         "LCP": "最大内容绘制",
         "CLS": "累计布局偏移",

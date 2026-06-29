@@ -512,6 +512,8 @@ export function useRumBeacon(overrides = {}) {
   return {
     // state — consumers: RumDashboard.vue (enabled, history, latest, config),
     // the dev hook (history, config), App.vue provide('rum').
+    //   latest -> RumDashboard's latest-reading readout (data-test="rum-latest"),
+    //             see RumDashboard.test.ts #11a-c.
     enabled,
     config,
     history: readonly(history),

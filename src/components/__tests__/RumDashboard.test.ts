@@ -27,6 +27,8 @@ const dictionary: Record<string, string> = {
   'rum.toggle.disabled': 'Performance monitoring off',
   'rum.dashboard.title': 'Performance monitor',
   'rum.dashboard.description': 'Real-user Core Web Vitals.',
+  'rum.dashboard.latestTitle': 'Latest reading',
+  'rum.dashboard.noLatest': 'No reading yet.',
   'rum.dashboard.metric.LCP': 'Largest Contentful Paint',
   'rum.dashboard.metric.CLS': 'Cumulative Layout Shift',
   'rum.dashboard.metric.INP': 'Interaction to Next Paint',
@@ -202,6 +204,44 @@ describe('RumDashboard.vue (#187)', () => {
       expect(clearBtn.exists()).toBe(true)
       await clearBtn.trigger('click')
       expect(rum.__resetForTests).toHaveBeenCalled()
+    })
+  })
+
+  describe('latest-reading readout (iter-10 dead-state gate — consumes rum.latest)', () => {
+    it('#11a renders the latest metric name/value with data-rating when a latest reading exists', async () => {
+      const rum = makeFakeRum(true, [])
+      // Seed latest directly (the composable sets latest on each recordMetric).
+      rum.latest.value = { name: 'LCP', value: 2200, rating: 'good' }
+      wrapper = mountDashboard(rum)
+      const readout = wrapper.find('[data-test="rum-latest"]')
+      expect(readout.exists()).toBe(true)
+      expect(readout.attributes('data-rating')).toBe('good')
+      // The localized metric name + the value both render.
+      expect(readout.text()).toContain('Largest Contentful Paint')
+      expect(readout.text()).toContain('2200')
+    })
+
+    it('#11b shows the localized empty copy when there is no latest reading', async () => {
+      const rum = makeFakeRum(true, [])
+      // latest stays null (no metric recorded yet).
+      wrapper = mountDashboard(rum)
+      const readout = wrapper.find('[data-test="rum-latest"]')
+      expect(readout.exists()).toBe(true)
+      expect(readout.text()).toContain('No reading yet.')
+    })
+
+    it('#11c the readout reflects a NEW latest reading reactively (proves rum.latest is bound, not snapshotted)', async () => {
+      const rum = makeFakeRum(true, [])
+      rum.latest.value = { name: 'CLS', value: 0.05, rating: 'good' }
+      wrapper = mountDashboard(rum)
+      expect(wrapper.find('[data-test="rum-latest"]').text()).toContain('Cumulative Layout Shift')
+      // Simulate a newer reading arriving.
+      rum.latest.value = { name: 'INP', value: 600, rating: 'poor' }
+      await wrapper.vm.$nextTick()
+      const readout = wrapper.find('[data-test="rum-latest"]')
+      expect(readout.attributes('data-rating')).toBe('poor')
+      expect(readout.text()).toContain('Interaction to Next Paint')
+      expect(readout.text()).toContain('600')
     })
   })
 
