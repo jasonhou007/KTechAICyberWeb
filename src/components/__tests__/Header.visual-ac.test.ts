@@ -85,4 +85,31 @@ describe('Header.vue — target-size CSS-source gate (#190 R1)', () => {
       `.nav-toggle width ${width}px is below the 24px WCAG target-size minimum`,
     ).toBeGreaterThanOrEqual(24)
   })
+
+  // --------------------------------------------------------------------------
+  // #190 R4 (coordinator re-measurement): even with width:28px + height:24px
+  // declared, Lighthouse STILL reported the rendered button at 22.6 x 24px.
+  // Root cause: .nav-toggle is a flex child of .nav (display:flex;
+  // justify-content:space-between). Flex items default to flex-shrink:1, so the
+  // container compresses the button BELOW its declared 28px width. The canonical
+  // fix is flex-shrink:0 on the base .nav-toggle rule. A pure DOM test cannot
+  // see CSS (iter-13 lesson), so this reads the source block and asserts the
+  // active declaration.
+  // RED-TEST PROOF: removing `flex-shrink: 0` from the .nav-toggle rule makes
+  // this test FAIL; re-adding it makes it PASS.
+  // --------------------------------------------------------------------------
+  it('.nav-toggle declares flex-shrink: 0 (prevent flex parent squeezing the 28px width)', () => {
+    const block = source.match(/\.nav-toggle\s*\{([\s\S]*?)\n\}/)
+    expect(block, '.nav-toggle rule must exist').not.toBeNull()
+
+    // flex-shrink:0 — the canonical fix. Must be present in the ACTIVE rule
+    // (comments already stripped by beforeAll, so a commented-out copy will not
+    // match).
+    expect(
+      block![1],
+      '.nav-toggle must declare flex-shrink: 0 so the flex parent (.nav ' +
+        'display:flex) cannot squeeze the declared 28px width below the 24px ' +
+        'WCAG target-size minimum (coordinator observed 22.6px rendered)',
+    ).toMatch(/flex-shrink\s*:\s*0/)
+  })
 })

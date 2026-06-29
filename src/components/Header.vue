@@ -349,11 +349,18 @@ onUnmounted(() => {
  * below the 24 x 24px minimum. The 3 aria-hidden bars use flex
  * space-between (3px each = 9px total), so a 24px height still yields a
  * ~7.5px gap between bars — visually unchanged on mobile (this rule is
- * display:none on desktop). */
+ * display:none on desktop).
+ * #190 R4: flex-shrink: 0 added — .nav is display:flex (justify-content:
+ * space-between), so .nav-toggle is a flex child. Flex items default to
+ * flex-shrink:1, which let the container squeeze the declared 28px width
+ * down to a RENDERED 22.6px (coordinator Lighthouse re-measurement), still
+ * failing the 24x24 target-size minimum on the WIDTH axis despite the
+ * declaration. flex-shrink:0 makes the parent honor the declared width. */
 .nav-toggle {
   display: none;
   flex-direction: column;
   justify-content: space-between;
+  flex-shrink: 0;
   width: 28px;
   height: 24px;
   padding: 0;
