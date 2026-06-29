@@ -236,7 +236,7 @@
   "188": {
     "title": "CWV: remove unused CSS / purge",
     "status": "InProgress",
-    "stage": "planning",
+    "stage": "coding",
     "iteration": 25,
     "github_state": "OPEN",
     "baseline": "origin/main @ c672d06",
@@ -258,6 +258,14 @@
       "cyber.css": "3058 chars / 120 lines",
       "scoped_vue_styles": "57 .vue files with <style> blocks"
     },
-    "notes": "Scanner single-flight: #188 sole Ready item, 0 open In-progress, board locked. #216/#217 already in Backlog. Baseline CSS measured."
+    "notes": "Scanner single-flight: #188 sole Ready item, 0 open In-progress, board locked. #216/#217 already in Backlog. Baseline CSS measured.",
+    "plan_verdict": "APPROVED — planner plan gated: every AC mapped [x]/[~], exact files listed, TDD red-first, visual-regression guard, perf protocol. Coordinator independently verified load-bearing claims (Clash/Satoshi never loaded; Orbitron/Rajdhani counts exact; index.html dead block exists).",
+    "plan_key_findings": {
+      "index_html_dead_block": "lines 49-133 ~84 lines pre-Vue skeleton CSS, fully dead (Vue SPA mounts #app)",
+      "cyber_css_redundant_root": "lines 1-19 byte-identical to [data-theme=dark] which always wins",
+      "font_var_bug": "--font-display:'Clash Display'/--font-body:'Satoshi' NEVER loaded (no @font-face, only Orbitron+Rajdhani via Google Fonts); ~37 components using these vars currently render system-ui (latent bug). Plan corrects vars to Orbitron/Rajdhani = visible improvement on those components, documented.",
+      "font_hardcodes": "117 Orbitron + 142 Rajdhani + 4 Courier New (terminal, KEEP) — exact grep counts verified"
+    },
+    "deferred_ac_followup": "scoped-style dead-selector archaeology (12,664 lines / 57 files) -> follow-up issue to be filed by coder, AC marked [~]"
   }
 }
