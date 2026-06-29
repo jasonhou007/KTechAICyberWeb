@@ -24,9 +24,10 @@ const rootRef = ref(null)
 //   fxRates -> .ss-fx-row readouts
 //   liquidity -> .ss-liquidity-fill height + aria-label
 //   prefersReducedMotion -> static summary branch
-//   isVisible -> kept mounted (LazySection controls mount; we just read it)
-//   isMobile -> rail packet count degraded by the composable
 //   rails -> node label resolution
+// isVisible + isMobile are NOT destructured here — the composable consumes
+// them internally (updateRunning / maxPackets / mobile-degrade) but no
+// template binding reads them (iter-10 dead-export gate).
 const {
   packets,
   latestBlock,
@@ -36,8 +37,6 @@ const {
   liquidity,
   reducedSummary,
   prefersReducedMotion,
-  isVisible,
-  isMobile,
   rails,
 } = useSettlementStream({ rootRef })
 

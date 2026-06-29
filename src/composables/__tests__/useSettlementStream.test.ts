@@ -140,7 +140,11 @@ function makeHost(matchesMap: Record<string, boolean> = {}, rootRef?: any) {
           h('span', { 'data-test': 'ss-liquidity' }, String(api.liquidity.value.toFixed(3))),
           h('span', { 'data-test': 'ss-settled' }, String(api.settledCount.value)),
           h('span', { 'data-test': 'ss-reduced' }, String(api.prefersReducedMotion.value)),
-          h('span', { 'data-test': 'ss-isvisible' }, String(api.isVisible.value)),
+          // NOTE: isVisible is NOT exported by the composable (iter-10 dead-export
+          // gate — it drives updateRunning() internally but has no template
+          // consumer). The IO offscreen throttle is proven below via its
+          // behavioural contract: the observe target is the bound root, rAF
+          // freezes, and block height stops advancing while offscreen.
         ])
     },
   })
@@ -380,10 +384,11 @@ describe('useSettlementStream — composable', () => {
       expect(obs.instances.length).toBeGreaterThanOrEqual(1)
       expect(obs.instances[0].observed[0]).toBe(rootRef.value)
 
-      // Fire the IO callback as OFFSCREEN. isVisible must flip to false.
+      // Fire the IO callback as OFFSCREEN. The internal isVisible flag flips
+      // to false (no longer exported — iter-10 dead-export gate), so we prove
+      // the throttle via its BEHAVIOUR: rAF + interval must both cancel.
       obs.fire({ intersecting: false })
       await nextTick()
-      expect(wrapper.find('[data-test="ss-isvisible"]').text()).toBe('false')
 
       // rAF loop is cancelled — firing frames must NOT re-schedule new ones.
       const callsAtHide = raf.callCount
@@ -400,7 +405,6 @@ describe('useSettlementStream — composable', () => {
       // Re-enter view: IO fires isIntersecting=true -> loop + interval resume.
       obs.fire({ intersecting: true })
       await nextTick()
-      expect(wrapper.find('[data-test="ss-isvisible"]').text()).toBe('true')
       // rAF resumed: at least one new frame gets scheduled on resume.
       expect(raf.callCount).toBeGreaterThan(callsAtHide)
       // Interval resumed: a block appends after the cadence elapses.
@@ -422,6 +426,8 @@ describe('useSettlementStream — composable', () => {
     const wrapper = mount(Host)
     await nextTick()
     // Each consumer we declared in the host must exist + render a value.
+    // isVisible is intentionally absent — it is no longer exported (iter-10
+    // dead-export gate); the IO throttle is proven behaviourally elsewhere.
     for (const sel of [
       'ss-block-height',
       'ss-block-hash',
@@ -430,7 +436,6 @@ describe('useSettlementStream — composable', () => {
       'ss-liquidity',
       'ss-settled',
       'ss-reduced',
-      'ss-isvisible',
     ]) {
       const el = wrapper.find(`[data-test="${sel}"]`)
       expect(el.exists(), `template consumer for ${sel} must exist`).toBe(true)

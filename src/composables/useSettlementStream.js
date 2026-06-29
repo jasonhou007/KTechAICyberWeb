@@ -527,7 +527,12 @@ export function useSettlementStream(opts = {}) {
   const recentBlocks = computed(() => blockHistory.value.slice(0, 6))
 
   return {
-    // live state (every ref has a template consumer in SettlementStream.vue)
+    // live state (every ref has a template consumer in SettlementStream.vue).
+    // isVisible + isMobile are intentionally NOT exported — they drive
+    // updateRunning()/maxPackets() INTERNALLY but no template reads them
+    // (iter-10 dead-export gate; SettlementStream.vue only needs the render
+    // outputs below). The composable test observes the IO flag via the
+    // behavioural contract (rAF/interval cancel), not via an exported ref.
     packets,
     latestBlock,
     recentBlocks,
@@ -536,8 +541,6 @@ export function useSettlementStream(opts = {}) {
     liquidity,
     reducedSummary,
     prefersReducedMotion,
-    isVisible,
-    isMobile,
     // constants (also rendered: rail catalog + node labels)
     rails: RAIL_IDS,
   }
