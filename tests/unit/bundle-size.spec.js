@@ -57,10 +57,12 @@ function listJsChunks() {
 // `web-vitals` chunk (~2.5 KB gzip) that only loads when the user enables
 // performance monitoring — it is NOT part of first paint. The index chunk also
 // grew slightly (~5 KB gzip) from wiring the composable + RumDashboard into the
-// app shell. Measured post-#187 total gzip across dist/assets: 162,728 bytes.
-// Budget raised from 160,000 -> 170,000 (restores ~4% headroom over the new
-// measured total). The MAX_ROUTE_CHUNK_GZIP_BUDGET stays unchanged: web-vitals
-// is its own lazy chunk at 2,563 gzip, well under the 7,000 per-chunk cap.
+// app shell. Measured post-#187 total gzip across dist/assets: 163,324 bytes
+// (re-derived from a fresh `vite build`, 2026-06-29; the prior 162,728 figure
+// predated the #187 review(dead-state) latest-reading readout). Budget raised
+// from 160,000 -> 170,000 (restores ~4% headroom over the new measured total).
+// The MAX_ROUTE_CHUNK_GZIP_BUDGET stays unchanged: web-vitals is its own lazy
+// chunk at 2,580 gzip, well under the 7,000 per-chunk cap.
 const TOTAL_ENTRY_GZIP_BUDGET = 170000
 const MAX_ROUTE_CHUNK_GZIP_BUDGET = 7000
 
