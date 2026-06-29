@@ -73,6 +73,11 @@
       <section class="cyber-ops-hud-section">
         <CyberOpsHud data-test="cyber-ops-hud" />
       </section>
+
+      <!-- Packet Route cyber puzzle mini-game (#184) -->
+      <section class="packet-route-section">
+        <PacketRoute data-test="packet-route" />
+      </section>
     </div>
   </div>
 </template>
@@ -85,6 +90,7 @@ import NeuralTerminal from '../components/NeuralTerminal.vue'
 import NeuralCore from '../components/NeuralCore.vue'
 import SolutionForge from '../components/SolutionForge.vue'
 import CyberOpsHud from '../components/CyberOpsHud.vue'
+import PacketRoute from '../components/PacketRoute.vue'
 
 const { t } = useLanguage()
 
@@ -480,6 +486,14 @@ h1 {
 /* Cyber Ops HUD section (#182) — same rhythm as the AI modules above so the
    interactive HUD stacks consistently on the homepage. */
 .cyber-ops-hud-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 3rem;
+}
+
+/* Packet Route section (#184) — same rhythm as the interactive modules above
+   so the playable puzzle stacks consistently on the homepage. */
+.packet-route-section {
   position: relative;
   z-index: 1;
   margin-top: 3rem;

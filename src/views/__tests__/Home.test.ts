@@ -324,4 +324,53 @@ describe('Home.vue', () => {
       expect(grid2Block![1]).not.toMatch(/transition:\s*transform/)
     })
   })
+
+  // ============================================
+  // Packet Route (#184) — shipped-app gate.
+  // Mounts the REAL Home view with the REAL useLanguage and asserts the Packet
+  // Route mini-game renders inside it. This FAILS if PacketRoute is unwired
+  // from Home (the shipped-app gate: a component that exists in src/ but isn't
+  // mounted into the live app is dead code). Mirrors the CyberOpsHud gate.
+  // ============================================
+  describe('Packet Route shipped-app gate (#184)', () => {
+    const homeSource = fs.readFileSync(
+      path.resolve(process.cwd(), 'src', 'views', 'Home.vue'),
+      'utf-8',
+    )
+
+    it('Home imports PacketRoute', () => {
+      expect(homeSource).toMatch(/from\s+['"]\.\.\/components\/PacketRoute\.vue['"]/)
+    })
+
+    it('Home wires PacketRoute inside a .packet-route-section', () => {
+      expect(homeSource).toMatch(/packet-route-section/)
+      expect(homeSource).toMatch(/<PacketRoute\b/)
+    })
+
+    it('renders [data-test="packet-route"] inside the mounted Home view', () => {
+      wrapper = mountHome()
+      const pr = wrapper.find('[data-test="packet-route"]')
+      expect(pr.exists()).toBe(true)
+    })
+
+    it('renders real localized title copy (not a raw key)', () => {
+      wrapper = mountHome()
+      // The component renders the packetRoute.title heading inside Home.
+      expect(wrapper.text()).toContain('Packet Route')
+      // No raw key leakage.
+      expect(wrapper.text()).not.toMatch(/packetRoute\.[a-zA-Z]/)
+    })
+
+    it('renders the PacketRoute grid inside the mounted Home view', () => {
+      wrapper = mountHome()
+      // The puzzle grid is the playable surface — must be present in the live app.
+      expect(wrapper.find('[data-test="packet-grid"]').exists()).toBe(true)
+    })
+
+    it('renders the zh localized title when language toggled', () => {
+      useLanguage().setLanguage('zh')
+      wrapper = mountHome()
+      expect(wrapper.text()).toContain('数据包路由')
+    })
+  })
 })
