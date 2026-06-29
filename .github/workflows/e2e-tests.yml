@@ -10,7 +10,7 @@ on:
 jobs:
   test:
     name: Playwright E2E Tests
-    timeout-minutes: 20
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
