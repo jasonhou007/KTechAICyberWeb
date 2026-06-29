@@ -236,7 +236,7 @@
   "188": {
     "title": "CWV: remove unused CSS / purge",
     "status": "InProgress",
-    "stage": "security",
+    "stage": "validation_done",
     "iteration": 25,
     "github_state": "OPEN",
     "baseline": "origin/main @ c672d06",
@@ -290,6 +290,16 @@
       "evidence": "tickets/188/{IMPLEMENTATION_SUMMARY.md} + evidence/{before,after}-{home,about}-desktop-dark.png",
       "shipped_app_gate": "CSS changes apply to rendered elements (proven by E2E getComputedStyle on live DOM, not just unit mounts)",
       "honesty": "coder caught unachievable plan threshold (entry chunk), rewrote test to measure real artifact, did not fake"
+    },
+    "security_verdict": "APPROVED: 0 Critical, 0 High, 0 Medium, 4 Info (all intentional/observational). SEC001 clean, no XSS, accessibility.css untouched, no deps added, theme integrity preserved, FOUC block sufficient.",
+    "evaluator_verdict": "GOOD 8.6/10 — APPROVED. All gates green. Caught bookkeeping drift in IMPLEMENTATION_SUMMARY.md §4 (claimed 42 files/284 ins, actual 47 files/880 ins) — doc-only, non-blocking, to be fixed in Stage-6 review cycle.",
+    "coordinator_rederived": {
+      "index_html_style_block": "8182 -> 397 B (-95.2%) — verified via git show + awk",
+      "diff_stat": "47 files / 880 ins / 366 del / 38 .vue files — verified via git diff --shortstat (SUMMARY claim of 42/284 was wrong)",
+      "entry_css": "74,859 B raw / 12,837 B gzip (baseline 75,369/12,892)",
+      "font_hardcodes_in_vue": 0,
+      "courier_new_preserved": 5,
+      "var_usages": "font-display 141, font-body 155"
     }
   }
 }
