@@ -1771,5 +1771,51 @@
       "level": "Level"
     },
     "reducedMotion": "Reduced motion on: packet animation skipped, result shown instantly."
+  },
+  "pulse": {
+    "title": "Neon Pulse",
+    "subtitle": "Audio-reactive visualizer — opt-in, seizure-safe",
+    "engage": "Engage",
+    "stop": "Stop",
+    "input": {
+      "synth": "Synth",
+      "mic": "Microphone"
+    },
+    "mode": {
+      "spectrum": "Spectrum",
+      "radial": "Radial",
+      "particles": "Particles"
+    },
+    "sensitivity": {
+      "label": "Sensitivity"
+    },
+    "status": {
+      "idle": "Idle",
+      "playing": "Playing",
+      "starting": "Starting"
+    },
+    "readout": {
+      "db": "{db} dB"
+    },
+    "notice": {
+      "micDenied": "Microphone access denied — falling back to synth.",
+      "micPrompting": "Requesting microphone access…",
+      "reducedMotion": "Reduced motion: visual effects are disabled.",
+      "iosAudio": "Note: on iOS, audio may require the device ringer to be unmuted before engaging.",
+      "bassMeter": "BASS",
+      "pausedOffscreen": "Paused — offscreen",
+      "mobileMode": "Mobile mode (reduced particles)",
+      "micLive": "Mic live"
+    },
+    "aria": {
+      "regionLabel": "Neon Pulse audio-reactive visualizer",
+      "description": "A live audio-reactive light show. Engage to begin; choose an input source and a visual mode.",
+      "engageButton": "Engage the Neon Pulse visualizer",
+      "stopButton": "Stop the Neon Pulse visualizer",
+      "modeGroup": "Visualizer mode",
+      "sensitivitySlider": "Visualizer sensitivity",
+      "inputGroup": "Audio input source",
+      "liveLevel": "Current output level: {db} dB"
+    }
   }
 }

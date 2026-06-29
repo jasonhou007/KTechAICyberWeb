@@ -1771,5 +1771,51 @@
       "level": "关卡"
     },
     "reducedMotion": "已启用减弱动效:跳过数据包动画,立即显示结果。"
+  },
+  "pulse": {
+    "title": "霓虹脉冲",
+    "subtitle": "音频反应可视化器 — 可选启用，防癫痫安全",
+    "engage": "启动",
+    "stop": "停止",
+    "input": {
+      "synth": "合成器",
+      "mic": "麦克风"
+    },
+    "mode": {
+      "spectrum": "频谱",
+      "radial": "环形",
+      "particles": "粒子"
+    },
+    "sensitivity": {
+      "label": "灵敏度"
+    },
+    "status": {
+      "idle": "待机",
+      "playing": "播放中",
+      "starting": "启动中"
+    },
+    "readout": {
+      "db": "{db} dB"
+    },
+    "notice": {
+      "micDenied": "麦克风访问被拒绝 — 已回退至合成器。",
+      "micPrompting": "正在请求麦克风访问…",
+      "reducedMotion": "减弱动效：视觉效果已禁用。",
+      "iosAudio": "提示：iOS 上启动前可能需要先取消设备静音。",
+      "bassMeter": "低频",
+      "pausedOffscreen": "已暂停 — 离开视口",
+      "mobileMode": "移动端模式（粒子已减少）",
+      "micLive": "麦克风已启用"
+    },
+    "aria": {
+      "regionLabel": "霓虹脉冲音频反应可视化器",
+      "description": "实时音频反应灯光秀。点击启动；选择输入源与可视化模式。",
+      "engageButton": "启动霓虹脉冲可视化器",
+      "stopButton": "停止霓虹脉冲可视化器",
+      "modeGroup": "可视化模式",
+      "sensitivitySlider": "可视化灵敏度",
+      "inputGroup": "音频输入源",
+      "liveLevel": "当前输出电平：{db} dB"
+    }
   }
 }

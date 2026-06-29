@@ -78,6 +78,11 @@
       <section class="packet-route-section">
         <PacketRoute data-test="packet-route" />
       </section>
+
+      <!-- Neon Pulse audio-reactive visualizer (#186) -->
+      <section class="neon-pulse-section">
+        <NeonPulse data-test="neon-pulse" />
+      </section>
     </div>
   </div>
 </template>
@@ -91,6 +96,7 @@ import NeuralCore from '../components/NeuralCore.vue'
 import SolutionForge from '../components/SolutionForge.vue'
 import CyberOpsHud from '../components/CyberOpsHud.vue'
 import PacketRoute from '../components/PacketRoute.vue'
+import NeonPulse from '../components/NeonPulse.vue'
 
 const { t } = useLanguage()
 
@@ -494,6 +500,14 @@ h1 {
 /* Packet Route section (#184) — same rhythm as the interactive modules above
    so the playable puzzle stacks consistently on the homepage. */
 .packet-route-section {
+  position: relative;
+  z-index: 1;
+  margin-top: 3rem;
+}
+
+/* Neon Pulse section (#186) — same rhythm as the interactive modules above so
+   the audio-reactive visualizer stacks consistently on the homepage. */
+.neon-pulse-section {
   position: relative;
   z-index: 1;
   margin-top: 3rem;

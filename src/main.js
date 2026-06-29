@@ -46,6 +46,10 @@ const routes = [
   { path: '/careers', component: () => import('./views/PositionList.vue') },
   { path: '/privacy', component: () => import('./views/PrivacyPolicy.vue') },
   { path: '/terms', component: () => import('./views/Terms.vue') },
+  // Neon Pulse audio-reactive visualizer (#186) — opt-in, lazy chunk. Wired
+  // into Home AND reachable as its own route so the visualizer is exercisable
+  // in isolation (and shipped-app gate: it must appear in both places).
+  { path: '/pulse', name: 'pulse', component: () => import('./components/NeonPulse.vue') },
   // Catch-all: render NotFound for any unmatched path so deep links / typos
   // no longer render a blank page. (:pathMatch(.*)* is the vue-router 4 form.)
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('./views/NotFound.vue') }
