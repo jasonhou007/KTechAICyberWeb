@@ -173,13 +173,24 @@ test.describe.serial('Theme Toggle', { tag: ['@regression', '@theme'] }, () => {
     expect(hasTransitions).toBe(true);
 
     // Measure transition time
+    // Measure responsiveness as the time from the click to the theme attr
+    // actually flipping — the real signal that the DOM updated. Previously
+    // this measured wall-clock after a fixed waitForTimeout(50), which flaked
+    // under firefox CI load (the click + wait + async overhead can exceed
+    // 500ms independent of whether the DOM updated fast). Polling for the
+    // data-theme change gives the true responsiveness figure. Cross-browser
+    // E2E #222 (firefox CI timing flake).
+    const htmlBefore = await homePage.page.locator('html').getAttribute('data-theme');
     const startTime = Date.now();
     await themeToggle.click();
-    await homePage.page.waitForTimeout(50); // Small wait for DOM update
+    await expect.poll(
+      async () => homePage.page.locator('html').getAttribute('data-theme'),
+      { timeout: 2000, intervals: [10], message: 'data-theme must flip after toggle click' },
+    ).not.toBe(htmlBefore);
     const endTime = Date.now();
 
-    // Toggle should be responsive (< 200ms for initial DOM update)
-    expect(endTime - startTime).toBeLessThan(500);
+    // Toggle should be responsive (< 500ms for the DOM update to land).
+    expect(endTime - startTime, 'toggle DOM update should land within 500ms').toBeLessThan(500);
   });
 
   test('should work on all pages', async ({ page }) => {
