@@ -79,6 +79,17 @@
       <LazySection class="neon-pulse-section" data-test="lazy-neon-pulse">
         <NeonPulse data-test="neon-pulse" />
       </LazySection>
+
+      <!-- Ambient "Settlement Stream" — always-on cross-border payment &
+           blockchain settlement cinematic BACKGROUND (#206). Lazy-mounted via
+           the same LazySection + defineAsyncComponent pattern as the 5 heavy
+           modules above (so its rAF/interval never spin before the user
+           scrolls near it). It sits as the last child but is positioned
+           absolutely behind the foreground (z-index:0, pointer-events:none)
+           so the rails/readouts read as a backdrop, not a section. -->
+      <LazySection class="settlement-stream-section" data-test="lazy-settlement-stream">
+        <SettlementStream data-test="settlement-stream" />
+      </LazySection>
     </div>
   </div>
 </template>
@@ -101,6 +112,8 @@ const NeuralCore = defineAsyncComponent(() => import('../components/NeuralCore.v
 const SolutionForge = defineAsyncComponent(() => import('../components/SolutionForge.vue'))
 const CyberOpsHud = defineAsyncComponent(() => import('../components/CyberOpsHud.vue'))
 const NeonPulse = defineAsyncComponent(() => import('../components/NeonPulse.vue'))
+// #206: ambient Settlement Stream — lazy chunk, same pattern as the 5 modules.
+const SettlementStream = defineAsyncComponent(() => import('../components/SettlementStream.vue'))
 
 const { t } = useLanguage()
 
@@ -473,6 +486,18 @@ h1 {
 .neon-pulse-section {
   position: relative;
   z-index: 1;
+  margin-top: 3rem;
+}
+
+/* Ambient Settlement Stream section (#206). The stream itself is positioned
+   absolutely inside (z-index:0, pointer-events:none) so it reads as a
+   background backdrop spanning the section; the LazySection wrapper just
+   reserves the layout slot. min-height keeps the backdrop tall enough that the
+   rails + readout columns are visible. */
+.settlement-stream-section {
+  position: relative;
+  z-index: 0;
+  min-height: 320px;
   margin-top: 3rem;
 }
 

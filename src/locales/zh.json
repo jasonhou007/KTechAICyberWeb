@@ -1789,5 +1789,25 @@
     "a11y": {
       "liveStatus": "性能监控状态"
     }
+  },
+  "settlementStream": {
+    "ariaLabel": "实时跨境结算流可视化背景：支付通道与区块链结算持续运行",
+    "nodes": {
+      "china": "中国",
+      "thailand": "泰国",
+      "singapore": "新加坡",
+      "malaysia": "马来西亚"
+    },
+    "blocks": {
+      "title": "区块结算"
+    },
+    "fx": {
+      "title": "汇率行情"
+    },
+    "liquidity": {
+      "title": "流动性池",
+      "value": "{value}%"
+    },
+    "settled": "已结算"
   }
 }

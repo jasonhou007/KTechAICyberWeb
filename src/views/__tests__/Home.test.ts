@@ -409,14 +409,17 @@ describe('Home.vue', () => {
       // LazySection is the wrapper that defers mount until intersection.
       expect(homeSource).toMatch(/from\s+['"]\.\.\/components\/LazySection\.vue['"]/)
       expect(homeSource).toMatch(/<LazySection\b/)
-      // All 5 modules wrapped. Count opening tags in the <template> region only
-      // (the import statement `import LazySection from ...` would otherwise
-      // inflate the count). Match the template usage form: <LazySection followed
-      // by a space + attribute (class/data-test), which only appears in markup.
+      // All lazy modules wrapped. #224 wrapped the 5 heavy interactive modules;
+      // #206 added the ambient SettlementStream as a 6th lazy-mounted child
+      // (its rAF/interval must not spin before the user scrolls near it). Count
+      // opening tags in the <template> region only (the import statement
+      // `import LazySection from ...` would otherwise inflate the count). Match
+      // the template usage form: <LazySection followed by a space + attribute
+      // (class/data-test), which only appears in markup.
       const template = homeSource.match(/<template>([\s\S]*?)<\/template>/)
       expect(template, 'Home.vue must have a <template>').not.toBeNull()
       const matches = template![1].match(/<LazySection\b/g) || []
-      expect(matches.length).toBe(5)
+      expect(matches.length).toBe(6)
     })
 
     it('keeps the card catalogs unchanged (blockchain 4 + banking 2 = 6 cards)', () => {
