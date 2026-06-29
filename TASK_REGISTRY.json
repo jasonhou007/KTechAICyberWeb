@@ -184,5 +184,42 @@
     "merge_sha": "bf3242cdd0eb9f7106d8acd8f4225a428b6a86ec",
     "merge_method": "--merge (NOT squash; 15 commits preserved)",
     "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/215"
+  },
+  "187": {
+    "title": "CWV: continuous performance monitoring (RUM beacon)",
+    "status": "Done",
+    "stage": "archived",
+    "iteration": 24,
+    "github_state": "CLOSED",
+    "baseline": "origin/main @ 1ee7e8b",
+    "started_at": "2026-06-29",
+    "completed_at": "2026-06-29T05:30:25Z",
+    "type": "feature (privacy-first RUM telemetry + local dashboard)",
+    "branch": "autodev-187-rum-beacon (merged, branch deleted)",
+    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxDPyo -> Done (98236657)",
+    "closes_acs_of": 187,
+    "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/218",
+    "merge_sha": "41d9402",
+    "merge_method": "--merge (NOT squash; 10 commits preserved on main)",
+    "commits": ["dbc7a30","bfce162","1960ec1","519ff75","96e2bf7","26f944a","feff024","8e1e26a","4c3561f","1de72fd"],
+    "security": "APPROVED: 0 Critical, 0 High, 2 Low, 2 Info (all optional hardenings; PII-stripping verified clean + tested; endpoint env-only no SSRF; XSS-free; WCAG-AA)",
+    "evaluator_verdict": "EXCELLENT (GO, no must-fix): 2433 vitest pass; coverage stmt 94.83%/branch 85.97%/line 96.46%; 4/4 E2E chromium; i18n 1084/1084; wired-gate all 3 mechanics verified; dead-reactive-state gate passed (latest wired in review commit 4c3561f)",
+    "honest_results": {
+      "vitest": "85 files / 2433 tests pass (0 fail)",
+      "coverage": "Statements 94.83% / Branches 85.97% / Functions 94.42% / Lines 96.46%",
+      "build": "vite build green; entry index-BYfiGzIS.js 204.99 kB raw / 79.42 kB gzip; web-vitals-hltjI8aA.js own async chunk 6.31 kB / 2.56 kB gzip (NOT in entry — perf tool does not slow first paint)",
+      "i18n_parity": "en 1084 = zh 1084 (+23 rum.* leaves each); 909 t() keys resolve; check-i18n-keys.mjs OK; no orphans",
+      "shipped_app": "useRumBeacon wired into App.vue:93 onMounted (live call-site); RumDashboard mounted App.vue:52; sendBeacon use-site useRumBeacon.js:357; 4/4 chromium E2E pass incl. LIVE WIRING (window.__rum.history grows on real navigation)",
+      "bundle": "total JS gzip 163324 < 170000 budget (bundle-size.spec.js, +6676 headroom); per-chunk cap 7000 unchanged",
+      "wired_gate": "collect (registerObservers -> App.vue onMounted -> recordMetric/buffer/sendBeacon) + beacon (dispatch -> pagehide flush -> navigator.sendBeacon) + surface (RumDashboard -> App.vue mount -> renders history+latest) — all 3 mechanics reach live render path",
+      "dead_state_gate": "all exported refs (enabled/history/latest/config) have live template consumers in RumDashboard.vue; latest wired in review commit 4c3561f after evaluator flagged it as dead export",
+      "security": "0 Critical, 0 High; payload metrics-only (stripPii whitelist) with PII-injection unit test; sessionId fresh crypto.randomUUID per load un-persisted; endpoint env-only VITE_RUM_ENDPOINT (no injection/SSRF); credentialess beacon; XSS-free; WCAG-AA (aria-pressed, role=region, aria-live, keyboard Space+Enter, contrast)",
+      "evidence": "tickets/187/{IMPLEMENTATION_SUMMARY,REVIEW}.md + evidence/{before,after}-*.png",
+      "ci_failure_set_diff": "EMPTY (real failures): main chromium = green, PR chromium = green (incl. 4/4 187-rum-beacon). firefox/webkit = pre-existing 2ms browser-binary infra debt (#216) — main 441 x 2ms instant-death vs PR 450 x 2ms; delta +9 = 3 new 187 tests x 3 retries, structurally identical browser-launch failures (NOT code failures). E2E job CANCELLED = timeout from slow retries on broken browsers, not a code problem."
+    },
+    "scope_narrowing": "AC 'Surface in a dashboard' marked [~] partial — local in-page RumDashboard.vue ships; remote/cross-user aggregation dashboard deferred to follow-up #217 (filed Backlog this cycle, cited in PR body). AC 'src/main.js' wiring-site varied to App.vue onMounted (justified: store access + lifecycle) — documented in IMPLEMENTATION_SUMMARY.",
+    "phase_5b": "#187 body has no markdown checkboxes (prose deferred-scope description) — nothing to flip; AC mapping lives in PR #218 body ([x]/[~] table with #217 citation).",
+    "deferred_followup": "#217 (CWV: remote RUM aggregation dashboard + analytics endpoint) — OPEN in Backlog.",
+    "notes": "M-sized feature, TDD red->green, 2 review commits. Privacy-first RUM: opt-in default-inert, endpoint-agnostic (null=no-op), metrics-only payload with tested PII stripping. web-vitals@^5.3.0 dynamic-imported to its own async chunk (perf tool measuring perf must not regress perf). Local dashboard = WCAG-AA in-page viewer; remote dashboard deferred (#217)."
   }
 }
