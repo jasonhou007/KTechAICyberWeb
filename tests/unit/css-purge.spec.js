@@ -4,25 +4,36 @@
  * (Core Web Vitals — "unused CSS is removed" AC deferred from #18).
  * @ticket #188
  *
- * This gate asserts the entry CSS chunk actually shrank after the manual purge
- * (index.html dead inline skeleton + cyber.css redundant :root), AND that the
- * dead selectors were really removed (not just minified away). DOM tests can't
- * see CSS — so we read the built artifacts + the source HTML directly.
+ * What #188 actually purged (measured 2026-06-29 on autodev-188-purge-css):
+ *   - The ~8 KB dead inline <style> block in index.html that styled the
+ *     pre-Vue skeleton (.hero-title/.honor-badge/.contact-grid/.loader-logo/
+ *     .nav-links, the #loading splash, .scanlines overlay, fade-in helpers).
+ *     Vue mounts #app and renders its own components, so this CSS targeted HTML
+ *     the user never sees. Source inline block: 8,182 -> 397 bytes (-95%).
+ *     This is the load-bearing CWV win: the browser downloads and parses ~8 KB
+ *     fewer HTML bytes on first paint before the app can mount.
+ *   - A byte-identical :root/{[data-theme=dark]} duplication in cyber.css.
+ *   - 259 Orbitron/Rajdhani font hardcodes consolidated onto CSS variables
+ *     (covered by font-consolidation.spec.js).
+ *
+ * IMPORTANT — what the purge did NOT shrink, and why: the bundled entry CSS
+ * chunk (dist/assets/index-*.css, ~75 KB raw / ~12.9 KB gzip) is composed of
+ * variables.css + cyber.css + LIVE scoped component styles. The dead CSS lived
+ * in index.html's INLINE block (a separate document), not in the chunk. So the
+ * chunk is essentially unchanged by this purge (75,369 -> 74,859 raw). The
+ * chunk-size test below is therefore a NON-REGRESSION gate (catches future
+ * bloat), not a proof of this purge — the proof is the index.html inline-block
+ * size test + the dead-selector-absence tests.
  *
  * Pattern mirrors bundle-size.spec.js (#18): read dist/assets with node:fs and
  * gzip with node:zlib, guarded by describe.skipIf(!existsSync(ASSETS_DIR)) so
  * the suite no-ops cleanly when no build is present (standard `vitest run` CI
  * path doesn't build first).
  *
- * Threshold rationale (re-derived from baseline build on autodev-188-purge-css
- * @ c672d06, 2026-06-29):
- *   - baseline entry CSS raw = 75,369 bytes; gzip = 12,892 bytes
- *   - post-purge thresholds set BELOW the baseline so the test is RED today
- *     and only goes green once the dead block + redundant :root are removed.
- *
- * RED-TEST PROOF: run this against the current (unpurged) build and the
- * "entry CSS raw < 72000" + "gzip < 12500" + "index.html does NOT contain
- * .hero-title" assertions all fail — proving the gate catches the regression.
+ * RED-TEST PROOF: against origin/main @ c672d06 (pre-purge), the
+ * "index.html inline <style> block < 1500 bytes" assertion fails (block is
+ * 8,182 bytes) and the dead-selector-absence assertions all fail (.hero-title
+ * etc. are present) — proving the gate catches the regression.
  */
 import { describe, it, expect, beforeAll } from 'vitest'
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
@@ -41,6 +52,12 @@ function stripComments(src) {
     .replace(/<!--[\s\S]*?-->/g, '')
 }
 
+/** Extract the inline <style>...</style> block bytes from an HTML document. */
+function extractInlineStyleBlock(html) {
+  const m = html.match(/<style[^>]*>([\s\S]*?)<\/style>/)
+  return m ? m[0] : ''
+}
+
 /** Find the single entry CSS chunk (index-*.css) in dist/assets, or null. */
 function findEntryCss() {
   if (!existsSync(ASSETS_DIR)) return null
@@ -49,28 +66,47 @@ function findEntryCss() {
   )
 }
 
+// The PRIMARY purge-size gate: the index.html inline <style> block. This runs
+// on the SOURCE file (no build needed) so it is robust in every CI path. The
+// dead pre-Vue skeleton lived HERE, not in the CSS chunk — so this is the
+// honest measure of the #188 purge win.
+describe('CSS purge — index.html inline <style> block shrank (#188)', () => {
+  // Baseline (origin/main @ c672d06): 8,182 bytes. After #188: 397 bytes.
+  // Threshold 1,500 bytes is ~4x the post-purge block (headroom for the
+  // critical no-FOUC block + comments) but ~5x BELOW the baseline, so the
+  // test is RED pre-purge and GREEN post-purge with no flake risk.
+  it('index.html inline <style> block is under 1500 bytes (baseline 8182, post-purge 397)', () => {
+    const html = readFileSync(INDEX_HTML_PATH, 'utf-8')
+    const block = extractInlineStyleBlock(html)
+    console.log('\n[css-purge] index.html inline <style> block:', block.length, 'bytes (budget 1500)')
+    expect(block.length).toBeLessThan(1500)
+  })
+})
+
 // describe.skipIf: when no build is present (CI unit path without `vite build`
 // first), the suite no-ops cleanly — same guard pattern as bundle-size.spec.js.
-describe.skipIf(!existsSync(ASSETS_DIR))('CSS purge — entry chunk size (#188)', () => {
+// This is a NON-REGRESSION gate on the entry CSS chunk (the chunk was not the
+// purge target — see file header).
+describe.skipIf(!existsSync(ASSETS_DIR))('CSS purge — entry chunk non-regression (#188)', () => {
   const entryCssName = findEntryCss()
 
   it('entry CSS chunk exists in dist/assets', () => {
     expect(entryCssName, 'expected an index-*.css chunk in dist/assets').not.toBeNull()
   })
 
-  it('entry CSS raw size is under 72000 bytes (baseline 75369)', () => {
+  it('entry CSS raw size stays bounded (< 76000 bytes; post-purge 74859)', () => {
     expect(entryCssName, 'no entry CSS chunk — did the build run?').not.toBeNull()
     const raw = readFileSync(resolve(ASSETS_DIR, entryCssName))
-    console.log('\n[css-purge] entry CSS raw:', raw.length, 'bytes (budget 72000)')
-    expect(raw.length).toBeLessThan(72000)
+    console.log('\n[css-purge] entry CSS raw:', raw.length, 'bytes (non-regression budget 76000)')
+    expect(raw.length).toBeLessThan(76000)
   })
 
-  it('entry CSS gzip size is under 12500 bytes (baseline 12892)', () => {
+  it('entry CSS gzip size stays bounded (< 13000 bytes; post-purge 12837)', () => {
     expect(entryCssName, 'no entry CSS chunk — did the build run?').not.toBeNull()
     const raw = readFileSync(resolve(ASSETS_DIR, entryCssName))
     const gzip = gzipSync(raw).length
-    console.log('\n[css-purge] entry CSS gzip:', gzip, 'bytes (budget 12500)')
-    expect(gzip).toBeLessThan(12500)
+    console.log('\n[css-purge] entry CSS gzip:', gzip, 'bytes (non-regression budget 13000)')
+    expect(gzip).toBeLessThan(13000)
   })
 })
 
