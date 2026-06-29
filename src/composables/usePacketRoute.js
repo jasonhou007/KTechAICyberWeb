@@ -367,10 +367,11 @@ export function rotateTileOnGrid(grid, r, c) {
 /**
  * PURE. Deterministic score: lower is better. Combines move count and elapsed
  * time into a single positive integer. Moves dominate (each move ~ 100 points),
- * time contributes 1 point per second.
+ * time contributes 1 point per second. A +1 base keeps even a perfect (0-move,
+ * 0-second) run strictly positive so a displayed "best" is never 0.
  *
- * Formula: floor(moves * 100 + elapsedMs / 1000). Deterministic for the same
- * inputs; fewer moves AND less time both strictly decrease the score.
+ * Formula: floor(moves * 100 + elapsedMs / 1000) + 1. Deterministic for the
+ * same inputs; fewer moves AND less time both strictly decrease the score.
  * @param {number} moves
  * @param {number} elapsedMs
  * @returns {number}
@@ -378,7 +379,7 @@ export function rotateTileOnGrid(grid, r, c) {
 export function computeScore(moves, elapsedMs) {
   const movePart = Math.max(0, Math.floor(moves)) * 100
   const timePart = Math.floor(Math.max(0, elapsedMs) / 1000)
-  return movePart + timePart
+  return movePart + timePart + 1
 }
 
 // ---------------------------------------------------------------------------
@@ -595,10 +596,18 @@ export function usePacketRoute() {
       return
     }
     animStart = performance.now()
+    // Re-entrancy + sync-rAF guard (mirrors useOpsFeed): under a SYNCHRONOUS
+    // rAF mock (tests, or some headless renderers), requestAnimationFrame(cb)
+    // calls cb inline. performance.now() would not advance across the inline
+    // chain, so the time-based idx never reaches path.length and the loop
+    // recurses forever. The frame counter caps the chain at path.length+1
+    // frames so the animation always terminates regardless of clock behavior.
+    let frame = 0
     const step = (now) => {
+      frame++
       const elapsed = now - animStart
       const idx = elapsed / ANIM_STEP_MS
-      if (idx >= path.length) {
+      if (frame > path.length || idx >= path.length) {
         packetProgress.value = path.length - 1
         finishWin()
         return
