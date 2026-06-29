@@ -160,14 +160,16 @@ describe('NeuralCore.vue (#179)', () => {
     mobile.unmount()
   })
 
-  it('renders the Run Inference button with a localized aria-label', async () => {
+  it('renders the Run Inference button with a localized accessible name', async () => {
     const w = await mountCore()
     const btn = w.find('[data-test="neural-run-inference"]')
     expect(btn.exists()).toBe(true)
-    const label = btn.attributes('aria-label')
-    expect(label).toBeTruthy()
-    // Not a raw i18n key.
-    expect(label).not.toContain('neural.')
+    // #190 label-content-name-mismatch: the aria-label was dropped so the
+    // visible text "Run Inference" IS the accessible name (no mismatch). The
+    // name must be the localized visible text, not a raw i18n key.
+    const text = btn.text()
+    expect(text).toBeTruthy()
+    expect(text).not.toContain('neural.')
   })
 
   // --- run inference -> readout -------------------------------------------
@@ -561,6 +563,23 @@ describe('NeuralCore.vue (#179)', () => {
       lines.forEach((ln) => {
         expect(ln.element.tagName.toLowerCase()).toBe('line')
       })
+    })
+
+    // #190 label-content-name-mismatch (run button): the Run Inference button
+    // had aria-label "Run neural inference" but visible text "Run Inference" —
+    // the visible text was NOT a substring of the accessible name. Fix: drop
+    // the aria-label so the visible text IS the name (no mismatch possible).
+    it('Run Inference button: visible text is the accessible name (aria-label dropped, no mismatch)', async () => {
+      await mountCore()
+      const btn = wrapper.find('[data-test="neural-run-inference"]')
+      expect(btn.exists()).toBe(true)
+      // No aria-label overriding the visible text.
+      expect(btn.attributes('aria-label')).toBeUndefined()
+      // The accessible name == visible text, which is the localized runInference
+      // copy (non-empty, not a raw key).
+      const text = btn.text()
+      expect(text).toBeTruthy()
+      expect(text).not.toContain('neural.')
     })
 
     // The neural.aria.synapseHighlighted key was ONLY used on the <line>; with

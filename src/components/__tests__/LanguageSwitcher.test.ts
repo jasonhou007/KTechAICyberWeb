@@ -48,8 +48,19 @@ vi.mock('../../composables/useLanguage', () => {
   // matching the real useLanguage().t contract.
   const dictionary: Record<string, string> = {
     'language.switch': 'Switch language',
+    // #190 label-content-name-mismatch: the accessible name must contain the
+    // visible language code. The copy interpolates the current display.
+    'language.switchTo': 'Switch language (current: {lang})',
   }
-  const t = (key: string) => dictionary[key] ?? key
+  const t = (key: string, params?: Record<string, string>) => {
+    let v = dictionary[key] ?? key
+    if (params) {
+      for (const [k, val] of Object.entries(params)) {
+        v = v.replace(`{${k}}`, val)
+      }
+    }
+    return v
+  }
 
   // languageDisplay mirrors the real composable: 'EN' when English, '中文' otherwise.
   const languageDisplay = i18nState.computed(() =>
@@ -234,8 +245,9 @@ describe('LanguageSwitcher.vue', () => {
       // Act: Get the button element
       const button = wrapper.find('button')
 
-      // Assert: aria-label matches the translated 'language.switch' key
-      expect(button.attributes('aria-label')).toBe('Switch language')
+      // #190: aria-label now uses language.switchTo (contains the visible code).
+      // The English copy interpolates the current display: 'Switch language (current: EN)'.
+      expect(button.attributes('aria-label')).toBe('Switch language (current: EN)')
     })
 
     it('uses a button element (native button role)', () => {
@@ -377,9 +389,9 @@ describe('LanguageSwitcher.vue', () => {
       // Act: Get the button
       const button = wrapper.find('button')
 
-      // Assert: aria-label is the translated label, not the raw key
-      expect(button.attributes('aria-label')).not.toBe('language.switch')
-      expect(button.attributes('aria-label')).toBe('Switch language')
+      // #190: aria-label now uses language.switchTo (interpolated copy).
+      expect(button.attributes('aria-label')).not.toBe('language.switchTo')
+      expect(button.attributes('aria-label')).toBe('Switch language (current: EN)')
     })
   })
 
@@ -482,6 +494,45 @@ describe('LanguageSwitcher.vue', () => {
       // Assert: Both accessibility attributes are present
       expect(button.attributes('aria-label')).toBeTruthy()
       expect(button.attributes('title')).toBeTruthy()
+    })
+  })
+
+  // ============================================
+  // #190 a11y: label-content-name-mismatch — the accessible name (aria-label)
+  // must be a superstring of the visible text. The visible text is the language
+  // code (EN / 中文); the old aria-label "Switch language" did NOT contain it.
+  // These tests FAIL on the old language.switch binding (no visible code in the
+  // name) and PASS once the binding uses language.switchTo with {lang}.
+  // ============================================
+  describe('#190 a11y: accessible name contains the visible text', () => {
+    const visibleIncludedInName = (w: VueWrapper) => {
+      const button = w.find('button')
+      const name = button.attributes('aria-label') ?? ''
+      const visible = button.find('.lang-text').text()
+      return { name, visible, ok: name.includes(visible) }
+    }
+
+    it('English state: aria-label contains the visible "EN"', () => {
+      i18nState.langRef.value = 'en'
+      const { name, visible, ok } = visibleIncludedInName(wrapper)
+      expect(visible).toBe('EN')
+      expect(ok, `aria-label "${name}" must contain visible "${visible}"`).toBe(true)
+    })
+
+    it('Chinese state: aria-label contains the visible "中文"', async () => {
+      i18nState.langRef.value = 'zh'
+      await wrapper.vm.$nextTick()
+      const { name, visible, ok } = visibleIncludedInName(wrapper)
+      expect(visible).toBe('中文')
+      expect(ok, `aria-label "${name}" must contain visible "${visible}"`).toBe(true)
+    })
+
+    it('aria-label is non-empty and uses the language.switchTo key (not language.switch)', () => {
+      const button = wrapper.find('button')
+      const label = button.attributes('aria-label')
+      expect(label).toBeTruthy()
+      // The new copy carries "(current:" — language.switch did not.
+      expect(label).toMatch(/current/i)
     })
   })
 })

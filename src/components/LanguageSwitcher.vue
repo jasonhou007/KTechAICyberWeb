@@ -2,7 +2,7 @@
   <button
     class="language-switcher"
     @click="toggleLanguage"
-    :aria-label="t('language.switch')"
+    :aria-label="t('language.switchTo', { lang: languageDisplay })"
     title="Switch between English and Chinese"
   >
     <span class="lang-icon">🌐</span>

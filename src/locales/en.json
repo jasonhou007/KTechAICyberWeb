@@ -1,6 +1,7 @@
 {
   "theme": {
     "toggle": "Toggle theme",
+    "toggleWithState": "Switch theme: {state}",
     "dark": "Dark theme",
     "light": "Light theme",
     "darkLabel": "Dark",
@@ -259,6 +260,7 @@
   },
   "language": {
     "switch": "Switch Language",
+    "switchTo": "Switch language (current: {lang})",
     "en": "English",
     "zh": "中文"
   },
@@ -1550,7 +1552,6 @@
       "regionLabel": "KTech AI Core neural network visualizer",
       "description": "An interactive neural network. Hover or focus a node to inspect its layer and function. Activate Run Inference to watch a data packet propagate to a decoded decision.",
       "nodeLabel": "Layer {layer}, function {function}",
-      "runInferenceButton": "Run neural inference",
       "inferenceRunning": "Inference propagating",
       "inferenceDone": "Inference complete",
       "readout": "Decoded inference readout"
@@ -1820,7 +1821,6 @@
   },
   "rum": {
     "toggle": {
-      "label": "Toggle performance monitoring (Core Web Vitals)",
       "enabled": "Performance monitoring on",
       "disabled": "Performance monitoring off"
     },

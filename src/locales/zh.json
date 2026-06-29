@@ -1,6 +1,7 @@
 {
   "theme": {
     "toggle": "切换主题",
+    "toggleWithState": "切换主题：{state}",
     "dark": "深色主题",
     "light": "浅色主题",
     "darkLabel": "深色",
@@ -259,6 +260,7 @@
   },
   "language": {
     "switch": "切换语言",
+    "switchTo": "切换语言（当前：{lang}）",
     "en": "English",
     "zh": "中文"
   },
@@ -1550,7 +1552,6 @@
       "regionLabel": "KTech 神经核心神经网络可视化",
       "description": "一个可交互的神经网络。悬停或聚焦节点以查看其层级与功能。激活“运行推理”以观看数据包传播至解码决策。",
       "nodeLabel": "层级 {layer}，功能 {function}",
-      "runInferenceButton": "运行神经推理",
       "inferenceRunning": "推理传播中",
       "inferenceDone": "推理完成",
       "readout": "解码后的推理读数"
@@ -1820,7 +1821,6 @@
   },
   "rum": {
     "toggle": {
-      "label": "切换性能监控（核心网页指标）",
       "enabled": "性能监控已开启",
       "disabled": "性能监控已关闭"
     },

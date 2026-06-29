@@ -144,7 +144,6 @@
         type="button"
         class="neural-run-button cyber-button neon-text"
         data-test="neural-run-inference"
-        :aria-label="t('neural.aria.runInferenceButton')"
         :disabled="inferenceState === 'running'"
         @click="runInference"
         @keydown="onButtonKeydown"

@@ -2,7 +2,7 @@
   <button
     type="button"
     class="theme-toggle"
-    :aria-label="t('theme.toggle')"
+    :aria-label="t('theme.toggleWithState', { state: label })"
     :aria-pressed="isLight ? 'true' : 'false'"
     :title="isLight ? t('theme.light') : t('theme.dark')"
     @click="handleToggle"

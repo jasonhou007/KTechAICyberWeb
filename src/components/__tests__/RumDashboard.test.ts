@@ -22,7 +22,6 @@ import { usePreferencesStore } from '../../stores/preferences'
 
 // Dictionary mirrors the rum.* leaves shipped in en.json.
 const dictionary: Record<string, string> = {
-  'rum.toggle.label': 'Toggle performance monitoring',
   'rum.toggle.enabled': 'Performance monitoring on',
   'rum.toggle.disabled': 'Performance monitoring off',
   'rum.dashboard.title': 'Performance monitor',
@@ -99,12 +98,17 @@ describe('RumDashboard.vue (#187)', () => {
   })
 
   describe('default state', () => {
-    it('#1 renders a toggle button with aria-label + aria-pressed=false when disabled', () => {
+    it('#1 renders a toggle button with aria-pressed=false when disabled', () => {
       const rum = makeFakeRum(false)
       wrapper = mountDashboard(rum)
       const btn = wrapper.find('[data-test="rum-toggle"]')
       expect(btn.exists()).toBe(true)
-      expect(btn.attributes('aria-label')).toBe('Toggle performance monitoring')
+      // #190 label-content-name-mismatch: the aria-label was dropped so the
+      // visible "Performance monitoring off" IS the accessible name. The name
+      // is the localized visible text (non-empty, not a raw key).
+      const text = btn.text()
+      expect(text).toBeTruthy()
+      expect(text).not.toContain('rum.')
       expect(btn.attributes('aria-pressed')).toBe('false')
     })
 
@@ -271,6 +275,28 @@ describe('RumDashboard.vue (#187)', () => {
       wrapper = mountDashboard(rum)
       const live = wrapper.find('[data-test="rum-status"]')
       expect(live.text()).toContain('off')
+    })
+  })
+
+  // ============================================
+  // #190 a11y: label-content-name-mismatch — the toggle's accessible name must
+  // be a superstring of its visible text. The visible text is "Performance
+  // monitoring on/off"; the old aria-label "Toggle performance monitoring" did
+  // NOT contain it. Fix: drop the aria-label so the visible text IS the name.
+  // ============================================
+  describe('#190 a11y: toggle accessible name == visible text', () => {
+    it('disabled state: no aria-label overriding the visible "Performance monitoring off"', () => {
+      wrapper = mountDashboard(makeFakeRum(false))
+      const btn = wrapper.find('[data-test="rum-toggle"]')
+      expect(btn.attributes('aria-label')).toBeUndefined()
+      expect(btn.text()).toContain('Performance monitoring off')
+    })
+
+    it('enabled state: no aria-label overriding the visible "Performance monitoring on"', () => {
+      wrapper = mountDashboard(makeFakeRum(true))
+      const btn = wrapper.find('[data-test="rum-toggle"]')
+      expect(btn.attributes('aria-label')).toBeUndefined()
+      expect(btn.text()).toContain('Performance monitoring on')
     })
   })
 })

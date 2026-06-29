@@ -112,7 +112,6 @@ function formatTime(ts) {
       class="rum-toggle"
       data-test="rum-toggle"
       :aria-pressed="rum.enabled.value ? 'true' : 'false'"
-      :aria-label="t('rum.toggle.label')"
       @click="toggle"
       @keydown="onToggleKeydown"
     >
