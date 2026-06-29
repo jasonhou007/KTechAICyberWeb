@@ -1,56 +1,4 @@
 {
-  "issue": 222,
-  "205": {
-    "title": "[bug] Correct KTech company facts: capital 300M (was 50M), full KASIKORN VISION name, founding date",
-    "status": "Done",
-    "stage": "archived",
-    "iteration": 20,
-    "github_state": "CLOSED",
-    "branch": "autodev-205-company-facts (merged, branch deleted)",
-    "baseline": "origin/main @ 7717d87",
-    "started_at": "2026-06-28",
-    "completed_at": "2026-06-28T16:10:22Z",
-    "type": "bug (content / i18n correction)",
-    "closes_acs_of": 159,
-    "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/210",
-    "merge_sha": "2ae6c75",
-    "merge_method": "--merge (NOT squash; commit 6154f2e preserved on main)",
-    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxEG8o -> Done (98236657)",
-    "commits": [
-      "6154f2e"
-    ],
-    "honest_results": {
-      "vitest": "71 files / 2116 tests pass (0 fail)",
-      "build": "vite build green (About-BPuc0_D5.js 8.92 kB)",
-      "i18n_parity": "en 946 = zh 946 (+2 each: established + establishedDate); check-i18n-keys.mjs OK",
-      "shipped_app": "Playwright 5/5 on running app (chromium) — en capital/name/established + zh (toggle) capital/established",
-      "no_old_values": "grep '50 million|Kaitai Vision|5000 万' src/ -> 0 matches",
-      "security": "0 Critical, 0 High, SEC001 clean, no XSS surface",
-      "evidence": "tickets/205/evidence/{before,after}-about-facts.png",
-      "ci_failure_set_diff": "EMPTY — PR #210 chromium failures {87-privacy>contact details} == main baseline; zero new failures. firefox/webkit = pre-existing 1ms browser-binary infra debt."
-    },
-    "phase_5b": "#159's 3 Company-Information ACs (Company name / Established / Capital) flipped [ ]->[x] via REST PATCH; #159 now 18/18 ACs checked; #159 closed + board card -> Done.",
-    "facts_corrected": {
-      "capital_en": "RMB 50 million -> RMB 300 million",
-      "capital_zh": "人民币 5000 万元 -> 3亿元人民币",
-      "name_en": "Kaitai Vision Information Technology Co., Ltd. -> KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)",
-      "name_zh": "开泰远景信息科技有限公司 (already correct, unchanged)",
-      "established_en": "(absent) -> Established: June 2020 (new 5th card)",
-      "established_zh": "(absent) -> 成立时间: 2020年6月"
-    },
-    "notes": "S-sized content/i18n fix. TDD red->green. Inline coordinator execution (proportionate)."
-  },
-  "title": "[bug] Fix latent cross-browser E2E failures exposed by #216",
-  "branch": "autodev-222-cross-browser-e2e (deleted)",
-  "status": "Done",
-  "stage": "archived",
-  "iteration": 29,
-  "startedAt": "2026-06-29",
-  "resumedAt": "2026-06-29",
-  "followUpIssues": [
-    229
-  ],
-  "notes": "Class B (firefox+chromium) failures fixed + verified: test CI job green (run 28380687882, 0 failures vs main's 9). webkit AC #1/#5 deferred to #229 with corrected premise (webkit NOT systemic — 140-router-base passes on webkit in CI; failures concentrated in 87-privacy footer-link flow + 187-rum-beacon, CI-runner-specific). Security PASS, evaluator EXCELLENT.",
   "180": {
     "title": "[CYBER] Add interactive 'AI Solution Forge' configurator (personalized solution recommender)",
     "status": "Done",
@@ -91,33 +39,6 @@
     "e2e_advisory": "Playwright E2E job red ONLY on firefox/webkit/Mobile Safari due to pre-existing browser-binary-missing infra debt (same 423-error signature on main baseline run 28323125865). solution-forge.spec.ts PASSES 7/7 on chromium + Mobile Chrome. Smoke + Mobile jobs GREEN on the PR. Failure-set diff vs main: EMPTY of real regressions.",
     "stage6_verdict": "APPROVE (8.0/10). No must-fix. 3 should-fix addressed on autodev-180-review-followup: registry trail (this block), SUMMARY count sync (15/+2748 -> 17/+2835), buildAssemblyTimeline dedup.",
     "completed_at": "2026-06-28T15:10:04Z"
-  },
-  "203": {
-    "title": "Self-Driving ambient demo background (always-on pipeline loop)",
-    "status": "InReview",
-    "stage": "pr",
-    "github_state": "OPEN",
-    "pr": "#211",
-    "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/211",
-    "branch": "autodev-203-self-driving",
-    "baseline": "origin/main @ c240c81 (v1.0)",
-    "head_sha": "77152a5",
-    "commits": 21,
-    "started_at": "2026-06-28",
-    "flagship": true,
-    "coverage": {
-      "statements": 94.45,
-      "branches": 86.45,
-      "functions": 94.8,
-      "lines": 95.56
-    },
-    "tests": "71 files / 2133 pass / 3 skipped / 0 fail",
-    "build": "green (140.12 kB entry / 58.67 kB gzip)",
-    "e2e": "4/4 pass (auto-play + reduced-motion + global + visibility/elementFromPoint)",
-    "security": "PASS (0 Critical, 0 High; 3 MEDIUM + 2 INFO found and fixed)",
-    "reviewer_verdict": "REVISE-AND-RESUBMIT → must-fix (occlusion) addressed in rev 3 → re-verified visible",
-    "auto_merge": false,
-    "notes": "FLAGSHIP: paused for human review per user instruction (no auto-merge). Iter-19 occlusion blind spot caught by adversarial reviewer (global bg was fully hidden behind hero); fixed by pivoting to in-flow section + elementFromPoint E2E. origin/main drifted to 04c9917 mid-run; rebase before merge."
   },
   "182": {
     "title": "[CYBER] Cyber Ops HUD interactive dashboard",
@@ -312,6 +233,73 @@
     "archived_at": "2026-06-29T07:21:44Z",
     "archive_notes": "E2E advisory (Playwright cancelled = pre-existing #216 debt); failure-set diff vs main empty; Smoke+Mobile green. --merge preserves 8 optimization commits (5cb5b68 test RED, fb60531 purge index.html, ed110cf purge cyber.css :root, 6621cfa fix var values, 68a6f34 consolidate fonts, 9245f12 review measure real artifact, 597d76c review fix E2E route, a757b20 evidence helper). Follow-up #219 OPEN (scoped-style audit, blocked-by #188)."
   },
+  "203": {
+    "title": "Self-Driving ambient demo background (always-on pipeline loop)",
+    "status": "InReview",
+    "stage": "pr",
+    "github_state": "OPEN",
+    "pr": "#211",
+    "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/211",
+    "branch": "autodev-203-self-driving",
+    "baseline": "origin/main @ c240c81 (v1.0)",
+    "head_sha": "77152a5",
+    "commits": 21,
+    "started_at": "2026-06-28",
+    "flagship": true,
+    "coverage": {
+      "statements": 94.45,
+      "branches": 86.45,
+      "functions": 94.8,
+      "lines": 95.56
+    },
+    "tests": "71 files / 2133 pass / 3 skipped / 0 fail",
+    "build": "green (140.12 kB entry / 58.67 kB gzip)",
+    "e2e": "4/4 pass (auto-play + reduced-motion + global + visibility/elementFromPoint)",
+    "security": "PASS (0 Critical, 0 High; 3 MEDIUM + 2 INFO found and fixed)",
+    "reviewer_verdict": "REVISE-AND-RESUBMIT → must-fix (occlusion) addressed in rev 3 → re-verified visible",
+    "auto_merge": false,
+    "notes": "FLAGSHIP: paused for human review per user instruction (no auto-merge). Iter-19 occlusion blind spot caught by adversarial reviewer (global bg was fully hidden behind hero); fixed by pivoting to in-flow section + elementFromPoint E2E. origin/main drifted to 04c9917 mid-run; rebase before merge."
+  },
+  "205": {
+    "title": "[bug] Correct KTech company facts: capital 300M (was 50M), full KASIKORN VISION name, founding date",
+    "status": "Done",
+    "stage": "archived",
+    "iteration": 20,
+    "github_state": "CLOSED",
+    "branch": "autodev-205-company-facts (merged, branch deleted)",
+    "baseline": "origin/main @ 7717d87",
+    "started_at": "2026-06-28",
+    "completed_at": "2026-06-28T16:10:22Z",
+    "type": "bug (content / i18n correction)",
+    "closes_acs_of": 159,
+    "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/210",
+    "merge_sha": "2ae6c75",
+    "merge_method": "--merge (NOT squash; commit 6154f2e preserved on main)",
+    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxEG8o -> Done (98236657)",
+    "commits": [
+      "6154f2e"
+    ],
+    "honest_results": {
+      "vitest": "71 files / 2116 tests pass (0 fail)",
+      "build": "vite build green (About-BPuc0_D5.js 8.92 kB)",
+      "i18n_parity": "en 946 = zh 946 (+2 each: established + establishedDate); check-i18n-keys.mjs OK",
+      "shipped_app": "Playwright 5/5 on running app (chromium) — en capital/name/established + zh (toggle) capital/established",
+      "no_old_values": "grep '50 million|Kaitai Vision|5000 万' src/ -> 0 matches",
+      "security": "0 Critical, 0 High, SEC001 clean, no XSS surface",
+      "evidence": "tickets/205/evidence/{before,after}-about-facts.png",
+      "ci_failure_set_diff": "EMPTY — PR #210 chromium failures {87-privacy>contact details} == main baseline; zero new failures. firefox/webkit = pre-existing 1ms browser-binary infra debt."
+    },
+    "phase_5b": "#159's 3 Company-Information ACs (Company name / Established / Capital) flipped [ ]->[x] via REST PATCH; #159 now 18/18 ACs checked; #159 closed + board card -> Done.",
+    "facts_corrected": {
+      "capital_en": "RMB 50 million -> RMB 300 million",
+      "capital_zh": "人民币 5000 万元 -> 3亿元人民币",
+      "name_en": "Kaitai Vision Information Technology Co., Ltd. -> KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)",
+      "name_zh": "开泰远景信息科技有限公司 (already correct, unchanged)",
+      "established_en": "(absent) -> Established: June 2020 (new 5th card)",
+      "established_zh": "(absent) -> 成立时间: 2020年6月"
+    },
+    "notes": "S-sized content/i18n fix. TDD red->green. Inline coordinator execution (proportionate)."
+  },
   "216": {
     "title": "[bug] Fix firefox/webkit Playwright browser-binary CI",
     "status": "Done",
@@ -350,5 +338,56 @@
     "postMergeFlakeFixes": "PR #230 (4 commits): 187-rum-beacon firefox history-flush race + theme.spec transition-smoothness wall-clock->DOM-signal + 2000ms CI-realistic threshold + theme.spec dark/light-theme resolved --bg-primary var harden. Post-merge main run 28387659155 (verifying).",
     "failuresAfterFinal": "0 on post-merge MAIN (run 28387659155: 297 passed, 0 ✘ incl retries) — test CI job GREEN ON MAIN (#222 objective achieved)",
     "mainGreenRun": 28387659155
+  },
+  "223": {
+    "title": "[HOME][P1] Remove Packet Route puzzle mini-game from Home page (off-direction)",
+    "status": "Done",
+    "stage": "archived",
+    "branch": "autodev-223-remove-packet-route",
+    "iteration": 30,
+    "approach": "DELETION ticket (iter-14 archetype): remove PacketRoute from Home.vue + delete component/composable/tests/locale-keys; default=full delete. Close #214 (drag-from-tray follow-up) as moot.",
+    "startedAt": "2026-06-29T16:59:13.020Z",
+    "pr": 231,
+    "issueState": "CLOSED",
+    "mergeSha": "8375ae22cdbe95317afd1fc73b9f92be3b5199d9",
+    "prMerged": true,
+    "mergeMethod": "--merge",
+    "branchDeleted": true,
+    "boardStatus": "Done",
+    "deployRun": "https://github.com/jasonhou007/KTechAICyberWeb/actions/runs/28391167731",
+    "reconciledIssues": [
+      214
+    ],
+    "reconciliation": "#214 (drag-from-tray follow-up) closed as obsolete — PacketRoute deleted, enhancement moot.",
+    "verification": "vitest 85/2395 pass; build green; i18n exit 0 (876 keys, 1037/1037 leaves); security 0/0/0/0; evaluator EXCELLENT; #223 E2E absence spec passes live; full chromium E2E 95 pass/0 fail (one #165 image-timing flake did not reproduce).",
+    "archivedAt": "2026-06-29T17:41:02.774Z"
+  },
+  "issue": 222,
+  "title": "[bug] Fix latent cross-browser E2E failures exposed by #216",
+  "branch": "autodev-222-cross-browser-e2e (deleted)",
+  "status": "Done",
+  "stage": "archived",
+  "iteration": 29,
+  "startedAt": "2026-06-29",
+  "resumedAt": "2026-06-29",
+  "followUpIssues": [
+    229
+  ],
+  "notes": "Class B (firefox+chromium) failures fixed + verified: test CI job green (run 28380687882, 0 failures vs main's 9). webkit AC #1/#5 deferred to #229 with corrected premise (webkit NOT systemic — 140-router-base passes on webkit in CI; failures concentrated in 87-privacy footer-link flow + 187-rum-beacon, CI-runner-specific). Security PASS, evaluator EXCELLENT.",
+  "224": {
+    "title": "[HOME][P1] Home overhaul: fix lag, remove neon flicker, add 'Our Business' + China-ASEAN mission",
+    "status": "InProgress",
+    "stage": "planning",
+    "iteration": 31,
+    "github_state": "OPEN",
+    "branch": "autodev-224-home-overhaul",
+    "baseline": "origin/main @ 8375ae2",
+    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxJdbk -> In progress (47fc9ee4)",
+    "started": "2026-06-30",
+    "facets": [
+      "1. Fix Home lag (throttle/pause offscreen animations, fewer simultaneous rAF, lazy-mount)",
+      "2. Remove neon flicker (glitch 0.3s infinite default-off, <3Hz, reduced-motion-safe)",
+      "3. Add Our Business section + China-ASEAN mission (5 cards, en+zh i18n)"
+    ]
   }
 }
