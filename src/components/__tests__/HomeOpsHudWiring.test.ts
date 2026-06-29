@@ -23,6 +23,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, VueWrapper, flushPromises } from '@vue/test-utils'
 import { nextTick } from 'vue'
+import { createRouter, createMemoryHistory } from 'vue-router'
+import { createPinia } from 'pinia'
 
 // matchMedia is required by useOpsFeed (reduced motion + mobile breakpoint).
 // happy-dom lacks it; install a benign default (mirrors HomeTerminalWiring).
@@ -50,9 +52,28 @@ describe('Home.vue -> CyberOpsHud wiring (#182 shipped-app gate)', () => {
 
   const mountHome = async () => {
     const Home = (await import('../../views/Home.vue')).default
-    wrapper = mount(Home)
-    await flushPromises()
-    await nextTick()
+    // #224: CyberOpsHud is now lazy-mounted inside <LazySection>. Mounting with
+    // a real router + pinia (mirroring Home.spec.js) lets the HUD's useOpsFeed
+    // composable initialise cleanly; the IntersectionObserver polyfill
+    // (tests/setup-intersection-observer.js) fires on the microtask queue and
+    // the defineAsyncComponent chunk resolves on a later macrotask. Under
+    // parallel test load a fixed sleep is flaky, so POLL until the lazy slot
+    // appears (bounded — fails fast if the wiring is genuinely broken).
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [
+        { path: '/', component: Home },
+        { path: '/about', component: { template: '<div/>' } },
+      ],
+    })
+    wrapper = mount(Home, { global: { plugins: [createPinia(), router] } })
+    const deadline = Date.now() + 2000
+    while (Date.now() < deadline) {
+      await flushPromises()
+      await nextTick()
+      if (wrapper.find('[data-test="cyber-ops-hud"]').exists()) break
+      await new Promise((r) => setTimeout(r, 25))
+    }
     return wrapper
   }
 

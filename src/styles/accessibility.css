@@ -104,10 +104,10 @@ nav a:focus-visible {
   }
 
   /* Disable specific animations */
-  .glitch-text::before,
-  .glitch-text::after {
-    animation: none !important;
-  }
+  /* #224: the .glitch-text::before/::after reduced-motion override is removed —
+     the glitch rule itself was deleted from Home.vue, so this selector targeted
+     nothing (dead CSS). The remaining reduced-motion overrides below are all
+     still live (their source animations exist). */
 
   .neon-text {
     animation: none !important;

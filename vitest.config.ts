@@ -14,6 +14,15 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'happy-dom',
+    // #224: global IntersectionObserver polyfill. happy-dom ships an IO
+    // constructor that never fires the callback (no viewport simulation), so
+    // lazy-mounted components (LazySection) never render their slots. This
+    // setup installs a fire-on-observe polyfill so lazy components mount in
+    // tests (mirrors real browser behavior where a mounted component is in
+    // view of the synthetic viewport). Per-test mocks that need a controllable
+    // observer (e.g. lazy-section.spec.js "renders nothing before intersection",
+    // FadeIn.test.ts) replace this global for their duration.
+    setupFiles: ['./tests/setup-intersection-observer.js'],
     // Note: the previous glob only matched `*.test.ts` / `*.spec.ts` under
     // __tests__, which silently skipped any `.spec.js` / `.test.js` files there
     // (e.g. src/components/__tests__/i18n-toggle.spec.js was never collected).

@@ -14,10 +14,15 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
 test.describe('#161 AI Neural Terminal', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
+    // #224: NeuralTerminal (incl. its floating launcher) is lazy-mounted inside
+    // <LazySection>; scroll it into view so the launcher mounts before any
+    // query. Behavior unchanged.
+    await mountLazySection(page, 'lazy-neural-terminal', 'neural-launcher')
   })
 
   test('launcher opens the console; typing help renders a cyber-styled response', async ({ page }) => {

@@ -48,13 +48,15 @@ describe('Home.vue', () => {
       expect(w.find('.home header.cyber-header').exists()).toBe(true)
     })
 
-    it('keeps neon-text + glitch-text + data-text on the title', () => {
+    it('keeps neon-text on the title but DROPS glitch-text + data-text (#224)', () => {
+      // #224 removed the neon flicker / glitch animation. The h1 keeps its
+      // neon-text glow class but must NOT carry glitch-text (the ::before/
+      // ::after carrier) nor the :data-text binding that fed attr(data-text).
       const w = mountHome()
-      const title = w.find('h1.neon-text.glitch-text')
+      const title = w.find('h1.neon-text')
       expect(title.exists()).toBe(true)
-      expect(title.attributes('data-text')).toContain(
-        'Leading Fintech Company in China ASEAN Region',
-      )
+      expect(title.classes()).not.toContain('glitch-text')
+      expect(title.attributes('data-text')).toBeUndefined()
     })
 
     it('keeps the .cyber-card hero container and the neon-border CTA', () => {
@@ -99,21 +101,20 @@ describe('Home.vue', () => {
       expect(w.find('.subtitle').text()).toBe('Better fintech for customers')
     })
 
-    it('first hero paragraph names KBank and the Shenzhen regulator', () => {
+    it('first hero paragraph carries the China-ASEAN mission line (#224)', () => {
+      // #224 replaced the KBank/Shenzhen regulator paragraph with the
+      // China-ASEAN fintech mission line.
       const w = mountHome()
       const firstP = w.findAll('.cyber-card p')[0].text()
-      expect(firstP).toContain('KASIKORNBANK')
-      expect(firstP).toContain('KBank')
-      expect(firstP).toContain('Shenzhen Municipal Financial Regulatory Bureau')
+      expect(firstP).toContain('China-ASEAN')
+      expect(firstP).toContain('leading fintech company')
     })
 
-    it('second hero paragraph lists blockchain, big data, AI', () => {
+    it('second hero paragraph carries the better-financial-tech mission clause (#224)', () => {
       const w = mountHome()
       const paragraphs = w.findAll('.cyber-card p')
       const second = paragraphs[1].text()
-      expect(second).toContain('blockchain')
-      expect(second).toContain('big data')
-      expect(second).toContain('artificial intelligence')
+      expect(second).toContain('better financial-service technology')
     })
 
     it('CTA reads "Learn more" and points to /about', () => {
@@ -124,11 +125,14 @@ describe('Home.vue', () => {
     })
   })
 
-  describe('What We Do section (en)', () => {
-    it('renders the heading + both group labels', () => {
+  describe('Our Business section (en) — #224 rebrand of What We Do', () => {
+    it('renders the rebranded heading + both group labels', () => {
+      // #224 A1: "What We Do" -> "Our Business" (en). zh heading already
+      // "我们的业务". The card grid is unchanged (4 blockchain + 2 banking).
       const w = mountHome()
       const text = w.text()
-      expect(text).toContain('What We Do')
+      expect(text).toContain('Our Business')
+      expect(text).not.toContain('What We Do')
       expect(text).toContain('Blockchain & Web3')
       expect(text).toContain('Banking Solution')
     })

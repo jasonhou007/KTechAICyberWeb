@@ -6,9 +6,10 @@
 
     <!-- Main content -->
     <div class="content">
-      <!-- Header with neon glow -->
+      <!-- Header with neon glow (#224: glitch-text + :data-text removed —
+           the neon flicker animation is gone, the calm neonPulse glow stays) -->
       <header class="cyber-header">
-        <h1 class="neon-text glitch-text" :data-text="t('home.title')">
+        <h1 class="neon-text">
           {{ t('home.title') }}
         </h1>
         <p class="subtitle">{{ t('home.subtitle') }}</p>
@@ -54,43 +55,52 @@
         </router-link>
       </div>
 
-      <!-- AI Neural Terminal command console (#161) -->
-      <section class="neural-terminal-section">
+      <!-- AI Neural Terminal command console (#161) — lazy-mounted (#224) -->
+      <LazySection class="neural-terminal-section" data-test="lazy-neural-terminal">
         <NeuralTerminal />
-      </section>
+      </LazySection>
 
-      <!-- AI Core neural-network visualizer (#179) -->
-      <section class="neural-core-section">
+      <!-- AI Core neural-network visualizer (#179) — lazy-mounted (#224) -->
+      <LazySection class="neural-core-section" data-test="lazy-neural-core">
         <NeuralCore />
-      </section>
+      </LazySection>
 
-      <!-- AI Solution Forge configurator (#180) -->
-      <section class="solution-forge-section">
+      <!-- AI Solution Forge configurator (#180) — lazy-mounted (#224) -->
+      <LazySection class="solution-forge-section" data-test="lazy-solution-forge">
         <SolutionForge />
-      </section>
+      </LazySection>
 
-      <!-- Cyber Ops HUD interactive mission-control dashboard (#182) -->
-      <section class="cyber-ops-hud-section">
+      <!-- Cyber Ops HUD interactive mission-control dashboard (#182) — lazy (#224) -->
+      <LazySection class="cyber-ops-hud-section" data-test="lazy-cyber-ops-hud">
         <CyberOpsHud data-test="cyber-ops-hud" />
-      </section>
+      </LazySection>
 
-      <!-- Neon Pulse audio-reactive visualizer (#186) -->
-      <section class="neon-pulse-section">
+      <!-- Neon Pulse audio-reactive visualizer (#186) — lazy-mounted (#224) -->
+      <LazySection class="neon-pulse-section" data-test="lazy-neon-pulse">
         <NeonPulse data-test="neon-pulse" />
-      </section>
+      </LazySection>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, defineAsyncComponent } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
-import NeuralTerminal from '../components/NeuralTerminal.vue'
-import NeuralCore from '../components/NeuralCore.vue'
-import SolutionForge from '../components/SolutionForge.vue'
-import CyberOpsHud from '../components/CyberOpsHud.vue'
-import NeonPulse from '../components/NeonPulse.vue'
+import LazySection from '../components/LazySection.vue'
+
+// #224 perf: lazy-mount the 5 heavy below-the-fold modules. Previously these
+// were statically imported and mounted eagerly on initial paint, spinning up
+// ~4 simultaneous rAF loops + ~43 CSS animations + 2 intervals despite being
+// below the fold — the runtime lag source ("太卡了"). defineAsyncComponent
+// yields a code-split chunk AND defers module evaluation until first render;
+// wrapping each in <LazySection> further defers the mount until the section
+// scrolls into view (IntersectionObserver, rootMargin 200px for early mount).
+const NeuralTerminal = defineAsyncComponent(() => import('../components/NeuralTerminal.vue'))
+const NeuralCore = defineAsyncComponent(() => import('../components/NeuralCore.vue'))
+const SolutionForge = defineAsyncComponent(() => import('../components/SolutionForge.vue'))
+const CyberOpsHud = defineAsyncComponent(() => import('../components/CyberOpsHud.vue'))
+const NeonPulse = defineAsyncComponent(() => import('../components/NeonPulse.vue'))
 
 const { t } = useLanguage()
 
@@ -244,42 +254,9 @@ h1 {
   text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
 }
 
-/* Glitch effect */
-.glitch-text {
-  position: relative;
-}
-
-.glitch-text::before,
-.glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.8;
-}
-
-.glitch-text::before {
-  color: #ff00ff;
-  animation: glitch 0.3s infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
-}
-
-.glitch-text::after {
-  color: #00ffff;
-  animation: glitch 0.3s infinite reverse;
-  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
-}
-
-@keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
-}
+/* #224: glitch-text + @keyframes glitch REMOVED (the neon flicker / strobe).
+   The calm neonPulse text-glow (2s alternate = 0.5Hz, well under the 3Hz
+   seizure threshold) stays. The cyber palette is unchanged. */
 
 /* Neon pulse animation */
 @keyframes neonPulse {

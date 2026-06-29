@@ -21,6 +21,7 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
 // Serial + single-worker: each test spins up a REAL AudioContext in chromium,
 // and under parallel browser contexts the main thread can briefly starve during
@@ -35,6 +36,10 @@ test.describe.serial('#186 Neon Pulse', () => {
     // composable's mic-deny fallback is covered in the unit suite).
     await page.context().grantPermissions(['microphone']).catch(() => {})
     await page.goto('/')
+    // #224: NeonPulse is lazy-mounted inside <LazySection>; scroll it into view
+    // so the visualizer (region + engage + canvas) mounts before any query.
+    // Behavior unchanged — the engage flow still works after mount.
+    await mountLazySection(page, 'lazy-neon-pulse', 'neon-pulse')
   })
 
   test('the visualizer renders on the shipped homepage with region + engage + canvas', async ({ page }) => {

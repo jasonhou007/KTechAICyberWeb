@@ -11,6 +11,7 @@
  * @ticket #182
  */
 import { test, expect } from '@playwright/test'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
 // Evidence screenshots land in the repo-root tickets/182/evidence/ (mirrors the
 // 205-company-facts evidence convention). Run from the repo root.
@@ -19,9 +20,14 @@ const EVIDENCE_DIR = 'tickets/182/evidence'
 test.describe('#182 Cyber Ops HUD evidence capture', () => {
   test('capture before (at rest) + after (pulse + anomaly) screenshots', async ({ page }) => {
     await page.goto('/')
+    // #224: CyberOpsHud is lazy-mounted; scroll it into view + wait for mount.
+    // Replaces the brittle scrollIntoViewIfNeeded() + waitForTimeout(400): the
+    // helper uses scrollIntoView({block:'center'}) (no-op-safe on the 1px
+    // sentinel) and an auto-retrying visibility wait.
+    await mountLazySection(page, 'lazy-cyber-ops-hud', 'cyber-ops-hud')
     const hud = page.locator('[data-test="cyber-ops-hud"]')
     await expect(hud).toBeVisible()
-    // Scroll the HUD into full view.
+    // Ensure the HUD is fully scrolled into view for the screenshot.
     await hud.scrollIntoViewIfNeeded()
     await page.waitForTimeout(400)
 

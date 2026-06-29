@@ -69,16 +69,19 @@ describe('Home.vue', () => {
       expect(header.exists()).toBe(true)
     })
 
-    it('renders the cyber header with neon + glitch title', () => {
+    it('renders the cyber header with neon title — glitch-text DROPPED (#224)', () => {
+      // #224 removed the neon flicker / glitch animation. The h1 keeps neon-text
+      // but must NOT carry glitch-text (the ::before/::after carrier).
       const header = wrapper.find('header.cyber-header')
       expect(header.exists()).toBe(true)
-      const h1 = header.find('h1.neon-text.glitch-text')
+      const h1 = header.find('h1.neon-text')
       expect(h1.exists()).toBe(true)
+      expect(h1.classes()).not.toContain('glitch-text')
     })
 
-    it('keeps the data-text attribute powering the glitch effect', () => {
-      const title = wrapper.find('.glitch-text')
-      expect(title.attributes('data-text')).toBeTruthy()
+    it('no longer carries the data-text attribute that fed the glitch pseudos (#224)', () => {
+      const title = wrapper.find('h1.neon-text')
+      expect(title.attributes('data-text')).toBeUndefined()
     })
 
     it('renders a subtitle eyebrow', () => {
@@ -133,31 +136,30 @@ describe('Home.vue', () => {
       )
     })
 
-    it('glitch data-text mirrors the title', () => {
-      expect(wrapper.find('.glitch-text').attributes('data-text')).toContain(
-        'Leading Fintech Company in China ASEAN Region',
-      )
+    it('glitch data-text is GONE — h1 has no data-text binding (#224)', () => {
+      // #224 removed the :data-text binding that fed the glitch ::before/::after
+      // pseudo-elements via attr(data-text).
+      expect(wrapper.find('h1.neon-text').attributes('data-text')).toBeUndefined()
     })
 
     it('subtitle is the official eyebrow', () => {
       expect(wrapper.find('.subtitle').text()).toBe('Better fintech for customers')
     })
 
-    it('first hero paragraph names KBank + the Shenzhen regulator', () => {
+    it('first hero paragraph carries the China-ASEAN mission line (#224)', () => {
+      // #224 A2 replaced the KBank/Shenzhen regulator paragraph with the
+      // China-ASEAN fintech mission line (exact issue wording).
       const firstP = wrapper.find('.cyber-card p.hero-description')
       const text = firstP.exists() ? firstP.text() : wrapper.find('.cyber-card p').text()
-      expect(text).toContain('KASIKORNBANK')
-      expect(text).toContain('KBank')
-      expect(text).toContain('Shenzhen Municipal Financial Regulatory Bureau')
+      expect(text).toContain('China-ASEAN')
+      expect(text).toContain('leading fintech company')
     })
 
-    it('second hero paragraph lists the service pillars', () => {
+    it('second hero paragraph carries the better-financial-tech mission clause (#224)', () => {
       const paragraphs = wrapper.findAll('.cyber-card p')
       expect(paragraphs.length).toBeGreaterThanOrEqual(2)
       const second = paragraphs[1].text()
-      expect(second).toContain('blockchain')
-      expect(second).toContain('big data')
-      expect(second).toContain('artificial intelligence')
+      expect(second).toContain('better financial-service technology')
     })
 
     it('CTA reads "Learn more" and links to /about', () => {
@@ -168,13 +170,16 @@ describe('Home.vue', () => {
     })
   })
 
-  describe('What We Do section (en)', () => {
+  describe('Our Business section (en) — #224 rebrand of What We Do', () => {
     beforeEach(() => {
       wrapper = mountHome()
     })
 
-    it('renders the section heading "What We Do"', () => {
-      expect(wrapper.text()).toContain('What We Do')
+    it('renders the rebranded section heading "Our Business"', () => {
+      // #224 A1: "What We Do" -> "Our Business" (en). zh heading already
+      // "我们的业务" (no change). The card grid is unchanged.
+      expect(wrapper.text()).toContain('Our Business')
+      expect(wrapper.text()).not.toContain('What We Do')
     })
 
     it('renders both group labels', () => {
@@ -359,6 +364,68 @@ describe('Home.vue', () => {
       wrapper = mountHome()
       expect(wrapper.text()).not.toMatch(/packetRoute\.[a-zA-Z]/)
       expect(wrapper.text()).not.toContain('Packet Route')
+    })
+  })
+
+  // ============================================
+  // #224 — lazy-mount below-the-fold modules.
+  // The 5 heavy interactive components (NeuralTerminal, NeuralCore,
+  // SolutionForge, CyberOpsHud, NeonPulse) previously mounted EAGERLY on Home,
+  // spinning up ~4 simultaneous rAF loops + ~43 CSS animations from initial
+  // load despite being below the fold — the runtime lag source. #224 wraps each
+  // in <LazySection> + defineAsyncComponent so they only mount when scrolled
+  // into view. These source-level gates make the test RED if the lazy wiring is
+  // reverted to static imports.
+  // ============================================
+  describe('#224 lazy-mounts below-the-fold modules', () => {
+    const homeSource = fs.readFileSync(
+      path.resolve(process.cwd(), 'src', 'views', 'Home.vue'),
+      'utf-8',
+    )
+
+    it('converts the 5 heavy components to defineAsyncComponent', () => {
+      // defineAsyncComponent is the Vue 3 primitive that yields a code-split
+      // chunk + defers module evaluation until first render.
+      expect(homeSource).toMatch(/defineAsyncComponent/)
+      // Each of the 5 modules is dynamically imported.
+      expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeuralTerminal\.vue['"]\)/)
+      expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeuralCore\.vue['"]\)/)
+      expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*SolutionForge\.vue['"]\)/)
+      expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*CyberOpsHud\.vue['"]\)/)
+      expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeonPulse\.vue['"]\)/)
+    })
+
+    it('drops the eager static imports of the 5 heavy components', () => {
+      // The old eager imports looked like `import X from '../components/X.vue'`.
+      // They must be gone — only the dynamic import form is allowed now.
+      expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/NeuralTerminal\.vue['"]/)
+      expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/NeuralCore\.vue['"]/)
+      expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/SolutionForge\.vue['"]/)
+      expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/CyberOpsHud\.vue['"]/)
+      expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/NeonPulse\.vue['"]/)
+    })
+
+    it('wraps each heavy component in <LazySection>', () => {
+      // LazySection is the wrapper that defers mount until intersection.
+      expect(homeSource).toMatch(/from\s+['"]\.\.\/components\/LazySection\.vue['"]/)
+      expect(homeSource).toMatch(/<LazySection\b/)
+      // All 5 modules wrapped. Count opening tags in the <template> region only
+      // (the import statement `import LazySection from ...` would otherwise
+      // inflate the count). Match the template usage form: <LazySection followed
+      // by a space + attribute (class/data-test), which only appears in markup.
+      const template = homeSource.match(/<template>([\s\S]*?)<\/template>/)
+      expect(template, 'Home.vue must have a <template>').not.toBeNull()
+      const matches = template![1].match(/<LazySection\b/g) || []
+      expect(matches.length).toBe(5)
+    })
+
+    it('keeps the card catalogs unchanged (blockchain 4 + banking 2 = 6 cards)', () => {
+      // #224 A1: the Our Business section reuses the existing card grid — no
+      // duplicate section, no collapsing of banking into the blockchain group.
+      const bc = homeSource.match(/key:\s*'(?:publicchain|crossborder|custody|stablechain|stablecoin)'/g) || []
+      expect(bc.length).toBe(4)
+      const bk = homeSource.match(/key:\s*'(?:retaillending|supplychain)'/g) || []
+      expect(bk.length).toBe(2)
     })
   })
 })
