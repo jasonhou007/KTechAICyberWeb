@@ -389,5 +389,17 @@
       "2. Remove neon flicker (glitch 0.3s infinite default-off, <3Hz, reduced-motion-safe)",
       "3. Add Our Business section + China-ASEAN mission (5 cards, en+zh i18n)"
     ]
+  },
+  "206": {
+    "status": "Done",
+    "stage": "pr",
+    "github_state": "CLOSED",
+    "merged_at": "2026-06-30",
+    "merge_commit": "a9f84fc",
+    "pr_number": 236,
+    "final_commits": 8,
+    "final_tests": "91 files / 2454 tests pass",
+    "evaluator_verdict": "GOOD 94/100 — APPROVED; numeric-drift items in SUMMARY/REVIEW prose corrected (iter-11/12/25 family); all code/tests/gates correct",
+    "followups": "#235 (seizure-safe glitch for AC 2.1, Backlog)"
   }
 }
