@@ -235,14 +235,14 @@
   },
   "188": {
     "title": "CWV: remove unused CSS / purge",
-    "status": "InProgress",
-    "stage": "validation_done",
+    "status": "Done",
+    "stage": "archived",
     "iteration": 25,
-    "github_state": "OPEN",
+    "github_state": "CLOSED",
     "baseline": "origin/main @ c672d06",
     "branch": "autodev-188-purge-css",
     "started_at": "2026-06-29",
-    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxDPzM -> In progress (47fc9ee4)",
+    "board_card": "PVTI_lAHOB5DQUc4BboAJzgxDPzM -> Done (98236657) [verified via graphql]",
     "closes_acs_of": 18,
     "baseline_css": {
       "entry_chunk_raw_kb": 75.37,
@@ -300,6 +300,17 @@
       "font_hardcodes_in_vue": 0,
       "courier_new_preserved": 5,
       "var_usages": "font-display 141, font-body 155"
-    }
+    },
+    "merge_sha": "25160d234ea8b6848cc9f85dd5f8740b5646c4e3",
+    "merge_method": "--merge (NOT squash; 8 optimization commits preserved on main)",
+    "pr_number": 220,
+    "pr_url": "https://github.com/jasonhou007/KTechAICyberWeb/pull/220",
+    "completed_at": "2026-06-29T07:21:44Z",
+    "deploy_run": "https://github.com/jasonhou007/KTechAICyberWeb/actions/runs/28355243235",
+    "deploy_status": "success",
+    "issue_close_comment": "https://github.com/jasonhou007/KTechAICyberWeb/issues/188#issuecomment-4829933518",
+    "parent_ac_closed": "#18 [x] Unused CSS is removed (flipped via gh issue edit)",
+    "archived_at": "2026-06-29T07:21:44Z",
+    "archive_notes": "E2E advisory (Playwright cancelled = pre-existing #216 debt); failure-set diff vs main empty; Smoke+Mobile green. --merge preserves 8 optimization commits (5cb5b68 test RED, fb60531 purge index.html, ed110cf purge cyber.css :root, 6621cfa fix var values, 68a6f34 consolidate fonts, 9245f12 review measure real artifact, 597d76c review fix E2E route, a757b20 evidence helper). Follow-up #219 OPEN (scoped-style audit, blocked-by #188)."
   }
 }
