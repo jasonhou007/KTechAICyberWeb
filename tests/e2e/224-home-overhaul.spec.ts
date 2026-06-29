@@ -16,7 +16,12 @@ import { test, expect } from '@playwright/test'
  *      still lazy-mount (the lazy wiring is motion-agnostic).
  */
 
-const BASE = '/KTechAICyberWeb/'
+// Resolve the origin from PLAYWRIGHT_BASE_URL (set when running against a
+// non-default preview port, e.g. 4175 to avoid the shared-repo port-3000
+// contention); fall back to the configured baseURL origin (3000) so the spec
+// also runs unchanged under the standard CI/dev server.
+const ORIGIN = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000'
+const BASE = `${ORIGIN}/KTechAICyberWeb/`
 
 test.describe('#224 Home overhaul — live shipped app', () => {
   test.beforeEach(async ({ page }) => {
