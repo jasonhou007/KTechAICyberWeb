@@ -15,10 +15,14 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
 test.describe('#179 AI Core neural-network visualizer', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
+    // #224: NeuralCore is lazy-mounted inside <LazySection>; scroll it into
+    // view so the inner component mounts before any query. Behavior unchanged.
+    await mountLazySection(page, 'lazy-neural-core', 'neural-core')
   })
 
   test('the neural core renders on the shipped homepage', async ({ page }) => {

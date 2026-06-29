@@ -20,10 +20,14 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
 test.describe('#180 AI Solution Forge configurator', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
+    // #224: SolutionForge is lazy-mounted inside <LazySection>; scroll it into
+    // view so the inner component mounts before any query. Behavior unchanged.
+    await mountLazySection(page, 'lazy-solution-forge', 'solution-forge')
   })
 
   test('the forge renders on the shipped homepage', async ({ page }) => {
@@ -143,6 +147,8 @@ test.describe('#180 AI Solution Forge configurator', () => {
     test.skip(browserName === 'firefox', 'mobile viewport tested on chromium/webkit')
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
+    // #224: re-navigation after beforeEach resets the page; re-trigger mount.
+    await mountLazySection(page, 'lazy-solution-forge', 'solution-forge')
     const forge = page.locator('[data-test="solution-forge"]')
     await expect(forge).toBeVisible()
     // Config UI still renders on mobile.

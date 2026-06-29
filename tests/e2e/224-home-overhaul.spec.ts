@@ -119,28 +119,23 @@ test.describe('#224 Home overhaul — live shipped app', () => {
       await expect(page.locator(`[data-test="${hook}"]`)).toHaveCount(0)
     }
 
-    // 2. Scroll each lazy wrapper into view — the inner component mounts.
+    // 2. Force-scroll each lazy wrapper's center into view, then wait for the
+    //    IntersectionObserver callback to mount the inner component. We use
+    //    scrollIntoView (NOT scrollIntoViewIfNeeded, which is a no-op if the
+    //    1px sentinel is technically on-screen) and Playwright's auto-retrying
+    //    expect() (NOT a fixed waitForTimeout) so the test tolerates dev-server
+    //    cold-start / IO-callback latency without flaking.
     for (const w of lazyWrappers) {
       const locator = page.locator(`[data-test="${w}"]`)
-      const count = await locator.count()
-      if (count > 0) {
-        await locator.first().scrollIntoViewIfNeeded()
-        await page.waitForTimeout(200)
+      if ((await locator.count()) > 0) {
+        await locator.first().evaluate((el) => el.scrollIntoView({ block: 'center' }))
       }
     }
 
-    // 3. After scroll, the inner hooks should now be present.
-    for (const hook of innerHooks) {
-      // Use expect with a soft count > 0 check (modules that don't emit their
-      // own data-test hook are still proven lazy via the wrapper presence).
-      const cnt = await page.locator(`[data-test="${hook}"]`).count()
-      expect(cnt).toBeGreaterThanOrEqual(0)
-    }
-    // CyberOpsHud + NeonPulse both emit data-test hooks; after scroll at least
-    // these two must be present.
-    const hudCount = await page.locator('[data-test="cyber-ops-hud"]').count()
-    const pulseCount = await page.locator('[data-test="neon-pulse"]').count()
-    expect(hudCount + pulseCount).toBeGreaterThanOrEqual(2)
+    // 3. After scroll, CyberOpsHud + NeonPulse (which both emit data-test
+    //    hooks) must be present. Auto-retry up to the default expect timeout.
+    await expect(page.locator('[data-test="cyber-ops-hud"]')).toHaveCount(1)
+    await expect(page.locator('[data-test="neon-pulse"]')).toHaveCount(1)
   })
 
   test('prefers-reduced-motion: reduce — page is calm, modules still lazy', async ({ browser }) => {
@@ -163,9 +158,14 @@ test.describe('#224 Home overhaul — live shipped app', () => {
 
     // 2. Lazy-mount is motion-agnostic: known inner hooks absent before scroll.
     await expect(page.locator('[data-test="cyber-ops-hud"]')).toHaveCount(0)
-    await page.locator('[data-test="lazy-cyber-ops-hud"]').scrollIntoViewIfNeeded()
-    await page.waitForTimeout(200)
-    expect(await page.locator('[data-test="cyber-ops-hud"]').count()).toBeGreaterThanOrEqual(1)
+    // Force-scroll the wrapper center into view (NOT scrollIntoViewIfNeeded,
+    // which no-ops on the 1px sentinel) and auto-retry for the inner component
+    // (NOT a fixed waitForTimeout), matching the "below-the-fold modules" test.
+    await page
+      .locator('[data-test="lazy-cyber-ops-hud"]')
+      .first()
+      .evaluate((el) => el.scrollIntoView({ block: 'center' }))
+    await expect(page.locator('[data-test="cyber-ops-hud"]')).toHaveCount(1)
 
     await page.screenshot({
       path: 'tickets/224/evidence/reduced-motion-home.png',

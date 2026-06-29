@@ -19,10 +19,15 @@
  */
 
 import { test, expect } from '@playwright/test'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
 test.describe('#182 Cyber Ops HUD', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
+    // #224: CyberOpsHud is lazy-mounted inside <LazySection>; scroll it into
+    // view so the inner component mounts before any query. Behavior under test
+    // is unchanged.
+    await mountLazySection(page, 'lazy-cyber-ops-hud', 'cyber-ops-hud')
   })
 
   test('the HUD renders on the shipped homepage with >=3 widgets + 4 filter tabs', async ({ page }) => {
@@ -99,6 +104,8 @@ test.describe('#182 Cyber Ops HUD', () => {
   test('reduced-motion mode is safe (request-flow hidden, root has the class, no strobe)', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('/')
+    // #224: re-navigation after beforeEach resets the page; re-trigger mount.
+    await mountLazySection(page, 'lazy-cyber-ops-hud', 'cyber-ops-hud')
     const hud = page.locator('[data-test="cyber-ops-hud"]')
     await expect(hud).toBeVisible()
     await expect(hud).toHaveClass(/reduced-motion/)
@@ -114,6 +121,8 @@ test.describe('#182 Cyber Ops HUD', () => {
     test.skip(browserName === 'firefox', 'mobile viewport tested on chromium/webkit')
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
+    // #224: re-navigation after beforeEach resets the page; re-trigger mount.
+    await mountLazySection(page, 'lazy-cyber-ops-hud', 'cyber-ops-hud')
     const hud = page.locator('[data-test="cyber-ops-hud"]')
     await expect(hud).toBeVisible()
     // Pulse works on mobile.
