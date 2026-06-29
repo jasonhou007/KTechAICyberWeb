@@ -3,7 +3,7 @@
  * @description Reactive brain for the Neon Pulse audio-reactive visualizer (#186).
  * @ticket #186 - [CYBER] Add opt-in 'Neon Pulse' audio-reactive visualizer.
  *
- * TWO export layers (mirrors useOpsFeed.js / usePacketRoute.js): NeonPulse.vue is
+ * TWO export layers (mirrors useOpsFeed.js): NeonPulse.vue is
  * a thin presentation layer over this composable and owns no business logic.
  *
  *  1. PURE functions + constants (no window/AudioContext — fully unit-testable):

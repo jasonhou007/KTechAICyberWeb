@@ -13,7 +13,7 @@
  * commented-out rule cannot masquerade as an active one (iter-15 lesson), and
  * asserts the declared `.nav-toggle` height is >= 24px.
  *
- * Pattern mirrors PacketRoute.visual-ac.test.ts (#184): read the .vue source,
+ * Pattern mirrors CyberOpsHud.visual-ac.test.ts (#182): read the .vue source,
  * strip comments, assert the active CSS rule.
  *
  * RED-TEST PROOF: setting `.nav-toggle { height: 22px }` (the original failing

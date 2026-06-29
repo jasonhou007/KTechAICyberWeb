@@ -12,7 +12,7 @@
  * DOM tests cannot SEE CSS (jsdom does not resolve computed stylesheets
  * reliably), so this gate reads the App.vue SOURCE, strips comments, and
  * asserts each a11y fix is DECLARED as active CSS. Pattern mirrors
- * PacketRoute.visual-ac.test.ts (#184).
+ * CyberOpsHud.visual-ac.test.ts (#182).
  *
  * RED-TEST PROOF: reverting text-decoration:none on .footer-link fails the
  * underline assertion; removing the explicit color on .footer-status fails the

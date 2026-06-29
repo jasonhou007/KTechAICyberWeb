@@ -326,51 +326,39 @@ describe('Home.vue', () => {
   })
 
   // ============================================
-  // Packet Route (#184) — shipped-app gate.
-  // Mounts the REAL Home view with the REAL useLanguage and asserts the Packet
-  // Route mini-game renders inside it. This FAILS if PacketRoute is unwired
-  // from Home (the shipped-app gate: a component that exists in src/ but isn't
-  // mounted into the live app is dead code). Mirrors the CyberOpsHud gate.
+  // Packet Route is fully removed from Home (#223).
+  // The puzzle mini-game was deleted as off-direction (#223). This gate asserts
+  // Home.vue no longer imports, mounts, references, or renders any PacketRoute
+  // artifact — proving the deletion is honest (no dangling imports / wrappers /
+  // data-test hooks left behind). Mirrors the CyberOpsHud gate style (inverted).
+  // RED-TEST PROOF: against the pre-#223 source every assertion below FAILS
+  // (import present, section present, [data-test="packet-route"] present).
   // ============================================
-  describe('Packet Route shipped-app gate (#184)', () => {
+  describe('Packet Route is fully removed from Home (#223)', () => {
     const homeSource = fs.readFileSync(
       path.resolve(process.cwd(), 'src', 'views', 'Home.vue'),
       'utf-8',
     )
 
-    it('Home imports PacketRoute', () => {
-      expect(homeSource).toMatch(/from\s+['"]\.\.\/components\/PacketRoute\.vue['"]/)
+    it('Home no longer imports PacketRoute', () => {
+      expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/PacketRoute\.vue['"]/)
     })
 
-    it('Home wires PacketRoute inside a .packet-route-section', () => {
-      expect(homeSource).toMatch(/packet-route-section/)
-      expect(homeSource).toMatch(/<PacketRoute\b/)
+    it('Home no longer mounts PacketRoute or wraps it in .packet-route-section', () => {
+      expect(homeSource).not.toMatch(/<PacketRoute\b/)
+      expect(homeSource).not.toMatch(/packet-route-section/)
     })
 
-    it('renders [data-test="packet-route"] inside the mounted Home view', () => {
+    it('does not render [data-test="packet-route"] or [data-test="packet-grid"]', () => {
       wrapper = mountHome()
-      const pr = wrapper.find('[data-test="packet-route"]')
-      expect(pr.exists()).toBe(true)
+      expect(wrapper.find('[data-test="packet-route"]').exists()).toBe(false)
+      expect(wrapper.find('[data-test="packet-grid"]').exists()).toBe(false)
     })
 
-    it('renders real localized title copy (not a raw key)', () => {
+    it('renders no raw packetRoute.* key and no "Packet Route" title copy', () => {
       wrapper = mountHome()
-      // The component renders the packetRoute.title heading inside Home.
-      expect(wrapper.text()).toContain('Packet Route')
-      // No raw key leakage.
       expect(wrapper.text()).not.toMatch(/packetRoute\.[a-zA-Z]/)
-    })
-
-    it('renders the PacketRoute grid inside the mounted Home view', () => {
-      wrapper = mountHome()
-      // The puzzle grid is the playable surface — must be present in the live app.
-      expect(wrapper.find('[data-test="packet-grid"]').exists()).toBe(true)
-    })
-
-    it('renders the zh localized title when language toggled', () => {
-      useLanguage().setLanguage('zh')
-      wrapper = mountHome()
-      expect(wrapper.text()).toContain('数据包路由')
+      expect(wrapper.text()).not.toContain('Packet Route')
     })
   })
 })

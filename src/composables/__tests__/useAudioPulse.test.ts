@@ -4,8 +4,8 @@
  * @ticket #186 - [CYBER] Add opt-in 'Neon Pulse' audio-reactive visualizer.
  *
  * TDD: written BEFORE the implementation. Drives a real host component that
- * mounts the composable, mirroring useOpsFeed.test.ts / usePacketRoute.test.ts
- * conventions. matchMedia + rAF + timers are mocked so timing is deterministic.
+ * mounts the composable, mirroring useOpsFeed.test.ts conventions. matchMedia
+ * + rAF + timers are mocked so timing is deterministic.
  *
  * Coverage areas (the planner's contract):
  *  PURE layer (no window/AudioContext — fully unit-testable):

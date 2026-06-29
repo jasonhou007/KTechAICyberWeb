@@ -6,7 +6,7 @@
  * Drives the REAL component (mounted via @vue/test-utils) using the REAL
  * useLanguage composable so i18n keys resolve against the real catalogs.
  * Asserts user-visible DOM effects (no internal-state mutation). Mirrors
- * PacketRoute.test.ts conventions.
+ * CyberOpsHud.test.ts conventions.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'

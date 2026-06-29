@@ -307,8 +307,8 @@ describe('useLanguage composable', () => {
     // with no params argument, so callers like t('theme.toggleWithState', {state})
     // passed {state} into a parameter the function never read. The literal
     // "{state}" placeholder survived into the rendered aria-label (Lighthouse
-    // evidence). Six source callers depend on this contract today
-    // (ThemeToggle, LanguageSwitcher, NeuralCore, NeonPulse, PacketRoute x3),
+    // evidence). Five source callers depend on this contract today
+    // (ThemeToggle, LanguageSwitcher, NeuralCore, NeonPulse),
     // so the fix is a general optional-params argument that replaces {name}
     // placeholders. These tests pin the contract.
     // RED-TEST PROOF: against the original `t(key)` signature, every assertion
@@ -333,11 +333,11 @@ describe('useLanguage composable', () => {
       it('replaces MULTIPLE placeholders in one string', () => {
         // language.switchTo = "Switch to {lang}" — single placeholder; use a
         // synthetic multi-placeholder key by building the expectation against a
-        // known multi-param key. packetRoute.aria.hintAnnounce has {row}/{column}.
-        const out = api.t('packetRoute.aria.hintAnnounce', { row: 2, column: 3 })
+        // known multi-param key. neural.aria.nodeLabel has {layer}/{function}.
+        const out = api.t('neural.aria.nodeLabel', { layer: 2, function: 3 })
         expect(out).toContain('2')
         expect(out).toContain('3')
-        expect(out).not.toMatch(/\{row\}|\{column\}/)
+        expect(out).not.toMatch(/\{layer\}|\{function\}/)
       })
 
       it('returns the key fallback (with placeholders intact) for an unknown key', () => {

@@ -20,7 +20,7 @@
  *    `'Courier New'` terminal-monospace declarations (NeuralCore,
  *    NeuralTerminal, SolutionForge, cyber.css body) are preserved.
  *
- * Pattern mirrors PacketRoute.visual-ac.test.ts (#184): read the source,
+ * Pattern mirrors CyberOpsHud.visual-ac.test.ts (#182): read the source,
  * strip comments (so a commented-out hardcoded font cannot masquerade as
  * consolidated), assert against regexes.
  *
@@ -145,18 +145,21 @@ describe('scoped styles consolidated onto font variables (#188)', () => {
     expect(count).toBeGreaterThanOrEqual(4)
   })
 
-  it('consolidation REPLACED (not deleted): var(--font-display) usages grew (>= 139)', () => {
+  it('consolidation REPLACED (not deleted): var(--font-display) usages grew (>= 133)', () => {
     // If someone deletes the Orbitron lines instead of replacing them with
     // var(--font-display), this count collapses. Baseline bare-form usages =
     // 22 (2 more exist in var-fallback form, simplified to bare in #188);
     // +116 consolidated Orbitron hardcodes + 1 fallback-converted = 139.
+    // #223 (Packet Route full-delete): PacketRoute.vue's 6 consolidated
+    // var(--font-display) usages left the repo with the file (honest source
+    // removal, NOT a consolidation regression), so the floor drops 139 -> 133.
     let count = 0
     for (const f of vueFiles) {
       const src = stripComments(readFileSync(f, 'utf-8'))
       count += (src.match(/var\(--font-display\)/g) || []).length
     }
     console.log('\n[font-consolidation] var(--font-display) usages:', count)
-    expect(count).toBeGreaterThanOrEqual(139)
+    expect(count).toBeGreaterThanOrEqual(133)
   })
 
   it('consolidation REPLACED (not deleted): var(--font-body) usages grew (>= 140)', () => {
