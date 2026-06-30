@@ -172,8 +172,8 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-  color: #00ffcc;
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
+  color: var(--cyan);
   font-family: var(--font-body);
   position: relative;
   overflow: hidden;
@@ -266,10 +266,10 @@ h1 {
   margin: 0;
   color: #ffffff;
   text-shadow:
-    0 0 10px #00ffcc,
-    0 0 20px #00ffcc,
-    0 0 30px #00ffcc,
-    0 0 40px #00ffcc;
+    0 0 10px var(--cyan),
+    0 0 20px var(--cyan),
+    0 0 30px var(--cyan),
+    0 0 40px var(--cyan);
   animation: neonPulse 2s ease-in-out infinite alternate;
 }
 
@@ -278,7 +278,7 @@ h1 {
   z-index: 1;
   font-family: var(--font-body);
   font-size: 1.5rem;
-  color: #00ffcc;
+  color: var(--cyan);
   margin-top: 1rem;
   text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
 }
@@ -291,17 +291,17 @@ h1 {
 @keyframes neonPulse {
   from {
     text-shadow:
-      0 0 10px #00ffcc,
-      0 0 20px #00ffcc,
-      0 0 30px #00ffcc;
+      0 0 10px var(--cyan),
+      0 0 20px var(--cyan),
+      0 0 30px var(--cyan);
   }
   to {
     text-shadow:
-      0 0 20px #00ffcc,
-      0 0 30px #00ffcc,
-      0 0 40px #00ffcc,
-      0 0 50px #00ffcc,
-      0 0 60px #00ffcc;
+      0 0 20px var(--cyan),
+      0 0 30px var(--cyan),
+      0 0 40px var(--cyan),
+      0 0 50px var(--cyan),
+      0 0 60px var(--cyan);
   }
 }
 
@@ -316,7 +316,7 @@ h1 {
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 700;
-  color: #00ffcc;
+  color: var(--cyan);
   letter-spacing: 0.15em;
   text-align: center;
   margin-bottom: 3rem;
@@ -332,9 +332,9 @@ h1 {
 
 /* Cyber Card (About's design language) */
 .cyber-card {
-  background: rgba(10, 15, 28, 0.8);
+  background: var(--surface-card);
   border: 1px solid rgba(0, 255, 204, 0.2);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
@@ -358,7 +358,7 @@ h1 {
 .hero .cyber-card p {
   font-family: var(--font-body);
   font-size: 1.2rem;
-  color: #b8b8b8;
+  color: var(--text-secondary);
   line-height: 1.8;
   margin: 0 0 1rem 0;
 }
@@ -378,7 +378,7 @@ h1 {
 
 .group-label {
   font-family: var(--font-display);
-  color: #00ffcc;
+  color: var(--cyan);
   text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
   margin-bottom: 1rem;
   font-size: 1.5rem;
@@ -409,14 +409,14 @@ h1 {
 
 .solution-card h4 {
   font-family: var(--font-display);
-  color: #00ffcc;
+  color: var(--cyan);
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
 }
 
 .solution-card p {
   font-family: var(--font-body);
-  color: #b8b8b8;
+  color: var(--text-secondary);
   font-size: 0.95rem;
   margin: 0;
   line-height: 1.6;
@@ -431,7 +431,7 @@ h1 {
   width: 100%;
   margin: 2rem 0;
   border: 1px solid rgba(0, 255, 204, 0.15);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   /* scroll-margin-top: when an E2E/user scrollIntoView()'s the demo, leave
      head-room for the fixed Header so the StatusReadout at the top of the
@@ -450,8 +450,8 @@ h1 {
 .cyber-button {
   display: inline-block;
   background: rgba(0, 255, 204, 0.1);
-  color: #00ffcc;
-  border: 2px solid #00ffcc;
+  color: var(--cyan);
+  border: 2px solid var(--cyan);
   padding: 1rem 3rem;
   font-family: var(--font-display);
   font-size: 1.2rem;
@@ -471,8 +471,8 @@ h1 {
 /* Neon border effect */
 .neon-border {
   box-shadow:
-    0 0 5px #00ffcc,
-    0 0 10px #00ffcc,
+    0 0 5px var(--cyan),
+    0 0 10px var(--cyan),
     inset 0 0 5px rgba(0, 255, 204, 0.2);
 }
 
