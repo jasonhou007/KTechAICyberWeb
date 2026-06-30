@@ -64,29 +64,49 @@
         </router-link>
       </div>
 
-      <!-- AI Neural Terminal command console (#161) — lazy-mounted (#224) -->
+      <!-- AI Neural Terminal command console (#161) — lazy-mounted (#224).
+           #232: :key + @retry back the user-facing Reload path — a click on the
+           AsyncLoadError affordance bumps retryKeys.neuralTerminal, remounting
+           the async boundary so the chunk loader re-runs (attempts reset). -->
       <LazySection class="neural-terminal-section" data-test="lazy-neural-terminal">
-        <NeuralTerminal />
+        <NeuralTerminal
+          :key="`neural-terminal-${retryKeys.neuralTerminal}`"
+          @retry="bumpRetry('neuralTerminal')"
+        />
       </LazySection>
 
-      <!-- AI Core neural-network visualizer (#179) — lazy-mounted (#224) -->
+      <!-- AI Core neural-network visualizer (#179) — lazy-mounted (#224, #232) -->
       <LazySection class="neural-core-section" data-test="lazy-neural-core">
-        <NeuralCore />
+        <NeuralCore
+          :key="`neural-core-${retryKeys.neuralCore}`"
+          @retry="bumpRetry('neuralCore')"
+        />
       </LazySection>
 
-      <!-- AI Solution Forge configurator (#180) — lazy-mounted (#224) -->
+      <!-- AI Solution Forge configurator (#180) — lazy-mounted (#224, #232) -->
       <LazySection class="solution-forge-section" data-test="lazy-solution-forge">
-        <SolutionForge />
+        <SolutionForge
+          :key="`solution-forge-${retryKeys.solutionForge}`"
+          @retry="bumpRetry('solutionForge')"
+        />
       </LazySection>
 
-      <!-- Cyber Ops HUD interactive mission-control dashboard (#182) — lazy (#224) -->
+      <!-- Cyber Ops HUD interactive mission-control dashboard (#182) — lazy (#224, #232) -->
       <LazySection class="cyber-ops-hud-section" data-test="lazy-cyber-ops-hud">
-        <CyberOpsHud data-test="cyber-ops-hud" />
+        <CyberOpsHud
+          :key="`cyber-ops-hud-${retryKeys.cyberOpsHud}`"
+          data-test="cyber-ops-hud"
+          @retry="bumpRetry('cyberOpsHud')"
+        />
       </LazySection>
 
-      <!-- Neon Pulse audio-reactive visualizer (#186) — lazy-mounted (#224) -->
+      <!-- Neon Pulse audio-reactive visualizer (#186) — lazy-mounted (#224, #232) -->
       <LazySection class="neon-pulse-section" data-test="lazy-neon-pulse">
-        <NeonPulse data-test="neon-pulse" />
+        <NeonPulse
+          :key="`neon-pulse-${retryKeys.neonPulse}`"
+          data-test="neon-pulse"
+          @retry="bumpRetry('neonPulse')"
+        />
       </LazySection>
 
       <!-- Ambient "Settlement Stream" — always-on cross-border payment &
@@ -108,6 +128,17 @@ import { onMounted, ref, defineAsyncComponent } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
 import LazySection from '../components/LazySection.vue'
+// #232: shared chunk-load error affordance (localized, a11y role=alert, Retry
+// button). Statically imported — it must be tiny so it stays in the entry chunk
+// and is available the moment a lazy section fails to load.
+import AsyncLoadError from '../components/AsyncLoadError.vue'
+
+// #232: retry a failed chunk fetch up to 2 times (deploy skew / CDN drop /
+// ad-blocker on a hashed asset). After 2 failures, give up -> errorComponent.
+const retryChunkLoad = (err, retry, fail, attempts) => {
+  if (attempts <= 2) retry()
+  else fail()
+}
 
 // #224 perf: lazy-mount the 5 heavy below-the-fold modules. Previously these
 // were statically imported and mounted eagerly on initial paint, spinning up
@@ -116,12 +147,41 @@ import LazySection from '../components/LazySection.vue'
 // yields a code-split chunk AND defers module evaluation until first render;
 // wrapping each in <LazySection> further defers the mount until the section
 // scrolls into view (IntersectionObserver, rootMargin 200px for early mount).
-const NeuralTerminal = defineAsyncComponent(() => import('../components/NeuralTerminal.vue'))
-const NeuralCore = defineAsyncComponent(() => import('../components/NeuralCore.vue'))
-const SolutionForge = defineAsyncComponent(() => import('../components/SolutionForge.vue'))
-const CyberOpsHud = defineAsyncComponent(() => import('../components/CyberOpsHud.vue'))
-const NeonPulse = defineAsyncComponent(() => import('../components/NeonPulse.vue'))
+// #232: each loader now carries an errorComponent + onError retry (<=2) +
+// timeout: 8000 so a chunk-fetch failure surfaces a localized, a11y-announced
+// Reload affordance instead of a silent blank section.
+const NeuralTerminal = defineAsyncComponent({
+  loader: () => import('../components/NeuralTerminal.vue'),
+  errorComponent: AsyncLoadError,
+  timeout: 8000,
+  onError: retryChunkLoad,
+})
+const NeuralCore = defineAsyncComponent({
+  loader: () => import('../components/NeuralCore.vue'),
+  errorComponent: AsyncLoadError,
+  timeout: 8000,
+  onError: retryChunkLoad,
+})
+const SolutionForge = defineAsyncComponent({
+  loader: () => import('../components/SolutionForge.vue'),
+  errorComponent: AsyncLoadError,
+  timeout: 8000,
+  onError: retryChunkLoad,
+})
+const CyberOpsHud = defineAsyncComponent({
+  loader: () => import('../components/CyberOpsHud.vue'),
+  errorComponent: AsyncLoadError,
+  timeout: 8000,
+  onError: retryChunkLoad,
+})
+const NeonPulse = defineAsyncComponent({
+  loader: () => import('../components/NeonPulse.vue'),
+  errorComponent: AsyncLoadError,
+  timeout: 8000,
+  onError: retryChunkLoad,
+})
 // #206: ambient Settlement Stream — lazy chunk, same pattern as the 5 modules.
+// #232: out of scope — left in simple form (no errorComponent hardening).
 const SettlementStream = defineAsyncComponent(() => import('../components/SettlementStream.vue'))
 // #203: Self-Driving dev pipeline flagship demo. Lazy-imported (code-split
 // into its own chunk, consistent with the #224 pattern) but NOT wrapped in
@@ -132,6 +192,22 @@ const SettlementStream = defineAsyncComponent(() => import('../components/Settle
 const SelfDrivingDemo = defineAsyncComponent(() => import('../components/SelfDrivingDemo.vue'))
 
 const { t } = useLanguage()
+
+// #232: per-section retry-key counters. Bumping one forces a remount of that
+// section's async boundary (the :key on the async component changes), which
+// re-runs the chunk loader with a fresh attempt counter. Invoked by the
+// AsyncLoadError affordance's Reload button via the @retry fallthrough
+// listener on each lazy component.
+const retryKeys = ref({
+  neuralTerminal: 0,
+  neuralCore: 0,
+  solutionForge: 0,
+  cyberOpsHud: 0,
+  neonPulse: 0,
+})
+const bumpRetry = (key) => {
+  retryKeys.value[key]++
+}
 
 // Root scope ref for the reduced-motion-safe mouse-move parallax (#177).
 const rootRef = ref(null)

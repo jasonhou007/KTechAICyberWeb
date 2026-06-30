@@ -431,4 +431,101 @@ describe('Home.vue', () => {
       expect(bk.length).toBe(2)
     })
   })
+
+  // ============================================
+  // #232 — chunk-load error hardening for the 5 lazy sections.
+  // When a lazy chunk fails to fetch (deploy skew / CDN drop / ad-blocker), the
+  // section used to go blank with no feedback or retry. #232 wires an
+  // errorComponent (AsyncLoadError) + onError retry (<=2 attempts) + timeout:
+  // 8000 to each of the 5 hardened sections, plus a user-facing Reload path
+  // backed by a :key-bump remount. These source-level gates make the test RED
+  // if the hardening is reverted to the simple defineAsyncComponent(() => ...)
+  // form, OR if it is (incorrectly) widened to the out-of-scope modules.
+  // ============================================
+  describe('#232 chunk-load error hardening', () => {
+    const homeSource = fs.readFileSync(
+      path.resolve(process.cwd(), 'src', 'views', 'Home.vue'),
+      'utf-8',
+    )
+
+    it('imports AsyncLoadError', () => {
+      // The shared error affordance must be statically imported (entry chunk)
+      // so it is available the instant a lazy section fails.
+      expect(homeSource).toMatch(
+        /from\s+['"]\.\.\/components\/AsyncLoadError\.vue['"]/,
+      )
+    })
+
+    it('converts the 5 lazy loaders to options form with errorComponent + onError + timeout: 8000', () => {
+      // Generic options-form gate: 5 occurrences of defineAsyncComponent({ ...
+      const optionsForm = homeSource.match(/defineAsyncComponent\(\s*\{/g) || []
+      expect(optionsForm.length).toBe(5)
+      // Each carries the shared error affordance, the retry policy, and the
+      // 8s timeout.
+      expect(homeSource).toMatch(/errorComponent:\s*AsyncLoadError/)
+      expect(homeSource).toMatch(/timeout:\s*8000/)
+      expect(homeSource).toMatch(/onError:\s*retryChunkLoad/)
+      // The shared retry handler is defined module-scope.
+      expect(homeSource).toMatch(
+        /const\s+retryChunkLoad\s*=\s*\([^)]*\)\s*=>\s*\{[^}]*attempts\s*<=\s*2[^}]*\}/,
+      )
+    })
+
+    it('all 5 named sections use the hardened form', () => {
+      // One regex per section: the options form must wrap each named loader.
+      const re = (name: string) =>
+        new RegExp(
+          `const\\s+${name}\\s*=\\s*defineAsyncComponent\\(\\s*\\{[\\s\\S]*?errorComponent:\\s*AsyncLoadError[\\s\\S]*?\\}`,
+        )
+      expect(homeSource).toMatch(re('NeuralTerminal'))
+      expect(homeSource).toMatch(re('NeuralCore'))
+      expect(homeSource).toMatch(re('SolutionForge'))
+      expect(homeSource).toMatch(re('CyberOpsHud'))
+      expect(homeSource).toMatch(re('NeonPulse'))
+    })
+
+    it('does NOT widen hardening to SettlementStream or SelfDrivingDemo', () => {
+      // Scope fence (iter-22): these two stay in simple form — out of scope.
+      // They must NOT be options-form, and must NOT reference AsyncLoadError.
+      expect(homeSource).toMatch(
+        /const\s+SettlementStream\s*=\s*defineAsyncComponent\(\s*\(\)\s*=>\s*import\(['"][^'"]*SettlementStream\.vue['"]\)\s*\)/,
+      )
+      expect(homeSource).toMatch(
+        /const\s+SelfDrivingDemo\s*=\s*defineAsyncComponent\(\s*\(\)\s*=>\s*import\(['"][^'"]*SelfDrivingDemo\.vue['"]\)\s*\)/,
+      )
+      // Neither name appears in an options-form declaration.
+      const settlementOpts = homeSource.match(
+        /SettlementStream[\s\S]{0,80}defineAsyncComponent\(\s*\{|defineAsyncComponent\(\s*\{[\s\S]{0,40}SettlementStream[\s\S]{0,120}errorComponent/,
+      )
+      expect(settlementOpts, 'SettlementStream must stay simple-form').toBeNull()
+      const selfDrivingOpts = homeSource.match(
+        /SelfDrivingDemo[\s\S]{0,80}defineAsyncComponent\(\s*\{|defineAsyncComponent\(\s*\{[\s\S]{0,40}SelfDrivingDemo[\s\S]{0,120}errorComponent/,
+      )
+      expect(selfDrivingOpts, 'SelfDrivingDemo must stay simple-form').toBeNull()
+    })
+
+    it('wires the user-facing Reload path: :key + @retry on each hardened section', () => {
+      // The AsyncLoadError Retry button reaches back up via @retry -> bumpRetry
+      // -> retryKeys bump -> :key change -> async boundary remount -> loader
+      // re-runs. Each of the 5 sections must bind BOTH :key (from retryKeys)
+      // and @retry (to bumpRetry).
+      const reKey = (k: string) =>
+        new RegExp(`:key="[^"]*\\$\\{retryKeys\\.${k}\\}[^"]*"`)
+      const reRetry = (k: string) => new RegExp(`@retry="bumpRetry\\('${k}'\\)"`)
+      const sections: Array<[string, string]> = [
+        ['neuralTerminal', 'NeuralTerminal'],
+        ['neuralCore', 'NeuralCore'],
+        ['solutionForge', 'SolutionForge'],
+        ['cyberOpsHud', 'CyberOpsHud'],
+        ['neonPulse', 'NeonPulse'],
+      ]
+      for (const [key, _name] of sections) {
+        expect(homeSource, `:key for ${key}`).toMatch(reKey(key))
+        expect(homeSource, `@retry for ${key}`).toMatch(reRetry(key))
+      }
+      // retryKeys covers exactly the 5 sections + bumpRetry increments.
+      expect(homeSource).toMatch(/const\s+retryKeys\s*=\s*ref\(\{/)
+      expect(homeSource).toMatch(/const\s+bumpRetry\s*=/)
+    })
+  })
 })
