@@ -20,7 +20,7 @@
  */
 
 import { test, expect } from '@playwright/test'
-import { mountLazySection } from './fixtures/lazy-mount-helper'
+import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
 
 test.describe('#180 AI Solution Forge configurator', () => {
   test.beforeEach(async ({ page }) => {
@@ -43,10 +43,35 @@ test.describe('#180 AI Solution Forge configurator', () => {
   })
 
   test('configure + Forge yields a blueprint card with a CTA router-link', async ({ page }) => {
+    // #244 webkit/Mobile Safari: the forge buttons/chips are static, but webkit's
+    // actionability stability check times out racing the sibling infinite forge
+    // arc spin animation. forceClick force-clicks (skipping the impossible
+    // stability gate) AND retries until each effect lands — Mobile Safari under
+    // combined-suite load occasionally drops the synthetic force-click dispatch,
+    // so a single click flakes. The chips are cheap toggles (default settleMs).
+    // The forge BUTTON triggers an expensive async re-forge (~1-2s), so it uses
+    // settleMs=2500 (> convergence) so a successful first click's effect completes
+    // before any retry is considered (a shorter gap would re-trigger the re-forge
+    // each attempt). Click semantics unchanged.
+    const industry = page.locator('[data-test="forge-industry"][data-key="finance"]')
+    const priority = page.locator('[data-test="forge-priority"][data-key="security"]')
+    const forgeBtn = page.locator('[data-test="forge-button"]')
     // Pick an industry + a priority, then forge.
-    await page.locator('[data-test="forge-industry"][data-key="finance"]').click()
-    await page.locator('[data-test="forge-priority"][data-key="security"]').click()
-    await page.locator('[data-test="forge-button"]').click()
+    await expect(industry).toBeVisible()
+    await forceClick(industry, async () =>
+      (await industry.getAttribute('aria-checked')) === 'true',
+    )
+    await expect(priority).toBeVisible()
+    await forceClick(priority, async () =>
+      (await priority.getAttribute('aria-checked')) === 'true',
+    )
+    await expect(forgeBtn).toBeVisible()
+    await forceClick(
+      forgeBtn,
+      async () => (await page.locator('[data-test="forge-result"]').count()) === 1,
+      3,
+      2500,
+    )
 
     // The result blueprint card renders after the forge completes.
     const result = page.locator('[data-test="forge-result"]')
@@ -77,12 +102,27 @@ test.describe('#180 AI Solution Forge configurator', () => {
   })
 
   test('changing an input after a result re-forges automatically (AC4)', async ({ page }) => {
-    await page.locator('[data-test="forge-button"]').click()
+    // #244: forceClick the forge button (sibling arc spin races webkit's
+    // stability gate; settleMs=2500 > the re-forge convergence so a successful
+    // first click completes before any retry).
+    const forgeBtn = page.locator('[data-test="forge-button"]')
+    await expect(forgeBtn).toBeVisible()
+    await forceClick(
+      forgeBtn,
+      async () => (await page.locator('[data-test="forge-result"]').count()) === 1,
+      3,
+      2500,
+    )
     const result = page.locator('[data-test="forge-result"]')
     await expect(result).toBeVisible({ timeout: 5000 })
 
     // Change the industry; the AC4 watcher re-forges without a manual click.
-    await page.locator('[data-test="forge-industry"][data-key="health"]').click()
+    // #244: forceClick the health chip — cheap idempotent toggle (default settle).
+    const health = page.locator('[data-test="forge-industry"][data-key="health"]')
+    await expect(health).toBeVisible()
+    await forceClick(health, async () =>
+      (await health.getAttribute('aria-checked')) === 'true',
+    )
     // A fresh blueprint lands (the result stays visible through the re-forge).
     await expect(result).toBeVisible({ timeout: 5000 })
     const services = page.locator('[data-test="forge-services"] li')
@@ -90,22 +130,46 @@ test.describe('#180 AI Solution Forge configurator', () => {
   })
 
   test('reroll + reset behave', async ({ page }) => {
-    await page.locator('[data-test="forge-button"]').click()
+    // #244: forge-button + reroll trigger expensive async re-forges (~2s), so
+    // they use settleMs=2500 (> convergence) — a successful first click completes
+    // before any retry is considered; a shorter gap would re-trigger the re-forge
+    // each attempt and never converge. reset is cheap (clears synchronously) so
+    // it uses the default settle with a count===0 effect.
+    const forgeBtn = page.locator('[data-test="forge-button"]')
+    await expect(forgeBtn).toBeVisible()
+    await forceClick(
+      forgeBtn,
+      async () => (await page.locator('[data-test="forge-result"]').count()) === 1,
+      3,
+      2500,
+    )
     const result = page.locator('[data-test="forge-result"]')
     await expect(result).toBeVisible({ timeout: 5000 })
 
     // Reroll re-forges (result stays visible).
-    await page.locator('[data-test="forge-reroll"]').click()
+    const reroll = page.locator('[data-test="forge-reroll"]')
+    await expect(reroll).toBeVisible()
+    await forceClick(
+      reroll,
+      async () => (await page.locator('[data-test="forge-result"]').count()) === 1,
+      3,
+      2500,
+    )
     await expect(result).toBeVisible({ timeout: 5000 })
 
     // Reset clears the result + stage.
-    await page.locator('[data-test="forge-reset"]').click()
+    const reset = page.locator('[data-test="forge-reset"]')
+    await expect(reset).toBeVisible()
+    await forceClick(reset, async () =>
+      (await page.locator('[data-test="forge-result"]').count()) === 0,
+    )
     await expect(result).toHaveCount(0)
     await expect(page.locator('[data-test="forge-stage"]')).toHaveCount(0)
   })
 
   test('keyboard-operable: focus the Forge button + Enter triggers a blueprint', async ({ page }) => {
     const forgeButton = page.locator('[data-test="forge-button"]')
+    // #244: focus+Enter path bypasses webkit actionability stability check (no click).
     await forgeButton.focus()
     await expect(forgeButton).toBeFocused()
     await page.keyboard.press('Enter')
@@ -154,7 +218,17 @@ test.describe('#180 AI Solution Forge configurator', () => {
     // Config UI still renders on mobile.
     expect(await page.locator('[data-test="forge-industry"]').count()).toBeGreaterThanOrEqual(5)
     // Forge works on mobile.
-    await page.locator('[data-test="forge-button"]').click()
+    // #244: forceClick (sibling arc spin races webkit/Mobile Safari stability;
+    // settleMs=2500 > re-forge convergence). Mobile Safari drops synthetic
+    // force-clicks under load, so the retry is required.
+    const forgeBtn = page.locator('[data-test="forge-button"]')
+    await expect(forgeBtn).toBeVisible()
+    await forceClick(
+      forgeBtn,
+      async () => (await page.locator('[data-test="forge-result"]').count()) === 1,
+      3,
+      2500,
+    )
     await expect(page.locator('[data-test="forge-result"]')).toBeVisible({ timeout: 5000 })
   })
 })

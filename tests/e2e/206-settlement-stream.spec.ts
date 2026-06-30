@@ -40,26 +40,29 @@ test.describe('#206 Settlement Stream — live shipped app', () => {
 
   test('AC1.1 auto-start: a packet advances along its rail with ZERO interaction', async ({ page }) => {
     await mountLazySection(page, 'lazy-settlement-stream', 'settlement-stream')
-    // Wait for at least one packet to be present on a rail.
-    await expect(page.locator('.ss-packet').first()).toBeVisible()
-    // Sample the packet's translateX twice with a real wall-clock gap. Under
-    // motion, the composable's rAF loop drives progress forward, so the second
-    // sample must differ from the first (AC 1.1 "auto-plays on load, loops
-    // forever, zero interaction").
-    const sampleTx = async () => {
-      return page.locator('.ss-packet').first().evaluate((el) => {
+    // Capture a single packet element once and track its translateX. The packet
+    // list mutates continuously (spawn/settle/wrap), so resolving `.first()`
+    // twice can land on DIFFERENT elements across samples; pinning the element
+    // removes that identity race.
+    const packet = page.locator('.ss-packet').first()
+    await expect(packet).toBeVisible()
+    const readTx = () =>
+      packet.evaluate((el) => {
         const m = /translateX\(([-0-9.]+)%\)/.exec(el.getAttribute('style') || '')
         return m ? parseFloat(m[1]) : null
       })
-    }
-    const t0 = await sampleTx()
-    expect(t0).not.toBeNull()
-    // Let the rAF loop run for ~600ms of real time (no interaction).
-    await page.waitForTimeout(600)
-    const t1 = await sampleTx()
-    expect(t1).not.toBeNull()
-    // The packet moved (auto-start contract). Use != so a wrap-to-0 also counts.
-    expect(t1).not.toBe(t0)
+    const firstTx = await readTx()
+    expect(firstTx).not.toBeNull()
+    // #244: poll-until-motion (not two fixed samples). The packet list mutates
+    // continuously (spawn/settle/wrap); polling the SAME element's translateX
+    // until it changes removes both the element-identity race (different packets
+    // across samples) and the fixed-gap coincidence (the second sample landing
+    // within the same animation step). No click here, so webkit's stability
+    // timeout cannot fire. AC 1.1 "auto-plays on load, loops forever, zero
+    // interaction".
+    await expect
+      .poll(async () => readTx(), { timeout: 3000, intervals: [100, 250] })
+      .not.toBe(firstTx)
   })
 
   test('readouts render localized copy (no raw settlementStream.* keys)', async ({ page }) => {

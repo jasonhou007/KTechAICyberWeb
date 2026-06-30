@@ -21,7 +21,7 @@
  */
 
 import { test, expect } from '@playwright/test'
-import { mountLazySection } from './fixtures/lazy-mount-helper'
+import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
 
 // Serial + single-worker: each test spins up a REAL AudioContext in chromium,
 // and under parallel browser contexts the main thread can briefly starve during
@@ -61,7 +61,40 @@ test.describe.serial('#186 Neon Pulse', () => {
   })
 
   test('Engage -> playing (status text flips, canvas still present)', async ({ page }) => {
-    await page.locator('[data-test="pulse-engage"]').click()
+    // #244 webkit/Mobile Safari/Mobile Chrome: the engage button is static, but
+    // on MOBILE viewports (≤768px) Playwright's synthetic force-click does NOT
+    // reliably reach the `@click="engage"` Vue handler for the EXPENSIVE async
+    // AudioContext build. Diagnosis (CI run 28460722546 + local repro,
+    // 2026-06-30 / 07-01): on Mobile Chrome (Pixel 5, chromium engine) forceClick
+    // fails "effect not observed after 3 attempts" — the synthetic force-click is
+    // intermittently dropped at the actionability stage before force applies, and
+    // even when it does start the async engage() the effect predicate re-checks
+    // inside the converge window. A STANDALONE native el.click() flips status
+    // synchronously (Idle→Playing) and is deterministic across repeated runs
+    // (verified 3/3 locally on Mobile Chrome; the same native path was already
+    // proven for Mobile Safari in the prior #244 commit). Desktop
+    // chromium/firefox/webkit keep forceClick (force + retry), which lands
+    // reliably there. The mixed force+native retry is NOT used for engage because
+    // a force-click that occasionally DOES start engage() then collides with a
+    // follow-up native click (two AudioContext builds). Click semantics
+    // unchanged — only HOW the click is dispatched varies by viewport.
+    const engage = page.locator('[data-test="pulse-engage"]')
+    await expect(engage).toBeVisible()
+    const stopBtn = page.locator('[data-test="pulse-stop"]')
+    const isMobileViewport = !!(page.viewportSize() && page.viewportSize().width <= 768)
+    if (isMobileViewport) {
+      // Single native click (proven reliable on Mobile Chrome + Mobile Safari);
+      // the status flip is synchronous so a short probe confirms it landed.
+      await engage.evaluate((el) => (el as HTMLElement).click())
+      await expect(stopBtn).toBeVisible({ timeout: 5000 })
+    } else {
+      await forceClick(
+        engage,
+        async () => (await stopBtn.count()) === 1,
+        3,
+        2500,
+      )
+    }
 
     // Status readout flips away from the idle copy. The localized "playing"
     // copy is present; assert it's NOT a raw key and NOT empty.
@@ -74,13 +107,18 @@ test.describe.serial('#186 Neon Pulse', () => {
     await expect(page.locator('[data-test="pulse-canvas"]')).toBeVisible()
 
     // Stop button is now offered (engage button hidden).
-    await expect(page.locator('[data-test="pulse-stop"]')).toBeVisible()
+    await expect(page.locator('[data-test="pulse-stop"]')).toBeVisible({ timeout: 5000 })
   })
 
   test('mode radio switch: each mode selects and reflects active state', async ({ page }) => {
+    // #244 webkit/Mobile Safari: mode radios are static, but webkit's stability
+    // check times out racing the sibling pulse canvas animation. forceCheck
+    // (forceClick on a radio) skips the stability gate and retries until the
+    // radio reports checked. Check semantics unchanged.
     for (const m of ['spectrum', 'radial', 'particles']) {
       const radio = page.locator(`[data-test="pulse-mode-${m}"]`)
-      await radio.check()
+      await expect(radio).toBeVisible()
+      await forceClick(radio, async () => await radio.isChecked())
       await expect(radio).toBeChecked()
     }
   })

@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test'
+import type { Page, Locator } from '@playwright/test'
 import { expect } from '@playwright/test'
 
 /**
@@ -185,4 +185,90 @@ export async function mountLazySection(
   //    be visible. This is the final convergence guarantee and tolerates any
   //    residual Vue render latency without a fixed waitForTimeout.
   await expect(inner).toBeVisible()
+}
+
+/**
+ * Force-click a static button/radio whose SIBLING infinite animation (canvas,
+ * CSS spin, metric ticker) keeps webkit/Mobile Safari's actionability stability
+ * check ("element is not stable") timing out, and do so deterministically.
+ *
+ * Background (#244): plain `click()` times out at the stability gate because the
+ * target's bounding box never stops moving (a sibling animates forever). Plain
+ * `click({ force: true })` skips that gate — but it also skips Playwright's
+ * retry-on-no-effect loop, so under combined-suite browser-engine load the
+ * synthetic dispatch is occasionally dropped or the async Vue handler resolves
+ * just past the assertion window, producing a flaky failure. This helper keeps
+ * `force: true` (so the impossible stability gate is never entered) AND wraps it
+ * in a small retry loop that re-clicks until the caller-supplied `effect`
+ * predicate holds — eliminating both failure modes.
+ *
+ * Contract: this ONLY changes HOW the click is dispatched (forced + retried), not
+ * WHAT the calling spec asserts. The `effect` predicate MUST be the exact
+ * user-visible consequence the click is supposed to produce (result card
+ * rendered, toast raised, radio checked, status flipped) — the same condition the
+ * spec would assert on the next line anyway. Behaviour under test is unchanged.
+ *
+ * @param locator  The static click target (button/radio) — must already be
+ *                 attached+visible (call `expect(locator).toBeVisible()` first).
+ * @param effect   Async predicate returning true once the click's user-visible
+ *                 effect has landed. Re-checked after every attempt.
+ * @param attempts   Max force-click attempts. Each attempt force-clicks then
+ *                   waits `settleMs` for the async handler + Vue render before
+ *                   re-checking `effect`. Default 4.
+ * @param settleMs   Per-attempt settle gap (ms) before re-checking `effect`.
+ *                   Default 700 (cheap idempotent toggles: chips, radios,
+ *                   pulse-button, dismiss, tabs). Use ~2500 for EXPENSIVE async
+ *                   actions whose effect takes that long to converge (forge
+ *                   re-forge, reroll, AudioContext engage) — a gap shorter than
+ *                   the action's convergence time makes each retry RE-TRIGGER the
+ *                   action (re-clicking reroll restarts its ~2s re-forge), so the
+ *                   effect never lands; a gap longer than convergence lets the
+ *                   first click's effect complete before any retry is considered.
+ * @param nativeFallback When true (default false), on every other attempt ALSO
+ *                       fire a native DOM `el.click()`. Required for Mobile Safari
+ *                       targets whose Vue `@click.stop` handler does not receive
+ *                       Playwright's synthetic force-click (verified: HUD tabs).
+ *                       Do NOT enable for expensive idempotent actions (forge
+ *                       reroll) — the native re-click re-triggers the async cycle
+ *                       each retry and prevents convergence; the HUD tabs (a
+ *                       cheap emit→prop update) tolerate it fine.
+ * @throws if `effect` never holds within `attempts` tries.
+ */
+export async function forceClick(
+  locator: Locator,
+  effect: () => Promise<boolean>,
+  attempts = 4,
+  settleMs = 700,
+  nativeFallback = false,
+): Promise<void> {
+  for (let i = 0; i < attempts; i++) {
+    // force: true = skip the actionability stability gate (the whole point — the
+    // sibling animation makes it impossible). Swallow per-attempt click errors so
+    // a transient dispatch miss does not abort; the retry + effect predicate is
+    // the source of truth.
+    await locator.click({ force: true }).catch(() => {})
+    // Settle gap: lets the async click handler resolve and Vue re-render before
+    // re-checking. MUST be ≥ the action's convergence time for expensive async
+    // actions (see settleMs doc above) or each retry re-triggers it.
+    await locator.page().waitForTimeout(settleMs)
+    if (await effect()) return
+    // Mobile Safari fallback (#244, opt-in): Playwright's force-click dispatches
+    // a synthetic pointer-event sequence that on Mobile Safari does NOT reliably
+    // produce the trusted `click` a Vue `@click.stop` handler listens for
+    // (verified: a native el.click() flips the HUD event-feed tab where
+    // force-click does not). When `nativeFallback` is set, on every other
+    // attempt also fire a native DOM click() so the Vue handler is reached
+    // regardless of the engine's synthetic-event quirks. OPT-IN because a native
+    // click() on an idempotent-but-expensive action (e.g. forge reroll) would
+    // re-trigger its full async cycle each retry and never converge; the HUD
+    // tabs (a cheap emit→prop update) tolerate it fine.
+    if (nativeFallback && i % 2 === 1) {
+      await locator.evaluate((el) => (el as HTMLElement).click()).catch(() => {})
+      await locator.page().waitForTimeout(settleMs)
+      if (await effect()) return
+    }
+  }
+  throw new Error(
+    `forceClick: effect not observed after ${attempts} attempts (target may be unresponsive)`,
+  )
 }

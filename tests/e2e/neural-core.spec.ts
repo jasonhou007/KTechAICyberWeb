@@ -15,7 +15,7 @@
  */
 
 import { test, expect } from '@playwright/test'
-import { mountLazySection } from './fixtures/lazy-mount-helper'
+import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
 
 test.describe('#179 AI Core neural-network visualizer', () => {
   test.beforeEach(async ({ page }) => {
@@ -66,7 +66,21 @@ test.describe('#179 AI Core neural-network visualizer', () => {
   test('Run Inference propagates a pulse and decodes a benign verdict readout', async ({ page }) => {
     const runButton = page.locator('[data-test="neural-run-inference"]')
     await expect(runButton).toBeVisible()
-    await runButton.click()
+    // #244 webkit/Mobile Safari: the run button is static, but webkit's
+    // actionability stability check times out racing the sibling infinite
+    // neural-graph synapse pulse animation. forceClick force-clicks (skipping the
+    // impossible stability gate) AND retries until the readout lands — Mobile
+    // Safari under combined-suite load occasionally drops the synthetic force-click
+    // dispatch, so a single click flakes. settleMs=2500 (> the async inference
+    // decode time) so a successful first click's effect completes before any retry
+    // is considered (a shorter gap would re-trigger the inference each attempt).
+    // Click semantics unchanged.
+    await forceClick(
+      runButton,
+      async () => (await page.locator('[data-test="neural-readout"]').count()) === 1,
+      3,
+      2500,
+    )
 
     // The readout renders after the inference run completes.
     const readout = page.locator('[data-test="neural-readout"]')
@@ -97,6 +111,7 @@ test.describe('#179 AI Core neural-network visualizer', () => {
     await expect(node).toBeFocused()
 
     // The Run Inference button is keyboard-operable: focus + Enter triggers it.
+    // #244: focus+Enter path bypasses webkit actionability stability check (no click).
     const runButton = page.locator('[data-test="neural-run-inference"]')
     await runButton.focus()
     await expect(runButton).toBeFocused()

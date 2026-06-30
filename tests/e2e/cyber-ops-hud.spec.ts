@@ -19,7 +19,7 @@
  */
 
 import { test, expect } from '@playwright/test'
-import { mountLazySection } from './fixtures/lazy-mount-helper'
+import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
 
 test.describe('#182 Cyber Ops HUD', () => {
   test.beforeEach(async ({ page }) => {
@@ -59,14 +59,61 @@ test.describe('#182 Cyber Ops HUD', () => {
   })
 
   test('the event feed filter updates the rendered list live', async ({ page }) => {
+    // #244 webkit/Mobile Safari: on the webkit engine family, every click
+    // target below times out at webkit's actionability stability check because
+    // the sibling infinite HUD animated metrics (gauge/throughput tickers) keep
+    // the layout unsettled. forceClick force-clicks (skipping the impossible
+    // stability gate) AND retries until each click's effect lands.
+    // On chromium/firefox/Mobile Chrome there was NEVER a stability issue (the
+    // original plain click() worked for years), and forceClick's retry loop
+    // introduced new flakiness there under CI load (firefox + Mobile Chrome CI
+    // failures, runs 28456837229/28459517034). So we scope forceClick to the
+    // webkit engine ONLY and use the original plain click() everywhere else.
+    // Click semantics are unchanged on every engine.
+    const isWebkit = (page.context().browser()?.browserType().name() ?? '') === 'webkit'
+
     // Pulse to add a security anomaly event to the feed.
-    await page.locator('[data-test="ops-pulse-button"]').click()
+    const pulseBtn = page.locator('[data-test="ops-pulse-button"]')
+    await expect(pulseBtn).toBeVisible()
+    if (isWebkit) {
+      await forceClick(pulseBtn, async () =>
+        (await page.locator('[data-test="ops-anomaly-toast"]').count()) === 1,
+      )
+    } else {
+      await pulseBtn.click()
+    }
     await expect(page.locator('[data-test="ops-anomaly-toast"]')).toBeVisible({ timeout: 5000 })
     // Dismiss the toast so it doesn't hold focus.
-    await page.locator('[data-test="ops-dismiss"]').click()
+    const dismiss = page.locator('[data-test="ops-dismiss"]')
+    await expect(dismiss).toBeVisible()
+    if (isWebkit) {
+      await forceClick(dismiss, async () =>
+        (await page.locator('[data-test="ops-anomaly-toast"]').count()) === 0,
+      )
+    } else {
+      await dismiss.click()
+    }
 
     // Click the Security tab.
-    await page.locator('[data-test="ops-tab-security"]').click()
+    const tabSecurity = page.locator('[data-test="ops-tab-security"]')
+    await expect(tabSecurity).toBeVisible()
+    if (isWebkit) {
+      // nativeFallback:true because Mobile Safari does not deliver Playwright's
+      // synthetic force-click to the tab's `@click.stop` Vue handler — a native
+      // el.click() does (verified). The tab is a cheap emit→prop update, so the
+      // native re-click is safe here.
+      await forceClick(
+        tabSecurity,
+        async () =>
+          (await tabSecurity.getAttribute('aria-selected')) === 'true' ||
+          (await tabSecurity.evaluate((el) => el.classList.contains('active'))),
+        4,
+        700,
+        true,
+      )
+    } else {
+      await tabSecurity.click()
+    }
     // Every visible event item is now category security (or the list is empty).
     const items = page.locator('[data-test="ops-event-list"] .ops-event-item')
     const count = await items.count()
@@ -75,7 +122,21 @@ test.describe('#182 Cyber Ops HUD', () => {
     }
 
     // Switching back to All restores a fuller list.
-    await page.locator('[data-test="ops-tab-all"]').click()
+    const tabAll = page.locator('[data-test="ops-tab-all"]')
+    await expect(tabAll).toBeVisible()
+    if (isWebkit) {
+      await forceClick(
+        tabAll,
+        async () =>
+          (await tabAll.getAttribute('aria-selected')) === 'true' ||
+          (await tabAll.evaluate((el) => el.classList.contains('active'))),
+        4,
+        700,
+        true,
+      )
+    } else {
+      await tabAll.click()
+    }
     const allCount = await page.locator('[data-test="ops-event-list"] .ops-event-item').count()
     expect(allCount).toBeGreaterThanOrEqual(count)
   })
