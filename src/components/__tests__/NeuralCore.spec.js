@@ -464,7 +464,15 @@ describe('NeuralCore.vue (#179)', () => {
     it('assertion (a): a COMPLETE @keyframes neural-breathing block (opener + inner transform/opacity frame + balanced close) exists and is applied', () => {
       expect(source, 'NeuralCore.vue source must be readable').toBeTruthy()
       // Brace-count the full block (handles nested per-stop `{ ... }`).
-      const block = extractBalancedBlock(source, /@keyframes\s+neural-breathing\s*/)
+      // Anchored opener: require `@keyframes neural-breathing` to be followed by
+      // the block's opening brace (allowing only whitespace between). This closes
+      // the iter-42 substring-any-match failure mode for the OPENER too — without
+      // the lookahead a near-namesake like `@keyframes neural-breathing-pulse`
+      // would match this regex, then `indexOf('{')` would jump to the WRONG
+      // (namesake) block's brace and the gate would validate the wrong rule. No
+      // such namesake exists today, but the anchor makes the gate robust to a
+      // future one being added.
+      const block = extractBalancedBlock(source, /@keyframes\s+neural-breathing\s*(?=\{)/)
       expect(block, '@keyframes neural-breathing opener must exist').not.toBeNull()
       expect(block.close, 'the keyframes block must be balanced (closing brace present)').toBe(true)
       // The body must contain at least one animation-relevant frame property —
