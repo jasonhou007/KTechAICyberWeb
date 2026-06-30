@@ -10,7 +10,13 @@ on:
 jobs:
   test:
     name: Playwright E2E Tests
-    timeout-minutes: 15
+    # #229 AC #4: webkit + Mobile Safari now run in this job (RUN_WEBKIT=true
+    # below). With 4 projects × ~28 specs under webkit's slower engine, the
+    # prior 15m budget cancelled the job mid-run (PR #243 run 28410495122 was
+    # CANCELLED at 15m22s with webkit still executing, before any reporter
+    # produced a result). 25m gives webkit headroom while keeping fast
+    # chromium/firefox feedback; well under the 6h GitHub job cap.
+    timeout-minutes: 25
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
