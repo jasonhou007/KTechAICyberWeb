@@ -38,15 +38,17 @@ async function assertCardsRectangular(page: import('@playwright/test').Page) {
   expect(count).toBe(6)
   // The bug: .neon-border forced each card to a 60x60 fixed square (the badge
   // circle). A fixed card is rectangular iff it has escaped that 60px
-  // constraint — i.e. its width is well past 60 (the badge diameter) and it is
-  // NOT a forced perfect square. We assert width > 100 (proves the collapse is
-  // gone; buggy cards were exactly 60 wide) AND not a square (width != height;
-  // buggy 60x60 cards had width == height). Real cards fill the grid cell, so
-  // either dimension may be the larger one — we do NOT require width > height.
+  // constraint — i.e. its width is well past the badge diameter (60) plus its
+  // grid-cell padding/margin. We assert width > 150 (clears 60px badge + margin
+  // unambiguously; fixed cards measured 211px at desktop, so 150 is a safe
+  // floor that still fails loudly on the 60px collapse) AND not a perfect
+  // square (width != height; buggy 60x60 cards had width == height). Real cards
+  // fill the grid cell, so either dimension may be the larger one — we do NOT
+  // require width > height.
   for (let i = 0; i < count; i++) {
     const box = await cards.nth(i).boundingBox()
     expect(box).not.toBeNull()
-    expect(box!.width).toBeGreaterThan(100)
+    expect(box!.width).toBeGreaterThan(150)
     expect(box!.width).not.toBe(box!.height)
   }
 }
