@@ -76,27 +76,27 @@
       <div class="container">
         <h2 class="section-title neon-text">{{ t('about.achievements.title') }}</h2>
         <div class="achievements-grid">
-          <div class="achievement-card neon-border">
+          <div class="achievement-card">
             <div class="badge iso-badge">ISO9001</div>
             <p>{{ t('about.achievements.iso9001') }}</p>
           </div>
-          <div class="achievement-card neon-border">
+          <div class="achievement-card">
             <div class="badge iso-badge">ISO27001</div>
             <p>{{ t('about.achievements.iso27001') }}</p>
           </div>
-          <div class="achievement-card neon-border">
+          <div class="achievement-card">
             <div class="badge iso-badge">ISO20000</div>
             <p>{{ t('about.achievements.iso20000') }}</p>
           </div>
-          <div class="achievement-card neon-border">
+          <div class="achievement-card">
             <div class="badge milestone-badge">🏆</div>
             <p>{{ t('about.achievements.firstMnc') }}</p>
           </div>
-          <div class="achievement-card neon-border">
+          <div class="achievement-card">
             <div class="badge milestone-badge">🥇</div>
             <p>{{ t('about.achievements.firstFintech') }}</p>
           </div>
-          <div class="achievement-card neon-border">
+          <div class="achievement-card">
             <div class="badge projects-badge">20+</div>
             <p>{{ t('about.achievements.projects') }}</p>
           </div>
@@ -521,12 +521,16 @@ const { enabled } = useParallax({
 .achievement-card {
   padding: 1.5rem;
   text-align: center;
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: 10px;
   background: rgba(10, 15, 28, 0.8);
+  backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
 .achievement-card:hover {
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
   transform: scale(1.05);
 }
 

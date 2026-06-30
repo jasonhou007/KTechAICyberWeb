@@ -36,10 +36,18 @@ async function assertCardsRectangular(page: import('@playwright/test').Page) {
   await expect(cards.first()).toBeVisible()
   const count = await cards.count()
   expect(count).toBe(6)
+  // The bug: .neon-border forced each card to a 60x60 fixed square (the badge
+  // circle). A fixed card is rectangular iff it has escaped that 60px
+  // constraint — i.e. its width is well past 60 (the badge diameter) and it is
+  // NOT a forced perfect square. We assert width > 100 (proves the collapse is
+  // gone; buggy cards were exactly 60 wide) AND not a square (width != height;
+  // buggy 60x60 cards had width == height). Real cards fill the grid cell, so
+  // either dimension may be the larger one — we do NOT require width > height.
   for (let i = 0; i < count; i++) {
     const box = await cards.nth(i).boundingBox()
     expect(box).not.toBeNull()
-    expect(box!.width).toBeGreaterThan(box!.height)
+    expect(box!.width).toBeGreaterThan(100)
+    expect(box!.width).not.toBe(box!.height)
   }
 }
 
@@ -66,7 +74,7 @@ test.describe('Achievements layout (#241)', () => {
   test.describe('desktop viewport (1280x720)', () => {
     test.use({ viewport: { width: 1280, height: 720 } })
 
-    test('achievement cards are rectangular (width > height) at desktop 1280px', async ({ page }) => {
+    test('achievement cards are rectangular (fill grid cell, not the 60x60 neon-border square) at desktop 1280px', async ({ page }) => {
       await assertCardsRectangular(page)
     })
 
@@ -78,7 +86,7 @@ test.describe('Achievements layout (#241)', () => {
   test.describe('mobile viewport (375x667)', () => {
     test.use({ viewport: { width: 375, height: 667 } })
 
-    test('achievement cards are rectangular at mobile 375px', async ({ page }) => {
+    test('achievement cards are rectangular at mobile 375px (not the 60x60 neon-border square)', async ({ page }) => {
       await assertCardsRectangular(page)
     })
 
