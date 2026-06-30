@@ -38,9 +38,9 @@ defineProps({
 
 <style scoped>
 .skeleton-card {
-  background: rgba(26, 26, 46, 0.6);
+  background: var(--surface-elevated);
   border: 1px solid rgba(0, 240, 255, 0.2);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 2rem;
   min-height: 200px;
   display: flex;
@@ -83,7 +83,7 @@ defineProps({
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .skeleton-circle {

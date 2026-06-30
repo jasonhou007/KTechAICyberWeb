@@ -71,7 +71,7 @@ const { t } = useLanguage()
   border: 1px solid var(--neon-pink);
   background: rgba(255, 0, 255, 0.08);
   padding: 0.6rem 0.8rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   box-shadow: 0 0 12px rgba(255, 0, 255, 0.3);
 }
 
@@ -121,7 +121,7 @@ const { t } = useLanguage()
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s ease;
 }
 

@@ -60,7 +60,7 @@ function positionFor(phase) {
   height: 24px;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--card-border);
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 

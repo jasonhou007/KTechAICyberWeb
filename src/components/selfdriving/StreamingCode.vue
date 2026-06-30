@@ -43,16 +43,16 @@ const visibleCount = computed(() => {
 <style scoped>
 .streaming-code {
   width: 100%;
-  font-family: 'Fira Code', 'Courier New', monospace;
+  font-family: var(--font-mono);
 }
 .streaming-code-pre {
   margin: 0;
   padding: 0.6rem 0.8rem;
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(0, 255, 204, 0.12);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  color: var(--neon-green, #00ff88);
+  color: var(--neon-green, var(--cyan));
 }
 .streaming-code-line {
   display: block;

@@ -247,7 +247,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 4rem;
-  background: rgba(10, 15, 28, 0.95);
+  background: var(--surface-card);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(0, 255, 204, 0.2);
   transition: all 0.3s ease;
@@ -373,13 +373,13 @@ onUnmounted(() => {
   display: block;
   width: 100%;
   height: 3px;
-  background: var(--cyan, #00f0ff);
-  border-radius: 2px;
+  background: var(--cyan, var(--cyan));
+  border-radius: var(--radius-sm);
   transition: all 0.3s ease;
 }
 
 .nav-toggle:focus {
-  outline: 2px solid var(--cyan, #00f0ff);
+  outline: 2px solid var(--cyan, var(--cyan));
   outline-offset: 4px;
 }
 
@@ -401,7 +401,7 @@ onUnmounted(() => {
     right: 0;
     left: 0;
     padding: 1.5rem;
-    background: rgba(10, 15, 28, 0.98);
+    background: var(--surface-card);
     border-bottom: 1px solid rgba(0, 255, 204, 0.2);
     transform: translateX(110%);
     transition: transform 0.3s ease;

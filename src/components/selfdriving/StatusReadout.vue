@@ -77,7 +77,7 @@ const phaseLine = computed(() => {
   text-transform: uppercase;
 }
 .status-readout-line {
-  font-family: 'Fira Code', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--text-secondary);
 }

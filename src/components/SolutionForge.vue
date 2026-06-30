@@ -303,10 +303,10 @@ onUnmounted(() => {
 <style scoped>
 .solution-forge {
   position: relative;
-  font-family: 'Courier New', 'Consolas', monospace;
+  font-family: var(--font-mono);
   background: rgba(5, 8, 14, 0.92);
   border: 1px solid rgba(0, 255, 255, 0.3);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow:
     0 0 24px rgba(0, 255, 255, 0.18),
@@ -324,12 +324,12 @@ onUnmounted(() => {
   font-size: 1.4rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #00ffff;
+  color: var(--cyan);
   margin: 0;
 }
 .forge-subtitle {
   font-size: 0.85rem;
-  color: #8be9ff;
+  color: var(--cyan);
   margin: 0.4rem 0 0;
   letter-spacing: 0.08em;
 }
@@ -343,7 +343,7 @@ onUnmounted(() => {
 }
 .forge-fieldset {
   border: 1px solid rgba(0, 255, 255, 0.18);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   padding: 0.6rem 0.8rem;
   margin: 0;
 }
@@ -352,7 +352,7 @@ onUnmounted(() => {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #00ffff;
+  color: var(--cyan);
   padding: 0 0.4rem;
 }
 .forge-chips,
@@ -368,10 +368,10 @@ onUnmounted(() => {
   font-family: inherit;
   font-size: 0.75rem;
   letter-spacing: 0.06em;
-  color: #8be9ff;
+  color: var(--cyan);
   background: rgba(0, 255, 255, 0.06);
   border: 1px solid rgba(0, 255, 255, 0.35);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 }
@@ -381,9 +381,9 @@ onUnmounted(() => {
 }
 .forge-chip.active,
 .forge-toggle.active {
-  color: #0a0a0a;
-  background: #00ffff;
-  border-color: #00ffff;
+  color: var(--bg-primary);
+  background: var(--cyan);
+  border-color: var(--cyan);
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
 }
 .forge-chip:focus-visible,
@@ -392,7 +392,7 @@ onUnmounted(() => {
 .forge-cta:focus-visible,
 .forge-reroll:focus-visible,
 .forge-reset:focus-visible {
-  outline: 2px solid #ff00ff;
+  outline: 2px solid var(--accent-magenta);
   outline-offset: 2px;
 }
 
@@ -408,7 +408,7 @@ onUnmounted(() => {
   width: 100%;
   height: 6px;
   background: rgba(0, 255, 255, 0.18);
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   outline: none;
 }
 .forge-slider::-webkit-slider-thumb {
@@ -417,8 +417,8 @@ onUnmounted(() => {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ff00ff;
-  border: 2px solid #00ffff;
+  background: var(--accent-magenta);
+  border: 2px solid var(--cyan);
   box-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
   cursor: pointer;
 }
@@ -426,8 +426,8 @@ onUnmounted(() => {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #ff00ff;
-  border: 2px solid #00ffff;
+  background: var(--accent-magenta);
+  border: 2px solid var(--cyan);
   box-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
   cursor: pointer;
 }
@@ -440,9 +440,9 @@ onUnmounted(() => {
 .forge-button {
   padding: 0.6rem 1.4rem;
   background: rgba(0, 255, 255, 0.08);
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  border-radius: 4px;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.95rem;
   letter-spacing: 0.08em;
@@ -462,7 +462,7 @@ onUnmounted(() => {
 .forge-stage {
   position: relative;
   border: 1px solid rgba(0, 255, 255, 0.18);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   background: radial-gradient(
     ellipse at center,
     rgba(0, 40, 60, 0.5) 0%,
@@ -522,10 +522,10 @@ onUnmounted(() => {
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #00ffcc;
+  color: var(--cyan);
   background: rgba(0, 255, 204, 0.08);
   border: 1px solid rgba(0, 255, 204, 0.45);
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   padding: 0.2rem 0.5rem;
   animation: forge-module-flyin 0.5s ease-out forwards;
   animation-delay: calc(var(--module-index, 0) * 0.25s);
@@ -546,10 +546,10 @@ onUnmounted(() => {
   font-family: var(--font-display);
   font-size: 1.1rem;
   letter-spacing: 0.2em;
-  color: #00ffff;
+  color: var(--cyan);
   text-shadow:
-    0 0 8px #00ffff,
-    0 0 16px #ff00ff;
+    0 0 8px var(--cyan),
+    0 0 16px var(--accent-magenta);
 }
 
 /* Glitch reveal — the data-text pseudo-elements tear the stamp while it
@@ -569,12 +569,12 @@ onUnmounted(() => {
   opacity: 0.8;
 }
 .glitch-text::before {
-  color: #ff00ff;
+  color: var(--accent-magenta);
   animation: forge-glitch 0.3s infinite;
   clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
 .glitch-text::after {
-  color: #00ffcc;
+  color: var(--cyan);
   animation: forge-glitch 0.3s infinite reverse;
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
@@ -594,12 +594,12 @@ onUnmounted(() => {
   width: 80%;
   height: 4px;
   background: rgba(0, 255, 255, 0.15);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 .forge-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00ffff, #ff00ff);
+  background: linear-gradient(90deg, var(--cyan), var(--accent-magenta));
   box-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
   transition: width 0.1s linear;
 }
@@ -618,15 +618,15 @@ onUnmounted(() => {
 .forge-result {
   padding: 1.2rem;
   border: 1px solid rgba(255, 0, 255, 0.35);
-  border-radius: 8px;
-  background: rgba(10, 15, 28, 0.85);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
 }
 .forge-result-title {
   font-family: var(--font-display);
   font-size: 1rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #00ffcc;
+  color: var(--cyan);
   margin: 0 0 0.8rem;
 }
 .forge-services {
@@ -639,7 +639,7 @@ onUnmounted(() => {
 }
 .forge-service {
   font-size: 0.85rem;
-  color: #c8ffe8;
+  color: var(--cyan);
   padding-left: 1rem;
   position: relative;
 }
@@ -647,7 +647,7 @@ onUnmounted(() => {
   content: '▸';
   position: absolute;
   left: 0;
-  color: #00ffff;
+  color: var(--cyan);
 }
 .forge-metrics {
   display: grid;
@@ -659,19 +659,19 @@ onUnmounted(() => {
   text-align: center;
   padding: 0.4rem;
   border: 1px solid rgba(0, 255, 255, 0.2);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   background: rgba(0, 255, 255, 0.05);
 }
 .forge-metric dt {
   font-size: 0.65rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #00ffff;
+  color: var(--cyan);
 }
 .forge-metric dd {
   margin: 0.2rem 0 0;
   font-size: 0.95rem;
-  color: #ff66ff;
+  color: var(--accent-magenta);
   text-shadow: 0 0 6px rgba(255, 0, 255, 0.5);
 }
 .forge-verdict {
@@ -679,11 +679,11 @@ onUnmounted(() => {
   font-size: 0.9rem;
   letter-spacing: 0.1em;
   text-align: center;
-  color: #00ffcc;
+  color: var(--cyan);
   margin: 0 0 0.8rem;
   padding: 0.5rem;
   border: 1px dashed rgba(0, 255, 204, 0.5);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 .forge-result-actions {
   display: flex;
@@ -698,16 +698,16 @@ onUnmounted(() => {
   font-family: var(--font-display);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
-  color: #00ffff;
+  color: var(--cyan);
   background: rgba(0, 255, 255, 0.08);
-  border: 1px solid #00ffff;
-  border-radius: 4px;
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   text-decoration: none;
   transition: background 0.2s ease, box-shadow 0.2s ease;
 }
-.forge-reroll { color: #ff00ff; border-color: #ff00ff; }
-.forge-reset { color: #8be9ff; border-color: rgba(0, 255, 255, 0.5); }
+.forge-reroll { color: var(--accent-magenta); border-color: var(--accent-magenta); }
+.forge-reset { color: var(--cyan); border-color: rgba(0, 255, 255, 0.5); }
 .forge-cta:hover,
 .forge-reroll:hover,
 .forge-reset:hover {

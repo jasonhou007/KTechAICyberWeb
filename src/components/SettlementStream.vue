@@ -219,7 +219,7 @@ const liquidityLabel = computed(() =>
     var(--neon-pink) 100%
   );
   box-shadow: 0 0 6px var(--neon-green);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   overflow: visible;
 }
 
@@ -303,7 +303,7 @@ const liquidityLabel = computed(() =>
 .ss-block-hash {
   font-size: 0.7rem;
   color: var(--text-secondary);
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
 }
 .ss-block-list {
   list-style: none;
@@ -318,7 +318,7 @@ const liquidityLabel = computed(() =>
   gap: 0.5rem;
   font-size: 0.7rem;
   color: var(--text-secondary);
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   /* AC1.2 block settlement drop-in (declared + applied). */
   animation: ss-block-drop 0.5s ease-out;
 }
@@ -352,7 +352,7 @@ const liquidityLabel = computed(() =>
   justify-content: space-between;
   gap: 0.75rem;
   font-size: 0.8rem;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   /* AC1.2 FX ticker drift (declared + applied). */
   animation: ss-fx-drift 3s ease-in-out infinite alternate;
 }
@@ -385,7 +385,7 @@ const liquidityLabel = computed(() =>
   margin-bottom: 0.4rem;
   background: rgba(0, 255, 204, 0.08);
   border: 1px solid var(--card-border);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 .ss-liquidity-fill {
@@ -410,7 +410,7 @@ const liquidityLabel = computed(() =>
 .ss-liquidity-readout {
   font-size: 0.75rem;
   color: var(--neon-green);
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   text-align: right;
 }
 

@@ -86,7 +86,7 @@ function timeLabel(ts) {
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s ease;
 }
 

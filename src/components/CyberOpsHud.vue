@@ -345,7 +345,7 @@ function widgetLabel(key) {
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--card-border);
   padding: 0.8rem;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   display: flex;
@@ -384,7 +384,7 @@ function widgetLabel(key) {
   padding: 1rem;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--neon-green);
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 .ops-detail-close {
@@ -397,7 +397,7 @@ function widgetLabel(key) {
   cursor: pointer;
   width: 24px;
   height: 24px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-size: 0.8rem;
   line-height: 1;
 }

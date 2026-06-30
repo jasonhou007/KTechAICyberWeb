@@ -32,7 +32,7 @@ defineEmits(['pulse'])
   cursor: pointer;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   transition: all 0.2s ease;
   box-shadow: 0 0 6px var(--glow-color);
 }

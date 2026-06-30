@@ -88,9 +88,9 @@ const categoryLabel = computed(() => {
 <style scoped>
 .news-card {
   position: relative;
-  background: rgba(26, 26, 46, 0.6);
+  background: var(--surface-elevated);
   border: 1px solid rgba(0, 240, 255, 0.2);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -116,12 +116,12 @@ const categoryLabel = computed(() => {
   top: 1rem;
   right: 1rem;
   background: rgba(0, 240, 255, 0.9);
-  color: #0a0a0f;
+  color: var(--bg-primary);
   font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.25rem 0.75rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   z-index: 10;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -176,7 +176,7 @@ const categoryLabel = computed(() => {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    rgba(26, 26, 46, 0.8) 100%
+    var(--surface-elevated) 100%
   );
   pointer-events: none;
 }
@@ -188,12 +188,12 @@ const categoryLabel = computed(() => {
   left: 1rem;
   background: rgba(10, 10, 15, 0.8);
   border: 1px solid rgba(0, 240, 255, 0.3);
-  color: #00f0ff;
+  color: var(--cyan);
   font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 500;
   padding: 0.25rem 0.75rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   z-index: 10;
@@ -211,7 +211,7 @@ const categoryLabel = computed(() => {
   font-family: var(--font-body);
   font-size: 1.25rem;
   font-weight: 600;
-  color: #e0e0e0;
+  color: var(--text-primary);
   margin: 0 0 0.75rem 0;
   line-height: 1.4;
   display: -webkit-box;
@@ -224,7 +224,7 @@ const categoryLabel = computed(() => {
 .news-card__excerpt {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: #b0b0b0;
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.6;
   display: -webkit-box;
@@ -244,7 +244,7 @@ const categoryLabel = computed(() => {
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 500;
-  color: #00f0ff;
+  color: var(--cyan);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.15em;
@@ -255,7 +255,7 @@ const categoryLabel = computed(() => {
 .news-card__link:hover,
 .news-card__link:focus {
   background: rgba(0, 240, 255, 0.1);
-  color: #e0e0e0;
+  color: var(--text-primary);
 }
 
 .news-card__arrow {

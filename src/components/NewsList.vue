@@ -143,9 +143,9 @@ const handleLoadMore = () => {
 .news-list__empty {
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(26, 26, 46, 0.4);
+  background: var(--surface-elevated);
   border: 1px dashed rgba(0, 240, 255, 0.3);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
 }
 
 .news-list__empty-icon {
@@ -157,7 +157,7 @@ const handleLoadMore = () => {
 .news-list__empty-text {
   font-family: var(--font-body);
   font-size: 1.1rem;
-  color: #b0b0b0;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -172,10 +172,10 @@ const handleLoadMore = () => {
   font-size: 1rem;
   font-weight: 600;
   padding: 0.875rem 2rem;
-  background: rgba(26, 26, 46, 0.6);
+  background: var(--surface-elevated);
   border: 2px solid rgba(0, 240, 255, 0.4);
-  border-radius: 6px;
-  color: #00f0ff;
+  border-radius: var(--radius-md);
+  color: var(--cyan);
   text-transform: uppercase;
   letter-spacing: 0.15em;
   cursor: pointer;

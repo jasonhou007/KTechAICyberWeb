@@ -50,7 +50,7 @@ defineProps({
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,33 +74,33 @@ defineProps({
   font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
-  color: #e0e0e0;
+  color: var(--text-primary);
   letter-spacing: 0.2em;
   position: relative;
   z-index: 1;
 }
 
 .logo-accent {
-  color: #00f0ff;
+  color: var(--cyan);
   text-shadow:
-    0 0 10px #00f0ff,
-    0 0 20px #00f0ff,
-    0 0 30px #00f0ff;
+    0 0 10px var(--cyan),
+    0 0 20px var(--cyan),
+    0 0 30px var(--cyan);
   animation: neonPulse 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes neonPulse {
   from {
     text-shadow:
-      0 0 10px #00f0ff,
-      0 0 20px #00f0ff;
+      0 0 10px var(--cyan),
+      0 0 20px var(--cyan);
   }
   to {
     text-shadow:
-      0 0 20px #00f0ff,
-      0 0 30px #00f0ff,
-      0 0 40px #00f0ff,
-      0 0 50px #00f0ff;
+      0 0 20px var(--cyan),
+      0 0 30px var(--cyan),
+      0 0 40px var(--cyan),
+      0 0 50px var(--cyan);
   }
 }
 
@@ -136,7 +136,7 @@ defineProps({
   width: 100%;
   height: 4px;
   background: rgba(0, 240, 255, 0.2);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   position: relative;
   margin-bottom: 1rem;
@@ -144,10 +144,10 @@ defineProps({
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00f0ff, #00ff88, #00f0ff);
+  background: linear-gradient(90deg, var(--cyan), var(--cyan), var(--cyan));
   background-size: 200% 100%;
   animation: progressShimmer 1s linear infinite;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   transition: width 0.1s linear;
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
 }
@@ -164,7 +164,7 @@ defineProps({
 .progress-text {
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: #00f0ff;
+  color: var(--cyan);
   text-align: right;
   letter-spacing: 0.1em;
 }
@@ -179,7 +179,7 @@ defineProps({
 .loading-dot {
   width: 8px;
   height: 8px;
-  background: #00f0ff;
+  background: var(--cyan);
   border-radius: 50%;
   animation: loadingDot 1.4s ease-in-out infinite;
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);

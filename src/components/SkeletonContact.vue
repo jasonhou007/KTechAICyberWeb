@@ -41,9 +41,9 @@ defineProps({
 .skeleton-item {
   opacity: 0;
   animation: fadeIn 0.4s ease forwards;
-  background: rgba(26, 26, 46, 0.6);
+  background: var(--surface-elevated);
   border: 1px solid rgba(0, 240, 255, 0.2);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 1.5rem;
   display: flex;
   align-items: center;
@@ -79,7 +79,7 @@ defineProps({
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .skeleton-circle {

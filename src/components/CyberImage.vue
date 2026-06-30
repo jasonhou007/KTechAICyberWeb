@@ -81,12 +81,12 @@ const resolvedSrc = computed(() => {
   position: relative;
   margin: 0;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   /* Neon border + glow */
   border: 1px solid rgba(0, 255, 204, 0.4);
   box-shadow: 0 0 12px rgba(0, 255, 204, 0.25),
     inset 0 0 8px rgba(0, 255, 204, 0.1);
-  background: rgba(10, 15, 28, 0.6);
+  background: var(--surface-card);
 }
 
 .cyber-image__img {

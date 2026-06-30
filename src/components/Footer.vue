@@ -23,7 +23,7 @@ const { t } = useLanguage()
 <style scoped>
 .footer {
   padding: 3rem 8%;
-  background: rgba(10, 15, 28, 0.9);
+  background: var(--surface-card);
   border-top: 1px solid rgba(0, 255, 204, 0.2);
   text-align: center;
 }

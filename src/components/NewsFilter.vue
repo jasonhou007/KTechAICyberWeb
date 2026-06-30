@@ -76,10 +76,10 @@ const selectCategory = (category) => {
   font-size: 0.95rem;
   font-weight: 500;
   padding: 0.625rem 1.25rem;
-  background: rgba(26, 26, 46, 0.6);
+  background: var(--surface-elevated);
   border: 1px solid rgba(0, 240, 255, 0.3);
-  border-radius: 6px;
-  color: #e0e0e0;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   cursor: pointer;
@@ -103,7 +103,7 @@ const selectCategory = (category) => {
 .news-filter__button--active {
   background: rgba(0, 240, 255, 0.2);
   border-color: rgba(0, 240, 255, 0.6);
-  color: #00f0ff;
+  color: var(--cyan);
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
 }
 

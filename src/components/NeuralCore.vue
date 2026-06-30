@@ -373,10 +373,10 @@ onUnmounted(() => {
 <style scoped>
 .neural-core {
   position: relative;
-  font-family: 'Courier New', 'Consolas', monospace;
+  font-family: var(--font-mono);
   background: rgba(5, 8, 14, 0.92);
   border: 1px solid rgba(0, 255, 255, 0.3);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 1.5rem;
   box-shadow:
     0 0 24px rgba(0, 255, 255, 0.18),
@@ -394,13 +394,13 @@ onUnmounted(() => {
   font-size: 1.4rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #00ffff;
+  color: var(--cyan);
   margin: 0;
 }
 
 .neural-core-subtitle {
   font-size: 0.85rem;
-  color: #8be9ff;
+  color: var(--cyan);
   margin: 0.4rem 0 0;
   letter-spacing: 0.08em;
 }
@@ -408,7 +408,7 @@ onUnmounted(() => {
 .neural-core-stage {
   position: relative;
   border: 1px solid rgba(0, 255, 255, 0.18);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   background: radial-gradient(
     ellipse at center,
     rgba(0, 40, 60, 0.5) 0%,
@@ -433,9 +433,9 @@ onUnmounted(() => {
 }
 
 .neural-synapse.highlighted {
-  stroke: #00ffff;
+  stroke: var(--cyan);
   stroke-width: 1.8;
-  filter: drop-shadow(0 0 4px #00ffff);
+  filter: drop-shadow(0 0 4px var(--cyan));
 }
 
 /* ---- layer labels -------------------------------------------------------- */
@@ -444,7 +444,7 @@ onUnmounted(() => {
   font-size: 7px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  fill: #00ffff;
+  fill: var(--cyan);
   opacity: 0.75;
 }
 
@@ -456,7 +456,7 @@ onUnmounted(() => {
 
 .neural-node-circle {
   fill: #0a1a2a;
-  stroke: #00ffff;
+  stroke: var(--cyan);
   stroke-width: 1.5;
   filter: drop-shadow(0 0 3px rgba(0, 255, 255, 0.7));
   transition: fill 0.2s ease, stroke-width 0.2s ease;
@@ -471,7 +471,7 @@ onUnmounted(() => {
 
 .neural-node.hovered .neural-node-circle,
 .neural-node:focus .neural-node-circle {
-  fill: #00ffff;
+  fill: var(--cyan);
   stroke-width: 2.5;
 }
 
@@ -501,8 +501,8 @@ onUnmounted(() => {
 
 /* The pulse packet itself: a bright neon dot. Only rendered during running. */
 .neural-pulse {
-  fill: #ff00ff;
-  filter: drop-shadow(0 0 6px #ff00ff);
+  fill: var(--accent-magenta);
+  filter: drop-shadow(0 0 6px var(--accent-magenta));
 }
 
 /* ---- tooltip ------------------------------------------------------------- */
@@ -512,10 +512,10 @@ onUnmounted(() => {
   right: 0.75rem;
   background: rgba(0, 10, 20, 0.92);
   border: 1px solid rgba(0, 255, 255, 0.5);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   padding: 0.4rem 0.6rem;
   font-size: 0.75rem;
-  color: #c8ffe8;
+  color: var(--cyan);
   pointer-events: none;
   z-index: 3;
 }
@@ -526,7 +526,7 @@ onUnmounted(() => {
 }
 
 .neural-tooltip-key {
-  color: #00ffff;
+  color: var(--cyan);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -543,9 +543,9 @@ onUnmounted(() => {
 .neural-run-button {
   padding: 0.5rem 1.1rem;
   background: rgba(0, 255, 255, 0.08);
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  border-radius: 4px;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.85rem;
   letter-spacing: 0.08em;
@@ -565,7 +565,7 @@ onUnmounted(() => {
 
 .neural-state {
   font-size: 0.8rem;
-  color: #00ff88;
+  color: var(--cyan);
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -575,20 +575,20 @@ onUnmounted(() => {
   padding: 0.4rem 0.7rem;
   background: rgba(255, 0, 255, 0.08);
   border: 1px solid rgba(255, 0, 255, 0.45);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 0.95rem;
   letter-spacing: 0.08em;
-  color: #ff66ff;
+  color: var(--accent-magenta);
   text-shadow: 0 0 6px rgba(255, 0, 255, 0.6);
 }
 
 .neural-readout-label {
-  color: #00ffff;
+  color: var(--cyan);
   margin-right: 0.4rem;
 }
 
 .neural-readout-confidence {
-  color: #c8ffe8;
+  color: var(--cyan);
   margin-left: 0.3rem;
 }
 
@@ -631,10 +631,10 @@ onUnmounted(() => {
   font-family: var(--font-display);
   font-size: 1.2rem;
   letter-spacing: 0.2em;
-  color: #00ffff;
+  color: var(--cyan);
   text-shadow:
-    0 0 8px #00ffff,
-    0 0 16px #ff00ff;
+    0 0 8px var(--cyan),
+    0 0 16px var(--accent-magenta);
   animation: neural-glitch-stamp 0.8s ease-out forwards;
 }
 

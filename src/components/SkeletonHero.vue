@@ -27,9 +27,9 @@ defineProps({
 
 <style scoped>
 .skeleton-hero {
-  background: rgba(26, 26, 46, 0.8);
+  background: var(--surface-elevated);
   border: 2px solid rgba(0, 240, 255, 0.2);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 3rem;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
   margin-bottom: 3rem;
@@ -65,7 +65,7 @@ defineProps({
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 .skeleton-line-lg {

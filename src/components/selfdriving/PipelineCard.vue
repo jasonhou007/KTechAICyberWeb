@@ -62,8 +62,8 @@ const statusKey = `selfDriving.phases.${props.phase}.status`
   padding: 0.75rem 0.9rem;
   min-width: 7rem;
   border: 1px solid rgba(0, 240, 255, 0.15);
-  background: rgba(10, 15, 28, 0.55);
-  border-radius: 6px;
+  background: var(--surface-card);
+  border-radius: var(--radius-md);
   opacity: 0.45;
   transition:
     transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),

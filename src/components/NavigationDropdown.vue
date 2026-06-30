@@ -218,7 +218,7 @@ defineExpose({ isOpen, menuRef, open, close })
 .dropdown-trigger {
   background: transparent;
   border: none;
-  color: #00f0ff;
+  color: var(--cyan);
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 500;
@@ -249,7 +249,7 @@ defineExpose({ isOpen, menuRef, open, close })
   left: 0;
   background: rgba(10, 10, 20, 0.95);
   border: 1px solid rgba(0, 240, 255, 0.3);
-  border-radius: 5px;
+  border-radius: var(--radius-sm);
   min-width: 200px;
   padding: 0.5rem 0;
   backdrop-filter: blur(10px);
@@ -259,7 +259,7 @@ defineExpose({ isOpen, menuRef, open, close })
 .dropdown-item {
   display: block;
   padding: 0.75rem 1rem;
-  color: #e0e0e0;
+  color: var(--text-primary);
   cursor: pointer;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -268,7 +268,7 @@ defineExpose({ isOpen, menuRef, open, close })
 .dropdown-item:hover,
 .dropdown-item:focus-visible {
   background: rgba(0, 240, 255, 0.1);
-  color: #00f0ff;
+  color: var(--cyan);
   padding-left: 1.25rem;
   outline: none;
 }
@@ -295,13 +295,13 @@ defineExpose({ isOpen, menuRef, open, close })
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #00f0ff;
+  color: var(--cyan);
   cursor: default;
 }
 
 .dropdown-group-heading:hover {
   background: transparent;
-  color: #00f0ff;
+  color: var(--cyan);
   padding-left: 1rem;
 }
 
@@ -326,7 +326,7 @@ defineExpose({ isOpen, menuRef, open, close })
     bottom: 0;
     left: 0;
     right: 0;
-    border-radius: 20px 20px 0 0;
+    border-radius: var(--radius-xl) 20px 0 0;
   }
 }
 </style>

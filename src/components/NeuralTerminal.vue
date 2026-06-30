@@ -515,7 +515,7 @@ onUnmounted(() => {
 
 <style scoped>
 .neural-terminal-root {
-  font-family: 'Courier New', 'Consolas', monospace;
+  font-family: var(--font-mono);
 }
 
 /* ---- launcher -------------------------------------------------------------*/
@@ -529,9 +529,9 @@ onUnmounted(() => {
   gap: 0.5rem;
   padding: 0.7rem 1.1rem;
   background: rgba(10, 10, 20, 0.85);
-  color: #00ffff;
-  border: 1px solid #00ffff;
-  border-radius: 6px;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-family: inherit;
   font-size: 0.95rem;
@@ -551,12 +551,12 @@ onUnmounted(() => {
 
 .neural-launcher-glyph {
   font-weight: bold;
-  color: #ff00ff;
-  text-shadow: 0 0 8px #ff00ff;
+  color: var(--accent-magenta);
+  text-shadow: 0 0 8px var(--accent-magenta);
 }
 
 .neural-launcher-label {
-  color: #00ffff;
+  color: var(--cyan);
 }
 
 /* ---- inert backdrop (modal) -----------------------------------------------*/
@@ -581,15 +581,15 @@ onUnmounted(() => {
   display: none;
   flex-direction: column;
   background: rgba(5, 8, 14, 0.96);
-  border: 1px solid #00ffff;
-  border-radius: 8px;
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius-md);
   overflow: hidden;
   z-index: 9001;
   box-shadow:
     0 0 24px rgba(0, 255, 255, 0.35),
     0 0 60px rgba(255, 0, 255, 0.15);
   font-family: inherit;
-  color: #c8ffe8;
+  color: var(--cyan);
 }
 
 .neural-console.open {
@@ -645,16 +645,16 @@ onUnmounted(() => {
   font-size: 0.85rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #00ffff;
+  color: var(--cyan);
 }
 
 .neural-close {
   background: transparent;
   border: 1px solid rgba(255, 0, 255, 0.5);
-  color: #ff66ff;
+  color: var(--accent-magenta);
   width: 1.6rem;
   height: 1.6rem;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
@@ -682,7 +682,7 @@ onUnmounted(() => {
 
 .terminal-prompt {
   margin-right: 0.4rem;
-  color: #00ff88;
+  color: var(--cyan);
   text-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
 }
 
@@ -691,13 +691,13 @@ onUnmounted(() => {
 }
 
 .terminal-system {
-  color: #ffcc00;
+  color: var(--status-warning);
   text-shadow: 0 0 6px rgba(255, 204, 0, 0.5);
 }
 
 .terminal-response {
   display: inline-block;
-  color: #c8ffe8;
+  color: var(--cyan);
   position: relative;
 }
 
@@ -726,13 +726,13 @@ onUnmounted(() => {
 }
 
 .glitch-text::before {
-  color: #ff00ff;
+  color: var(--accent-magenta);
   transform: translate(-1px, 0);
   clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
 
 .glitch-text::after {
-  color: #00ffff;
+  color: var(--cyan);
   transform: translate(1px, 0);
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
@@ -760,8 +760,8 @@ onUnmounted(() => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #00ffff;
-  box-shadow: 0 0 6px #00ffff;
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
   animation: terminal-think 1s ease-in-out infinite;
 }
 
@@ -789,10 +789,10 @@ onUnmounted(() => {
   background: transparent;
   border: none;
   outline: none;
-  color: #c8ffe8;
+  color: var(--cyan);
   font-family: inherit;
   font-size: 0.95rem;
-  caret-color: #00ff88;
+  caret-color: var(--cyan);
 }
 
 .neural-input::placeholder {
@@ -801,7 +801,7 @@ onUnmounted(() => {
 
 .terminal-cursor {
   margin-left: 0.3rem;
-  color: #00ff88;
+  color: var(--cyan);
 }
 
 .terminal-cursor.blink {
@@ -827,7 +827,7 @@ onUnmounted(() => {
   font-size: 0.75rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #00ffff;
+  color: var(--cyan);
   margin-bottom: 0.4rem;
 }
 
@@ -841,10 +841,10 @@ onUnmounted(() => {
   padding: 0.35rem 0.7rem;
   font-size: 0.8rem;
   font-family: inherit;
-  color: #00ff88;
+  color: var(--cyan);
   background: rgba(0, 255, 136, 0.08);
-  border: 1px solid #00ff88;
-  border-radius: 4px;
+  border: 1px solid var(--cyan);
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
@@ -927,24 +927,24 @@ onUnmounted(() => {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #00ffff;
-  box-shadow: 0 0 8px #00ffff;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
   --dx: 0px;
   --dy: 0px;
   animation: terminal-burst-particle 0.9s ease-out forwards;
 }
 /* Distribute the 12 particles radially via nth-child offsets. */
-.terminal-burst-particle:nth-child(2)  { --dx:  40vw; --dy: -30vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(2)  { --dx:  40vw; --dy: -30vh; background:var(--accent-magenta); box-shadow:0 0 8px var(--accent-magenta); }
 .terminal-burst-particle:nth-child(3)  { --dx: -40vw; --dy: -20vh; }
-.terminal-burst-particle:nth-child(4)  { --dx:  30vw; --dy:  35vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(4)  { --dx:  30vw; --dy:  35vh; background:var(--accent-magenta); box-shadow:0 0 8px var(--accent-magenta); }
 .terminal-burst-particle:nth-child(5)  { --dx: -35vw; --dy:  25vh; }
-.terminal-burst-particle:nth-child(6)  { --dx:  50vw; --dy:   5vh; background:#00ff88; box-shadow:0 0 8px #00ff88; }
+.terminal-burst-particle:nth-child(6)  { --dx:  50vw; --dy:   5vh; background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
 .terminal-burst-particle:nth-child(7)  { --dx: -50vw; --dy:  -5vh; }
-.terminal-burst-particle:nth-child(8)  { --dx:  10vw; --dy: -45vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(8)  { --dx:  10vw; --dy: -45vh; background:var(--accent-magenta); box-shadow:0 0 8px var(--accent-magenta); }
 .terminal-burst-particle:nth-child(9)  { --dx: -10vw; --dy:  45vh; }
 .terminal-burst-particle:nth-child(10) { --dx:  45vw; --dy: -40vh; }
-.terminal-burst-particle:nth-child(11) { --dx: -45vw; --dy:  40vh; background:#00ff88; box-shadow:0 0 8px #00ff88; }
-.terminal-burst-particle:nth-child(12) { --dx:   0vw; --dy:  50vh; background:#ff00ff; box-shadow:0 0 8px #ff00ff; }
+.terminal-burst-particle:nth-child(11) { --dx: -45vw; --dy:  40vh; background:var(--cyan); box-shadow:0 0 8px var(--cyan); }
+.terminal-burst-particle:nth-child(12) { --dx:   0vw; --dy:  50vh; background:var(--accent-magenta); box-shadow:0 0 8px var(--accent-magenta); }
 .terminal-burst-particle:nth-child(13) { --dx:   0vw; --dy: -50vh; }
 
 @keyframes terminal-burst-flash {
