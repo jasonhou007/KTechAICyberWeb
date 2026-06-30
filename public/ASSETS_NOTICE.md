@@ -48,7 +48,8 @@ or branded. They were intentionally NOT extracted to avoid trademark misuse:
   embedding the brand wordmark)
 - `arrow99.svg` (branded decorative arrow)
 - `about1-5.svg` (about-section icons embedding the wordmark — tracked
-  separately in follow-up Issue #198, which will commission original icons)
+  separately in follow-up Issue #198, now RESOLVED: original cyber icons
+  commissioned instead, see "Original About icons" below)
 - the site logo (the official KTech trademark — out of scope for demo reuse)
 
 ## News-list images caveat
@@ -60,9 +61,40 @@ available as a static asset; the remaining news cards continue to use the
 pre-existing `public/images/news/*.webp` placeholders. Replacing those
 placeholders is out of scope for this ticket.
 
+## Original About icons (`src/components/icons/AboutIcon.vue`)
+
+Issue #198 took the BRANDED branch for the trademarked `about1-5.svg`: rather
+than integrate the official icons (which embed the KASIKORN/KTech wordmark and
+are therefore not safe to redistribute), #198 ships **5 ORIGINAL royalty-free
+cyberpunk inline-SVG icons** rendered by a single Vue component,
+`src/components/icons/AboutIcon.vue`.
+
+Attestation — the 5 motifs are original geometric line-art and are NOT derived
+from the trademarked `about1-5.svg`:
+
+- **NO wordmarks or logos.** The component source and rendered DOM contain
+  zero KASIKORN / KBank / KTech text, zero embedded `<text>` elements, and no
+  reproduction of the official logo likeness. (Enforced by `AboutIcon.test.ts`
+  IP-gate assertions.)
+- **NO reproduction of official path data.** The motifs are hand-authored
+  primitives (`<polyline>`, `<rect>`, `<circle>`, `<ellipse>`, `<line>`) on a
+  fresh `0 0 64 64` viewBox. No path data from `about1-5.svg` was copied,
+  traced, or referenced.
+- **NO map landmasses, currency symbols, or rocket likeness.** The 5 motifs
+  are abstract geometric representations: a stacked-floors building, a
+  wireframe globe (circle + ellipses), a coin stack, a calendar wireframe,
+  and an upward trajectory line.
+
+The 5 icons are wired into the **Who We Are** section of `About.vue`
+(company, parentRegion, capital, established, services), replacing the prior
+emoji placeholders. The remaining About emoji (Vision/Mission/Culture/
+Achievements) are NOT part of the `about1-5.svg` slot and are tracked in a
+separate follow-up.
+
 ## Related follow-up issues
 
-- **#198** — commission original About section icons to replace the current
-  emoji icons (the trademarked `about1-5.svg` icons are NOT used).
+- **#198** (RESOLVED) — commissioned original About section icons to replace
+  the trademarked `about1-5.svg`; the 5 original inline-SVGs now ship in
+  `AboutIcon.vue` for the Who We Are cards.
 - **#199** — generate `srcset` responsive image variants for the About/News
   images (this ticket ships a single `webp`/`png` per slot).
