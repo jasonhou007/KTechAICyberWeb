@@ -1,12 +1,13 @@
 /* Cyberpunk Styling.
  * NOTE (#188): the previous `:root { /* Default to dark theme *\/ ... }` block
  * was byte-identical to `[data-theme="dark"]` below and has been removed.
- * App.vue always sets <html data-theme="dark|light"> synchronously on mount
- * (treating the default 'cyber' theme as dark), so the dark values are always
- * authored via [data-theme="dark"]; the bare :root copy was dead. The critical
- * no-FOUC background is handled by the minimal inline <style> in index.html. */
+ * #239: the site is locked to the dark theme — App.vue unconditionally sets
+ * <html data-theme="dark"> on mount, so dark is the ONLY theme variant. The
+ * former light-theme variable block + light neon rules were removed. The
+ * critical no-FOUC background is handled by the minimal inline <style> in
+ * index.html. */
 
-/* Dark Theme (Default) */
+/* Dark Theme (Default — and only theme, per #239) */
 [data-theme="dark"] {
   --bg-primary: #0a0a0a;
   --bg-secondary: #1a1a2e;
@@ -23,25 +24,6 @@
   --nav-bg: rgba(10, 10, 15, 0.8);
   --glow-color: rgba(0, 255, 136, 0.4);
   --shadow-color: rgba(0, 0, 0, 0.5);
-}
-
-/* Light Theme (Cyberpunk Light) */
-[data-theme="light"] {
-  --bg-primary: #f5f7fa;
-  --bg-secondary: #e8ecf1;
-  --bg-gradient-start: #f5f7fa;
-  --bg-gradient-mid: #e8ecf1;
-  --bg-gradient-end: #d4d9e2;
-  --text-primary: #1a1a2e;
-  --text-secondary: #006677;
-  --neon-green: #00b894;
-  --neon-blue: #00b4d8;
-  --neon-pink: #e84393;
-  --card-bg: rgba(255, 255, 255, 0.9);
-  --card-border: rgba(0, 184, 148, 0.3);
-  --nav-bg: rgba(255, 255, 255, 0.9);
-  --glow-color: rgba(0, 184, 148, 0.3);
-  --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 /* Theme transitions - smooth color changes */
@@ -92,21 +74,15 @@ body {
   box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green);
 }
 
-/* Theme-specific glow effects */
+/* Theme-specific glow effects.
+ * #239: dark is the only theme, so the former [data-theme="light"] neon rules
+ * were removed (they could never match). The dark-scoped rules are kept for
+ * explicitness/specificity parity with the rest of the stylesheet. */
 [data-theme="dark"] .neon-text {
   text-shadow: 0 0 5px var(--neon-green), 0 0 10px var(--neon-green);
-}
-
-[data-theme="light"] .neon-text {
-  text-shadow: 0 0 3px var(--neon-green), 0 0 6px var(--neon-green);
 }
 
 [data-theme="dark"] .neon-border {
   border: 1px solid var(--neon-green);
   box-shadow: 0 0 5px var(--neon-green), inset 0 0 5px var(--neon-green);
-}
-
-[data-theme="light"] .neon-border {
-  border: 1px solid var(--neon-green);
-  box-shadow: 0 0 3px var(--neon-green), inset 0 0 3px var(--neon-green);
 }
