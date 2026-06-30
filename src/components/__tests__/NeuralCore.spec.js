@@ -518,7 +518,19 @@ describe('NeuralCore.vue (#179)', () => {
       const { setLanguage } = useLanguage()
       setLanguage('en')
       const Home = (await import('../../views/Home.vue')).default
-      const home = mount(Home, { attachTo: document.body })
+      // Home also mounts <SelfDrivingDemo /> (#203), whose useAutoDemoLoop rAF
+      // loop would infinitely recurse under this test's synchronous syncRAF()
+      // (the demo's own tests use a deferred rAF for exactly this reason). This
+      // test is the NeuralCore wiring gate — it does not exercise the demo — so
+      // stub SelfDrivingDemo to a no-op so only NeuralCore's loop runs here.
+      const home = mount(Home, {
+        attachTo: document.body,
+        global: {
+          stubs: {
+            SelfDrivingDemo: { template: '<div class="stub-self-driving-demo"></div>' },
+          },
+        },
+      })
       // #224: NeuralCore is lazy-mounted; POLL until the slot appears
       // (bounded — robust under parallel test load).
       const deadline = Date.now() + 2000

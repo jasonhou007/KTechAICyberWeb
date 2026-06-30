@@ -63,7 +63,18 @@ function listJsChunks() {
 // from 160,000 -> 170,000 (restores ~4% headroom over the new measured total).
 // The MAX_ROUTE_CHUNK_GZIP_BUDGET stays unchanged: web-vitals is its own lazy
 // chunk at 2,580 gzip, well under the 7,000 per-chunk cap.
-const TOTAL_ENTRY_GZIP_BUDGET = 170000
+//
+// Updated for #203 (Self-Driving demo): the feature adds a new code-split
+// `SelfDrivingDemo-*.js` lazy chunk (~3.1 KB gzip) lazy-imported in Home.vue +
+// About.vue via defineAsyncComponent (NOT eager — it does not bloat the index
+// entry chunk; it loads on demand like the 5 #224 modules + #206 stream).
+// Measured post-#203 total gzip across dist/assets: 170,305 bytes (fresh
+// `vite build`, 2026-06-30). Budget raised 170,000 -> 175,000 (restores ~2.7%
+// headroom over the new measured total, consistent with the #187 bump's
+// philosophy: a properly code-split flagship feature warrants a documented
+// bump rather than a hack). MAX_ROUTE_CHUNK_GZIP_BUDGET unchanged — the new
+// chunk at 3,139 gzip is well under the 7,000 per-chunk cap.
+const TOTAL_ENTRY_GZIP_BUDGET = 175000
 const MAX_ROUTE_CHUNK_GZIP_BUDGET = 7000
 
 // The suite is skipped entirely when no build is present. describe.skipIf

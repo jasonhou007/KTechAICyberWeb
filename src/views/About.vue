@@ -22,6 +22,14 @@
       </div>
     </section>
 
+    <!-- Self-Driving dev pipeline flagship demo (#203). Auto-plays the full
+         INTAKE -> ... -> RESOLVED loop with zero interaction. Mounted IN-FLOW
+         (not as a global fixed background) so the pipeline rail, streaming
+         code feed, and status readout are visible page content (AC1). -->
+    <section class="self-driving-section">
+      <SelfDrivingDemo />
+    </section>
+
     <!-- Who We Are Section -->
     <section class="section who-we-are">
       <div class="container">
@@ -269,6 +277,7 @@ import { ref } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
 import CyberImage from '../components/CyberImage.vue'
+import SelfDrivingDemo from '../components/SelfDrivingDemo.vue'
 
 const { t } = useLanguage()
 
@@ -336,6 +345,23 @@ const { enabled } = useParallax({
 .container {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+/* Self-Driving demo flagship section (#203). The demo component owns its own
+   background + min-height; this wrapper gives it vertical breathing room and a
+   relative positioning context above the grid-bg. */
+.self-driving-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 2rem auto;
+  max-width: 1200px;
+  border: 1px solid rgba(0, 255, 204, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  /* scroll-margin-top: leave head-room for the fixed Header so the demo's
+     StatusReadout is NOT occluded by the nav (mobile Chrome E2E gate). */
+  scroll-margin-top: 6rem;
 }
 
 /* Hero Section */

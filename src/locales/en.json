@@ -1809,5 +1809,32 @@
       "value": "{value}%"
     },
     "settled": "Settled"
+  },
+  "selfDriving": {
+    "aria": {
+      "regionLabel": "Self-driving dev pipeline — live demo"
+    },
+    "heading": "Self-Driving Dev Pipeline",
+    "phases": {
+      "intake": { "title": "Intake", "status": "New issue received" },
+      "triage": { "title": "Triage", "status": "Auto-triaged & assigned" },
+      "planner": { "title": "Planner", "status": "Plan generated" },
+      "coder": { "title": "Coder", "status": "Streaming code diff" },
+      "security": { "title": "Security", "status": "Security review passed" },
+      "evaluator": { "title": "Evaluator", "status": "Quality gate green" },
+      "merger": { "title": "Merger", "status": "PR opened" },
+      "resolved": { "title": "Resolved", "status": "Issue auto-closed" }
+    },
+    "readout": {
+      "merged": "PR #NNN MERGED · AUTO-CLOSED",
+      "cycling": "CYCLE {n}",
+      "complete": "CYCLE COMPLETE"
+    },
+    "streaming": {
+      "plannerLine": "planner: analyzing requirements…",
+      "coderLine": "coder: +export function resolve() {",
+      "securityLine": "security: no vulnerabilities found",
+      "evalLine": "evaluator: 8/8 acceptance criteria met"
+    }
   }
 }

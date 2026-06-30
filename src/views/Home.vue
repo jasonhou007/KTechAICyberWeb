@@ -15,6 +15,15 @@
         <p class="subtitle">{{ t('home.subtitle') }}</p>
       </header>
 
+      <!-- Self-Driving dev pipeline flagship demo (#203). Auto-plays the full
+           INTAKE -> ... -> RESOLVED loop with zero interaction. Mounted IN-FLOW
+           as the FIRST content block after the page title (not as a global fixed
+           background) so the pipeline rail, streaming code feed, and status
+           readout are visible page content — the product demos itself (AC1). -->
+      <section class="self-driving-section">
+        <SelfDrivingDemo />
+      </section>
+
       <!-- Hero section -->
       <section class="hero">
         <div class="cyber-card hover-lift">
@@ -114,6 +123,13 @@ const CyberOpsHud = defineAsyncComponent(() => import('../components/CyberOpsHud
 const NeonPulse = defineAsyncComponent(() => import('../components/NeonPulse.vue'))
 // #206: ambient Settlement Stream — lazy chunk, same pattern as the 5 modules.
 const SettlementStream = defineAsyncComponent(() => import('../components/SettlementStream.vue'))
+// #203: Self-Driving dev pipeline flagship demo. Lazy-imported (code-split
+// into its own chunk, consistent with the #224 pattern) but NOT wrapped in
+// <LazySection> because it is the FIRST above-the-fold content block — its
+// AC1 ("auto-plays on load, zero interaction") requires it to mount eagerly.
+// The composable's own IntersectionObserver + visibilitychange + reduced-motion
+// guards throttle its rAF loop when appropriate.
+const SelfDrivingDemo = defineAsyncComponent(() => import('../components/SelfDrivingDemo.vue'))
 
 const { t } = useLanguage()
 
@@ -404,6 +420,23 @@ h1 {
   font-size: 0.95rem;
   margin: 0;
   line-height: 1.6;
+}
+
+/* Self-Driving demo flagship section (#203). The demo component owns its own
+   background + min-height; this wrapper just gives it vertical breathing room
+   in the page flow and a relative positioning context above the grid-bg. */
+.self-driving-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 2rem 0;
+  border: 1px solid rgba(0, 255, 204, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  /* scroll-margin-top: when an E2E/user scrollIntoView()'s the demo, leave
+     head-room for the fixed Header so the StatusReadout at the top of the
+     stage is NOT occluded by the nav (mobile Chrome E2E occlusion gate). */
+  scroll-margin-top: 6rem;
 }
 
 /* CTA */
