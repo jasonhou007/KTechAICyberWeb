@@ -138,8 +138,72 @@ describe('AboutIcon.vue', () => {
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .replace(/\/\/.*$/gm, '')
 
-    it('active CSS uses drop-shadow glow', () => {
-      expect(stripped).toMatch(/drop-shadow\(/)
+    it('active CSS has a BASE (static, non-hover, non-keyframe) drop-shadow glow', () => {
+      // The component defines drop-shadow in several contexts:
+      //   1. the BASE `.about-icon { ... }` rule (the static glow — the AC
+      //      requirement), whose selector is exactly `.about-icon`,
+      //   2. `.about-icon:hover` (hover glow),
+      //   3. `@keyframes about-icon-pulse` (animated frames),
+      //   4. `@media (prefers-reduced-motion: reduce)` (no drop-shadow, but
+      //      guarded anyway).
+      // A regression that deletes ONLY the base static glow would still leave
+      // the hover + keyframe drop-shadows, so a naive /drop-shadow\(/ match
+      // passes against a broken icon. To be RED-proof we walk the TOP-LEVEL
+      // rules of the <style> block and assert that the rule whose selector is
+      // EXACTLY `.about-icon` (not `:hover`, not the `:deep(g)`/`g` line-art
+      // rule, not inside @keyframes/@media) contains a drop-shadow declaration.
+      const styleMatch = stripped.match(/<style[^>]*>([\s\S]*?)<\/style>/)
+      expect(styleMatch, '<style> block must be present').not.toBeNull()
+      const styleBody = styleMatch![1]
+
+      // Top-level rule splitter: match either an at-rule block (@keyframes /
+      // @media, which may contain nested `{ ... }`) or a selector-led `{ ... }`
+      // rule. We deliberately capture @keyframes/@media blocks whole so their
+      // nested rules are NOT mistaken for top-level rules.
+      const topLevelRules: string[] = []
+      const atBlock =
+        /@(?:keyframes|media)[^{]*\{(?:[^{}]*|\{[^{}]*\})*\}/g
+      let cursor = 0
+      let m: RegExpExecArray | null
+      while ((m = atBlock.exec(styleBody)) !== null) {
+        // any plain rules between the last consumed point and this at-block
+        const between = styleBody.slice(cursor, m.index)
+        for (const r of between.match(/[^{}]*\{[^{}]*\}/g) || []) {
+          topLevelRules.push(r)
+        }
+        topLevelRules.push(m[0]) // the at-block itself (kept, identifiable by leading @)
+        cursor = m.index + m[0].length
+      }
+      // trailing plain rules after the last at-block
+      const tail = styleBody.slice(cursor)
+      for (const r of tail.match(/[^{}]*\{[^{}]*\}/g) || []) {
+        topLevelRules.push(r)
+      }
+
+      // The BASE rule: selector exactly `.about-icon` (whitespace-trimmed,
+      // comma-split for grouped selectors) and NOT an at-block.
+      const baseRules = topLevelRules.filter((rule) => {
+        if (/^\s*@/.test(rule)) return false // skip @keyframes / @media wholes
+        const selector = rule.split('{')[0].trim()
+        return selector
+          .split(',')
+          .map((s) => s.trim())
+          .includes('.about-icon')
+      })
+
+      expect(
+        baseRules.length,
+        'at least one base `.about-icon { ... }` rule must exist',
+      ).toBeGreaterThanOrEqual(1)
+      // At least ONE base rule must carry the static drop-shadow glow. The
+      // hover/keyframe drop-shadows live in rules whose selectors are NOT plain
+      // `.about-icon` (they are `.about-icon:hover` / `@keyframes`), so they
+      // are excluded from `baseRules` — removing the static glow from the only
+      // base rule that has it leaves zero glowing base rules and FAILS here.
+      expect(
+        baseRules.some((r) => /drop-shadow\(/.test(r)),
+        'a base `.about-icon` rule (not :hover, not @keyframes) must declare a drop-shadow glow',
+      ).toBe(true)
     })
 
     it('active CSS uses currentColor for stroke/fill', () => {
