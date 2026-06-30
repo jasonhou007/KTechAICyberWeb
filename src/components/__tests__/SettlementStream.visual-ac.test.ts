@@ -61,6 +61,29 @@ function extractMediaBlock(source: string, mediaFeature: string): string {
 }
 
 /**
+ * Extract the FULL body of a `@keyframes <name> { ... }` block by counting
+ * braces. A lazy regex like `@keyframes name \s* \{ ([\s\S]*?) \}` stops at the
+ * FIRST inner `}` — i.e. it captures only the `0% { ... }` stop and silently
+ * drops the `15%`, `30%`, `100%` stops, so a paint-property violation hiding in
+ * a non-0% stop passes the gate (false green — adversarial-review finding on
+ * #235). Brace-counting captures ALL keyframe stops. Returns the empty string
+ * if no such keyframes block exists. Mirrors `extractMediaBlock` above exactly
+ * (ported from the same #234 brace-counter precedent).
+ */
+function extractKeyframeBlock(source: string, name: string): string {
+  const opener = new RegExp(`@keyframes\\s+${name}\\s*\\{`)
+  const startMatch = source.match(opener)
+  if (!startMatch) return ''
+  let i = startMatch.index! + startMatch[0].length
+  let depth = 1
+  for (; i < source.length && depth > 0; i++) {
+    if (source[i] === '{') depth++
+    else if (source[i] === '}') depth--
+  }
+  return source.slice(startMatch.index! + startMatch[0].length, i - 1)
+}
+
+/**
  * Parse every `animation:` shorthand in the source and return the list of
  * raw declaration values (the text between `animation:` and the `;`). Ported
  * verbatim from NeuralTerminal.visual-ac.test.ts (#234). Used by the <3Hz
@@ -251,13 +274,20 @@ describe('SettlementStream.vue — visual-AC CSS-source gate (#206)', () => {
   // opacity only). This preserves #206's perf budget (transform/opacity are
   // compositor-only, no layout/paint). Mirrors the same constraint already
   // applied to the existing #206 keyframes.
-  // RED-PROOF: add `color: var(--neon-pink);` inside a keyframe stop and the
-  // assertion fails.
+  //
+  // The body is extracted via brace-counting (`extractKeyframeBlock`), NOT a
+  // non-greedy regex — a lazy `([\s\S]*?)` stops at the FIRST `}` and only
+  // inspects the 0% stop, so a paint-property violation in the 15% / 30% /
+  // 100% stop passes silently (adversarial-review finding on #235).
+  //
+  // RED-PROOF (empirical, verified 2026-07-01):
+  //   - inject `filter: blur(2px);` into the 30% stop  -> this test FAILS.
+  //   - inject `color: red;` into the 100% stop         -> this test FAILS.
+  // (Before the brace-counter fix both mutations PASSED — false green.)
   // --------------------------------------------------------------------------
   it('#235 AC4 perf: @keyframes ss-glitch-pulse animates transform/opacity only (no paint/layout properties)', () => {
-    const kfMatch = source.match(/@keyframes\s+ss-glitch-pulse\s*\{([\s\S]*?)\}/)
-    expect(kfMatch, '@keyframes ss-glitch-pulse must be declared').not.toBeNull()
-    const body = kfMatch![1]
+    const body = extractKeyframeBlock(source, 'ss-glitch-pulse')
+    expect(body, '@keyframes ss-glitch-pulse must be declared with a non-empty body').toBeTruthy()
     expect(body, 'glitch-pulse keyframes must animate transform or opacity').toMatch(/(transform|opacity)\s*:/)
     expect(body).not.toMatch(/\b(color|background|box-shadow|filter|visibility)\b\s*:/)
   })
