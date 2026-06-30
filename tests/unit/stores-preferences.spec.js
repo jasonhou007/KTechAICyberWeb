@@ -138,7 +138,7 @@ describe('usePreferencesStore', () => {
       expect(prefs.theme).toBe('cyber')
       expect(prefs.language).toBe('en')
       const stored = JSON.parse(localStorage.getItem(PREFERENCES_STORAGE_KEY))
-      expect(stored).toEqual({ theme: 'cyber', language: 'en', rumEnabled: false })
+      expect(stored).toEqual({ theme: 'cyber', language: 'en' })
     })
   })
 

@@ -69,12 +69,7 @@ export const usePreferencesStore = defineStore('preferences', {
       // preference, or 'dark' (the cyberpunk default) as a final fallback.
       theme,
       // UI language code. Defaults to 'en'. Mirrors useLanguage.js default.
-      language: persisted.language || 'en',
-      // RUM beacon opt-in (#187). Default OFF — the composable is inert until
-      // the user explicitly enables performance monitoring via the dashboard
-      // toggle. Coerces persisted truthy/non-truthy to a strict boolean so a
-      // corrupted "true" string can never flip it on by accident.
-      rumEnabled: persisted.rumEnabled === true
+      language: persisted.language || 'en'
     }
   },
 
@@ -101,7 +96,6 @@ export const usePreferencesStore = defineStore('preferences', {
           JSON.stringify({
             theme: this.theme,
             language: this.language,
-            rumEnabled: this.rumEnabled,
           })
         )
       } catch {
@@ -141,15 +135,6 @@ export const usePreferencesStore = defineStore('preferences', {
       }
     },
     /**
-     * Set the RUM beacon opt-in (#187). Coerces the value to a strict boolean
-     * so only an explicit `true` enables monitoring, and persists the choice.
-     * @param {boolean} v
-     */
-    setRumEnabled(v) {
-      this.rumEnabled = v === true
-      this.persist()
-    },
-    /**
      * Re-hydrate state from localStorage. Useful after clearing storage or
      * when the user logs out and back in within a long-lived session.
      */
@@ -161,15 +146,11 @@ export const usePreferencesStore = defineStore('preferences', {
       if (persisted.language && VALID_LANGUAGES.includes(persisted.language)) {
         this.language = persisted.language
       }
-      if (typeof persisted.rumEnabled === 'boolean') {
-        this.rumEnabled = persisted.rumEnabled
-      }
     },
     /** Reset preferences to defaults and re-persist. */
     reset() {
       this.theme = 'cyber'
       this.language = 'en'
-      this.rumEnabled = false
       this.persist()
     }
   }

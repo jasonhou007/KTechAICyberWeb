@@ -154,4 +154,27 @@ describe('App.vue -> Header nav wiring (#164 shipped-app gate)', () => {
     // Real ThemeToggle renders button.theme-toggle.
     expect(toolbar.find('button.theme-toggle').exists()).toBe(true)
   })
+
+  // --------------------------------------------------------------------------
+  // #240 — RUM beacon removed from the shipped footer (live-DOM proof).
+  // This mounts the REAL App (no child mocked) and asserts the footer does
+  // NOT render the performance-monitoring dashboard. The footer itself must
+  // still render (proves we didn't accidentally delete the whole footer).
+  // RED-TEST PROOF: re-adding <RumDashboard v-if="rumMounted"> to App.vue
+  // makes the .rum-dashboard assertion fail.
+  // --------------------------------------------------------------------------
+  it('does NOT render the RUM dashboard in the shipped footer (#240 removal)', async () => {
+    const wrapper = await mountApp()
+    // The footer must still exist (we only removed the RUM child, not the
+    // footer region itself).
+    expect(wrapper.find('footer.cyber-footer').exists()).toBe(true)
+    // No RUM dashboard artifact reaches the live DOM.
+    expect(wrapper.find('.rum-dashboard').exists()).toBe(false)
+    expect(wrapper.find('.footer-rum').exists()).toBe(false)
+    expect(wrapper.find('[data-test="rum-toggle"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="rum-region"]').exists()).toBe(false)
+    // The status dot + status text remain (the footer-status wrapper is
+    // intact, just without the RUM child).
+    expect(wrapper.find('footer.cyber-footer .status-dot').exists()).toBe(true)
+  })
 })
