@@ -58,6 +58,8 @@
           :alt="t(article.altKey) || article.title"
           eager
           className="news-detail__image"
+          :srcset="imageSrcset"
+          :sizes="imageSizes"
         />
         <figcaption class="news-detail__caption" itemprop="caption">
           {{ article.title }}
@@ -146,6 +148,28 @@ const findArticle = () => {
   const found = newsData.find(item => item.slug === props.slug)
   return found || null
 }
+
+// Responsive image variants (#199). Most News images are SVGs mislabeled .webp
+// (intrinsic width 800) and only one is a real raster (news-iso27001-official,
+// 258x258). Emit a single-descriptor srcset at each image's intrinsic/native
+// width — NO new image files generated for News (the SVGs are not rasterized).
+const NATIVE_WIDTH_MAP = {
+  '/images/news/news-iso27001-official.webp': 258,
+}
+const DEFAULT_NEWS_WIDTH = 800 // SVGs declare width="800"
+
+const imageNativeWidth = computed(() => {
+  const img = article.value?.image
+  if (!img) return DEFAULT_NEWS_WIDTH
+  return NATIVE_WIDTH_MAP[img] || DEFAULT_NEWS_WIDTH
+})
+
+const imageSrcset = computed(() => {
+  const img = article.value?.image
+  return img ? `${img} ${imageNativeWidth.value}w` : ''
+})
+
+const imageSizes = computed(() => `(max-width: 600px) 100vw, ${imageNativeWidth.value}px`)
 
 // Format date
 const formattedDate = computed(() => {

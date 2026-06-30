@@ -11,12 +11,16 @@
           {{ t('about.pageTitle') }} <span class="accent">{{ t('about.pageTitleAccent') }}</span>
         </h1>
         <p class="page-subtitle">{{ t('about.pageSubtitle') }}</p>
-        <!-- Hero figure: official-site imagery, eager-loaded (above the fold) -->
+        <!-- Hero figure: official-site imagery, eager-loaded (above the fold).
+             Responsive srcset (#199): 400w on mobile, 800w on tablet, and the
+             1200w descriptor points at the original 800px file (no upscale). -->
         <figure class="about-hero__figure">
           <CyberImage
             src="/images/about/about-who-we-are.webp"
             :alt="t('about.hero.imageAlt')"
             eager
+            srcset="/images/about/about-who-we-are-400w.webp 400w, /images/about/about-who-we-are-800w.webp 800w, /images/about/about-who-we-are.webp 1200w"
+            sizes="(max-width: 600px) 100vw, 50vw"
           />
         </figure>
       </div>
@@ -71,11 +75,15 @@
             <p>{{ t('about.whoWeAre.servicesList') }}</p>
           </div>
         </div>
-        <!-- Who-we-are feature figure: regional fintech illustration -->
+        <!-- Who-we-are feature figure: regional fintech illustration.
+             Single-descriptor srcset at native width (800px) — no new files
+             generated (#199; this image is already optimally sized). -->
         <figure class="who-we-are__feature">
           <CyberImage
             src="/images/about/about-regional-fintech.webp"
             :alt="t('about.whoWeAre.featureImageAlt')"
+            srcset="/images/about/about-regional-fintech.webp 800w"
+            sizes="(max-width: 600px) 100vw, 720px"
           />
         </figure>
       </div>

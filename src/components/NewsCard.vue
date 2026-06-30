@@ -12,6 +12,8 @@
         :src="article.image"
         :alt="t(article.altKey) || article.title"
         className="news-card__image"
+        :srcset="imageSrcset"
+        :sizes="imageSizes"
       />
       <div v-else class="news-card__image-skeleton"></div>
       <div class="news-card__image-overlay" aria-hidden="true"></div>
@@ -62,6 +64,29 @@ const props = defineProps({
 })
 
 const { t } = useLanguage()
+
+// Responsive image variants (#199). Most News images are SVGs mislabeled .webp
+// (intrinsic width 800) and only one is a real raster (news-iso27001-official,
+// 258x258). Rather than rasterize/upscale the SVGs (anti-pattern), emit a
+// single-descriptor srcset at each image's intrinsic/native width: this tells
+// the browser the source is good up to that display width and lets it skip the
+// src vs. currentSrc round-trip. NO new image files are generated for News.
+const NATIVE_WIDTH_MAP = {
+  '/images/news/news-iso27001-official.webp': 258,
+}
+const DEFAULT_NEWS_WIDTH = 800 // SVGs declare width="800"
+
+const imageNativeWidth = computed(() => {
+  const img = props.article.image
+  if (!img) return DEFAULT_NEWS_WIDTH
+  return NATIVE_WIDTH_MAP[img] || DEFAULT_NEWS_WIDTH
+})
+
+const imageSrcset = computed(() =>
+  props.article.image ? `${props.article.image} ${imageNativeWidth.value}w` : '',
+)
+
+const imageSizes = computed(() => `(max-width: 600px) 100vw, ${imageNativeWidth.value}px`)
 
 const formattedDate = computed(() => {
   if (!props.article.date) return ''
