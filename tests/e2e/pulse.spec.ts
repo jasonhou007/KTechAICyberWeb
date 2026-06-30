@@ -61,26 +61,30 @@ test.describe.serial('#186 Neon Pulse', () => {
   })
 
   test('Engage -> playing (status text flips, canvas still present)', async ({ page }) => {
-    // #244 webkit/Mobile Safari: the engage button is static, but webkit's
-    // actionability stability check times out racing the sibling infinite pulse
-    // canvas animation. On chromium/firefox/webpack-desktop, forceClick (force +
-    // retry) lands the Vue handler. On Mobile Safari specifically, NEITHER
-    // Playwright's synthetic force-click NOR a mixed force+native retry reliably
-    // reaches the `@click="engage"` handler (verified: status stays "Idle", no
-    // console error), while a STANDALONE native el.click() flips it synchronously.
-    // The mixed retry fails because a force-click that occasionally DOES start
-    // the async engage() then collides with a follow-up native click (two
-    // AudioContext builds). So on Mobile Safari we click ONCE via native el.click()
-    // (trusted-enough for the Vue handler + the synchronous status flip), then
-    // fall back to forceClick for the other engines. Click semantics unchanged.
+    // #244 webkit/Mobile Safari/Mobile Chrome: the engage button is static, but
+    // on MOBILE viewports (≤768px) Playwright's synthetic force-click does NOT
+    // reliably reach the `@click="engage"` Vue handler for the EXPENSIVE async
+    // AudioContext build. Diagnosis (CI run 28460722546 + local repro,
+    // 2026-06-30 / 07-01): on Mobile Chrome (Pixel 5, chromium engine) forceClick
+    // fails "effect not observed after 3 attempts" — the synthetic force-click is
+    // intermittently dropped at the actionability stage before force applies, and
+    // even when it does start the async engage() the effect predicate re-checks
+    // inside the converge window. A STANDALONE native el.click() flips status
+    // synchronously (Idle→Playing) and is deterministic across repeated runs
+    // (verified 3/3 locally on Mobile Chrome; the same native path was already
+    // proven for Mobile Safari in the prior #244 commit). Desktop
+    // chromium/firefox/webkit keep forceClick (force + retry), which lands
+    // reliably there. The mixed force+native retry is NOT used for engage because
+    // a force-click that occasionally DOES start engage() then collides with a
+    // follow-up native click (two AudioContext builds). Click semantics
+    // unchanged — only HOW the click is dispatched varies by viewport.
     const engage = page.locator('[data-test="pulse-engage"]')
     await expect(engage).toBeVisible()
     const stopBtn = page.locator('[data-test="pulse-stop"]')
-    const isMobileSafari = (page.context().browser()?.browserType().name() ?? '') === 'webkit'
-      && !!(page.viewportSize() && page.viewportSize().width <= 768)
-    if (isMobileSafari) {
-      // Single native click (proven reliable standalone on Mobile Safari); the
-      // status flip is synchronous so a short probe confirms it landed.
+    const isMobileViewport = !!(page.viewportSize() && page.viewportSize().width <= 768)
+    if (isMobileViewport) {
+      // Single native click (proven reliable on Mobile Chrome + Mobile Safari);
+      // the status flip is synchronous so a short probe confirms it landed.
       await engage.evaluate((el) => (el as HTMLElement).click())
       await expect(stopBtn).toBeVisible({ timeout: 5000 })
     } else {
