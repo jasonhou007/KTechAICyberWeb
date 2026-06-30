@@ -98,6 +98,19 @@ const liquidityLabel = computed(() =>
 
       <!-- Reused CRT scanline overlay (AC 2 — do not reimplement). -->
       <Scanlines />
+
+      <!-- ===== #235 seizure-safe glitch pulse =====
+           A single <=2Hz (3.2s) chromatic-aberration pulse via STATIC-tint
+           ::before/::after pseudo-elements (neon-blue / neon-pink) that
+           translate in opposite directions + pulse opacity during the window.
+           This is NOT a continuous flicker (deferred from #206 AC 2.1 because
+           #224 removed unbounded strobe as a seizure hazard). aria-hidden +
+           pointer-events:none — pure decoration, never read by AT. -->
+      <div
+        class="ss-glitch-pulse"
+        data-test="ss-glitch-pulse"
+        aria-hidden="true"
+      ></div>
     </div>
 
     <!-- ===== Readout surface (real text, semantic, selectable) =====
@@ -173,6 +186,63 @@ const liquidityLabel = computed(() =>
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+/* ===== #235 seizure-safe glitch pulse =====
+   A single <=2Hz (3.2s = 0.31Hz) chromatic-aberration pulse. The RGB-split
+   is delivered via STATIC-tint ::before/::after pseudo-elements (neon-blue /
+   neon-pink) so the keyframes NEVER touch color/background/filter (transform +
+   opacity only — AC4 perf contract, compositor-only). During the ~35% pulse
+   window the two channels translate in opposite directions (+3px / -3px) and
+   opacity lifts; outside the window they rest at low opacity. Pure CSS, zero
+   script/composable changes (preserves the #206 rAF-throttle perf contract). */
+.ss-glitch-pulse {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  animation: ss-glitch-pulse 3.2s ease-in-out infinite;
+}
+.ss-glitch-pulse::before,
+.ss-glitch-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.ss-glitch-pulse::before {
+  /* STATIC neon-blue tint (the keyframes only translate/opacity this layer). */
+  background: var(--neon-blue);
+  mix-blend-mode: screen;
+  opacity: 0.04;
+}
+.ss-glitch-pulse::after {
+  /* STATIC neon-pink tint. */
+  background: var(--neon-pink);
+  mix-blend-mode: screen;
+  opacity: 0.04;
+}
+@keyframes ss-glitch-pulse {
+  /* Rest: both channels centered, low opacity. */
+  0% {
+    transform: translateX(0);
+    opacity: 0.12;
+  }
+  /* Pulse window: opacity lifts + the element (and its static-tint pseudo
+     children) shift slightly. transform/opacity ONLY — no paint properties. */
+  15% {
+    transform: translateX(-3px);
+    opacity: 0.26;
+  }
+  30% {
+    transform: translateX(3px);
+    opacity: 0.26;
+  }
+  /* Hold/rest for the rest of the cycle so the rate stays <=2Hz. */
+  100% {
+    transform: translateX(0);
+    opacity: 0.12;
+  }
 }
 
 /* ===== Rails =====
@@ -427,6 +497,19 @@ const liquidityLabel = computed(() =>
   }
   .ss-rails {
     opacity: 0.35;
+  }
+  /* #235 seizure-safe glitch-pulse: CSS-authoritative defense-in-depth.
+     The composable's prefersReducedMotion flag already keeps rAF from
+     scheduling, but the glitch-pulse is a PURE-CSS animation (no JS), so it
+     must be neutralized at the CSS level too. opacity:0 hides the static-tint
+     pseudo-element layers entirely so no residual aberration shows. Mirrors
+     the #234 ac02054 precedent (decode-anim / terminal-cursor guard):
+     photosafety must not depend on JS alone. */
+  .ss-glitch-pulse,
+  .ss-glitch-pulse::before,
+  .ss-glitch-pulse::after {
+    animation: none;
+    opacity: 0;
   }
 }
 
