@@ -10,7 +10,7 @@
  * fabricated value; this test flips RED the moment any corrected value is
  * reverted or a locale drifts out of sync.
  *
- * Each assertion below is one row of CORRECTIONS_MANIFEST.md (C1-C5, H1-H4,
+ * Each assertion below is one row of CORRECTIONS_MANIFEST.md (C3-C5, H1-H3,
  * M1-M5). The expected values are quoted verbatim from the manifest.
  */
 
@@ -31,18 +31,6 @@ function pick(obj: unknown, path: string): string {
 }
 
 describe('#246 content audit — CRITICAL (brand / contact facts)', () => {
-  // C1 — hero.title
-  it('C1: hero.title is KTech in both locales', () => {
-    expect(pick(en, 'hero.title')).toBe('KTech')
-    expect(pick(zh, 'hero.title')).toBe('KTech')
-  })
-
-  // C2 — hero.subtitle
-  it('C2: hero.subtitle is FINTECH / 金融科技 (no fabricated KBRIGHT/凯泰)', () => {
-    expect(pick(en, 'hero.subtitle')).toBe('FINTECH')
-    expect(pick(zh, 'hero.subtitle')).toBe('金融科技')
-  })
-
   // C3 — contact email (both the info block and the legacy top-level pair)
   it('C3: contact email is the official KTECH@kaitaitech.cn inbox', () => {
     expect(pick(en, 'contact.info.emailValue')).toBe('KTECH@kaitaitech.cn')
@@ -102,17 +90,6 @@ describe('#246 content audit — HIGH (mission / vision / parent chain)', () => 
     expect(pick(zh, 'culture.missionDesc')).toBe('以尖端科技赋能客户')
   })
 
-  // H4 — hero.description parent-chain clause
-  it('H4: hero.description names KASIKORNBANK via KASIKORN VISION subsidiary', () => {
-    expect(pick(en, 'hero.description')).toContain(
-      "Thailand's KASIKORNBANK through its wholly owned subsidiary KASIKORN VISION Co., Ltd.",
-    )
-    expect(pick(en, 'hero.description')).not.toContain("KASIKORN Bank Group")
-    expect(pick(zh, 'hero.description')).toContain(
-      '由泰国开泰银行通过其全资子公司开泰远景有限公司（注册于泰国）在深圳市罗湖区设立',
-    )
-    expect(pick(zh, 'hero.description')).not.toContain('由泰国开泰银行集团')
-  })
 })
 
 describe('#246 content audit — MEDIUM (internal consistency)', () => {

@@ -49,8 +49,8 @@ const views = Object.entries(viewModules)
 // A standalone component not under src/views but still i18n-driven.
 import NewsSection from '../../src/components/NewsSection.vue'
 
-// The 8 components migrated from local t() maps onto useLanguage().
-import Hero from '../../src/components/Hero.vue'
+// The 7 components migrated from local t() maps onto useLanguage() that are
+// still live (Hero.vue was deleted as orphaned dead code — see #259).
 import ServicesSection from '../../src/components/Services.vue'
 import Culture from '../../src/components/Culture.vue'
 import ContactSection from '../../src/components/Contact.vue'
@@ -149,7 +149,7 @@ describe('No raw i18n placeholder keys leak into rendered views', () => {
 })
 
 // Transition stub that renders its children, so v-if content is visible for
-// components that gate real copy behind a loading Transition (Hero, Services,
+// components that gate real copy behind a loading Transition (Services,
 // Culture, Contact).
 const transitionSlotStub = {
   render() {
@@ -163,9 +163,8 @@ const router = createRouter({
   routes: [{ path: '/', component: { template: '<div/>' } }],
 })
 
-describe('Migrated components (Hero, Services, Culture, Contact, Footer, ...) leak no raw keys', () => {
+describe('Migrated components (Services, Culture, Contact, Footer, ...) leak no raw keys', () => {
   const migratedComponents = [
-    { name: 'Hero', component: Hero, stubs: { Transition: transitionSlotStub } },
     { name: 'Services (section)', component: ServicesSection, stubs: { Transition: transitionSlotStub } },
     { name: 'Culture', component: Culture, stubs: { Transition: transitionSlotStub } },
     { name: 'Contact (section)', component: ContactSection, stubs: { Transition: transitionSlotStub } },

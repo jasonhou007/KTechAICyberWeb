@@ -3,15 +3,13 @@ import { test, expect } from '@playwright/test'
 // Issue #246 — Copy factual-accuracy audit. Live-DOM proof that the corrected
 // contact/address/vision facts RENDER on the running app, in BOTH locales.
 //
-// The playbook for #246 also asks for a hero-title assertion. Note: the
-// `hero.title` key ("KTech") is rendered ONLY by src/components/Hero.vue,
-// which is NOT mounted on any live route (the live Home page renders
-// `home.title` instead). So `hero.title` has no live-DOM surface and is
-// covered authoritatively by the unit tests:
-//   - src/locales/__tests__/246-content-audit.spec.ts (locale-level, both langs)
-//   - src/components/__tests__/Hero.test.ts (component-level render)
-// This E2E covers the corrected facts that DO render on live pages: the
-// Contact page (email/phone/address) and the About page (vision).
+// The playbook for #246 also asked for a hero-title assertion. Note: the
+// top-level `hero` i18n block was deleted in #259 (it was rendered ONLY by the
+// orphaned src/components/Hero.vue, which was never mounted on any live route —
+// the live Home page renders `home.title` instead). With both gone, there is no
+// hero-title surface left to assert in any locale. This E2E covers the
+// corrected facts that DO render on live pages: the Contact page
+// (email/phone/address) and the About page (vision).
 //
 // Conventions mirror tests/e2e/205-company-facts.spec.ts: the dev server is
 // served at the /KTechAICyberWeb/ subpath, so deep-links include it

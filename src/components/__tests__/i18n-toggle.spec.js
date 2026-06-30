@@ -6,7 +6,7 @@
  * local translation map, so toggling the language left their text stuck in one
  * language. These tests set the language to `zh` (via the same composable the
  * LanguageSwitcher drives) and assert that real Chinese copy renders in a
- * representative subset: Hero, Footer, Header, Contact.
+ * representative subset: Footer, Header, Contact.
  *
  * The shared language lives in a module-scoped ref inside useLanguage, so
  * setLanguage('zh') before mount() is enough to flip every component that
@@ -19,7 +19,6 @@ import { mount } from '@vue/test-utils'
 import { h, ref } from 'vue'
 
 import { useLanguage } from '../../composables/useLanguage'
-import Hero from '../Hero.vue'
 import Footer from '../Footer.vue'
 import Header from '../Header.vue'
 import Contact from '../Contact.vue'
@@ -82,17 +81,6 @@ describe('migrated components re-render on language toggle to zh', () => {
   afterEach(() => {
     // Restore the default English locale so other suites are unaffected.
     setLanguage('en')
-  })
-
-  it('Hero renders Chinese title and stats labels after toggle', () => {
-    const wrapper = mountWithStubs(Hero)
-    // #246: hero.title is the brand "KTech" in BOTH locales (official site
-    // uses "KTech" even on ZH pages); the zh render is still proven by the
-    // stats labels below.
-    expect(wrapper.find('.hero-title .main').text()).toBe('KTech')
-    const labels = wrapper.findAll('.stat-item .stat-label').map((el) => el.text())
-    expect(labels).toEqual(['成立年份', '注册资本（元）', '建设项目'])
-    wrapper.unmount()
   })
 
   it('Footer renders Chinese company name and copyright after toggle', () => {
