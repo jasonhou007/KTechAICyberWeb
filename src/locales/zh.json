@@ -199,7 +199,14 @@
       "establishedDate": "2020年6月",
       "services": "核心服务",
       "servicesList": "面向金融机构的供应链金融、零售贷款平台及大数据与人工智能解决方案。",
-      "featureImageAlt": "区域性领先金融科技平台示意图"
+      "featureImageAlt": "区域性领先金融科技平台示意图",
+      "icons": {
+        "companyAlt": "公司图标",
+        "parentRegionAlt": "母公司区域图标",
+        "capitalAlt": "注册资本图标",
+        "establishedAlt": "成立时间图标",
+        "servicesAlt": "核心服务图标"
+      }
     },
     "achievements": {
       "title": "我们的成就",

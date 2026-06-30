@@ -199,7 +199,14 @@
       "establishedDate": "June 2020",
       "services": "Core Services",
       "servicesList": "Supply chain finance, retail lending platforms, and big data & AI solutions for financial institutions.",
-      "featureImageAlt": "Regional leading fintech platform illustration"
+      "featureImageAlt": "Regional leading fintech platform illustration",
+      "icons": {
+        "companyAlt": "Company icon",
+        "parentRegionAlt": "Regional parent company icon",
+        "capitalAlt": "Registered capital icon",
+        "establishedAlt": "Established date icon",
+        "servicesAlt": "Core services icon"
+      }
     },
     "achievements": {
       "title": "Our Achievements",

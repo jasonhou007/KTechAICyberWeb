@@ -36,27 +36,37 @@
         <h2 class="section-title neon-text">{{ t('about.whoWeAre.title') }}</h2>
         <div class="content-grid">
           <div class="content-card cyber-card">
-            <div class="card-icon neon-border">🏢</div>
+            <div class="card-icon neon-border">
+              <AboutIcon name="company" :label="t('about.whoWeAre.icons.companyAlt')" />
+            </div>
             <h3>{{ t('about.whoWeAre.companyName') }}</h3>
             <p>{{ t('about.whoWeAre.companyInfo') }}</p>
           </div>
           <div class="content-card cyber-card">
-            <div class="card-icon neon-border">🌏</div>
+            <div class="card-icon neon-border">
+              <AboutIcon name="parentRegion" :label="t('about.whoWeAre.icons.parentRegionAlt')" />
+            </div>
             <h3>{{ t('about.whoWeAre.parentCompany') }}</h3>
             <p>{{ t('about.whoWeAre.parentInfo') }}</p>
           </div>
           <div class="content-card cyber-card">
-            <div class="card-icon neon-border">💰</div>
+            <div class="card-icon neon-border">
+              <AboutIcon name="capital" :label="t('about.whoWeAre.icons.capitalAlt')" />
+            </div>
             <h3>{{ t('about.whoWeAre.capital') }}</h3>
             <p>{{ t('about.whoWeAre.capitalAmount') }}</p>
           </div>
           <div class="content-card cyber-card">
-            <div class="card-icon neon-border">📅</div>
+            <div class="card-icon neon-border">
+              <AboutIcon name="established" :label="t('about.whoWeAre.icons.establishedAlt')" />
+            </div>
             <h3>{{ t('about.whoWeAre.established') }}</h3>
             <p>{{ t('about.whoWeAre.establishedDate') }}</p>
           </div>
           <div class="content-card cyber-card">
-            <div class="card-icon neon-border">🚀</div>
+            <div class="card-icon neon-border">
+              <AboutIcon name="services" :label="t('about.whoWeAre.icons.servicesAlt')" />
+            </div>
             <h3>{{ t('about.whoWeAre.services') }}</h3>
             <p>{{ t('about.whoWeAre.servicesList') }}</p>
           </div>
@@ -278,6 +288,7 @@ import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
 import CyberImage from '../components/CyberImage.vue'
 import SelfDrivingDemo from '../components/SelfDrivingDemo.vue'
+import AboutIcon from '../components/icons/AboutIcon.vue'
 
 const { t } = useLanguage()
 
