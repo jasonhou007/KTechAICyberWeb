@@ -431,9 +431,9 @@ const features = [
 }
 
 .cta-button:hover {
-  background: rgba(255, 0, 255, 0.2);
-  border-color: rgba(255, 0, 255, 0.5);
-  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+  background: rgba(255, 0, 170, 0.2);
+  border-color: rgba(255, 0, 170, 0.5);
+  box-shadow: 0 0 15px rgba(255, 0, 170, 0.3);
 }
 
 .cta-button span:first-child {

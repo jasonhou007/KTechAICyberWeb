@@ -137,7 +137,7 @@ onMounted(() => {
   transform: translate(-50%, -50%);
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, rgba(0, 240, 255, 0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0, 255, 204, 0.3) 0%, transparent 70%);
   animation: pulseRing 2s ease-out infinite;
   z-index: 0;
 }
@@ -161,7 +161,7 @@ onMounted(() => {
 .progress-bar {
   width: 100%;
   height: 4px;
-  background: rgba(0, 240, 255, 0.2);
+  background: rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-sm);
   overflow: hidden;
   position: relative;
@@ -175,7 +175,7 @@ onMounted(() => {
   animation: progressShimmer 1s linear infinite;
   border-radius: var(--radius-sm);
   transition: width 0.1s linear;
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
 @keyframes progressShimmer {
@@ -208,7 +208,7 @@ onMounted(() => {
   background: var(--cyan, var(--cyan));
   border-radius: 50%;
   animation: loadingDot 1.4s ease-in-out infinite;
-  box-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
 .loading-dot:nth-child(1) {

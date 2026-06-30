@@ -368,8 +368,8 @@ const nearStyle = computed(() => depthStyle(34))
     ),
     repeating-linear-gradient(
       0deg,
-      rgba(255, 0, 255, 0.04) 0,
-      rgba(0, 255, 136, 0.04) 1px,
+      rgba(255, 0, 170, 0.04) 0,
+      rgba(0, 255, 204, 0.04) 1px,
       transparent 1px,
       transparent 48px
     );

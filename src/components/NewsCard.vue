@@ -89,7 +89,7 @@ const categoryLabel = computed(() => {
 .news-card {
   position: relative;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
@@ -100,13 +100,13 @@ const categoryLabel = computed(() => {
 
 .news-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(0, 240, 255, 0.5);
-  box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
 }
 
 .news-card:focus-within {
-  border-color: rgba(0, 240, 255, 0.6);
-  outline: 2px solid rgba(0, 240, 255, 0.3);
+  border-color: rgba(0, 255, 204, 0.6);
+  outline: 2px solid rgba(0, 255, 204, 0.3);
   outline-offset: 2px;
 }
 
@@ -115,7 +115,7 @@ const categoryLabel = computed(() => {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(0, 240, 255, 0.9);
+  background: rgba(0, 255, 204, 0.9);
   color: var(--bg-primary);
   font-family: var(--font-body);
   font-size: 0.75rem;
@@ -162,9 +162,9 @@ const categoryLabel = computed(() => {
   height: 100%;
   background: linear-gradient(
     90deg,
-    rgba(0, 240, 255, 0.1) 0%,
-    rgba(0, 240, 255, 0.2) 50%,
-    rgba(0, 240, 255, 0.1) 100%
+    rgba(0, 255, 204, 0.1) 0%,
+    rgba(0, 255, 204, 0.2) 50%,
+    rgba(0, 255, 204, 0.1) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
@@ -187,7 +187,7 @@ const categoryLabel = computed(() => {
   bottom: 1rem;
   left: 1rem;
   background: rgba(10, 10, 15, 0.8);
-  border: 1px solid rgba(0, 240, 255, 0.3);
+  border: 1px solid rgba(0, 255, 204, 0.3);
   color: var(--cyan);
   font-family: var(--font-body);
   font-size: 0.7rem;
@@ -248,13 +248,13 @@ const categoryLabel = computed(() => {
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  border-top: 1px solid rgba(0, 255, 204, 0.2);
   transition: all 0.3s ease;
 }
 
 .news-card__link:hover,
 .news-card__link:focus {
-  background: rgba(0, 240, 255, 0.1);
+  background: rgba(0, 255, 204, 0.1);
   color: var(--text-primary);
 }
 

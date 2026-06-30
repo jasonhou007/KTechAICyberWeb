@@ -260,6 +260,31 @@ describe('hardcoded hex literals collapsed across src (#242 AC2)', () => {
     console.log('\n[style-unification] Courier New literals in .vue:', courier, 'Fira Code:', fira, offenders)
     expect(courier + fira).toBe(0)
   })
+
+  // The rgba-triplet form of the legacy neon literals. A hex-only denylist
+  // cannot catch `rgba(0, 240, 255, 0.2)` (sky-cyan) — but the LIVE computed
+  // style resolves these to the legacy color, so they must also be normalized
+  // to the canonical cyan/magenta triplets. Assert ZERO legacy rgba neon
+  // triplets remain in any .vue/.css source.
+  const RGBA_DENYLIST = [
+    { pat: 'rgba(0, 240, 255', name: 'sky-cyan rgba' },
+    { pat: 'rgba(0,255,240', name: 'sky-cyan rgba (no-space)' },
+    { pat: 'rgba(0, 255, 136', name: 'neon-green rgba' },
+    { pat: 'rgba(0,255,136', name: 'neon-green rgba (no-space)' },
+    { pat: 'rgba(255, 0, 255', name: 'legacy-magenta rgba' },
+    { pat: 'rgba(255,0,255', name: 'legacy-magenta rgba (no-space)' },
+  ]
+  for (const { pat, name } of RGBA_DENYLIST) {
+    it(`ZERO '${name}' triplet in src`, () => {
+      const offenders = []
+      for (const f of vueFiles) {
+        const src = stripComments(readFileSync(f, 'utf-8'))
+        if (src.includes(pat)) offenders.push(path.relative(ROOT, f))
+      }
+      if (offenders.length) console.log(`\n[style-unification] '${name}' offenders:`, offenders)
+      expect(offenders, `${pat} must be normalized to canonical cyan/magenta`).toEqual([])
+    })
+  }
 })
 
 describe('var(--token) usage grew as literals were consolidated (#242)', () => {

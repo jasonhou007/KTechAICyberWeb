@@ -41,8 +41,8 @@ export default {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(0, 240, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.06) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.06) 1px, transparent 1px);
   background-size: 40px 40px;
   pointer-events: none;
 }
@@ -88,15 +88,15 @@ export default {
   text-decoration: none;
   color: var(--cyan);
   padding: 0.75rem 2rem;
-  border: 1px solid rgba(0, 240, 255, 0.5);
-  background: rgba(0, 240, 255, 0.05);
+  border: 1px solid rgba(0, 255, 204, 0.5);
+  background: rgba(0, 255, 204, 0.05);
   transition: all 0.3s ease;
 }
 
 .home-link:hover,
 .home-link:focus-visible {
-  background: rgba(0, 240, 255, 0.15);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 255, 204, 0.15);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
   outline: none;
 }
 </style>

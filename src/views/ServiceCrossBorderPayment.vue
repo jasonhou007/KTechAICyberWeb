@@ -275,8 +275,8 @@ onMounted(() => {
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   animation: cbpGridMove 20s linear infinite;
   pointer-events: none;
@@ -285,8 +285,8 @@ onMounted(() => {
 
 .grid-bg-2 {
   background-image:
-    linear-gradient(rgba(0, 255, 136, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.02) 1px, transparent 1px);
   background-size: 100px 100px;
   animation: cbpGridMove 30s linear infinite reverse;
 }
@@ -306,7 +306,7 @@ onMounted(() => {
 
 .cbp__skeleton-block {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-md);
   margin-bottom: 1rem;
   animation: cbpShimmer 1.5s ease-in-out infinite;
@@ -348,7 +348,7 @@ onMounted(() => {
 }
 
 .cbp__breadcrumb-separator {
-  color: rgba(0, 240, 255, 0.5);
+  color: rgba(0, 255, 204, 0.5);
 }
 
 .cbp__breadcrumb-current {
@@ -360,7 +360,7 @@ onMounted(() => {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   margin-bottom: 3rem;
   backdrop-filter: blur(10px);
@@ -377,7 +377,7 @@ onMounted(() => {
   line-height: 120px;
   margin: 0 auto;
   border-radius: 50%;
-  background: rgba(0, 240, 255, 0.1);
+  background: rgba(0, 255, 204, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -414,8 +414,8 @@ onMounted(() => {
 .cbp__hero-button {
   display: inline-block;
   padding: 1rem 2.5rem;
-  background: rgba(0, 240, 255, 0.1);
-  border: 2px solid rgba(0, 240, 255, 0.4);
+  background: rgba(0, 255, 204, 0.1);
+  border: 2px solid rgba(0, 255, 204, 0.4);
   border-radius: var(--radius-md);
   color: var(--cyan);
   text-decoration: none;
@@ -428,9 +428,9 @@ onMounted(() => {
 
 .cbp__hero-button:hover,
 .cbp__hero-button:focus {
-  background: rgba(0, 240, 255, 0.2);
-  border-color: rgba(0, 240, 255, 0.6);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 255, 204, 0.2);
+  border-color: rgba(0, 255, 204, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
   transform: translateY(-2px);
 }
 
@@ -459,7 +459,7 @@ onMounted(() => {
   margin: 0 auto 4rem;
   padding: 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
 }
 
@@ -484,7 +484,7 @@ onMounted(() => {
 
 .cbp__card {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   padding: 2rem;
   text-align: center;
@@ -494,9 +494,9 @@ onMounted(() => {
 }
 
 .cbp__card:hover {
-  border-color: rgba(0, 240, 255, 0.5);
+  border-color: rgba(0, 255, 204, 0.5);
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15);
 }
 
 @keyframes cbpFadeInUp {
@@ -534,7 +534,7 @@ onMounted(() => {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--surface-elevated);
-  border: 2px solid rgba(0, 240, 255, 0.3);
+  border: 2px solid rgba(0, 255, 204, 0.3);
   border-radius: var(--radius-lg);
   margin-bottom: 3rem;
 }
@@ -559,8 +559,8 @@ onMounted(() => {
 .cbp__cta-button {
   display: inline-block;
   padding: 1rem 2.5rem;
-  background: rgba(0, 240, 255, 0.1);
-  border: 2px solid rgba(0, 240, 255, 0.4);
+  background: rgba(0, 255, 204, 0.1);
+  border: 2px solid rgba(0, 255, 204, 0.4);
   border-radius: var(--radius-md);
   color: var(--cyan);
   text-decoration: none;
@@ -573,9 +573,9 @@ onMounted(() => {
 
 .cbp__cta-button:hover,
 .cbp__cta-button:focus {
-  background: rgba(0, 240, 255, 0.2);
-  border-color: rgba(0, 240, 255, 0.6);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 255, 204, 0.2);
+  border-color: rgba(0, 255, 204, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
   transform: translateY(-2px);
 }
 
@@ -614,16 +614,16 @@ onMounted(() => {
 
 .neon-border {
   box-shadow:
-    0 0 5px rgba(0, 240, 255, 0.5),
-    0 0 10px rgba(0, 240, 255, 0.3),
-    inset 0 0 5px rgba(0, 240, 255, 0.1);
+    0 0 5px rgba(0, 255, 204, 0.5),
+    0 0 10px rgba(0, 255, 204, 0.3),
+    inset 0 0 5px rgba(0, 255, 204, 0.1);
 }
 
 .neon-text {
   text-shadow:
-    0 0 5px rgba(0, 240, 255, 0.5),
-    0 0 10px rgba(0, 240, 255, 0.3),
-    0 0 15px rgba(0, 240, 255, 0.2);
+    0 0 5px rgba(0, 255, 204, 0.5),
+    0 0 10px rgba(0, 255, 204, 0.3),
+    0 0 15px rgba(0, 255, 204, 0.2);
 }
 
 @media (max-width: 768px) {

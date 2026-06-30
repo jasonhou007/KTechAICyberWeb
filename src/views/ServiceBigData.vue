@@ -398,8 +398,8 @@ onMounted(() => {
   right: 0;
   bottom: 0;
   background-image:
-    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
   animation: bdGridMove 20s linear infinite;
   pointer-events: none;
@@ -408,8 +408,8 @@ onMounted(() => {
 
 .grid-bg-2 {
   background-image:
-    linear-gradient(rgba(0, 255, 136, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.02) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.02) 1px, transparent 1px);
   background-size: 100px 100px;
   animation: bdGridMove 30s linear infinite reverse;
 }
@@ -430,7 +430,7 @@ onMounted(() => {
 
 .bd__skeleton-block {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-md);
   margin-bottom: 1rem;
   animation: bdShimmer 1.5s ease-in-out infinite;
@@ -474,7 +474,7 @@ onMounted(() => {
 }
 
 .bd__breadcrumb-separator {
-  color: rgba(0, 240, 255, 0.5);
+  color: rgba(0, 255, 204, 0.5);
 }
 
 .bd__breadcrumb-current {
@@ -491,7 +491,7 @@ onMounted(() => {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   margin-bottom: 3rem;
   backdrop-filter: blur(10px);
@@ -508,7 +508,7 @@ onMounted(() => {
   line-height: 120px;
   margin: 0 auto;
   border-radius: 50%;
-  background: rgba(0, 240, 255, 0.1);
+  background: rgba(0, 255, 204, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -545,8 +545,8 @@ onMounted(() => {
 .bd__hero-button {
   display: inline-block;
   padding: 1rem 2.5rem;
-  background: rgba(0, 240, 255, 0.1);
-  border: 2px solid rgba(0, 240, 255, 0.4);
+  background: rgba(0, 255, 204, 0.1);
+  border: 2px solid rgba(0, 255, 204, 0.4);
   border-radius: var(--radius-md);
   color: var(--cyan);
   text-decoration: none;
@@ -559,9 +559,9 @@ onMounted(() => {
 
 .bd__hero-button:hover,
 .bd__hero-button:focus {
-  background: rgba(0, 240, 255, 0.2);
-  border-color: rgba(0, 240, 255, 0.6);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 255, 204, 0.2);
+  border-color: rgba(0, 255, 204, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
   transform: translateY(-2px);
 }
 
@@ -592,7 +592,7 @@ onMounted(() => {
   margin: 0 auto 4rem;
   padding: 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
 }
 
@@ -618,7 +618,7 @@ onMounted(() => {
 
 .bd__card {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   padding: 2rem;
   text-align: center;
@@ -628,9 +628,9 @@ onMounted(() => {
 }
 
 .bd__card:hover {
-  border-color: rgba(0, 240, 255, 0.5);
+  border-color: rgba(0, 255, 204, 0.5);
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15);
 }
 
 @keyframes bdFadeInUp {
@@ -669,7 +669,7 @@ onMounted(() => {
   margin-bottom: 4rem;
   padding: 3rem 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
 }
 
@@ -714,7 +714,7 @@ onMounted(() => {
   display: flex;
   gap: 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   padding: 2rem;
   transition: all 0.3s ease;
@@ -723,8 +723,8 @@ onMounted(() => {
 }
 
 .bd__process-step:hover {
-  border-color: rgba(0, 240, 255, 0.5);
-  box-shadow: 0 8px 20px rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15);
 }
 
 .bd__step-number {
@@ -738,7 +738,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(0, 240, 255, 0.1);
+  background: rgba(0, 255, 204, 0.1);
   flex-shrink: 0;
 }
 
@@ -762,7 +762,7 @@ onMounted(() => {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--surface-elevated);
-  border: 2px solid rgba(0, 240, 255, 0.3);
+  border: 2px solid rgba(0, 255, 204, 0.3);
   border-radius: var(--radius-lg);
   margin-bottom: 3rem;
 }
@@ -787,8 +787,8 @@ onMounted(() => {
 .bd__cta-button {
   display: inline-block;
   padding: 1rem 2.5rem;
-  background: rgba(0, 240, 255, 0.1);
-  border: 2px solid rgba(0, 240, 255, 0.4);
+  background: rgba(0, 255, 204, 0.1);
+  border: 2px solid rgba(0, 255, 204, 0.4);
   border-radius: var(--radius-md);
   color: var(--cyan);
   text-decoration: none;
@@ -801,9 +801,9 @@ onMounted(() => {
 
 .bd__cta-button:hover,
 .bd__cta-button:focus {
-  background: rgba(0, 240, 255, 0.2);
-  border-color: rgba(0, 240, 255, 0.6);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 255, 204, 0.2);
+  border-color: rgba(0, 255, 204, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
   transform: translateY(-2px);
 }
 
@@ -844,17 +844,17 @@ onMounted(() => {
 /* Neon border effect */
 .neon-border {
   box-shadow:
-    0 0 5px rgba(0, 240, 255, 0.5),
-    0 0 10px rgba(0, 240, 255, 0.3),
-    inset 0 0 5px rgba(0, 240, 255, 0.1);
+    0 0 5px rgba(0, 255, 204, 0.5),
+    0 0 10px rgba(0, 255, 204, 0.3),
+    inset 0 0 5px rgba(0, 255, 204, 0.1);
 }
 
 /* Neon text effect */
 .neon-text {
   text-shadow:
-    0 0 5px rgba(0, 240, 255, 0.5),
-    0 0 10px rgba(0, 240, 255, 0.3),
-    0 0 15px rgba(0, 240, 255, 0.2);
+    0 0 5px rgba(0, 255, 204, 0.5),
+    0 0 10px rgba(0, 255, 204, 0.3),
+    0 0 15px rgba(0, 255, 204, 0.2);
 }
 
 /* Responsive */

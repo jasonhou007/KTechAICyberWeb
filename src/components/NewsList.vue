@@ -144,7 +144,7 @@ const handleLoadMore = () => {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--surface-elevated);
-  border: 1px dashed rgba(0, 240, 255, 0.3);
+  border: 1px dashed rgba(0, 255, 204, 0.3);
   border-radius: var(--radius-lg);
 }
 
@@ -173,7 +173,7 @@ const handleLoadMore = () => {
   font-weight: 600;
   padding: 0.875rem 2rem;
   background: var(--surface-elevated);
-  border: 2px solid rgba(0, 240, 255, 0.4);
+  border: 2px solid rgba(0, 255, 204, 0.4);
   border-radius: var(--radius-md);
   color: var(--cyan);
   text-transform: uppercase;
@@ -187,15 +187,15 @@ const handleLoadMore = () => {
 
 .news-list__button:hover,
 .news-list__button:focus {
-  background: rgba(0, 240, 255, 0.1);
-  border-color: rgba(0, 240, 255, 0.8);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+  background: rgba(0, 255, 204, 0.1);
+  border-color: rgba(0, 255, 204, 0.8);
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
   transform: translateY(-2px);
 }
 
 .news-list__button:focus {
   outline: none;
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.3), 0 0 0 3px rgba(0, 240, 255, 0.2);
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.3), 0 0 0 3px rgba(0, 255, 204, 0.2);
 }
 
 .news-list__button:active {

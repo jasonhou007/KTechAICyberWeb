@@ -69,10 +69,10 @@ const { t } = useLanguage()
 <style scoped>
 .ops-anomaly-toast {
   border: 1px solid var(--neon-pink);
-  background: rgba(255, 0, 255, 0.08);
+  background: rgba(255, 0, 170, 0.08);
   padding: 0.6rem 0.8rem;
   border-radius: var(--radius-sm);
-  box-shadow: 0 0 12px rgba(255, 0, 255, 0.3);
+  box-shadow: 0 0 12px rgba(255, 0, 170, 0.3);
 }
 
 .ops-anomaly-head {
@@ -127,7 +127,7 @@ const { t } = useLanguage()
 
 .ops-anomaly-btn:hover,
 .ops-anomaly-btn:focus-visible {
-  background: rgba(255, 0, 255, 0.15);
+  background: rgba(255, 0, 170, 0.15);
   box-shadow: 0 0 6px var(--neon-pink);
   outline: none;
 }
@@ -139,7 +139,7 @@ const { t } = useLanguage()
 
 .ops-investigate-btn:hover,
 .ops-investigate-btn:focus-visible {
-  background: rgba(0, 255, 136, 0.15);
+  background: rgba(0, 255, 204, 0.15);
   box-shadow: 0 0 6px var(--neon-green);
 }
 
@@ -160,7 +160,7 @@ const { t } = useLanguage()
 
 .ops-investigating {
   border-color: var(--neon-green);
-  box-shadow: 0 0 12px rgba(0, 255, 136, 0.3);
+  box-shadow: 0 0 12px rgba(0, 255, 204, 0.3);
 }
 
 .ops-toast-enter-active,

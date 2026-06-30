@@ -83,28 +83,40 @@ test.describe('#242 style parity — canonical cyber palette renders live', () =
       expect(lum).toBeLessThan(0.2)
     })
 
-    test(`${route.name}: a heading resolves to canonical cyan rgb(0, 255, 204)`, async ({ page }) => {
+    test(`${route.name}: at least one heading resolves to canonical cyan rgb(0, 255, 204)`, async ({ page }) => {
       await page.goto(route.path)
       await page.waitForLoadState('networkidle')
-      // Find the first visible heading (h1-h3) whose computed color is NOT the
-      // body text color (i.e. a branded heading). Compare against canonical.
-      const color = await page.evaluate(() => {
-        const headings = Array.from(document.querySelectorAll('h1, h2, h3'))
-        for (const h of headings) {
+      // Scan ALL visible headings. The first heading is often the white hero
+      // (#ffffff) or text-primary — that's canonical too. The parity signal is:
+      // (a) at least one heading IS the canonical cyan, AND (b) NO heading
+      // resolves to a legacy neon literal (neon-green rgb(0,255,136) or
+      // sky-cyan rgb(0,240,255)).
+      const data = await page.evaluate(() => {
+        const out: string[] = []
+        for (const h of Array.from(document.querySelectorAll('h1, h2, h3'))) {
           const rect = (h as HTMLElement).getBoundingClientRect()
           if (rect.width === 0 || rect.height === 0) continue
-          return getComputedStyle(h).color
+          out.push(getComputedStyle(h).color)
         }
-        return ''
+        return out
       })
-      console.log(`\n[242] ${route.name} first heading color: ${color}`)
-      expect(color).toBeTruthy()
-      const [r, g, b] = parseRgb(color)
-      // Canonical cyan #00ffcc = rgb(0, 255, 204). Reject legacy neon-green
-      // rgb(0, 255, 136) and sky-cyan rgb(0, 240, 255) with tight tolerance.
-      expect(Math.abs(r - 0)).toBeLessThanOrEqual(5)
-      expect(Math.abs(g - 255)).toBeLessThanOrEqual(5)
-      expect(Math.abs(b - 204)).toBeLessThanOrEqual(10)
+      console.log(`\n[242] ${route.name} heading colors:`, data)
+      expect(data.length).toBeGreaterThan(0)
+      // (a) at least one heading is canonical cyan (tolerant: r~0, g~255, b~204).
+      const hasCyan = data.some((c) => {
+        const [r, g, b] = parseRgb(c)
+        return Math.abs(r - 0) <= 5 && Math.abs(g - 255) <= 5 && Math.abs(b - 204) <= 10
+      })
+      expect(hasCyan, `${route.name} must have a canonical-cyan heading`).toBe(true)
+      // (b) NO heading is a legacy neon literal.
+      const hasLegacyNeon = data.some((c) => {
+        const [r, g, b] = parseRgb(c)
+        // neon-green rgb(0,255,136) or sky-cyan rgb(0,240,255).
+        const neonGreen = r <= 5 && Math.abs(g - 255) <= 5 && Math.abs(b - 136) <= 10
+        const skyCyan = r <= 5 && Math.abs(g - 240) <= 10 && Math.abs(b - 255) <= 5
+        return neonGreen || skyCyan
+      })
+      expect(hasLegacyNeon, `${route.name} must not use legacy neon-green/sky-cyan`).toBe(false)
     })
 
     test(`${route.name}: a .cyber-card border resolves to a cyan-family rgba`, async ({ page }) => {
@@ -113,26 +125,27 @@ test.describe('#242 style parity — canonical cyber palette renders live', () =
       // .cyber-card is the canonical card class. Some routes (e.g. contact) may
       // use a different card class — fall back to the first bordered card-like
       // element if .cyber-card is absent.
-      const border = await page.evaluate(() => {
+      const borders = await page.evaluate(() => {
         const sel = '.cyber-card, .card, .solution-card, [class*="card"]'
         const cards = Array.from(document.querySelectorAll(sel))
+        const out: string[] = []
         for (const c of cards) {
           const rect = (c as HTMLElement).getBoundingClientRect()
           if (rect.width === 0 || rect.height === 0) continue
           const bc = getComputedStyle(c).borderColor
-          // Skip transparent borders.
-          if (bc && !/rgba?\(\s*0,\s*0,\s*0,\s*0?\)/.test(bc) && bc !== 'transparent') return bc
+          if (bc && !/rgba?\(\s*0,\s*0,\s*0,\s*0?\)/.test(bc) && bc !== 'transparent') out.push(bc)
         }
-        return ''
+        return out
       })
-      console.log(`\n[242] ${route.name} card border: ${border}`)
-      // If a route has no visible bordered card (e.g. contact form), skip the
-      // border assertion but still log — the heading+bg assertions cover parity.
-      if (border) {
-        const [r, g, b] = parseRgb(border)
-        // Cyan family = high green + some blue, low red.
-        expect(g).toBeGreaterThan(150)
-        expect(r).toBeLessThan(100)
+      console.log(`\n[242] ${route.name} card borders:`, borders)
+      // If a route has visible bordered cards, at least one must be cyan-family
+      // (canonical #00ffcc or its rgba). Reject legacy sky-cyan rgb(0,240,255).
+      if (borders.length) {
+        const hasCyan = borders.some((c) => {
+          const [r, g, b] = parseRgb(c)
+          return Math.abs(r - 0) <= 5 && Math.abs(g - 255) <= 10 && Math.abs(b - 204) <= 15
+        })
+        expect(hasCyan, `${route.name} must have a canonical-cyan card border`).toBe(true)
       }
     })
   }

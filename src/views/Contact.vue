@@ -461,8 +461,8 @@ const handleSubmit = () => {
 .contact-hero {
   padding: 4rem 5% 2rem;
   text-align: center;
-  background: rgba(0, 240, 255, 0.05);
-  border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+  background: rgba(0, 255, 204, 0.05);
+  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
 }
 
 .page-title {
@@ -476,7 +476,7 @@ const handleSubmit = () => {
 
 .page-title .accent {
   color: var(--cyan);
-  text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+  text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
 }
 
 .page-subtitle {
@@ -510,13 +510,13 @@ const handleSubmit = () => {
   color: var(--cyan);
   letter-spacing: 0.15em;
   margin-bottom: 2rem;
-  text-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+  text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
 }
 
 /* Contact Form */
 .contact-form-section {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   padding: 2rem;
 }
@@ -547,7 +547,7 @@ const handleSubmit = () => {
   font-size: 1rem;
   color: var(--text-primary);
   background: rgba(10, 10, 20, 0.8);
-  border: 1px solid rgba(0, 240, 255, 0.3);
+  border: 1px solid rgba(0, 255, 204, 0.3);
   border-radius: var(--radius-sm);
   transition: all 0.3s ease;
 }
@@ -555,7 +555,7 @@ const handleSubmit = () => {
 .form-input:focus {
   outline: none;
   border-color: var(--cyan);
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
 }
 
 .form-input.error {
@@ -627,7 +627,7 @@ select.form-input option {
   font-size: 1rem;
   font-weight: 600;
   color: var(--cyan);
-  background: rgba(0, 240, 255, 0.1);
+  background: rgba(0, 255, 204, 0.1);
   border: 2px solid var(--cyan);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -637,8 +637,8 @@ select.form-input option {
 }
 
 .submit-button:hover:not(:disabled) {
-  background: rgba(0, 240, 255, 0.2);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+  background: rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.4);
   transform: translateY(-2px);
 }
 
@@ -659,8 +659,8 @@ select.form-input option {
 
 .submit-message.success {
   color: var(--cyan);
-  background: rgba(0, 255, 136, 0.1);
-  border: 1px solid rgba(0, 255, 136, 0.3);
+  background: rgba(0, 255, 204, 0.1);
+  border: 1px solid rgba(0, 255, 204, 0.3);
 }
 
 .submit-message.error {
@@ -672,7 +672,7 @@ select.form-input option {
 /* Company Info Section */
 .company-info-section {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-lg);
   padding: 2rem;
 }
@@ -686,15 +686,15 @@ select.form-input option {
 
 .info-item {
   padding: 1.5rem;
-  background: rgba(0, 240, 255, 0.05);
-  border: 1px solid rgba(0, 240, 255, 0.15);
+  background: rgba(0, 255, 204, 0.05);
+  border: 1px solid rgba(0, 255, 204, 0.15);
   border-radius: var(--radius-md);
   transition: all 0.3s ease;
 }
 
 .info-item:hover {
-  border-color: rgba(0, 240, 255, 0.4);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+  border-color: rgba(0, 255, 204, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
   transform: translateY(-3px);
 }
 
@@ -734,7 +734,7 @@ select.form-input option {
 .social-links {
   text-align: center;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(0, 240, 255, 0.15);
+  border-top: 1px solid rgba(0, 255, 204, 0.15);
 }
 
 .social-label {
@@ -748,8 +748,8 @@ select.form-input option {
 /* Demo Section */
 .demo-section {
   padding: 4rem 5%;
-  background: rgba(0, 240, 255, 0.05);
-  border-top: 1px solid rgba(0, 240, 255, 0.2);
+  background: rgba(0, 255, 204, 0.05);
+  border-top: 1px solid rgba(0, 255, 204, 0.2);
 }
 
 .demo-content {
@@ -765,7 +765,7 @@ select.form-input option {
   color: var(--cyan);
   letter-spacing: 0.15em;
   margin-bottom: 1.5rem;
-  text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+  text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
 }
 
 .demo-description {
@@ -787,14 +787,14 @@ select.form-input option {
   text-align: center;
   padding: 1.5rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 240, 255, 0.2);
+  border: 1px solid rgba(0, 255, 204, 0.2);
   border-radius: var(--radius-md);
   transition: all 0.3s ease;
 }
 
 .demo-feature:hover {
-  border-color: rgba(0, 240, 255, 0.5);
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+  border-color: rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
   transform: translateY(-5px);
 }
 
@@ -804,7 +804,7 @@ select.form-input option {
   font-weight: 700;
   color: var(--cyan);
   margin-bottom: 1rem;
-  text-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+  text-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
 }
 
 .demo-feature h3 {
@@ -822,7 +822,7 @@ select.form-input option {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--cyan);
-  background: rgba(0, 240, 255, 0.1);
+  background: rgba(0, 255, 204, 0.1);
   border: 2px solid var(--cyan);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -832,8 +832,8 @@ select.form-input option {
 }
 
 .demo-button:hover {
-  background: rgba(0, 240, 255, 0.2);
-  box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+  background: rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
   transform: scale(1.05);
 }
 
@@ -850,7 +850,7 @@ select.form-input option {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 204, 0.2), transparent);
   transition: left 0.5s ease;
 }
 

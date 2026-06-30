@@ -587,7 +587,7 @@ onUnmounted(() => {
   z-index: 9001;
   box-shadow:
     0 0 24px rgba(0, 255, 255, 0.35),
-    0 0 60px rgba(255, 0, 255, 0.15);
+    0 0 60px rgba(255, 0, 170, 0.15);
   font-family: inherit;
   color: var(--cyan);
 }
@@ -606,8 +606,8 @@ onUnmounted(() => {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(0, 255, 136, 0.18) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 136, 0.18) 1px, transparent 1px);
+    linear-gradient(rgba(0, 255, 204, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 204, 0.18) 1px, transparent 1px);
   background-size: 24px 24px;
   transition: opacity 0.4s ease, background-size 0.4s ease;
 }
@@ -636,7 +636,7 @@ onUnmounted(() => {
   background: linear-gradient(
     90deg,
     rgba(0, 255, 255, 0.12),
-    rgba(255, 0, 255, 0.08)
+    rgba(255, 0, 170, 0.08)
   );
   border-bottom: 1px solid rgba(0, 255, 255, 0.35);
 }
@@ -650,7 +650,7 @@ onUnmounted(() => {
 
 .neural-close {
   background: transparent;
-  border: 1px solid rgba(255, 0, 255, 0.5);
+  border: 1px solid rgba(255, 0, 170, 0.5);
   color: var(--accent-magenta);
   width: 1.6rem;
   height: 1.6rem;
@@ -661,7 +661,7 @@ onUnmounted(() => {
 }
 
 .neural-close:hover {
-  box-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
+  box-shadow: 0 0 8px rgba(255, 0, 170, 0.6);
 }
 
 /* ---- output ---------------------------------------------------------------*/
@@ -683,7 +683,7 @@ onUnmounted(() => {
 .terminal-prompt {
   margin-right: 0.4rem;
   color: var(--cyan);
-  text-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
+  text-shadow: 0 0 6px rgba(0, 255, 204, 0.6);
 }
 
 .terminal-input-text {
@@ -818,7 +818,7 @@ onUnmounted(() => {
   position: relative;
   z-index: 2;
   padding: 0.5rem 0.75rem 0.75rem;
-  border-top: 1px solid rgba(0, 255, 136, 0.3);
+  border-top: 1px solid rgba(0, 255, 204, 0.3);
   background: rgba(0, 0, 0, 0.35);
 }
 
@@ -842,14 +842,14 @@ onUnmounted(() => {
   font-size: 0.8rem;
   font-family: inherit;
   color: var(--cyan);
-  background: rgba(0, 255, 136, 0.08);
+  background: rgba(0, 255, 204, 0.08);
   border: 1px solid var(--cyan);
   border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
 .terminal-chip:hover {
-  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
 }
 
 /* ---- mobile breakpoint ----------------------------------------------------*/
@@ -912,11 +912,11 @@ onUnmounted(() => {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 0, 255, 0.9),
+    rgba(255, 0, 170, 0.9),
     rgba(0, 255, 255, 0.9),
     transparent
   );
-  box-shadow: 0 0 16px rgba(255, 0, 255, 0.8);
+  box-shadow: 0 0 16px rgba(255, 0, 170, 0.8);
   animation: terminal-burst-scan 0.7s linear;
 }
 
@@ -948,8 +948,8 @@ onUnmounted(() => {
 .terminal-burst-particle:nth-child(13) { --dx:   0vw; --dy: -50vh; }
 
 @keyframes terminal-burst-flash {
-  0%   { background: rgba(255, 0, 255, 0); }
-  10%  { background: rgba(255, 0, 255, 0.35); }
+  0%   { background: rgba(255, 0, 170, 0); }
+  10%  { background: rgba(255, 0, 170, 0.35); }
   30%  { background: rgba(0, 255, 255, 0.25); }
   100% { background: rgba(0, 0, 0, 0); }
 }

@@ -174,7 +174,7 @@ const handleCTA = () => {
   gap: 0.5rem;
   font-size: 0.9rem;
   color: var(--text-secondary);
-  background: rgba(0, 240, 255, 0.03);
+  background: rgba(0, 255, 204, 0.03);
 }
 
 .breadcrumb a {
@@ -292,7 +292,7 @@ section {
 }
 
 .overview {
-  background: rgba(0, 240, 255, 0.02);
+  background: rgba(0, 255, 204, 0.02);
 }
 
 .overview-grid {
@@ -379,7 +379,7 @@ section {
 }
 
 .benefits {
-  background: rgba(0, 240, 255, 0.02);
+  background: rgba(0, 255, 204, 0.02);
 }
 
 .benefits-list {
@@ -469,7 +469,7 @@ section {
 }
 
 .related-services {
-  background: rgba(0, 240, 255, 0.02);
+  background: rgba(0, 255, 204, 0.02);
 }
 
 .related-grid {

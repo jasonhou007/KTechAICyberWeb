@@ -136,7 +136,7 @@ const newsItems = [
 
 .hover-glow:hover {
   border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.3), 0 0 60px rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 30px rgba(0, 255, 204, 0.3), 0 0 60px rgba(255, 0, 170, 0.1);
 }
 
 .card-image {
@@ -152,7 +152,7 @@ const newsItems = [
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(0, 255, 204, 0.1) 0%, rgba(255, 0, 255, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(0, 255, 204, 0.1) 0%, rgba(255, 0, 170, 0.05) 100%);
 }
 
 .neon-border {
@@ -189,9 +189,9 @@ const newsItems = [
 }
 
 .news-card:hover .card-cta {
-  background: rgba(255, 0, 255, 0.2);
-  border-color: rgba(255, 0, 255, 0.5);
-  box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+  background: rgba(255, 0, 170, 0.2);
+  border-color: rgba(255, 0, 170, 0.5);
+  box-shadow: 0 0 15px rgba(255, 0, 170, 0.3);
 }
 
 .cta-text {

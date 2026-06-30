@@ -310,7 +310,7 @@ onUnmounted(() => {
   padding: 1.5rem;
   box-shadow:
     0 0 24px rgba(0, 255, 255, 0.18),
-    0 0 60px rgba(255, 0, 255, 0.08);
+    0 0 60px rgba(255, 0, 170, 0.08);
   overflow: hidden;
 }
 
@@ -419,7 +419,7 @@ onUnmounted(() => {
   border-radius: 50%;
   background: var(--accent-magenta);
   border: 2px solid var(--cyan);
-  box-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
+  box-shadow: 0 0 8px rgba(255, 0, 170, 0.7);
   cursor: pointer;
 }
 .forge-slider::-moz-range-thumb {
@@ -428,7 +428,7 @@ onUnmounted(() => {
   border-radius: 50%;
   background: var(--accent-magenta);
   border: 2px solid var(--cyan);
-  box-shadow: 0 0 8px rgba(255, 0, 255, 0.7);
+  box-shadow: 0 0 8px rgba(255, 0, 170, 0.7);
   cursor: pointer;
 }
 
@@ -500,7 +500,7 @@ onUnmounted(() => {
   transform-origin: 100px 60px;
 }
 .forge-arc-1 { animation: forge-arc-spin 6s linear infinite; stroke: rgba(0, 255, 255, 0.3); }
-.forge-arc-2 { animation: forge-arc-spin 4s linear infinite reverse; stroke: rgba(255, 0, 255, 0.3); }
+.forge-arc-2 { animation: forge-arc-spin 4s linear infinite reverse; stroke: rgba(255, 0, 170, 0.3); }
 .forge-arc-3 { animation: forge-arc-spin 3s linear infinite; stroke: rgba(0, 255, 204, 0.3); }
 
 @keyframes forge-arc-spin {
@@ -600,7 +600,7 @@ onUnmounted(() => {
 .forge-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--cyan), var(--accent-magenta));
-  box-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
+  box-shadow: 0 0 8px rgba(255, 0, 170, 0.6);
   transition: width 0.1s linear;
 }
 
@@ -609,15 +609,15 @@ onUnmounted(() => {
   animation: forge-stage-flash 0.8s ease-out forwards;
 }
 @keyframes forge-stage-flash {
-  0% { box-shadow: 0 0 0 rgba(255, 0, 255, 0); }
-  15% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.5); }
-  100% { box-shadow: 0 0 0 rgba(255, 0, 255, 0); }
+  0% { box-shadow: 0 0 0 rgba(255, 0, 170, 0); }
+  15% { box-shadow: 0 0 30px rgba(255, 0, 170, 0.5); }
+  100% { box-shadow: 0 0 0 rgba(255, 0, 170, 0); }
 }
 
 /* ---- result blueprint --------------------------------------------------- */
 .forge-result {
   padding: 1.2rem;
-  border: 1px solid rgba(255, 0, 255, 0.35);
+  border: 1px solid rgba(255, 0, 170, 0.35);
   border-radius: var(--radius-md);
   background: var(--surface-card);
 }
@@ -672,7 +672,7 @@ onUnmounted(() => {
   margin: 0.2rem 0 0;
   font-size: 0.95rem;
   color: var(--accent-magenta);
-  text-shadow: 0 0 6px rgba(255, 0, 255, 0.5);
+  text-shadow: 0 0 6px rgba(255, 0, 170, 0.5);
 }
 .forge-verdict {
   font-family: var(--font-display);

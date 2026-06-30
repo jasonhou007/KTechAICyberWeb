@@ -297,8 +297,8 @@ function widgetLabel(key) {
   pointer-events: none;
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(0, 255, 136, 0.03) 0px,
-    rgba(0, 255, 136, 0.03) 1px,
+    rgba(0, 255, 204, 0.03) 0px,
+    rgba(0, 255, 204, 0.03) 1px,
     transparent 1px,
     transparent 3px
   );

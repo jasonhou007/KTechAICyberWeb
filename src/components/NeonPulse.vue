@@ -326,8 +326,8 @@ watch(status, (s) => {
   pointer-events: none;
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(255, 0, 255, 0.04) 0px,
-    rgba(255, 0, 255, 0.04) 1px,
+    rgba(255, 0, 170, 0.04) 0px,
+    rgba(255, 0, 170, 0.04) 1px,
     transparent 1px,
     transparent 3px
   );
@@ -341,14 +341,14 @@ watch(status, (s) => {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle, rgba(0, 255, 136, 0.0) 0%, rgba(0, 255, 136, 0.0) 100%);
+  background: radial-gradient(circle, rgba(0, 255, 204, 0.0) 0%, rgba(0, 255, 204, 0.0) 100%);
   opacity: 0;
   transition: opacity 0.08s ease-out;
   z-index: 2;
 }
 .pulse-flash.lit {
   opacity: 1;
-  background: radial-gradient(circle, rgba(0, 255, 136, 0.25) 0%, rgba(255, 0, 255, 0.15) 100%);
+  background: radial-gradient(circle, rgba(0, 255, 204, 0.25) 0%, rgba(255, 0, 170, 0.15) 100%);
 }
 
 .pulse-header {
@@ -412,7 +412,7 @@ watch(status, (s) => {
 .pulse-btn.danger {
   color: var(--neon-pink);
   border-color: var(--neon-pink);
-  box-shadow: 0 0 6px rgba(255, 0, 255, 0.4);
+  box-shadow: 0 0 6px rgba(255, 0, 170, 0.4);
 }
 
 /* Input + mode radio groups */
@@ -596,7 +596,7 @@ watch(status, (s) => {
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--neon-pink);
   color: var(--neon-pink);
-  background: rgba(255, 0, 255, 0.08);
+  background: rgba(255, 0, 170, 0.08);
 }
 
 .pulse-reduced-note {

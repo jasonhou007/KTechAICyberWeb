@@ -380,7 +380,7 @@ onUnmounted(() => {
   padding: 1.5rem;
   box-shadow:
     0 0 24px rgba(0, 255, 255, 0.18),
-    0 0 60px rgba(255, 0, 255, 0.08);
+    0 0 60px rgba(255, 0, 170, 0.08);
   overflow: hidden;
 }
 
@@ -463,8 +463,8 @@ onUnmounted(() => {
 }
 
 .neural-node-halo {
-  fill: rgba(255, 0, 255, 0.08);
-  stroke: rgba(255, 0, 255, 0.35);
+  fill: rgba(255, 0, 170, 0.08);
+  stroke: rgba(255, 0, 170, 0.35);
   stroke-width: 0.5;
   opacity: 0.5;
 }
@@ -573,13 +573,13 @@ onUnmounted(() => {
 .neural-readout {
   margin-left: auto;
   padding: 0.4rem 0.7rem;
-  background: rgba(255, 0, 255, 0.08);
-  border: 1px solid rgba(255, 0, 255, 0.45);
+  background: rgba(255, 0, 170, 0.08);
+  border: 1px solid rgba(255, 0, 170, 0.45);
   border-radius: var(--radius-sm);
   font-size: 0.95rem;
   letter-spacing: 0.08em;
   color: var(--accent-magenta);
-  text-shadow: 0 0 6px rgba(255, 0, 255, 0.6);
+  text-shadow: 0 0 6px rgba(255, 0, 170, 0.6);
 }
 
 .neural-readout-label {
@@ -623,7 +623,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 0, 255, 0.12);
+  background: rgba(255, 0, 170, 0.12);
   animation: neural-glitch-flash 0.8s ease-out forwards;
 }
 
@@ -639,8 +639,8 @@ onUnmounted(() => {
 }
 
 @keyframes neural-glitch-flash {
-  0% { background: rgba(255, 0, 255, 0); }
-  15% { background: rgba(255, 0, 255, 0.25); }
+  0% { background: rgba(255, 0, 170, 0); }
+  15% { background: rgba(255, 0, 170, 0.25); }
   100% { background: rgba(0, 255, 255, 0); }
 }
 
