@@ -86,7 +86,10 @@ describe('migrated components re-render on language toggle to zh', () => {
 
   it('Hero renders Chinese title and stats labels after toggle', () => {
     const wrapper = mountWithStubs(Hero)
-    expect(wrapper.find('.hero-title .main').text()).toBe('开泰科技')
+    // #246: hero.title is the brand "KTech" in BOTH locales (official site
+    // uses "KTech" even on ZH pages); the zh render is still proven by the
+    // stats labels below.
+    expect(wrapper.find('.hero-title .main').text()).toBe('KTech')
     const labels = wrapper.findAll('.stat-item .stat-label').map((el) => el.text())
     expect(labels).toEqual(['成立年份', '注册资本（元）', '建设项目'])
     wrapper.unmount()

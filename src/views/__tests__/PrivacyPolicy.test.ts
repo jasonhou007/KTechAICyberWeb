@@ -121,8 +121,8 @@ describe('PrivacyPolicy.vue', () => {
 
     it('includes a note on how to exercise rights', () => {
       expect(wrapper.find('.note').exists()).toBe(true)
-      // The bundled exerciseNote resolves to real copy mentioning the contact email.
-      expect(wrapper.text()).toContain('privacy@ktech.fintech')
+      // The bundled exerciseNote resolves to real copy mentioning the official contact email.
+      expect(wrapper.text()).toContain('KTECH@kaitaitech.cn')
     })
 
     it('renders item lists for each sectioned block', () => {

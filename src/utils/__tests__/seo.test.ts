@@ -28,7 +28,7 @@ import seo, { getRouteMeta, getStructuredData, getSitemapRoutes } from '../seo.j
 // ---------------------------------------------------------------------------
 const SITE_URL = 'https://jasonhou007.github.io/KTechAICyberWeb'
 const LOCALE = 'zh_CN'
-const SITE_NAME = '开泰科技 - KBight Fintech'
+const SITE_NAME = 'KTech'
 
 // Helper: build a minimal but realistic Vue Router route object
 const makeRoute = (path: string) => ({ path })
@@ -63,7 +63,7 @@ describe('getRouteMeta(route)', () => {
     const meta = getRouteMeta(makeRoute('/'))
 
     it('returns a site-default title containing the brand', () => {
-      expect(meta.title).toBe('开泰科技 - KBight Fintech | 金融科技创新')
+      expect(meta.title).toBe('KTech | 金融科技创新')
     })
 
     it('returns a non-empty route-specific description', () => {
@@ -117,8 +117,8 @@ describe('getRouteMeta(route)', () => {
     const meta = getRouteMeta(makeRoute('/about'))
 
     it('returns an about-specific title distinct from home', () => {
-      expect(meta.title).toBe('关于我们 - 开泰科技 | KBight Fintech')
-      expect(meta.title).not.toBe('开泰科技 - KBight Fintech | 金融科技创新')
+      expect(meta.title).toBe('关于我们 - KTech')
+      expect(meta.title).not.toBe('KTech | 金融科技创新')
     })
 
     it('returns an about-specific description distinct from home', () => {
@@ -140,7 +140,7 @@ describe('getRouteMeta(route)', () => {
     const meta = getRouteMeta(makeRoute('/news'))
 
     it('returns a news-specific title distinct from home and about', () => {
-      expect(meta.title).toBe('News & Updates - KTech | KBight Fintech')
+      expect(meta.title).toBe('News & Updates - KTech')
       expect(meta.title).not.toContain('关于')
     })
 

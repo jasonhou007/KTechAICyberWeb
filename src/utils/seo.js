@@ -4,9 +4,9 @@
  */
 
 const SITE_URL = 'https://jasonhou007.github.io/KTechAICyberWeb'
-const SITE_NAME = '开泰科技 - KBight Fintech'
+const SITE_NAME = 'KTech'
 const DEFAULT_DESCRIPTION = '开泰远景信息科技有限公司 - 专注于金融科技创新，提供项目管理、零售信贷、供应链金融、区块链技术等解决方案。'
-const DEFAULT_KEYWORDS = '开泰科技,KBight,金融科技,区块链,供应链金融,零售信贷,开泰远景,深圳金融科技,跨境电商,项目管理'
+const DEFAULT_KEYWORDS = '开泰远景信息科技,KTech,金融科技,区块链,供应链金融,零售信贷,开泰远景,深圳金融科技,跨境电商,项目管理'
 const LOCALE = 'zh_CN'
 
 /**
@@ -34,31 +34,31 @@ export function getRouteMeta(route) {
   // Route-specific meta
   const routeMeta = {
     '/': {
-      title: `开泰科技 - KBight Fintech | 金融科技创新`,
-      description: '开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。',
+      title: `KTech | 金融科技创新`,
+      description: '开泰远景信息科技有限公司于2020年6月由泰国开泰银行通过其全资子公司开泰远景有限公司（注册于泰国）在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。',
       ogImage: `${SITE_URL}/og-image-home.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-home.jpg`
     },
     '/about': {
-      title: '关于我们 - 开泰科技 | KBight Fintech',
+      title: '关于我们 - KTech',
       description: '了解开泰远景信息科技有限公司的愿景、使命和文化。我们致力于成为区域领先的金融科技平台。',
       ogImage: `${SITE_URL}/og-image-about.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-about.jpg`
     },
     '/news': {
-      title: 'News & Updates - KTech | KBight Fintech',
+      title: 'News & Updates - KTech',
       description: 'Stay updated with the latest news, insights, and updates from KTech. Company announcements, industry insights, technology updates, and events.',
       ogImage: `${SITE_URL}/og-image-news.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-news.jpg`
     },
     '/privacy': {
-      title: 'Privacy Policy - KTech | KBight Fintech',
+      title: 'Privacy Policy - KTech',
       description: 'KTech Privacy Policy. Learn how we collect, use, and protect your personal data in compliance with GDPR and CCPA, including your data protection rights.',
       ogImage: `${SITE_URL}/og-image-privacy.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-privacy.jpg`
     },
     '/terms': {
-      title: 'Terms of Service - KTech | KBight Fintech',
+      title: 'Terms of Service - KTech',
       description: 'KTech Terms of Service. Read the terms and conditions governing your use of our financial technology platform, including user responsibilities, liability, and dispute resolution.',
       ogImage: `${SITE_URL}/og-image-terms.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-terms.jpg`
@@ -105,7 +105,7 @@ export function getStructuredData(route) {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',
-      email: 'contact@ktech.fintech'
+      email: 'KTECH@kaitaitech.cn'
     },
     sameAs: [
       'https://github.com/jasonhou007/KTechAICyberWeb'
@@ -177,17 +177,16 @@ export function getStructuredData(route) {
     logo: `${SITE_URL}/logo.png`,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '罗湖区',
+      streetAddress: '深圳市梅苑路75号润弘大厦T2座12楼',
       addressLocality: '深圳市',
       addressRegion: '广东省',
-      postalCode: '518000',
       addressCountry: 'CN'
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+86-755-00000000',
+      telephone: '+86-755-36878020',
       contactType: 'Customer Service',
-      email: 'contact@ktech.fintech',
+      email: 'KTECH@kaitaitech.cn',
       areaServed: 'CN',
       availableLanguage: ['zh', 'en']
     }

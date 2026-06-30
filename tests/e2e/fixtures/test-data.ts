@@ -16,14 +16,14 @@ export const EXPECTED_SERVICES = [
 
 // Expected contact items
 export const EXPECTED_CONTACT_ITEMS = [
-  { title: '公司地址', value: '深圳市罗湖区' },
-  { title: '电子邮箱', value: 'contact@ktech.fintech' },
+  { title: '公司地址', value: '深圳市梅苑路75号润弘大厦T2座12楼' },
+  { title: '电子邮箱', value: 'KTECH@kaitaitech.cn' },
   { title: '官方网站', value: 'www.kaitai.tech' },
 ];
 
 // Expected hero content
 export const EXPECTED_HERO = {
-  mainTitle: '开泰科技',
+  mainTitle: 'KTech',
   subtitle: '开泰远景信息科技有限公司',
 };
 

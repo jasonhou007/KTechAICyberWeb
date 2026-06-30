@@ -255,7 +255,7 @@
       <div class="container">
         <div class="stats-grid">
           <div class="stat-item">
-            <div class="stat-value neon-text">50+</div>
+            <div class="stat-value neon-text">20+</div>
             <div class="stat-label">{{ t('about.stats.projects.label') }}</div>
           </div>
           <div class="stat-item">

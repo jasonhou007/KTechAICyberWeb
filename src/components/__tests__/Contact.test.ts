@@ -148,14 +148,14 @@ describe('Contact.vue', () => {
       const items = wrapper.findAll('.contact-item')
       const addressItem = items[0]
       expect(addressItem.find('h4').text()).toBe('Address')
-      expect(addressItem.find('p').text()).toBe('Luohu District, Shenzhen')
+      expect(addressItem.find('p').text()).toBe('12F, Runhong Building T2, No. 75 Meiyuan Road, Shenzhen')
     })
 
     it('displays email contact item', () => {
       const items = wrapper.findAll('.contact-item')
       const emailItem = items[1]
       expect(emailItem.find('h4').text()).toBe('Email')
-      expect(emailItem.find('p').text()).toBe('contact@ktech.fintech')
+      expect(emailItem.find('p').text()).toBe('KTECH@kaitaitech.cn')
     })
 
     it('displays website contact item', () => {
