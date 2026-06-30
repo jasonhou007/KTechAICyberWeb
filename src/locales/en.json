@@ -1807,5 +1807,10 @@
       "securityLine": "security: no vulnerabilities found",
       "evalLine": "evaluator: 8/8 acceptance criteria met"
     }
+  },
+  "asyncLoadError": {
+    "title": "This section could not be loaded",
+    "message": "A part of the page failed to load. Check your connection and try again.",
+    "retry": "Reload section"
   }
 }
