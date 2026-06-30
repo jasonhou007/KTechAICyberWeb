@@ -137,13 +137,13 @@ describe('Hero.vue', () => {
     it('displays hero title with main text', () => {
       const titleMain = wrapper.find('.hero-title .main')
       expect(titleMain.exists()).toBe(true)
-      expect(titleMain.text()).toBe('KaiTech')
+      expect(titleMain.text()).toBe('KTech')
     })
 
     it('displays hero title with accent text', () => {
       const titleAccent = wrapper.find('.hero-title .accent')
       expect(titleAccent.exists()).toBe(true)
-      expect(titleAccent.text()).toBe('KBRIGHT FINTECH')
+      expect(titleAccent.text()).toBe('FINTECH')
     })
 
     it('displays hero subtitle/description', () => {
@@ -464,12 +464,12 @@ describe('Hero.vue', () => {
 
     it('translates hero title', () => {
       const titleMain = wrapper.find('.hero-title .main')
-      expect(titleMain.text()).toBe('KaiTech')
+      expect(titleMain.text()).toBe('KTech')
     })
 
     it('translates hero subtitle', () => {
       const titleAccent = wrapper.find('.hero-title .accent')
-      expect(titleAccent.text()).toBe('KBRIGHT FINTECH')
+      expect(titleAccent.text()).toBe('FINTECH')
     })
 
     it('translates hero description', () => {

@@ -257,7 +257,7 @@ describe('About.vue', () => {
       const visionCard = wrapper.findAll('.vmc-card')[0]
       expect(visionCard.find('h3').text()).toBe('Our Vision')
       expect(visionCard.find('p').text()).toBe(
-        'To become the most trusted AI partner for financial institutions, making intelligent finance accessible to every business.',
+        'To become a regional leading fintech platform.',
       )
     })
 
@@ -266,7 +266,7 @@ describe('About.vue', () => {
       // Mission title resolves to real English copy (about.mission.heading).
       expect(missionCard.find('h3').text()).toBe('Our Mission')
       expect(missionCard.find('p').text()).toBe(
-        'KTech is dedicated to building transformative AI solutions that push the boundaries of what\'s possible.',
+        'Empower customers with cutting-edge technology.',
       )
     })
 
@@ -345,7 +345,7 @@ describe('About.vue', () => {
 
     it('renders the projects stat with hardcoded value and translated label', () => {
       const items = wrapper.findAll('.stat-item')
-      expect(items[0].find('.stat-value').text()).toBe('50+')
+      expect(items[0].find('.stat-value').text()).toBe('20+')
       // t('about.stats.projects') resolves to the bundled {label,value} object; the
       // real label "Projects" is present in the rendered text (not the raw key).
       expect(items[0].find('.stat-label').text()).toContain('Projects')

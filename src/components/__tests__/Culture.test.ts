@@ -174,7 +174,7 @@ describe('Culture.vue', () => {
       const missionCard = cards[1]
       const description = missionCard.find('p')
       expect(description.exists()).toBe(true)
-      expect(description.text()).toBe('Empower clients with frontier technology')
+      expect(description.text()).toBe('Empower customers with cutting-edge technology')
     })
 
     it('displays values description with HTML content', () => {

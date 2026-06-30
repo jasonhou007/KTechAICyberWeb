@@ -139,7 +139,7 @@ describe('Contact Component', () => {
       mockUseSkeleton.mockReturnValue({ isLoading: false })
       wrapper = mount(Contact)
       const values = wrapper.findAll('.contact-item p')
-      const expectedValues = ['深圳市罗湖区', 'contact@ktech.fintech', 'www.kaitai.tech']
+      const expectedValues = ['深圳市梅苑路75号润弘大厦T2座12楼', 'KTECH@kaitaitech.cn', 'www.kaitai.tech']
       values.forEach((value, index) => {
         expect(value.text()).toBe(expectedValues[index])
       })
