@@ -155,10 +155,10 @@ describe('#246 content audit — MEDIUM (internal consistency)', () => {
 })
 
 describe('#246 content audit — fabricated identifiers are gone everywhere', () => {
-  // Defense-in-depth: the fabricated `@ktech.fintech` mailbox and the
+  // Defense-in-depth: the fabricated `@ktech.fintech` mailboxes and the
   // `0000 0000` placeholder must not survive in ANY locale leaf that the
-  // manifest touched. (Other inboxes — e.g. legal@ — are out of scope and
-  // intentionally retained.)
+  // manifest touched. All fabricated inboxes — contact@, privacy@, and
+  // legal@ — have been corrected to the official KTECH@kaitaitech.cn inbox.
   it('no corrected contact key still holds contact@ktech.fintech', () => {
     expect(pick(en, 'contact.info.emailValue')).not.toBe('contact@ktech.fintech')
     expect(pick(zh, 'contact.info.emailValue')).not.toBe('contact@ktech.fintech')
@@ -174,6 +174,13 @@ describe('#246 content audit — fabricated identifiers are gone everywhere', ()
   it('no fabricated privacy@ktech.fintech inbox survives in privacy.rights.exerciseNote', () => {
     expect(pick(en, 'privacy.rights.exerciseNote')).not.toContain('privacy@ktech.fintech')
     expect(pick(zh, 'privacy.rights.exerciseNote')).not.toContain('privacy@ktech.fintech')
+  })
+
+  it('no fabricated legal@ktech.fintech inbox survives in terms.contact.email', () => {
+    expect(pick(en, 'terms.contact.email')).not.toContain('legal@ktech.fintech')
+    expect(pick(zh, 'terms.contact.email')).not.toContain('legal@ktech.fintech')
+    expect(pick(en, 'terms.contact.email')).toContain('KTECH@kaitaitech.cn')
+    expect(pick(zh, 'terms.contact.email')).toContain('KTECH@kaitaitech.cn')
   })
 
   it('no fabricated 518000 ZIP survives in terms.contact.address', () => {
