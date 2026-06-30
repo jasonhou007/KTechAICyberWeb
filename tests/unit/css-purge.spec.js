@@ -153,11 +153,20 @@ describe('CSS purge — cyber.css redundant :root removed (#188)', () => {
   // counting how many times the unique dark gradient-end value appears in
   // ACTIVE (comment-stripped) source: must be exactly ONCE (only in
   // [data-theme="dark"]). RED today: appears twice.
-  it('cyber.css contains --bg-gradient-end: #16213e exactly ONCE (only in [data-theme=dark])', () => {
+  it('cyber.css defines ZERO --bg-gradient-end (consolidated into variables.css by #242)', () => {
     const raw = readFileSync(CYBER_CSS_PATH, 'utf-8')
     const active = stripComments(raw)
     const matches = active.match(/--bg-gradient-end:\s*#16213e/g) || []
     console.log('\n[css-purge] --bg-gradient-end #16213e count in cyber.css:', matches.length)
+    // #188 left 1 (in [data-theme="dark"]); #242 removed that block -> 0.
+    expect(matches.length).toBe(0)
+  })
+
+  it('variables.css is the single source: --bg-gradient-end: #16213e exactly ONCE', () => {
+    const raw = readFileSync(resolve(ROOT, 'src/assets/styles/variables.css'), 'utf-8')
+    const active = stripComments(raw)
+    const matches = active.match(/--bg-gradient-end:\s*#16213e/g) || []
+    console.log('\n[css-purge] --bg-gradient-end #16213e count in variables.css:', matches.length)
     expect(matches.length).toBe(1)
   })
 })

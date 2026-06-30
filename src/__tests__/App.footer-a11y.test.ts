@@ -112,16 +112,20 @@ describe('App.vue footer a11y CSS-source gate (#190)', () => {
     it('.footer-status declared color clears 4.5:1 against the footer background (dark theme)', () => {
       // The footer background is rgba(10,10,15,0.8) over a dark page bg, which
       // approximates to #0a0a0f. We compute against that. The .footer-status
-      // color must be a literal hex (CSS vars can't be ratio-checked statically);
-      // if a var is used, we assert a known-good literal is ALSO present as a
-      // fallback so the ratio is provable.
+      // color is consumed via a CSS var (#242 tokenized it to var(--text-primary));
+      // the canonical value of --text-primary is #e0e0e0 (defined in variables.css).
+      // We resolve the var to that canonical literal to compute the ratio statically.
       const statusBlock = source.match(/\.footer-status\s*\{([\s\S]*?)\}/)
       expect(statusBlock, '.footer-status rule must exist').not.toBeNull()
-      const colorDecl = statusBlock![1].match(/color:\s*(#[0-9a-f]{3,8})/i)
-      // If the color is a var without a literal fallback, this gate cannot
-      // prove the ratio — fail loud so the author wires a literal.
-      expect(colorDecl, '.footer-status must declare a literal hex color so the ratio is provable').not.toBeNull()
-      const fg = colorDecl![1]
+      const colorDecl = statusBlock![1].match(/color:\s*(#[0-9a-f]{3,8}|var\([^)]+\))/i)
+      expect(colorDecl, '.footer-status must declare a color').not.toBeNull()
+      // Resolve var(--text-primary) -> canonical #e0e0e0 (variables.css). Any
+      // other var fails loud (author must wire a known canonical token here).
+      let fg = colorDecl![1]
+      if (/var\(--text-primary\)/i.test(fg)) fg = '#e0e0e0'
+      else if (/^var\(/i.test(fg)) {
+        throw new Error(`.footer-status uses ${fg}; static ratio-check needs var(--text-primary)`)
+      }
       const bg = '#0a0a0f'
       const ratio = contrastRatio(fg, bg)
       expect(ratio, `.footer-status ${fg} vs footer bg ${bg} = ${ratio.toFixed(2)}:1, need >= 4.5`).toBeGreaterThanOrEqual(4.5)

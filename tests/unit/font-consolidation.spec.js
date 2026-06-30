@@ -126,23 +126,31 @@ describe('scoped styles consolidated onto font variables (#188)', () => {
     expect(total).toBe(0)
   })
 
-  it("does NOT over-purge: 'Courier New' terminal monospace preserved (>= 4)", () => {
+  it("does NOT over-purge: terminal monospace preserved (>= 4 consumers via --font-mono, #242)", () => {
     // NeuralCore, NeuralTerminal, SolutionForge terminal blocks + cyber.css
     // body — intentional monospace. Proves consolidation was targeted, not a
-    // blanket font-family rewrite.
+    // blanket font-family rewrite. #242 tokenized these onto var(--font-mono)
+    // (defined in variables.css as 'Courier New', monospace), so we assert the
+    // token is consumed in >= 4 sites AND the canonical Courier New literal
+    // survives in variables.css (the single source of the mono stack).
     let count = 0
     for (const f of vueFiles) {
       const src = stripComments(readFileSync(f, 'utf-8'))
-      const matches = src.match(/'Courier New'/g) || []
-      count += matches.length
+      count += (src.match(/var\(--font-mono\)/g) || []).length
     }
-    // Also count cyber.css (not a .vue but is an intentional Courier New site).
+    // cyber.css body now uses var(--font-mono) (tokenized by #242).
     const cyberSrc = stripComments(
       readFileSync(resolve(ROOT, 'src/assets/styles/cyber.css'), 'utf-8')
     )
-    count += (cyberSrc.match(/'Courier New'/g) || []).length
-    console.log('\n[font-consolidation] Courier New preserved count:', count)
+    count += (cyberSrc.match(/var\(--font-mono\)/g) || []).length
+    console.log('\n[font-consolidation] var(--font-mono) consumers:', count)
     expect(count).toBeGreaterThanOrEqual(4)
+
+    // The canonical 'Courier New' literal must survive in variables.css.
+    const varSrc = stripComments(
+      readFileSync(resolve(ROOT, 'src/assets/styles/variables.css'), 'utf-8')
+    )
+    expect(varSrc).toMatch(/--font-mono:\s*'Courier New'/)
   })
 
   it('consolidation REPLACED (not deleted): var(--font-display) usages grew (>= 133)', () => {

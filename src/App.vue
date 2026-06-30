@@ -105,7 +105,7 @@ export default {
         { name: 'description', content: currentMeta.value.description },
         { name: 'keywords', content: currentMeta.value.keywords },
         { name: 'author', content: '开泰远景信息科技有限公司' },
-        { name: 'theme-color', content: '#00ffcc' },
+        { name: 'theme-color', content: 'var(--cyan)' },
 
         // Open Graph
         { property: 'og:type', content: currentMeta.value.ogType },
@@ -170,10 +170,10 @@ export default {
   border-top: 1px solid rgba(0, 240, 255, 0.2);
 }
 .footer-content { display: flex; justify-content: space-between; align-items: center; }
-.footer-text { font-family: var(--font-body); font-size: 0.9rem; color: #b0b0b0; }
+.footer-text { font-family: var(--font-body); font-size: 0.9rem; color: var(--text-secondary); }
 .footer-link {
   margin-left: 1rem;
-  color: #00f0ff;
+  color: var(--cyan);
   /* #190 link-in-text-block: persistent underline is the non-color distinguisher
      (the link cyan contrasts poorly with the surrounding footer text, so color
      alone is not an accessible differentiator). */
@@ -192,16 +192,16 @@ export default {
   align-items: center;
   gap: 0.5rem;
   /* #190 color-contrast: explicit high-contrast color so the status text does
-     not rely on inheritance (which computed to #1a1a2e on #39393e = 1.48:1,
-     failing WCAG AA). #e0e0e0 on the footer bg (#0a0a0f) = 14.96:1. */
-  color: #e0e0e0;
+     not rely on inheritance (which computed to var(--bg-secondary) on var(--bg-secondary) = 1.48:1,
+     failing WCAG AA). var(--text-primary) on the footer bg (var(--bg-primary)) = 14.96:1. */
+  color: var(--text-primary);
 }
 .status-dot {
-  width: 8px; height: 8px; background: #00f0ff; border-radius: 50%;
+  width: 8px; height: 8px; background: var(--cyan); border-radius: 50%;
   animation: blink 2s ease-in-out infinite;
 }
 @keyframes blink {
-  0%, 100% { opacity: 1; box-shadow: 0 0 10px #00f0ff; }
+  0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--cyan); }
   50% { opacity: 0.3; box-shadow: none; }
 }
 </style>

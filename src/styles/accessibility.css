@@ -49,9 +49,9 @@
  * Provides clear visual feedback for keyboard users
  */
 :focus-visible {
-  outline: 2px solid var(--focus-color, #00f0ff);
+  outline: 2px solid var(--focus-color, var(--cyan));
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 
 /**
@@ -63,7 +63,7 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--focus-color, #00f0ff);
+  outline: 2px solid var(--focus-color, var(--cyan));
   outline-offset: 2px;
   box-shadow: 0 0 10px var(--focus-glow, rgba(0, 240, 255, 0.5));
 }
@@ -72,9 +72,9 @@ textarea:focus-visible {
  * Focus styles for navigation links
  */
 nav a:focus-visible {
-  outline: 2px solid var(--focus-color, #00f0ff);
+  outline: 2px solid var(--focus-color, var(--cyan));
   outline-offset: 4px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 /**
@@ -129,7 +129,7 @@ nav a:focus-visible {
 
   .progress-fill {
     animation: none !important;
-    background-image: linear-gradient(90deg, #00f0ff, #00ff88);
+    background-image: linear-gradient(90deg, var(--cyan), var(--cyan));
   }
 
   .logo-accent {
@@ -158,7 +158,7 @@ nav a:focus-visible {
  */
 @media (prefers-contrast: high) {
   :root {
-    --focus-color: #00f0ff;
+    --focus-color: var(--cyan);
     --focus-glow: rgba(0, 240, 255, 0.8);
   }
 
@@ -220,7 +220,7 @@ footer:focus {
 main:focus-visible,
 nav:focus-visible,
 footer:focus-visible {
-  outline: 2px solid var(--focus-color, #00f0ff);
+  outline: 2px solid var(--focus-color, var(--cyan));
   outline-offset: 4px;
 }
 
@@ -236,13 +236,13 @@ footer:focus-visible {
 /* Footer text contrast */
 .footer-text,
 .stat-label {
-  color: #b0b0b0; /* #888 replaced for 4.5:1 contrast on dark backgrounds */
+  color: var(--text-secondary); /* #888 replaced for 4.5:1 contrast on dark backgrounds */
 }
 
 /* About page content contrast */
 .content-block p,
 .page-subtitle {
-  color: #b8b8b8; /* #aaa replaced for 4.5:1 contrast on dark backgrounds */
+  color: var(--text-secondary); /* #aaa replaced for 4.5:1 contrast on dark backgrounds */
 }
 
 /* =============================================================================
@@ -271,7 +271,7 @@ button:disabled,
 
 button:disabled:focus-visible,
 [aria-disabled="true"]:focus-visible {
-  outline: 2px solid var(--focus-color, #00f0ff);
+  outline: 2px solid var(--focus-color, var(--cyan));
   outline-offset: 2px;
   opacity: 0.8;
 }
@@ -290,7 +290,7 @@ button:disabled:focus-visible,
 
 [aria-live="polite"]:focus,
 [aria-live="assertive"]:focus {
-  outline: 2px solid var(--focus-color, #00f0ff);
+  outline: 2px solid var(--focus-color, var(--cyan));
   outline-offset: 2px;
 }
 
