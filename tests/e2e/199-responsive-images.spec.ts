@@ -17,6 +17,18 @@ import { test, expect } from '@playwright/test'
  * (400w file vs 800w file), so the strict ordering is meaningful. The
  * currentSrc assertion is the deterministic, dimension-independent proof.
  *
+ * Note on deviceScaleFactor (DPR): the AC tests the LOGIC of "smaller viewport
+ * => smaller source file". A real Pixel 5 has DPR 2.75, so at 375 CSS-px the
+ * browser needs ~1031 device px and correctly picks the larger source — that
+ * is correct real-device behavior, NOT a bug. To test the srcset LOGIC itself
+ * deterministically across the Desktop Chrome and Mobile Chrome CI projects
+ * (which apply different device contexts: Desktop=1x, Pixel 5=2.75x), every
+ * viewport here pins deviceScaleFactor: 1 explicitly. This isolates the AC3
+ * contract (viewport-driven variant selection) from the separate,
+ * device-dependent question of high-DPR up-sampling. With DPR pinned to 1,
+ * 100vw at 375px = 375 device px => the 400w variant is the smallest source
+ * that satisfies it, and the assertion holds in BOTH CI projects.
+ *
  * Lives in tests/e2e/ (the collected testDir — see playwright.config.ts); the
  * top-level e2e/ dir is NOT collected. Paths use the Vite base subpath
  * (/KTechAICyberWeb/) per the existing 165-about-news-images.spec.ts pattern.
@@ -53,7 +65,10 @@ async function heroImgInfo(page: import('@playwright/test').Page): Promise<HeroI
 
 test.describe('Responsive images (AC #199)', () => {
   test.describe('desktop viewport (1920x1080)', () => {
-    test.use({ viewport: { width: 1920, height: 1080 } })
+    // Pin DPR=1 so the test verifies viewport-driven selection deterministically
+    // under BOTH the Desktop Chrome (1x) and Mobile Chrome (Pixel 5, 2.75x) CI
+    // projects — see the header note on deviceScaleFactor.
+    test.use({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 })
 
     test('About hero selects the 800w source (not the 400w mobile variant)', async ({ page }) => {
       await page.goto(`${BASE}about`)
@@ -67,7 +82,11 @@ test.describe('Responsive images (AC #199)', () => {
   })
 
   test.describe('mobile viewport (375x667)', () => {
-    test.use({ viewport: { width: 375, height: 667 } })
+    // Pin DPR=1 — see the desktop block comment + header note. Without this,
+    // the Mobile Chrome CI project (Pixel 5, DPR 2.75) would correctly pick
+    // the larger source (375 CSS-px * 2.75 ≈ 1031 device px), which is right
+    // for a real device but obscures the srcset/sizes LOGIC under test.
+    test.use({ viewport: { width: 375, height: 667 }, deviceScaleFactor: 1 })
 
     test('About hero selects the 400w variant', async ({ page }) => {
       await page.goto(`${BASE}about`)
@@ -86,9 +105,11 @@ test.describe('Responsive images (AC #199)', () => {
     // viewports also pick different currentSrc files (400w vs 800w).
     const desktopCtx = await browser.newContext({
       viewport: { width: 1920, height: 1080 },
+      deviceScaleFactor: 1,
     })
     const mobileCtx = await browser.newContext({
       viewport: { width: 375, height: 667 },
+      deviceScaleFactor: 1,
     })
     const desktopPage = await desktopCtx.newPage()
     const mobilePage = await mobileCtx.newPage()
