@@ -74,8 +74,13 @@ export const PARTICLE_CAP = 200
 const PARTICLE_LIFE_FRAMES = 30
 /** Max outward speed (px/frame) of a burst particle. */
 const PARTICLE_MAX_SPEED = 6
-/** Neon palette for burst particles (cycles). */
-const PARTICLE_COLORS = ['#00ff88', '#ff00ff', '#00ffff', '#ffff00']
+/** Neon palette for burst particles (cycles).
+ *  Values are the CANONICAL brand tokens from variables.css (#242 style
+ *  unification): #00ffcc = --cyan, #ff00aa = --accent-magenta, #ffcc00 =
+ *  --status-warning. Canvas fillStyle cannot consume var(--...) so the
+ *  resolved canonical hex is inlined here; if the tokens change, update both
+ *  variables.css and this array. */
+const PARTICLE_COLORS = ['#00ffcc', '#ff00aa', '#00ffcc', '#ffcc00']
 
 // --- media queries / device class ------------------------------------------
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)'
@@ -563,7 +568,10 @@ export function useAudioPulse() {
     const gap = 2
     const bw = (w - gap * (bars - 1)) / bars
     const gain = sensitivity.value
-    ctx2d.fillStyle = '#00ff88'
+    // #242 style unification: canonical --cyan (#00ffcc). Canvas fillStyle
+    // cannot consume var(--...) so the resolved canonical hex is inlined; kept
+    // in sync with variables.css.
+    ctx2d.fillStyle = '#00ffcc'
     for (let i = 0; i < bars; i++) {
       // AC 1c: route each byte through computeSensitivity so the slider scales
       // bar height. gain=1 is the identity; <1 flattens, >1 amplifies (clamped).
@@ -578,7 +586,8 @@ export function useAudioPulse() {
     const cy = h / 2
     const gain = sensitivity.value
     const baseR = Math.min(w, h) * 0.2 + computeSensitivity(energy, gain) * Math.min(w, h) * 0.15
-    ctx2d.strokeStyle = '#ff00ff'
+    // #242: canonical --accent-magenta (#ff00aa).
+    ctx2d.strokeStyle = '#ff00aa'
     ctx2d.lineWidth = 2
     ctx2d.beginPath()
     const steps = Math.min(data.length, 64)
@@ -598,7 +607,8 @@ export function useAudioPulse() {
   function drawParticles(ctx2d, w, h, data) {
     const count = Math.min(data.length, 48)
     const gain = sensitivity.value
-    ctx2d.fillStyle = '#00ffff'
+    // #242: canonical --cyan (#00ffcc).
+    ctx2d.fillStyle = '#00ffcc'
     for (let i = 0; i < count; i++) {
       // AC 1c: amplitude scales with sensitivity.
       const v = computeSensitivity(data[i], gain)

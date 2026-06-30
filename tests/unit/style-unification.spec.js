@@ -70,9 +70,15 @@ function stripComments(src) {
     .replace(/\/\/[^\n]*/g, '')
 }
 
-/** The file set under the unification gate: .vue + .css under src/, EXCLUDING
- *  locales (JSON-i18n payloads, not style sources), __tests__, and *.test.*
- *  files (test fixtures are not shipped CSS). */
+// The file set under the unification gate: .vue + .js + .ts + .css under src/,
+// EXCLUDING locales (JSON-i18n payloads, not style sources), __tests__, and
+// *.test.*/*.spec.* files (test fixtures are not shipped CSS/JS).
+//
+// Why .js/.ts are in scope (#242 review): a composable can write brand colors
+// straight to a LIVE rendered surface via canvas. useAudioPulse.js did exactly
+// this with PARTICLE_COLORS and ctx2d.fillStyle. A .vue-only gate missed that
+// canvas palette, so the legacy neon slipped through. Canvas/WebGL draw code
+// is a shipped style source just like a style block, so the gate must read it.
 function listSourceFiles() {
   const acc = []
   ;(function walk(dir) {
@@ -81,7 +87,7 @@ function listSourceFiles() {
       if (entry.isDirectory()) {
         if (entry.name === 'locales' || entry.name === '__tests__' || entry.name === 'node_modules') continue
         walk(full)
-      } else if (/\.(vue|css)$/.test(entry.name) && !/\.test\./.test(entry.name)) {
+      } else if (/\.(vue|js|ts|css)$/.test(entry.name) && !/\.(test|spec)\./.test(entry.name)) {
         acc.push(full)
       }
     }
@@ -209,13 +215,19 @@ describe('hardcoded hex literals collapsed across src (#242 AC2)', () => {
   })
 
   // Per-offender denylist: these LOUD legacy brand literals must NOT appear in
-  // any .vue file. They are consolidated onto var(--cyan) / var(--accent-magenta)
-  // / var(--bg-primary) / var(--text-primary) / var(--text-muted). Allowed in
+  // any .vue/.js/.ts file. They are consolidated onto var(--cyan) /
+  // var(--accent-magenta) / var(--bg-primary) / var(--text-primary) /
+  // var(--text-muted) (or, for canvas draw code that cannot consume var(),
+  // their canonical hex VALUES #00ffcc / #ff00aa / #ffcc00). Allowed in
   // variables.css + cyber.css ONLY inside comments (those files define/alias
   // the canonical values — the test strips comments before checking).
+  //
+  // .js/.ts are in scope (#242 review): a composable can paint brand neon
+  // straight onto a LIVE canvas (useAudioPulse.js did exactly this with
+  // PARTICLE_COLORS + ctx2d.fillStyle). A .vue-only gate missed it.
   const DENYLIST = ['#00f0ff', '#00ff88', '#ff00ff', '#00ffff', '#0a0f1c', '#e0e8ff', '#8a9acc']
 
-  const vueFiles = (() => {
+  const srcComponentFiles = (() => {
     const acc = []
     ;(function walk(dir) {
       for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -223,7 +235,7 @@ describe('hardcoded hex literals collapsed across src (#242 AC2)', () => {
         if (entry.isDirectory()) {
           if (entry.name === 'locales' || entry.name === '__tests__' || entry.name === 'node_modules') continue
           walk(full)
-        } else if (entry.name.endsWith('.vue') && !/\.test\./.test(entry.name)) {
+        } else if (entry.name.match(/\.(vue|js|ts)$/) && !/\.(test|spec)\./.test(entry.name)) {
           acc.push(full)
         }
       }
@@ -232,24 +244,24 @@ describe('hardcoded hex literals collapsed across src (#242 AC2)', () => {
   })()
 
   for (const hex of DENYLIST) {
-    it(`ZERO '${hex}' literals in any .vue file`, () => {
+    it(`ZERO '${hex}' literals in any .vue/.js/.ts file`, () => {
       const offenders = []
-      for (const f of vueFiles) {
+      for (const f of srcComponentFiles) {
         const src = stripComments(readFileSync(f, 'utf-8'))
         const hits = (src.match(new RegExp(hex.replace('#', '\\#'), 'gi')) || []).length
         if (hits) offenders.push({ file: path.relative(ROOT, f), count: hits })
       }
       const total = offenders.reduce((s, o) => s + o.count, 0)
       if (total) console.log(`\n[style-unification] '${hex}' offenders:`, offenders)
-      expect(total, `${hex} must be consolidated in .vue files`).toBe(0)
+      expect(total, `${hex} must be consolidated in .vue/.js/.ts files`).toBe(0)
     })
   }
 
-  it("'Courier New' / 'Fira Code' literals eliminated from .vue (route via --font-mono)", () => {
+  it("'Courier New' / 'Fira Code' literals eliminated from .vue/.js/.ts (route via --font-mono)", () => {
     let courier = 0
     let fira = 0
     const offenders = []
-    for (const f of vueFiles) {
+    for (const f of srcComponentFiles) {
       const src = stripComments(readFileSync(f, 'utf-8'))
       const c = (src.match(/'Courier New'/g) || []).length
       const fc = (src.match(/'Fira Code'/g) || []).length
@@ -257,7 +269,7 @@ describe('hardcoded hex literals collapsed across src (#242 AC2)', () => {
       courier += c
       fira += fc
     }
-    console.log('\n[style-unification] Courier New literals in .vue:', courier, 'Fira Code:', fira, offenders)
+    console.log('\n[style-unification] Courier New literals in .vue/.js/.ts:', courier, 'Fira Code:', fira, offenders)
     expect(courier + fira).toBe(0)
   })
 
@@ -265,7 +277,7 @@ describe('hardcoded hex literals collapsed across src (#242 AC2)', () => {
   // cannot catch `rgba(0, 240, 255, 0.2)` (sky-cyan) — but the LIVE computed
   // style resolves these to the legacy color, so they must also be normalized
   // to the canonical cyan/magenta triplets. Assert ZERO legacy rgba neon
-  // triplets remain in any .vue/.css source.
+  // triplets remain in any .vue/.js/.ts/.css source.
   const RGBA_DENYLIST = [
     { pat: 'rgba(0, 240, 255', name: 'sky-cyan rgba' },
     { pat: 'rgba(0,255,240', name: 'sky-cyan rgba (no-space)' },
@@ -277,7 +289,7 @@ describe('hardcoded hex literals collapsed across src (#242 AC2)', () => {
   for (const { pat, name } of RGBA_DENYLIST) {
     it(`ZERO '${name}' triplet in src`, () => {
       const offenders = []
-      for (const f of vueFiles) {
+      for (const f of srcComponentFiles) {
         const src = stripComments(readFileSync(f, 'utf-8'))
         if (src.includes(pat)) offenders.push(path.relative(ROOT, f))
       }
