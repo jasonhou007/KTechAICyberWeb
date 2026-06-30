@@ -245,6 +245,43 @@ describe('About.vue', () => {
   })
 
   // ============================================
+  // Who We Are Icons (AC #198) — live-DOM assertions that the 5 emoji icons in
+  // the Who We Are cards have been replaced by the original cyber AboutIcon
+  // inline-SVGs (company, parentRegion, capital, established, services). The
+  // shipped-app gate: these svgs must appear in the REAL mounted About view.
+  // ============================================
+  describe('Who We Are Icons (AC #198)', () => {
+    it('renders exactly five inline-SVG icons inside the Who We Are cards', () => {
+      const svgs = wrapper.findAll('.who-we-are .card-icon svg')
+      expect(svgs).toHaveLength(5)
+    })
+
+    it('every Who We Are icon svg has role="img"', () => {
+      wrapper.findAll('.who-we-are .card-icon svg').forEach((svg) => {
+        expect(svg.attributes('role')).toBe('img')
+      })
+    })
+
+    it('every Who We Are icon svg has a non-empty aria-label that is not a raw key', () => {
+      wrapper.findAll('.who-we-are .card-icon svg').forEach((svg) => {
+        const label = svg.attributes('aria-label') || ''
+        expect(label.length).toBeGreaterThan(0)
+        expect(label).not.toMatch(/^about\./)
+      })
+    })
+
+    it('does NOT render the legacy emoji icons (🏢🌏💰📅🚀) in Who We Are', () => {
+      const icons = wrapper.findAll('.who-we-are .card-icon')
+      const text = icons.map((i) => i.text()).join('')
+      expect(text).not.toContain('🏢')
+      expect(text).not.toContain('🌏')
+      expect(text).not.toContain('💰')
+      expect(text).not.toContain('📅')
+      expect(text).not.toContain('🚀')
+    })
+  })
+
+  // ============================================
   // Vision/Mission/Culture Section Tests
   // ============================================
   describe('Vision / Mission / Culture Section', () => {
