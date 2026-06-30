@@ -32,7 +32,7 @@ import { test, expect, type Page } from '@playwright/test'
 // (the server 302-redirects / to the subpath) BUT page.goto('/about') hits the
 // origin's /about which 404s (no redirect for deep routes). Specs that
 // deep-link must include the subpath explicitly. Mirrors the BASE-constant
-// pattern used by 187-rum-beacon.spec.ts (#187) and 140-router-base.spec.ts.
+// pattern used by 140-router-base.spec.ts.
 const BASE = '/KTechAICyberWeb/'
 const HOME = `${BASE}`
 const ABOUT = `${BASE}about`

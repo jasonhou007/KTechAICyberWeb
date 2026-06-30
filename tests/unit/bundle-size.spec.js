@@ -74,6 +74,18 @@ function listJsChunks() {
 // philosophy: a properly code-split flagship feature warrants a documented
 // bump rather than a hack). MAX_ROUTE_CHUNK_GZIP_BUDGET unchanged — the new
 // chunk at 3,139 gzip is well under the 7,000 per-chunk cap.
+//
+// Updated for #240 (remove RUM beacon): the #187 RUM feature was fully removed
+// (the performance-monitoring debug panel was leaking into production). This
+// deletes the dynamic-imported `web-vitals` async chunk (-2,556 gzip) AND the
+// RumDashboard/useRumBeacon wiring from the index entry chunk (-3,148 gzip).
+// Measured post-#240 total gzip across dist/assets: 164,141 bytes / 30 chunks
+// (fresh `vite build`, 2026-06-30; was 170,305 / 31 chunks pre-#240 — a
+// -5,730 gzip / -1-chunk shrink). The TOTAL_ENTRY_GZIP_BUDGET is intentionally
+// LEFT at 175,000: a deletion widens headroom (now ~6.6%), which is the
+// correct direction — lowering the ceiling after a shrink would mask a future
+// regression that re-adds comparable weight. MAX_ROUTE_CHUNK_GZIP_BUDGET
+// unchanged (the deleted web-vitals chunk was already well under the cap).
 const TOTAL_ENTRY_GZIP_BUDGET = 175000
 const MAX_ROUTE_CHUNK_GZIP_BUDGET = 7000
 
