@@ -10,13 +10,13 @@ on:
 jobs:
   test:
     name: Playwright E2E Tests
-    # #229 AC #4: webkit + Mobile Safari now run in this job (RUN_WEBKIT=true
-    # below). With 4 projects × ~28 specs under webkit's slower engine, the
-    # prior 15m budget cancelled the job mid-run (PR #243 run 28410495122 was
-    # CANCELLED at 15m22s with webkit still executing, before any reporter
-    # produced a result). 25m gives webkit headroom while keeping fast
-    # chromium/firefox feedback; well under the 6h GitHub job cap.
-    timeout-minutes: 25
+    # chromium + firefox + Mobile Chrome here (fast engines). webkit + Mobile
+    # Safari run in the parallel `test-webkit` job below (#229) — they were
+    # serially appended here first, but webkit's slower engine pushed total
+    # runtime past both the 15m and 25m budgets (PR #243 runs 28410495122 +
+    # 28411226987 both CANCELLED). Sharding gives webkit its own budget without
+    # slowing chromium/firefox feedback.
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -38,18 +38,10 @@ jobs:
         run: npm run build
 
       - name: Run Playwright tests
-        run: npm run test:e2e
-        env:
-          # #229 AC #3: re-enable webkit + Mobile Safari in the main E2E job.
-          # The webkit browser binaries are installed in the step above
-          # (npx playwright install --with-deps chromium firefox webkit); this
-          # flag opts the webkit/Mobile-Safari projects in (see playwright.config.ts).
-          # The two per-test actionability races that gated webkit out (#216) are
-          # resolved by this ticket: 87-privacy-policy (strict footer-link
-          # locator, AC #1) and 187-rum-beacon (scroll-into-view before toggle
-          # click, AC #2). test-smoke + test-mobile remain webkit-free (out of
-          # scope for #229 — noted as follow-up in the PR body).
-          RUN_WEBKIT: 'true'
+        # #229: chromium + firefox + Mobile Chrome only. webkit + Mobile Safari
+        # moved to the dedicated `test-webkit` job (they were serially appended
+        # here first and blew past the 15m/25m budgets — webkit's slower engine).
+        run: npx playwright test --project=chromium --project=firefox --project="Mobile Chrome"
 
       - name: Upload test results
         if: always()
@@ -96,6 +88,84 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Playwright Test Results
+          path: 'junit-results.xml'
+          reporter: java-junit
+          fail-on-error: true
+
+  test-webkit:
+    # #229 AC #3 + #4: webkit + Mobile Safari run in CI, in their own job so
+    # webkit's slower engine gets a dedicated budget instead of serially
+    # extending the chromium/firefox job past its timeout (PR #243 runs
+    # 28410495122 + 28411226987 both CANCELLED at 15m/25m with webkit still
+    # executing). RUN_WEBKIT=true opts the projects in (playwright.config.ts);
+    # --project filters then run only the two webkit-engine projects. The two
+    # actionability races that gated webkit out (#216) are fixed: 87-privacy-
+    # policy (strict footer-link locator) + 187-rum-beacon (scroll-into-view
+    # before toggle click).
+    name: Playwright E2E Tests (webkit)
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run Playwright webkit + Mobile Safari tests
+        run: npx playwright test --project=webkit --project="Mobile Safari"
+        env:
+          RUN_WEBKIT: 'true'
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-webkit
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test results JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-json-webkit
+          path: test-results.json
+          retention-days: 30
+
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-screenshots-webkit
+          path: screenshots/
+          retention-days: 30
+
+      - name: Upload traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-webkit
+          path: playwright-traces/
+          retention-days: 30
+
+      - name: Publish Test Report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Playwright Test Results (webkit)
           path: 'junit-results.xml'
           reporter: java-junit
           fail-on-error: true
