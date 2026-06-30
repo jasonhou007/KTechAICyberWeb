@@ -15,8 +15,9 @@
  *     origin/main: today they resolve to system-ui, not Orbitron.
  *  2. body resolves to a monospace stack (cyber.css keeps the intentional
  *     'Courier New' body font).
- *  3. Theme toggle still flips [data-theme] AND changes a sample element's
- *     computed color (proves the cyber.css :root dedup didn't break theming).
+ *  3. The [data-theme="dark"] block still resolves --text-primary to #e0e0e0
+ *     after the #239 light-branch deletion (proves the cyber.css :root dedup
+ *     AND the light-block removal didn't break dark theming).
  *  4. No `pageerror` console errors on Home (the inline-block removal didn't
  *     orphan a referenced script/style).
  *
@@ -83,55 +84,43 @@ test.describe('#188 CSS purge — visual no-regression', () => {
     expect(ff.toLowerCase()).toContain('orbitron')
   })
 
-  test('theme toggle flips [data-theme] AND changes a sample element color (cyber.css dedup did not break theming)', async ({ page }) => {
+  test('[data-theme="dark"] still resolves --text-primary after #239 light-branch deletion (cyber.css dedup did not break dark theming)', async ({ page }) => {
     await page.goto(HOME)
     await page.waitForLoadState('networkidle')
-    // Reset to a known theme so the toggle direction is deterministic.
+    // #239: the site is locked to dark — App.vue forces data-theme="dark"
+    // regardless of persisted state. Seed a stale 'light' preference to prove
+    // the dark CSS still resolves (the light block was deleted, but the dark
+    // block must remain the active resolver).
     await page.evaluate(() => {
-      localStorage.setItem('ktech-preferences', JSON.stringify({ theme: 'dark', language: 'en' }))
+      localStorage.setItem('ktech-preferences', JSON.stringify({ theme: 'light', language: 'en' }))
     })
     await page.reload()
     await page.waitForLoadState('networkidle')
 
-    const htmlBefore = await page.locator('html').getAttribute('data-theme')
+    // <html> must be dark (the lock), not light (the persisted preference).
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark')
+
     // Read the RESOLVED --text-primary variable off <html>. This is the most
-    // direct proof that the [data-theme="..."] block in cyber.css still applies
-    // after the :root dedup (#188): the variable's value comes straight from
-    // the matching [data-theme] selector, with NO CSS transition in the way
-    // (transitions only affect properties that consume the var, like body.color,
-    // not the var resolution itself). It therefore settles the instant
-    // data-theme flips, on every engine — no fixed-timeout wait needed.
-    // dark #e0e0e0 vs light #1a1a2e (see cyber.css [data-theme] blocks).
-    const varBefore = await page.evaluate(
-      () => getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim()
-    )
-    expect(varBefore, '--text-primary must resolve under [data-theme="dark"]').toBe('#e0e0e0')
-
-    // Click the theme toggle and assert [data-theme] flips.
-    await page.locator('.theme-toggle').click()
-    const htmlAfter = await page.locator('html').getAttribute('data-theme')
-    expect(htmlAfter, 'data-theme must change after toggle click').not.toBe(htmlBefore)
-
-    // The resolved variable must now reflect the light-theme block. expect.poll
-    // makes this robust against any engine timing without a magic timeout.
+    // direct proof that the [data-theme="dark"] block in cyber.css still
+    // applies after the #188 :root dedup AND the #239 light-block deletion:
+    // the variable's value comes straight from the [data-theme="dark"]
+    // selector, with NO CSS transition in the way. dark #e0e0e0.
     await expect.poll(
       async () => page.evaluate(
         () => getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim()
       ),
-      { timeout: 3000, message: '--text-primary must flip to the light-theme value' },
-    ).toBe('#1a1a2e')
+      { timeout: 3000, message: '--text-primary must resolve under [data-theme="dark"]' },
+    ).toBe('#e0e0e0')
 
-    // Belt-and-braces: body.color consumes --text-primary, so once the variable
-    // has flipped AND the 300ms `color` transition (`* { transition: color 0.3s }
-    //`, cyber.css lines 47-54) has finished interpolating, body.color must settle
-    // to the resolved light value. Asserting the EXACT settled color (not just
-    // "different from before") proves the transition completed and the consumer
-    // reached the new theme — no mid-transition ambiguity. 5s timeout absorbs
-    // parallel-worker contention on a shared origin.
+    // Belt-and-braces: body.color consumes --text-primary, so once the 300ms
+    // `color` transition (`* { transition: color 0.3s }`, cyber.css) has
+    // finished interpolating, body.color must settle to the resolved dark
+    // value. Asserting the EXACT settled color proves the consumer reached the
+    // dark theme. 5s timeout absorbs parallel-worker contention.
     await expect.poll(
       async () => page.evaluate(() => getComputedStyle(document.body).color),
-      { timeout: 5000, message: 'body color must settle to the light-theme value' },
-    ).toBe('rgb(26, 26, 46)')
+      { timeout: 5000, message: 'body color must settle to the dark-theme value' },
+    ).toBe('rgb(224, 224, 224)')
   })
 
   test('no pageerror console errors on Home after purge', async ({ page }) => {
