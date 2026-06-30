@@ -64,6 +64,14 @@ test.describe('#179 AI Core neural-network visualizer', () => {
   })
 
   test('Run Inference propagates a pulse and decodes a benign verdict readout', async ({ page }) => {
+    // #229 AC #4 → #244: this test was SKIPPED on webkit/Mobile Safari in the
+    // prior #229 commit (9d4354e) because the Run Inference click→readout flow
+    // timed out racing webkit's stability check vs the neural-graph synapse
+    // pulse animation. #244 (commit e445b69 / 15a0877, merged to main) FIXED it
+    // with forceClick (force + retry until the readout lands; settleMs=2500 >
+    // the async inference decode). #229's rebase onto main therefore UN-SKIPS
+    // this test. Verified green on webkit + Mobile Safari CI (run captured in
+    // this ticket's evidence).
     const runButton = page.locator('[data-test="neural-run-inference"]')
     await expect(runButton).toBeVisible()
     // #244 webkit/Mobile Safari: the run button is static, but webkit's
@@ -103,6 +111,13 @@ test.describe('#179 AI Core neural-network visualizer', () => {
   })
 
   test('keyboard-only: focus a node, then focus the Run Inference button + Enter', async ({ page }) => {
+    // #229 AC #4 → #244: this test was SKIPPED on webkit/Mobile Safari in the
+    // prior #229 commit (9d4354e) because the keyboard Enter→inference flow
+    // timed out on webkit. #244 (commit e445b69 / 15a0877, merged to main) FIXED
+    // it — the focus+Enter path bypasses webkit's actionability stability check
+    // entirely (no click), so it never races the synapse pulse animation.
+    // #229's rebase onto main therefore UN-SKIPS this test. Verified green on
+    // webkit + Mobile Safari CI (run captured in this ticket's evidence).
     // Nodes are keyboard-reachable via tabindex=0. Focus the first node
     // directly (we are not Tab-walking from the page top, which a pre-existing
     // Header focus-trap loops within the nav) and assert it is focusable.

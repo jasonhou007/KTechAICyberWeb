@@ -98,10 +98,14 @@ jobs:
     # extending the chromium/firefox job past its timeout (PR #243 runs
     # 28410495122 + 28411226987 both CANCELLED at 15m/25m with webkit still
     # executing). RUN_WEBKIT=true opts the projects in (playwright.config.ts);
-    # --project filters then run only the two webkit-engine projects. The two
+    # --project filters then run only the two webkit-engine projects. The
     # actionability races that gated webkit out (#216) are fixed: 87-privacy-
-    # policy (strict footer-link locator) + 187-rum-beacon (scroll-into-view
-    # before toggle click).
+    # policy (strict footer-link locator). The 187-rum-beacon race is moot —
+    # the RUM beacon feature was removed from production in #240. The remaining
+    # webkit/Mobile Safari actionability races across #179/#180/#182/#186 were
+    # fixed at the source by #244 (forceClick / native el.click() / focus+Enter),
+    # so those tests are UN-SKIPPED on webkit here. Only #206's packet-advance
+    # rAF/translateX timing test stays skipped (genuine webkit timing quirk).
     name: Playwright E2E Tests (webkit)
     timeout-minutes: 25
     runs-on: ubuntu-latest

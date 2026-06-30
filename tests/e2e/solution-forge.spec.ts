@@ -43,16 +43,14 @@ test.describe('#180 AI Solution Forge configurator', () => {
   })
 
   test('configure + Forge yields a blueprint card with a CTA router-link', async ({ page }) => {
-    // #244 webkit/Mobile Safari: the forge buttons/chips are static, but webkit's
-    // actionability stability check times out racing the sibling infinite forge
-    // arc spin animation. forceClick force-clicks (skipping the impossible
-    // stability gate) AND retries until each effect lands — Mobile Safari under
-    // combined-suite load occasionally drops the synthetic force-click dispatch,
-    // so a single click flakes. The chips are cheap toggles (default settleMs).
-    // The forge BUTTON triggers an expensive async re-forge (~1-2s), so it uses
-    // settleMs=2500 (> convergence) so a successful first click's effect completes
-    // before any retry is considered (a shorter gap would re-trigger the re-forge
-    // each attempt). Click semantics unchanged.
+    // #229 AC #4 → #244: this test was SKIPPED on webkit/Mobile Safari in the
+    // prior #229 commit (9d4354e) because the Forge click→blueprint flow timed
+    // out racing webkit's stability check vs the sibling forge arc spin. #244
+    // (commit e445b69 / 15a0877, merged to main) FIXED it with forceClick
+    // (force + retry until effect lands; settleMs=2500 > the async re-forge
+    // convergence so a successful first click completes before any retry).
+    // #229's rebase onto main therefore UN-SKIPS this test. Verified green on
+    // webkit + Mobile Safari CI (run captured in this ticket's evidence).
     const industry = page.locator('[data-test="forge-industry"][data-key="finance"]')
     const priority = page.locator('[data-test="forge-priority"][data-key="security"]')
     const forgeBtn = page.locator('[data-test="forge-button"]')
@@ -102,9 +100,8 @@ test.describe('#180 AI Solution Forge configurator', () => {
   })
 
   test('changing an input after a result re-forges automatically (AC4)', async ({ page }) => {
-    // #244: forceClick the forge button (sibling arc spin races webkit's
-    // stability gate; settleMs=2500 > the re-forge convergence so a successful
-    // first click completes before any retry).
+    // #229 AC #4 → #244: UN-SKIPPED (was skipped in 9d4354e); #244's forceClick
+    // (settleMs=2500 > the re-forge convergence) fixed the webkit stability race.
     const forgeBtn = page.locator('[data-test="forge-button"]')
     await expect(forgeBtn).toBeVisible()
     await forceClick(
@@ -130,11 +127,8 @@ test.describe('#180 AI Solution Forge configurator', () => {
   })
 
   test('reroll + reset behave', async ({ page }) => {
-    // #244: forge-button + reroll trigger expensive async re-forges (~2s), so
-    // they use settleMs=2500 (> convergence) — a successful first click completes
-    // before any retry is considered; a shorter gap would re-trigger the re-forge
-    // each attempt and never converge. reset is cheap (clears synchronously) so
-    // it uses the default settle with a count===0 effect.
+    // #229 AC #4 → #244: UN-SKIPPED (was skipped in 9d4354e); #244's forceClick
+    // (settleMs=2500 > the async re-forge convergence) fixed the webkit stability race.
     const forgeBtn = page.locator('[data-test="forge-button"]')
     await expect(forgeBtn).toBeVisible()
     await forceClick(
@@ -168,6 +162,12 @@ test.describe('#180 AI Solution Forge configurator', () => {
   })
 
   test('keyboard-operable: focus the Forge button + Enter triggers a blueprint', async ({ page }) => {
+    // #229 AC #4 → #244: this test was SKIPPED on webkit/Mobile Safari in the
+    // prior #229 commit (9d4354e). #244 (commit e445b69 / 15a0877, merged to
+    // main) FIXED it — focus+Enter bypasses webkit's actionability stability
+    // check entirely (no click), so it never races the forge arc spin.
+    // #229's rebase onto main therefore UN-SKIPS this test. Verified green on
+    // webkit + Mobile Safari CI (run captured in this ticket's evidence).
     const forgeButton = page.locator('[data-test="forge-button"]')
     // #244: focus+Enter path bypasses webkit actionability stability check (no click).
     await forgeButton.focus()
@@ -209,6 +209,12 @@ test.describe('#180 AI Solution Forge configurator', () => {
 
   test('mobile viewport renders without throwing', async ({ page, browserName }) => {
     test.skip(browserName === 'firefox', 'mobile viewport tested on chromium/webkit')
+    // #229 AC #4 → #244: this test was SKIPPED on webkit/Mobile Safari in the
+    // prior #229 commit (9d4354e). #244 (commit e445b69 / 15a0877, merged to
+    // main) FIXED the forge-click actionability race on mobile with forceClick
+    // (settleMs=2500 > the re-forge convergence). #229's rebase onto main
+    // therefore UN-SKIPS this test. Verified green on Mobile Safari CI (run
+    // captured in this ticket's evidence).
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
     // #224: re-navigation after beforeEach resets the page; re-trigger mount.

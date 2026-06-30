@@ -61,23 +61,14 @@ test.describe.serial('#186 Neon Pulse', () => {
   })
 
   test('Engage -> playing (status text flips, canvas still present)', async ({ page }) => {
-    // #244 webkit/Mobile Safari/Mobile Chrome: the engage button is static, but
-    // on MOBILE viewports (≤768px) Playwright's synthetic force-click does NOT
-    // reliably reach the `@click="engage"` Vue handler for the EXPENSIVE async
-    // AudioContext build. Diagnosis (CI run 28460722546 + local repro,
-    // 2026-06-30 / 07-01): on Mobile Chrome (Pixel 5, chromium engine) forceClick
-    // fails "effect not observed after 3 attempts" — the synthetic force-click is
-    // intermittently dropped at the actionability stage before force applies, and
-    // even when it does start the async engage() the effect predicate re-checks
-    // inside the converge window. A STANDALONE native el.click() flips status
-    // synchronously (Idle→Playing) and is deterministic across repeated runs
-    // (verified 3/3 locally on Mobile Chrome; the same native path was already
-    // proven for Mobile Safari in the prior #244 commit). Desktop
-    // chromium/firefox/webkit keep forceClick (force + retry), which lands
-    // reliably there. The mixed force+native retry is NOT used for engage because
-    // a force-click that occasionally DOES start engage() then collides with a
-    // follow-up native click (two AudioContext builds). Click semantics
-    // unchanged — only HOW the click is dispatched varies by viewport.
+    // #224/#229/#244: this test was SKIPPED on Mobile Safari in the prior #229
+    // commit (9d4354e) under AC #4 because the Engage click→status flip timed out.
+    // #244 (commit af6b395 / 15a0877, merged to main) FIXED the underlying
+    // cross-browser actionability race by routing the Engage click through a
+    // standalone native el.click() on mobile viewports (forceClick on desktop).
+    // #229's rebase onto main therefore UN-SKIPS this test — #244's source fix
+    // makes it pass without a skip. Verified green on webkit + Mobile Safari CI
+    // (run captured in this ticket's evidence).
     const engage = page.locator('[data-test="pulse-engage"]')
     await expect(engage).toBeVisible()
     const stopBtn = page.locator('[data-test="pulse-stop"]')
@@ -111,6 +102,13 @@ test.describe.serial('#186 Neon Pulse', () => {
   })
 
   test('mode radio switch: each mode selects and reflects active state', async ({ page }) => {
+    // #229 AC #4 → #244: this test was SKIPPED on webkit in the prior #229
+    // commit (c8961f8) because the pulse canvas animation prevented the mode
+    // radios from settling. #244 (commit e445b69 / 15a0877, merged to main)
+    // FIXED it with forceCheck (forceClick on a radio — skips the stability
+    // gate and retries until checked). #229's rebase onto main therefore
+    // UN-SKIPS this test. Verified green on webkit CI (run captured in this
+    // ticket's evidence).
     // #244 webkit/Mobile Safari: mode radios are static, but webkit's stability
     // check times out racing the sibling pulse canvas animation. forceCheck
     // (forceClick on a radio) skips the stability gate and retries until the

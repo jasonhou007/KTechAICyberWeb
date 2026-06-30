@@ -59,6 +59,12 @@ test.describe('#182 Cyber Ops HUD', () => {
   })
 
   test('the event feed filter updates the rendered list live', async ({ page }) => {
+    // #229 AC #4 → #244: this test was SKIPPED on Mobile Safari in the prior #229
+    // commit (c8961f8) because the HUD Pulse button never settled. #244 (commit
+    // adff762 / 15a0877, merged to main) FIXED it by scoping forceClick to the
+    // webkit engine only (plain click() elsewhere). #229's rebase onto main
+    // therefore UN-SKIPS this test. Verified green on Mobile Safari CI (run
+    // captured in this ticket's evidence).
     // #244 webkit/Mobile Safari: on the webkit engine family, every click
     // target below times out at webkit's actionability stability check because
     // the sibling infinite HUD animated metrics (gauge/throughput tickers) keep
