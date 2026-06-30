@@ -340,7 +340,7 @@ h1 {
   text-transform: uppercase;
   letter-spacing: 0.2em;
   margin: 0;
-  color: #ffffff;
+  color: var(--text-primary);
   text-shadow:
     0 0 10px var(--cyan),
     0 0 20px var(--cyan),

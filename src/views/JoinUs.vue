@@ -173,7 +173,7 @@ onMounted(() => {
 .page-title {
   font-size: 3.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   margin-bottom: 20px;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -229,7 +229,7 @@ onMounted(() => {
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   text-align: center;
   margin-bottom: 20px;
   text-transform: uppercase;
@@ -299,7 +299,7 @@ onMounted(() => {
 }
 
 .benefit-card h3 {
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 1.15rem;
   margin-bottom: 12px;
   font-weight: 600;
@@ -361,7 +361,7 @@ onMounted(() => {
 }
 
 .process-step h3 {
-  color: #ffffff;
+  color: var(--text-primary);
   font-size: 1.1rem;
   margin-bottom: 12px;
   font-weight: 600;
