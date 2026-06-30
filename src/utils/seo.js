@@ -35,7 +35,7 @@ export function getRouteMeta(route) {
   const routeMeta = {
     '/': {
       title: `开泰科技 - KBight Fintech | 金融科技创新`,
-      description: '开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。',
+      description: '开泰远景信息科技有限公司于2020年6月由泰国开泰银行通过其全资子公司开泰远景有限公司（注册于泰国）在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。',
       ogImage: `${SITE_URL}/og-image-home.jpg`,
       twitterImage: `${SITE_URL}/twitter-image-home.jpg`
     },
@@ -105,7 +105,7 @@ export function getStructuredData(route) {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'sales',
-      email: 'contact@ktech.fintech'
+      email: 'KTECH@kaitaitech.cn'
     },
     sameAs: [
       'https://github.com/jasonhou007/KTechAICyberWeb'
@@ -177,17 +177,16 @@ export function getStructuredData(route) {
     logo: `${SITE_URL}/logo.png`,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: '罗湖区',
+      streetAddress: '深圳市梅苑路75号润弘大厦T2座12楼',
       addressLocality: '深圳市',
       addressRegion: '广东省',
-      postalCode: '518000',
       addressCountry: 'CN'
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+86-755-00000000',
+      telephone: '+86-755-36878020',
       contactType: 'Customer Service',
-      email: 'contact@ktech.fintech',
+      email: 'KTECH@kaitaitech.cn',
       areaServed: 'CN',
       availableLanguage: ['zh', 'en']
     }

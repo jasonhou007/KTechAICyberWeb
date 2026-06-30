@@ -47,13 +47,13 @@
     "info": {
       "title": "公司信息",
       "address": "地址",
-      "addressValue": "中国广东省深圳市罗湖区",
+      "addressValue": "中国深圳市梅苑路75号润弘大厦T2座12楼",
       "email": "邮箱",
-      "emailValue": "contact@ktech.fintech",
+      "emailValue": "KTECH@kaitaitech.cn",
       "phone": "电话",
-      "phoneValue": "+86 755 0000 0000",
+      "phoneValue": "+86 755 36878020",
       "wechat": "微信",
-      "wechatValue": "ktech-official",
+      "wechatValue": "KTech 官方微信",
       "social": "关注我们"
     },
     "demo": {
@@ -65,9 +65,9 @@
       "button": "申请演示"
     },
     "address": "公司地址",
-    "addressValue": "深圳市罗湖区",
+    "addressValue": "深圳市梅苑路75号润弘大厦T2座12楼",
     "email": "电子邮箱",
-    "emailValue": "contact@ktech.fintech",
+    "emailValue": "KTECH@kaitaitech.cn",
     "website": "官方网站",
     "websiteValue": "www.kaitai.tech"
   },
@@ -173,11 +173,11 @@
     },
     "mission": {
       "heading": "我们的使命",
-      "description": "KTech 致力于构建变革性的 AI 解决方案，不断突破可能性的边界。"
+      "description": "以尖端科技赋能客户。"
     },
     "vision": {
       "title": "我们的愿景",
-      "description": "成为金融机构最信赖的 AI 合作伙伴，让智能金融惠及每一家企业。"
+      "description": "成为区域领先的金融科技平台。"
     },
     "culture": {
       "title": "我们的文化",
@@ -240,7 +240,7 @@
     "stats": {
       "projects": {
         "label": "项目",
-        "value": "50+"
+        "value": "20+"
       },
       "commitment": {
         "label": "承诺",
@@ -1077,8 +1077,8 @@
     "contact": {
       "heading": "联系我们",
       "description": "如果您对本隐私政策有任何疑问，或希望行使您的数据保护权利，请联系我们的数据保护官。",
-      "email": "电子邮箱：privacy@ktech.fintech",
-      "address": "地址：开泰远景信息科技有限公司，广东省深圳市罗湖区，518000"
+      "email": "电子邮箱：KTECH@kaitaitech.cn",
+      "address": "地址：开泰远景信息科技有限公司，深圳市梅苑路75号润弘大厦T2座12楼"
     }
   },
   "terms": {
@@ -1202,9 +1202,9 @@
     "home": "返回首页"
   },
   "hero": {
-    "title": "开泰科技",
-    "subtitle": "凯泰金融科技",
-    "description": "开泰远景信息科技有限公司于2020年6月由泰国开泰银行集团在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。"
+    "title": "KTech",
+    "subtitle": "金融科技",
+    "description": "开泰远景信息科技有限公司于2020年6月由泰国开泰银行通过其全资子公司开泰远景有限公司（注册于泰国）在深圳市罗湖区设立，注册资本3亿元人民币，是深圳市第一批跨国公司总部企业。"
   },
   "stats": {
     "founded": "成立年份",
@@ -1355,7 +1355,7 @@
     "contact": {
       "title": "联系我们",
       "description": "对在开泰科技工作有疑问？我们很乐意为您解答。",
-      "email": "careers@ktech.fintech"
+      "email": "KTECH@kaitaitech.cn"
     }
   },
   "mobileApp": {

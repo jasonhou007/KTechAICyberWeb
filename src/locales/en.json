@@ -47,13 +47,13 @@
     "info": {
       "title": "Company Information",
       "address": "Address",
-      "addressValue": "Luohu District, Shenzhen, Guangdong, China",
+      "addressValue": "12F, Runhong Building T2, No. 75 Meiyuan Road, Shenzhen, China",
       "email": "Email",
-      "emailValue": "contact@ktech.fintech",
+      "emailValue": "KTECH@kaitaitech.cn",
       "phone": "Phone",
-      "phoneValue": "+86 755 0000 0000",
+      "phoneValue": "+86 755 36878020",
       "wechat": "WeChat",
-      "wechatValue": "ktech-official",
+      "wechatValue": "KTech Official WeChat",
       "social": "Follow Us"
     },
     "demo": {
@@ -65,9 +65,9 @@
       "button": "Request Demo"
     },
     "address": "Address",
-    "addressValue": "Luohu District, Shenzhen",
+    "addressValue": "12F, Runhong Building T2, No. 75 Meiyuan Road, Shenzhen",
     "email": "Email",
-    "emailValue": "contact@ktech.fintech",
+    "emailValue": "KTECH@kaitaitech.cn",
     "website": "Website",
     "websiteValue": "www.kaitai.tech"
   },
@@ -173,11 +173,11 @@
     },
     "mission": {
       "heading": "Our Mission",
-      "description": "KTech is dedicated to building transformative AI solutions that push the boundaries of what's possible."
+      "description": "Empower customers with cutting-edge technology."
     },
     "vision": {
       "title": "Our Vision",
-      "description": "To become the most trusted AI partner for financial institutions, making intelligent finance accessible to every business."
+      "description": "To become a regional leading fintech platform."
     },
     "culture": {
       "title": "Our Culture",
@@ -240,7 +240,7 @@
     "stats": {
       "projects": {
         "label": "Projects",
-        "value": "50+"
+        "value": "20+"
       },
       "commitment": {
         "label": "Commitment",
@@ -1077,8 +1077,8 @@
     "contact": {
       "heading": "Contact Us",
       "description": "If you have questions about this Privacy Policy or wish to exercise your data protection rights, please contact our Data Protection Officer.",
-      "email": "Email: privacy@ktech.fintech",
-      "address": "Address: 开泰远景信息科技有限公司, Luohu District, Shenzhen, Guangdong, China 518000"
+      "email": "Email: KTECH@kaitaitech.cn",
+      "address": "Address: 开泰远景信息科技有限公司, 12F, Runhong Building T2, No. 75 Meiyuan Road, Shenzhen, China"
     }
   },
   "terms": {
@@ -1202,9 +1202,9 @@
     "home": "Back to Home"
   },
   "hero": {
-    "title": "KaiTech",
-    "subtitle": "KBRIGHT FINTECH",
-    "description": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech) was established in Luohu District, Shenzhen in June 2020 by Thailand's KASIKORN Bank Group, with a registered capital of RMB 300 million. It is among the first batch of multinational-company headquarters enterprises recognized by Shenzhen."
+    "title": "KTech",
+    "subtitle": "FINTECH",
+    "description": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech) was established in Luohu District, Shenzhen in June 2020 by Thailand's KASIKORNBANK through its wholly owned subsidiary KASIKORN VISION Co., Ltd., with a registered capital of RMB 300 million. It is among the first batch of multinational-company headquarters enterprises recognized by Shenzhen."
   },
   "stats": {
     "founded": "Founded",
@@ -1216,7 +1216,7 @@
     "vision": "Vision",
     "visionDesc": "Become a leading regional fintech platform",
     "mission": "Mission",
-    "missionDesc": "Empower clients with frontier technology",
+    "missionDesc": "Empower customers with cutting-edge technology",
     "values": "Culture",
     "valuesDesc": "Customer First · Open Collaboration<br>Agile Innovation · Professional Excellence"
   },
@@ -1355,7 +1355,7 @@
     "contact": {
       "title": "Get in Touch",
       "description": "Have questions about working at KTech? We'd love to hear from you.",
-      "email": "careers@ktech.fintech"
+      "email": "KTECH@kaitaitech.cn"
     }
   },
   "mobileApp": {
