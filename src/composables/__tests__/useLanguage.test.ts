@@ -390,9 +390,10 @@ describe('useLanguage composable', () => {
     })
 
     it('initLanguage() does NOT consult window.matchMedia', () => {
-      // matchMedia is irrelevant to language, but the old theme code used it
-      // via detectSystemTheme. Assert the language init path never touches it
-      // so a future refactor can't quietly couple language to a media query.
+      // matchMedia is irrelevant to language. The old theme code used it via
+      // prefers-color-scheme detection (detectSystemTheme), removed in #248.
+      // Assert the language init path never touches matchMedia so a future
+      // refactor can't quietly couple language to a media query.
       const mm = vi.fn(() => ({ matches: false, addEventListener: () => {}, removeEventListener: () => {} }))
       vi.stubGlobal('matchMedia', mm)
 
