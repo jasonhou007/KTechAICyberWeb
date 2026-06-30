@@ -1,23 +1,22 @@
 /**
  * @file App.theme-lock.test.ts
- * @description Focused red-test for the #239 dark-theme lock (AC1).
+ * @description Focused red-test for the dark-theme lock (AC1, post-#248).
  *
- * WHY A SEPARATE FILE: App.test.ts stubs the child components (Header etc.)
- * and seeds the store via setTheme() AFTER activating Pinia. This file mounts
- * the REAL App.vue against a REAL Pinia store and seeds theme='light' TWO
- * ways — (a) via persisted localStorage so the store hydrates with light on
- * first access, and (b) via setTheme('light') after mount — and asserts
- * <html data-theme> is "dark" in both cases.
+ * WHY A SEPARATE FILE: App.test.ts stubs the child components (Header etc.).
+ * This file mounts the REAL App.vue against a REAL Pinia store and seeds a
+ * STALE theme='light' into localStorage before mount — simulating an existing
+ * user from before #248 — and asserts <html data-theme> is "dark" anyway.
  *
- * RED-TEST PROOF (AC1): this suite FAILS against the old watcher code. The
- * old App.vue did `applyTheme(preferences.theme)` on mount + watched
- * `preferences.theme`; with the store seeded to 'light', <html> would carry
- * data-theme="light" on mount and after setTheme('light'). The #239 lock
- * (a single unconditional setAttribute('data-theme','dark') with no watcher)
- * is the only code that makes both assertions pass.
+ * RED-TEST PROOF (regression target): this suite FAILS if any future change
+ * re-introduces a theme reader in App.vue's setup (e.g. restoring the old
+ * applyTheme(preferences.theme) or a watch(preferences.theme)). With a stale
+ * 'light' theme seeded in localStorage, such a reader would mirror "light"
+ * onto <html>; the #239 lock (a single unconditional
+ * setAttribute('data-theme','dark') that reads nothing from the store) is the
+ * only code that makes the assertion pass.
  *
- * Verified red: temporarily restoring the old applyTheme()+watch(preferences.theme)
- * block makes both `it()` cases below fail (data-theme resolves to "light").
+ * Verified red: temporarily removing App.vue's setAttribute('data-theme','dark')
+ * line makes the it() case below fail (data-theme resolves to null).
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
@@ -65,7 +64,7 @@ vi.mock('../components/Header.vue', () => ({
 
 const App = (await import('../App.vue')).default
 
-describe('App.vue dark-theme lock — focused red-test (#239 AC1)', () => {
+describe('App.vue dark-theme lock — focused red-test (#248)', () => {
   let pinia: ReturnType<typeof createPinia>
 
   beforeEach(() => {
@@ -79,40 +78,28 @@ describe('App.vue dark-theme lock — focused red-test (#239 AC1)', () => {
     vi.restoreAllMocks()
   })
 
-  it('forces <html data-theme="dark"> even when the store HYDRATES with theme="light"', async () => {
-    // Seed persisted preferences so the store hydrates with light on first
-    // access (the store's state() reads localStorage). The old applyTheme()
-    // would have mirrored "light" onto <html> on mount.
+  it('forces <html data-theme="dark"> even when localStorage HYDRATES with theme="light"', async () => {
+    // Seed persisted preferences with a STALE 'light' theme so an existing
+    // user's blob is honored by loadPersisted() (which returns the whole
+    // parsed object), simulating a pre-#248 user. The #239 lock must still
+    // force "dark" onto <html> regardless.
     localStorage.setItem(
       PREFERENCES_STORAGE_KEY,
       JSON.stringify({ theme: 'light', language: 'en', rumEnabled: false }),
     )
     const store = usePreferencesStore()
-    // Prove the hydration actually seeded light (guards against a future
-    // change to the store's hydration that would make this test vacuous).
-    expect(store.theme).toBe('light')
 
     mount(App, { global: { plugins: [pinia] } })
     await flushPromises()
 
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-  })
 
-  it('forces <html data-theme="dark"> even when setTheme("light") is called AFTER mount', async () => {
-    const store = usePreferencesStore()
-    store.setTheme('dark')
-    mount(App, { global: { plugins: [pinia] } })
+    // AC3 migration: triggering persist() via a real mutation must rewrite
+    // localStorage WITHOUT the stale theme key.
+    store.setLanguage('zh')
     await flushPromises()
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-
-    // The old watch(preferences.theme) would have flipped <html> to "light"
-    // here. The lock must not react.
-    store.setTheme('light')
-    await flushPromises()
-    // Drain any deferred microtask the old watcher would have used.
-    await new Promise((r) => setTimeout(r, 0))
-
-    expect(store.theme).toBe('light')
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    const raw = JSON.parse(localStorage.getItem(PREFERENCES_STORAGE_KEY) || '{}')
+    expect(raw.language).toBe('zh')
+    expect('theme' in raw).toBe(false)
   })
 })

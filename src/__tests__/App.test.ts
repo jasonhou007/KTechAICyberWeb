@@ -1,28 +1,26 @@
 /**
  * @file App.test.ts
- * @description Dark-theme lock wiring tests for the App shell (#239).
+ * @description Dark-theme lock wiring tests for the App shell (#239 / #248).
  *
- * #239 locked the site to the dark theme unconditionally. The preferences
- * STORE still owns a theme value (+ localStorage persistence), but App.vue
- * no longer mirrors it onto <html data-theme="..."> — it hardcodes
- * data-theme="dark" once on mount and never flips it. The dark/light
- * ThemeToggle component was deleted, so there is no UI affordance that
- * reaches the store's setTheme/toggleTheme actions.
+ * #239 locked the site to the dark theme unconditionally. #248 then removed
+ * the now-dead theme surface from the preferences store (state.theme,
+ * setTheme/toggleTheme, detectSystemTheme, currentTheme/isDarkTheme): App.vue
+ * hardcodes data-theme="dark" once on mount and never flips it, and no
+ * shipped code reads a theme from the store. The store now owns only language.
  *
  * These tests pin that locked-dark contract end-to-end by mounting the REAL
  * App component with a REAL preferences store and asserting the user-visible
  * DOM attribute. Each AC has a test that would FAIL if the lock regressed:
- *   - On mount, data-theme is "dark" regardless of the store's initial theme.
- *   - data-theme stays "dark" even when store.theme is later set to "light"
- *     (proves the old watch(preferences.theme) reactive mirror is gone).
- *   - The store's theme value can still be mutated (the actions are inert,
- *     not stripped) — only the DOM is locked.
+ *   - On mount, data-theme is "dark" even when a stale 'light' theme sits in
+ *     localStorage (proves App forces dark regardless of persisted state).
+ *   - data-theme stays "dark" after a real store mutation (setLanguage),
+ *     proving the persist path does not disturb the DOM lock.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { createPinia, setActivePinia } from 'pinia'
-import { usePreferencesStore } from '../stores/preferences'
+import { usePreferencesStore, PREFERENCES_STORAGE_KEY } from '../stores/preferences'
 
 // Mock @vueuse/head so App.setup() can register reactive head tags without a
 // real <head> manager. useHead just no-ops.
@@ -85,7 +83,7 @@ vi.mock('../components/Header.vue', () => ({
 
 const App = (await import('../App.vue')).default
 
-describe('App.vue dark-theme lock (#239)', () => {
+describe('App.vue dark-theme lock (#239 / #248)', () => {
   let pinia: ReturnType<typeof createPinia>
 
   beforeEach(() => {
@@ -106,42 +104,34 @@ describe('App.vue dark-theme lock (#239)', () => {
     return wrapper
   }
 
-  it('sets <html data-theme> to "dark" on initial mount regardless of store theme', async () => {
-    // Seed the store to LIGHT before mount. The old code would have mirrored
-    // "light" onto <html>; the #239 lock must force "dark" instead.
-    const store = usePreferencesStore()
-    store.setTheme('light')
+  it('sets <html data-theme> to "dark" on initial mount regardless of stored theme', async () => {
+    // Seed a STALE 'light' theme into localStorage before mount (an existing
+    // user from before #248 would carry this). The old code would have
+    // mirrored "light" onto <html>; the #239 lock must force "dark" instead.
+    localStorage.setItem(
+      PREFERENCES_STORAGE_KEY,
+      JSON.stringify({ theme: 'light', language: 'en' }),
+    )
     await mountApp()
 
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
   })
 
-  it('stays "dark" even when store.theme is set to "light" after mount (watcher is gone)', async () => {
+  it('stays "dark" after a real store mutation (persist path does not disturb the lock)', async () => {
+    // Seed a stale 'light' theme, mount (forces dark), then trigger persist()
+    // via setLanguage — a real mutation that rewrites localStorage. The lock
+    // must NOT be disturbed by the store's persist path.
+    localStorage.setItem(
+      PREFERENCES_STORAGE_KEY,
+      JSON.stringify({ theme: 'light', language: 'en' }),
+    )
     const store = usePreferencesStore()
-    store.setTheme('dark')
     await mountApp()
 
-    // The old watch(preferences.theme) would have flipped <html> to "light"
-    // here. The lock must NOT react to store mutations.
-    store.setTheme('light')
+    store.setLanguage('zh')
     await flushPromises()
     await new Promise((r) => setTimeout(r, 0))
 
-    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
-  })
-
-  it('the store theme value is still mutable (inert actions, locked DOM)', async () => {
-    // Proves we did not strip the store's theme actions — they still update
-    // state, they just no longer reach the DOM. This guards against a future
-    // "cleanup" that deletes setTheme/toggleTheme and breaks persist/hydrate.
-    const store = usePreferencesStore()
-    store.setTheme('dark')
-    await mountApp()
-
-    store.setTheme('light')
-    await flushPromises()
-    expect(store.theme).toBe('light')
-    // ...but the DOM stays dark.
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
   })
 })

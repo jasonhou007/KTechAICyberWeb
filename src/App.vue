@@ -74,9 +74,10 @@ export default {
     // #239: the site is locked to the dark theme unconditionally. The previous
     // dark/light toggle (ThemeToggle.vue) and its applyTheme() + watcher were
     // removed; <html data-theme="dark"> is set once here and never flipped.
-    // The preferences store still exposes setTheme/toggleTheme/detectSystemTheme
-    // for backward-compat with persisted state, but no shipped UI reaches them,
-    // so the DOM is always dark regardless of the stored theme value.
+    // #248: the preferences store no longer owns any theme surface — it only
+    // persists language. The lock below is unconditional and reads nothing
+    // from the store, so the DOM is always dark regardless of any stale theme
+    // value left in a user's localStorage.
     document.documentElement.setAttribute('data-theme', 'dark')
 
     // Initialize language on app mount. Translations are bundled at module
