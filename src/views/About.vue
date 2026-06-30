@@ -423,7 +423,7 @@ const { enabled } = useParallax({
   font-family: var(--font-display);
   font-size: 3rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
   letter-spacing: 0.2em;
   margin-bottom: 1rem;
   text-transform: uppercase;
@@ -566,7 +566,7 @@ const { enabled } = useParallax({
 
 .iso-badge {
   background: linear-gradient(135deg, var(--cyan), var(--cyan));
-  color: #000;
+  color: var(--bg-primary);
 }
 
 .milestone-badge {
@@ -575,8 +575,8 @@ const { enabled } = useParallax({
 }
 
 .projects-badge {
-  background: linear-gradient(135deg, #ff6600, #cc4400);
-  color: #fff;
+  background: linear-gradient(135deg, var(--accent-magenta), var(--accent-magenta));
+  color: var(--bg-primary);
 }
 
 .achievement-card p {
