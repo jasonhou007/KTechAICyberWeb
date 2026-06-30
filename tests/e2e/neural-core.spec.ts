@@ -72,9 +72,16 @@ test.describe('#179 AI Core neural-network visualizer', () => {
     const readout = page.locator('[data-test="neural-readout"]')
     await expect(readout).toBeVisible({ timeout: 5000 })
 
+    // #204: assert against the stable, locale-independent data-verdict attribute
+    // emitted by the component (approve|review|flag). The old /APPROVE|REVIEW|FLAG/
+    // text assertion was English-only and failed under the zh locale, where the
+    // readout renders localized verdict copy (通过/复审/标记). data-verdict is
+    // driven off readout.decisionKey in the composable — a stable enum unaffected
+    // by the active locale.
+    const verdict = (await readout.getAttribute('data-verdict')) ?? ''
+    expect(['approve', 'review', 'flag']).toContain(verdict)
+
     const text = (await readout.textContent()) ?? ''
-    // Localized verdict word from the deterministic pool.
-    expect(/APPROVE|REVIEW|FLAG/.test(text)).toBe(true)
     // Confidence percentage present.
     expect(text).toContain('%')
     // Never a raw i18n key.
@@ -97,7 +104,8 @@ test.describe('#179 AI Core neural-network visualizer', () => {
 
     const readout = page.locator('[data-test="neural-readout"]')
     await expect(readout).toBeVisible({ timeout: 5000 })
-    const text = (await readout.textContent()) ?? ''
-    expect(/APPROVE|REVIEW|FLAG/.test(text)).toBe(true)
+    // #204: locale-independent verdict via data-verdict (see test above).
+    const verdict = (await readout.getAttribute('data-verdict')) ?? ''
+    expect(['approve', 'review', 'flag']).toContain(verdict)
   })
 })

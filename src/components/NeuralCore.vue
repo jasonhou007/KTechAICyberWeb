@@ -164,6 +164,7 @@
         v-if="readout"
         class="neural-readout"
         data-test="neural-readout"
+        :data-verdict="readout.decisionKey"
         role="status"
         aria-live="polite"
         :aria-label="t('neural.aria.readout')"
