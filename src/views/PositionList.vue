@@ -352,7 +352,7 @@ onUnmounted(() => {
 <style scoped>
 .position-list {
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba(0, 255, 204, 0.05) 0%, rgba(139, 0, 255, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(0, 255, 204, 0.05) 0%, rgba(255, 0, 170, 0.05) 100%);
   padding: 2rem 5%;
 }
 
@@ -598,9 +598,9 @@ onUnmounted(() => {
 
 .position-card__badge {
   padding: 0.3rem 0.8rem;
-  background: rgba(139, 0, 255, 0.2);
-  border: 1px solid rgba(139, 0, 255, 0.4);
-  color: #8b00ff;
+  background: rgba(255, 0, 170, 0.2);
+  border: 1px solid rgba(255, 0, 170, 0.4);
+  color: var(--accent-magenta);
   font-family: var(--font-body);
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -813,13 +813,13 @@ onUnmounted(() => {
 
 .position-modal__share {
   background: transparent;
-  border: 1px solid rgba(139, 0, 255, 0.4);
-  color: #8b00ff;
+  border: 1px solid rgba(255, 0, 170, 0.4);
+  color: var(--accent-magenta);
 }
 
 .position-modal__share:hover {
-  background: rgba(139, 0, 255, 0.1);
-  box-shadow: 0 0 15px rgba(139, 0, 255, 0.5);
+  background: rgba(255, 0, 170, 0.1);
+  box-shadow: 0 0 15px rgba(255, 0, 170, 0.5);
 }
 
 /* Responsive */
