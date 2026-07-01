@@ -92,15 +92,16 @@ describe('migrated components re-render on language toggle to zh', () => {
 
   it('Header renders Chinese nav labels after toggle', () => {
     const wrapper = mountWithStubs(Header)
-    // The rewritten Header (#164) renders Home + Contact as router-link <a>
-    // and the 4 dropdown top-level items (About / News / Solutions / Join Us)
-    // as NavigationDropdown <button> triggers.
+    // The rewritten Header (#164) renders Home + About + Contact as
+    // router-link <a> and the 3 dropdown top-level items (News / Solutions /
+    // Join Us) as NavigationDropdown <button> triggers. (#255 made About a
+    // direct link to /about instead of a dropdown.)
     const anchors = wrapper.findAll('ul.nav-links a').map((a) => a.text())
-    expect(anchors).toEqual(['首页', '联系'])
+    expect(anchors).toEqual(['首页', '关于我们', '联系'])
     const triggers = wrapper
       .findAll('ul.nav-links .dropdown-trigger')
       .map((b) => b.text().replace('▼', '').trim())
-    expect(triggers).toEqual(['关于我们', '新闻', '解决方案', '加入我们'])
+    expect(triggers).toEqual(['新闻', '解决方案', '加入我们'])
     wrapper.unmount()
   })
 

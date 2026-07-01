@@ -133,9 +133,9 @@ describe('App.vue -> Header nav wiring (#164 shipped-app gate)', () => {
     expect(triggerTexts).toEqual(
       expect.arrayContaining(['Our Solutions ▼', 'Join Us ▼']),
     )
-    // And all 4 dropdown triggers are present (About Us / News / Our
-    // Solutions / Join Us).
-    expect(wrapper.findAll('nav#navbar .dropdown-trigger')).toHaveLength(4)
+    // 3 dropdown triggers remain (News / Our Solutions / Join Us). About is
+    // now a direct router-link to /about (#255), not a dropdown.
+    expect(wrapper.findAll('nav#navbar .dropdown-trigger')).toHaveLength(3)
   })
 
   it('renders the KTech brand logo from Header (KAI<span>TECH</span>)', async () => {
