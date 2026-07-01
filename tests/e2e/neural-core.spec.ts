@@ -15,22 +15,26 @@
  */
 
 import { test, expect } from '@playwright/test'
-import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
+import { mountLazySection } from './fixtures/lazy-mount-helper'
 
-// #229: the webkit engine (Desktop Safari + Mobile Safari) has residual
-// handler-convergence flakiness on this suite under CI load that #244's
-// forceClick retry + #229's forceKeyboardEnter retry cannot reliably clear
-// (both helpers exhaust their retry budgets — see evidence in
-// projects/kttech-cyber/tickets/229/evidence/before-webkit-failures-*).
-// These two inference tests are skipped on the webkit engine family with
-// cited CI evidence; chromium + firefox + Mobile Chrome cover the AC.
-// Tracked for a future source-level fix in follow-up #<NNN>.
+// #293 RESOLVED the webkit engine (Desktop Safari + Mobile Safari)
+// handler-convergence flakiness that #229 cited on this suite. The root cause
+// was that the E2E effect predicates waited on the rAF-gated readout render
+// (set only in finishInference() at the end of a ~17-frame requestAnimationFrame
+// chain), so under webkit-CI load (rAF throttled) every fixed settleMs/retry
+// budget (#244 forceClick, #229 forceKeyboardEnter) exhausted. The handler
+// itself is correct — it flips a deterministic FSM value (inferenceState:
+// idle→running→done) synchronously inside finishInference(). The fix is to wait
+// on that FSM value directly: the persistent [data-test="neural-state"] element
+// already exposes :data-state="inferenceState", so expect(...).toHaveAttribute
+// ('data-state','done') auto-polls until the FSM flips — no fixed timeout, no
+// retry budget, rAF-cadence-independent. Both inference tests are now un-skipped
+// on the webkit engine family.
 //
 // Note: Playwright's `browserName` fixture returns the BROWSER ENGINE name
 // ('webkit'), NOT the project name — so it is 'webkit' for BOTH the desktop
 // 'webkit' project AND the 'Mobile Safari' project (which also uses the
-// webkit engine). This single check therefore covers the whole webkit family.
-const isWebkitEngine = (browserName: string) => browserName === 'webkit'
+// webkit engine).
 
 test.describe('#179 AI Core neural-network visualizer', () => {
   test.beforeEach(async ({ page }) => {
@@ -78,39 +82,16 @@ test.describe('#179 AI Core neural-network visualizer', () => {
     expect(text!).not.toContain('neural.')
   })
 
-  test('Run Inference propagates a pulse and decodes a benign verdict readout', async ({ page, browserName }) => {
-    // #229 RE-SKIP on webkit engine (re-evaluated after the origin/main rebase):
-    // #244's forceClick retry (commit e445b69 / 15a0877) was expected to fix this
-    // on webkit/Mobile Safari, and the prior #229 commit (00a0061) un-skipped it
-    // on that basis. But on CI the forceClick retry budget (3 attempts) is
-    // exhausted under webkit-engine combined-suite load — the inference-decode
-    // async handler does not converge within the retry window. Deterministic CI
-    // failure: run 28499977525, jobs 84474747676 (webkit) + 84474747742 (Mobile
-    // Safari), 'forceClick: effect not observed after 3 attempts'. The component
-    // source is unchanged from the prior (passing-locally) state — this is
-    // webkit-CI handler-convergence flakiness, not a source bug. chromium +
-    // firefox + Mobile Chrome cover this AC. Tracked for a source-level fix in
-    // follow-up #<NNN>. (The earlier "Verified green on webkit" claim in
-    // 00a0061 was a bookkeeping error — both CI runs on that SHA failed.)
-    test.skip(isWebkitEngine(browserName),
-      '#229: webkit inference-decode handler-convergence flakiness under CI load (run 28499977525)')
+  test('Run Inference propagates a pulse and decodes a benign verdict readout', async ({ page }) => {
     const runButton = page.locator('[data-test="neural-run-inference"]')
     await expect(runButton).toBeVisible()
-    // #244 webkit/Mobile Safari: the run button is static, but webkit's
-    // actionability stability check times out racing the sibling infinite
-    // neural-graph synapse pulse animation. forceClick force-clicks (skipping the
-    // impossible stability gate) AND retries until the readout lands — Mobile
-    // Safari under combined-suite load occasionally drops the synthetic force-click
-    // dispatch, so a single click flakes. settleMs=2500 (> the async inference
-    // decode time) so a successful first click's effect completes before any retry
-    // is considered (a shorter gap would re-trigger the inference each attempt).
-    // Click semantics unchanged.
-    await forceClick(
-      runButton,
-      async () => (await page.locator('[data-test="neural-readout"]').count()) === 1,
-      3,
-      2500,
-    )
+    // #293: the click drives the deterministic inference FSM (idle→running→done).
+    // Waiting on the persistent [data-test="neural-state"]'s data-state attribute
+    // auto-polls until finishInference() flips the FSM to 'done' — no fixed
+    // timeout, no retry budget, rAF-cadence-independent (the readout render is
+    // gated on the rAF chain and was the root cause of the webkit-CI flakes).
+    await runButton.click()
+    await expect(page.locator('[data-test="neural-state"]')).toHaveAttribute('data-state', 'done')
 
     // The readout renders after the inference run completes.
     const readout = page.locator('[data-test="neural-readout"]')
@@ -132,25 +113,7 @@ test.describe('#179 AI Core neural-network visualizer', () => {
     expect(text).not.toContain('neural.readout')
   })
 
-  test('keyboard-only: focus a node, then focus the Run Inference button + Enter', async ({ page, browserName }) => {
-    // #229 RE-SKIP on webkit engine. #244 (commit e445b69 / 15a0877) fixed the
-    // actionability-stability half of the keyboard Enter→inference flow (focus+
-    // Enter bypasses webkit's stability check — no click). The prior #229 commit
-    // (00a0061) un-skipped this test on that basis AND this branch added a
-    // forceKeyboardEnter retry helper (commit 05b4470) to handle the residual
-    // async-decode convergence quirk. But on CI the retry budget (4 attempts) is
-    // STILL exhausted under webkit-engine combined-suite load — the Enter never
-    // drives the inference handler to convergence. Deterministic CI failure:
-    // run 28499977525, jobs 84474747676 (webkit) + 84474747742 (Mobile Safari),
-    // 'forceKeyboardEnter: effect not observed after 4 attempts'. The component
-    // (NeuralCore.onButtonKeydown) correctly calls runInference() on Enter —
-    // this is webkit-CI handler-convergence flakiness, not a source bug, and not
-    // fixable by more retries (4 was already generous). chromium + firefox +
-    // Mobile Chrome cover this WCAG 2.1.1 AC. Tracked for a source-level fix in
-    // follow-up #<NNN>. (The earlier "Verified green on webkit" claim in
-    // 00a0061 was a bookkeeping error — both CI runs on that SHA failed.)
-    test.skip(isWebkitEngine(browserName),
-      '#229: webkit keyboard-Enter inference handler-convergence flakiness under CI load (run 28499977525)')
+  test('keyboard-only: focus a node, then focus the Run Inference button + Enter', async ({ page }) => {
     //
     // Nodes are keyboard-reachable via tabindex=0. Focus the first node
     // directly (we are not Tab-walking from the page top, which a pre-existing
@@ -160,11 +123,13 @@ test.describe('#179 AI Core neural-network visualizer', () => {
     await expect(node).toBeFocused()
 
     // The Run Inference button is keyboard-operable: focus + Enter triggers it.
-    // #244: focus+Enter path bypasses webkit actionability stability check (no click).
+    // #293: wait on the deterministic FSM data-state (auto-polls until 'done')
+    // rather than the rAF-gated readout render — see file-header note.
     const runButton = page.locator('[data-test="neural-run-inference"]')
     await runButton.focus()
     await expect(runButton).toBeFocused()
     await page.keyboard.press('Enter')
+    await expect(page.locator('[data-test="neural-state"]')).toHaveAttribute('data-state', 'done')
 
     const readout = page.locator('[data-test="neural-readout"]')
     await expect(readout).toBeVisible({ timeout: 5000 })
