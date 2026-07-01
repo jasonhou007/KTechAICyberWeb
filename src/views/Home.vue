@@ -410,8 +410,8 @@ h1 {
 
 /* Hero card sizing */
 .hero .cyber-card {
-  padding: clamp(1rem, 2.5vh, 2rem);
-  margin-bottom: 1rem;
+  padding: clamp(0.6rem, 1.5vh, 2rem);
+  margin-bottom: clamp(0.25rem, 0.6vh, 1rem);
   text-align: left;
 }
 
@@ -428,30 +428,39 @@ h1 {
 }
 
 /* What We Do */
+/* #265 review(AC#1): .whatwedo is eagerly rendered (NOT LazySection), so it IS
+ * part of the above-the-fold flagship stack. Tightened via clamp() so the whole
+ * stack (header -> Self-driving -> hero -> .whatwedo 6 cards -> .cta) fits at
+ * 1920x1080. The cards themselves are short (3-col grid = 2 rows of ~86px), so
+ * the lever is vertical RHYTHM: section padding, group margins, label margins,
+ * grid gaps. clamp() lower bounds are reached on short desktop viewports so the
+ * stack compresses on 1080p and breathes on 4K. The card grid stays 3-col
+ * (tightest 2-row packing of 6 cards). */
 .whatwedo {
   text-align: left;
+  padding: clamp(0.4rem, 0.8vh, 1.25rem) 5%;
 }
 
 .solution-group {
-  margin-bottom: 2rem;
+  margin-bottom: clamp(0.3rem, 0.6vh, 1.25rem);
 }
 
 .group-label {
   font-family: var(--font-display);
   color: var(--cyan);
   text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin-bottom: clamp(0.25rem, 0.5vh, 0.75rem);
+  font-size: var(--home-group-label);
 }
 
 .solution-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  gap: clamp(0.4rem, 0.6vh, 1rem);
 }
 
 .solution-card {
-  padding: 2rem;
+  padding: clamp(0.45rem, 0.7vh, 1.1rem);
   animation: fadeInUp 0.6s ease forwards;
   opacity: 0;
 }
@@ -470,16 +479,16 @@ h1 {
 .solution-card h4 {
   font-family: var(--font-display);
   color: var(--cyan);
-  margin: 0 0 0.5rem 0;
-  font-size: 1.1rem;
+  margin: 0 0 0.25rem 0;
+  font-size: var(--home-card-title);
 }
 
 .solution-card p {
   font-family: var(--font-body);
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: var(--home-card-body);
   margin: 0;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 /* Self-Driving demo flagship section (#203). The demo component owns its own
@@ -504,7 +513,7 @@ h1 {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: clamp(0.75rem, 2vh, 1.5rem) 5%;
+  padding: clamp(0.4rem, 0.8vh, 1.5rem) 5%;
 }
 
 .cyber-button {

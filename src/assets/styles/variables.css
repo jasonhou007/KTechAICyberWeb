@@ -77,6 +77,13 @@
   --home-subtitle: clamp(1rem, 1.6vw, 1.2rem);
   --home-section-title: clamp(1.4rem, 2.2vw, 1.75rem);
   --home-section-gap: clamp(1.5rem, 3vh, 2.5rem);
+  /* #265 review(AC#1): card group + card body tokens so the ENTIRE flagship
+   * stack (title + Self-driving + hero + .whatwedo incl. 6 cards + .cta) fits
+   * above the fold. Lower bounds = readability floor (>=0.78rem body); upper
+   * bounds = desktop caps. Driven by the .whatwedo/.solution-card rules. */
+  --home-card-title: clamp(0.85rem, 1vw, 1rem);
+  --home-card-body: clamp(0.78rem, 0.85vw, 0.9rem);
+  --home-group-label: clamp(0.9rem, 1.2vw, 1.1rem);
 
   /* === Border Radius === */
   --radius-sm: 4px;
