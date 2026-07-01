@@ -233,7 +233,7 @@ const features = [
 .hero-subtitle {
   font-family: var(--font-body);
   font-size: 1.3rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
 }
 
 /* Section Titles */
@@ -265,7 +265,7 @@ const features = [
   font-family: var(--font-body);
   font-size: 1.2rem;
   line-height: 1.8;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   text-align: center;
   max-width: 800px;
   margin: 0 auto;
@@ -309,7 +309,7 @@ const features = [
 .capability-card p {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
 }
 
@@ -358,7 +358,7 @@ const features = [
 .step-content p {
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
 }
 
@@ -414,7 +414,7 @@ const features = [
 .cta-card p {
   font-family: var(--font-body);
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   margin-bottom: 2rem;
 }
 

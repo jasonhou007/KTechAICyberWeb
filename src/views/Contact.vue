@@ -533,7 +533,7 @@ const handleSubmit = async () => {
 .page-subtitle {
   font-family: var(--font-body);
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
 }
 
 /* Breadcrumb */
@@ -541,7 +541,7 @@ const handleSubmit = async () => {
   padding: 1rem 5%;
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--text-caption);
 }
 
 /* Main Content */
@@ -615,7 +615,7 @@ const handleSubmit = async () => {
 }
 
 .form-input::placeholder {
-  color: var(--text-muted);
+  color: var(--text-caption);
 }
 
 /* Select: keep native affordance but match the cyber input look. */
@@ -661,7 +661,7 @@ select.form-input option {
   gap: 0.75rem;
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--text-list-label);
   cursor: pointer;
 }
 
@@ -776,7 +776,7 @@ select.form-input option {
 .info-item p {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
 }
 
@@ -800,7 +800,7 @@ select.form-input option {
 .social-label {
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--text-list-label);
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }
@@ -831,7 +831,7 @@ select.form-input option {
 .demo-description {
   font-family: var(--font-body);
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: var(--text-caption);
   line-height: 1.8;
   margin-bottom: 3rem;
 }

@@ -216,26 +216,32 @@ describe('#252 hero #fff headings -> var(--text-primary)', () => {
 })
 
 describe('#252 Contact.vue failing gray #666 -> var(--text-muted)', () => {
+  // #286 superseded the token assignment for these three secondary-text roles:
+  // .breadcrumb + .form-input::placeholder are caption-tier (-> --text-caption,
+  // a new blue-gray hue in the --text-muted family) and .social-label is a
+  // list-label (-> --text-list-label == --text-muted). The #252 regression
+  // guard these tests encode — "no #666 gray literal" — is preserved below;
+  // only the exact token name is updated to the #286 role token.
   const css = () => vueStyleSource('Contact.vue')
 
-  it('.breadcrumb color uses var(--text-muted), no #666', () => {
+  it('.breadcrumb color uses a #286 caption role token, no #666', () => {
     const body = ruleBodyFor(css(), '.breadcrumb')
     expect(body, '.breadcrumb rule must exist').not.toBeNull()
-    expect(body).toMatch(/color:\s*var\(--text-muted\)/)
+    expect(body).toMatch(/color:\s*var\(--text-caption\)/)
     expect(body).not.toMatch(/color:\s*#666/i)
   })
 
-  it('.form-input::placeholder color uses var(--text-muted), no #666', () => {
+  it('.form-input::placeholder color uses a #286 caption role token, no #666', () => {
     const body = ruleBodyFor(css(), '.form-input::placeholder')
     expect(body, '.form-input::placeholder rule must exist').not.toBeNull()
-    expect(body).toMatch(/color:\s*var\(--text-muted\)/)
+    expect(body).toMatch(/color:\s*var\(--text-caption\)/)
     expect(body).not.toMatch(/color:\s*#666/i)
   })
 
-  it('.social-label color uses var(--text-muted), no #666', () => {
+  it('.social-label color uses a #286 list-label role token, no #666', () => {
     const body = ruleBodyFor(css(), '.social-label')
     expect(body, '.social-label rule must exist').not.toBeNull()
-    expect(body).toMatch(/color:\s*var\(--text-muted\)/)
+    expect(body).toMatch(/color:\s*var\(--text-list-label\)/)
     expect(body).not.toMatch(/color:\s*#666/i)
   })
 })

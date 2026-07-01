@@ -42,6 +42,17 @@
   /* Dimmed/tertiary text (labels, captions). Was the old text-secondary. */
   --text-muted: #8a9acc;
 
+  /* === Secondary/tertiary text roles (#286 cross-page uniformity pass).
+     Each semantic role resolves to ONE token on every page, so card meta,
+     subtitles, etc. never drift between --text-secondary and --text-muted.
+     All values derive from the muted blue-gray family and pass WCAG AA
+     (>= 4.5:1) against --bg-primary #0a0a0a. See COLOR_ROLE_MAP.md. === */
+  --text-section-subtitle: #b0b0b0;   /* hero/section subtitle == --text-secondary; 9.13:1 */
+  --text-card-meta: #b0b0b0;          /* card description/overview body == --text-secondary; 9.13:1 */
+  --text-list-label: #8a9acc;         /* stat/step/filter labels == --text-muted; 7.14:1 */
+  --text-caption: #9aa0b0;            /* inline caption/helper/empty-state; 7.57:1 (new hue) */
+  --text-timestamp: #8a9acc;          /* timestamps/dates == --text-muted; 7.14:1 */
+
   /* === Surfaces === */
   --surface-card: rgba(10, 15, 28, 0.8);
   --surface-elevated: rgba(26, 26, 46, 0.8);

@@ -464,7 +464,7 @@ onMounted(() => {
 }
 
 .bd__breadcrumb-link {
-  color: var(--text-secondary);
+  color: var(--text-caption);
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -533,7 +533,7 @@ onMounted(() => {
 
 .bd__hero-subtitle {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   max-width: 800px;
   margin: 0 auto 2rem;
   line-height: 1.6;
@@ -600,7 +600,7 @@ onMounted(() => {
 .bd__overview-text {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   text-align: center;
 }
 
@@ -662,7 +662,7 @@ onMounted(() => {
 .bd__card-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
 }
 
 /* Stats Section */
@@ -693,7 +693,7 @@ onMounted(() => {
 
 .bd__stat-label {
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: var(--text-list-label);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -754,7 +754,7 @@ onMounted(() => {
 .bd__step-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   margin: 0;
 }
 
@@ -778,7 +778,7 @@ onMounted(() => {
 
 .bd__cta-description {
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: var(--text-caption);
   margin-bottom: 2rem;
   max-width: 600px;
   margin-left: auto;

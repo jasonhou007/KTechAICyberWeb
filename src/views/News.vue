@@ -94,7 +94,7 @@ onMounted(() => {
 }
 
 .news-page__breadcrumb-link {
-  color: var(--text-secondary);
+  color: var(--text-caption);
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -150,7 +150,7 @@ onMounted(() => {
 .news-page__subtitle {
   font-family: var(--font-body);
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   margin: 0;
 }
 
