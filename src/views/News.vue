@@ -105,7 +105,7 @@ onMounted(() => {
 }
 
 .news-page__breadcrumb-separator {
-  color: rgba(0, 255, 204, 0.5);
+  color: var(--accent-cyan-alpha-50);
 }
 
 .news-page__breadcrumb-current {

@@ -161,7 +161,7 @@ onMounted(() => {
 /* Hero Section */
 .hero {
   padding: 120px 20px 80px;
-  background: linear-gradient(180deg, rgba(0, 255, 204, 0.05) 0%, transparent 100%);
+  background: linear-gradient(180deg, var(--accent-cyan-alpha-05) 0%, transparent 100%);
   text-align: center;
 }
 
@@ -181,7 +181,7 @@ onMounted(() => {
 
 .accent {
   color: var(--cyan);
-  text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+  text-shadow: 0 0 20px var(--accent-cyan-alpha-50);
 }
 
 .subtitle {
@@ -203,13 +203,13 @@ onMounted(() => {
   border-radius: var(--radius-sm);
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 4px 20px rgba(0, 255, 204, 0.3);
+  box-shadow: 0 4px 20px var(--accent-cyan-alpha-30);
   transition: all 0.3s ease;
 }
 
 .cta-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 30px rgba(0, 255, 204, 0.5);
+  box-shadow: 0 6px 30px var(--accent-cyan-alpha-50);
 }
 
 /* Section Styles */
@@ -254,7 +254,7 @@ onMounted(() => {
 
 .culture-card {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-md);
   padding: 30px;
   transition: all 0.3s ease;
@@ -262,7 +262,7 @@ onMounted(() => {
 
 .culture-card:hover {
   border-color: var(--cyan);
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 20px var(--accent-cyan-alpha-20);
   transform: translateY(-5px);
 }
 
@@ -295,7 +295,7 @@ onMounted(() => {
 
 .benefit-card:hover {
   background: var(--surface-elevated);
-  box-shadow: 0 0 15px rgba(0, 255, 204, 0.15);
+  box-shadow: 0 0 15px var(--accent-cyan-alpha-15);
 }
 
 .benefit-card h3 {
@@ -330,7 +330,7 @@ onMounted(() => {
 .view-all-button:hover {
   background: var(--cyan);
   color: var(--bg-primary);
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+  box-shadow: 0 0 20px var(--accent-cyan-alpha-40);
 }
 
 /* Process Section */
@@ -357,7 +357,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   margin: 0 auto 20px;
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  box-shadow: var(--shadow-glow-cyan);
 }
 
 .process-step h3 {
@@ -376,7 +376,7 @@ onMounted(() => {
 /* Contact Section */
 .contact {
   text-align: center;
-  background: linear-gradient(180deg, transparent 0%, rgba(0, 255, 204, 0.05) 100%);
+  background: linear-gradient(180deg, transparent 0%, var(--accent-cyan-alpha-05) 100%);
 }
 
 .email-link {
@@ -388,7 +388,7 @@ onMounted(() => {
 }
 
 .email-link:hover {
-  text-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+  text-shadow: 0 0 15px var(--accent-cyan-alpha-50);
   text-decoration: underline;
 }
 

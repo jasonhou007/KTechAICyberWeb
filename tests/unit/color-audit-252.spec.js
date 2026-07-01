@@ -139,8 +139,11 @@ describe('#252 PositionList.vue off-theme purple -> magenta token', () => {
 
   it('.position-card__badge background+border use magenta rgba, not purple', () => {
     const body = ruleBodyFor(css(), '.position-card__badge')
-    expect(body).toMatch(/background:\s*rgba\(\s*255,\s*0,\s*170/)
-    expect(body).toMatch(/border:\s*1px solid rgba\(\s*255,\s*0,\s*170/)
+    // #285 tokenized the brand magenta alpha literals onto
+    // var(--accent-magenta-alpha-NN). Accept EITHER the literal rgba OR the
+    // token — both satisfy "magenta (255,0,170), not purple (139,0,255)".
+    expect(body).toMatch(/background:\s*(?:rgba\(\s*255,\s*0,\s*170|var\(--accent-magenta-alpha-)/)
+    expect(body).toMatch(/border:\s*1px solid (?:rgba\(\s*255,\s*0,\s*170|var\(--accent-magenta-alpha-)/)
     expect(body).not.toMatch(/rgba\(\s*139,\s*0,\s*255/)
   })
 

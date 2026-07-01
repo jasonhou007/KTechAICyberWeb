@@ -155,7 +155,7 @@ onMounted(() => {
   position: relative;
   padding: 6rem 5% 4rem;
   background: rgba(0, 255, 204, 0.03);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
   z-index: 1;
 }
 
@@ -195,7 +195,7 @@ onMounted(() => {
   color: var(--text-primary);
   letter-spacing: 0.2em;
   margin-bottom: 1rem;
-  text-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  text-shadow: 0 0 20px var(--accent-cyan-alpha-30);
 }
 
 .page-title .accent {
@@ -234,7 +234,7 @@ onMounted(() => {
   letter-spacing: 0.15em;
   text-align: center;
   margin-bottom: 3rem;
-  text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+  text-shadow: 0 0 15px var(--accent-cyan-alpha-40);
 }
 
 .overview-text {
@@ -252,7 +252,7 @@ onMounted(() => {
   align-items: center;
   gap: 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-lg);
   padding: 2rem;
   max-width: 900px;
@@ -267,7 +267,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   flex-shrink: 0;
 }
 
@@ -296,7 +296,7 @@ onMounted(() => {
 
 .feature-card {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   padding: 2rem;
   text-align: center;
@@ -307,8 +307,8 @@ onMounted(() => {
 
 .feature-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-30);
 }
 
 @keyframes fadeInUp {
@@ -329,7 +329,7 @@ onMounted(() => {
   line-height: 70px;
   margin: 0 auto 1.5rem;
   border-radius: 50%;
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
 }
 
 .feature-card h3 {
@@ -374,7 +374,7 @@ onMounted(() => {
 
 .benefit-item:hover {
   border-left-color: var(--cyan);
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 20px var(--accent-cyan-alpha-20);
 }
 
 .benefit-number {
@@ -405,9 +405,9 @@ onMounted(() => {
 .cta {
   position: relative;
   padding: 5rem 5%;
-  background: linear-gradient(135deg, rgba(0, 255, 204, 0.05) 0%, rgba(0, 255, 204, 0.03) 100%);
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  background: linear-gradient(135deg, var(--accent-cyan-alpha-05) 0%, rgba(0, 255, 204, 0.03) 100%);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
   z-index: 1;
 }
 
@@ -423,7 +423,7 @@ onMounted(() => {
   color: var(--cyan);
   margin-bottom: 1.5rem;
   letter-spacing: 0.15em;
-  text-shadow: 0 0 15px rgba(0, 255, 204, 0.4);
+  text-shadow: 0 0 15px var(--accent-cyan-alpha-40);
 }
 
 .cta p {
@@ -435,7 +435,7 @@ onMounted(() => {
 }
 
 .cyber-button {
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   color: var(--cyan);
   border: 2px solid var(--cyan);
   padding: 1rem 3rem;
@@ -451,8 +451,8 @@ onMounted(() => {
 }
 
 .cyber-button:hover {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-50);
   transform: scale(1.05);
 }
 
@@ -460,8 +460,8 @@ onMounted(() => {
 .neon-border {
   box-shadow:
     0 0 5px var(--cyan),
-    0 0 10px rgba(0, 255, 204, 0.5),
-    inset 0 0 5px rgba(0, 255, 204, 0.2);
+    0 0 10px var(--accent-cyan-alpha-50),
+    inset 0 0 5px var(--accent-cyan-alpha-20);
 }
 
 .neon-text {

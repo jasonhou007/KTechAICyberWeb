@@ -241,13 +241,13 @@ onUnmounted(() => {
   padding: 1.5rem 4rem;
   background: var(--surface-card);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
   transition: all 0.3s ease;
 }
 
 .nav.scrolled {
   padding: 1rem 4rem;
-  box-shadow: 0 4px 20px rgba(0, 255, 204, 0.1);
+  box-shadow: 0 4px 20px var(--accent-cyan-alpha-10);
 }
 
 .nav-logo {
@@ -394,7 +394,7 @@ onUnmounted(() => {
     left: 0;
     padding: 1.5rem;
     background: var(--surface-card);
-    border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+    border-bottom: 1px solid var(--accent-cyan-alpha-20);
     transform: translateX(110%);
     transition: transform 0.3s ease;
     backdrop-filter: blur(20px);

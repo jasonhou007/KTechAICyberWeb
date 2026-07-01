@@ -195,7 +195,7 @@ const features = [
   justify-content: center;
   text-align: center;
   background: var(--surface-card);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
 }
 
 .hero-content {
@@ -210,7 +210,7 @@ const features = [
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(0, 255, 204, 0.3);
+  border: 2px solid var(--accent-cyan-alpha-30);
   border-radius: 50%;
 }
 
@@ -249,11 +249,11 @@ const features = [
 }
 
 .neon-text {
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.5);
+  text-shadow: 0 0 10px var(--accent-cyan-alpha-80), 0 0 20px var(--accent-cyan-alpha-50);
 }
 
 .neon-glow {
-  filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.5));
+  filter: drop-shadow(0 0 10px var(--accent-cyan-alpha-50));
 }
 
 /* Overview Section */
@@ -296,7 +296,7 @@ const features = [
   justify-content: center;
   margin: 0 auto 1rem;
   border-radius: 50%;
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
 }
 
 .capability-card h3 {
@@ -338,8 +338,8 @@ const features = [
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 255, 204, 0.1);
-  border: 2px solid rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-10);
+  border: 2px solid var(--accent-cyan-alpha-30);
   border-radius: 50%;
   font-family: var(--font-display);
   font-size: 1.2rem;
@@ -379,7 +379,7 @@ const features = [
   gap: 1rem;
   padding: 1rem 1.5rem;
   background: var(--surface-card);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
   color: var(--text-primary);
@@ -401,7 +401,7 @@ const features = [
   margin: 0 auto;
   padding: 3rem;
   text-align: center;
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
 }
 
 .cta-card h2 {
@@ -423,17 +423,17 @@ const features = [
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 2rem;
-  background: rgba(0, 255, 204, 0.1);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-10);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-sm);
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
 .cta-button:hover {
-  background: rgba(255, 0, 170, 0.2);
-  border-color: rgba(255, 0, 170, 0.5);
-  box-shadow: 0 0 15px rgba(255, 0, 170, 0.3);
+  background: var(--accent-magenta-alpha-20);
+  border-color: var(--accent-magenta-alpha-50);
+  box-shadow: 0 0 15px var(--accent-magenta-alpha-30);
 }
 
 .cta-button span:first-child {
@@ -463,7 +463,7 @@ const features = [
 /* Utility Classes */
 .cyber-card {
   background: rgba(20, 25, 40, 0.8);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
@@ -471,8 +471,8 @@ const features = [
 
 .hover-lift:hover {
   transform: translateY(-5px);
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-20);
 }
 
 .neon-border {
@@ -480,7 +480,7 @@ const features = [
 }
 
 .neon-border:hover {
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.5), inset 0 0 20px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 20px var(--accent-cyan-alpha-50), inset 0 0 20px var(--accent-cyan-alpha-20);
 }
 
 /* Responsive */

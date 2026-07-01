@@ -77,7 +77,7 @@ const selectCategory = (category) => {
   font-weight: 500;
   padding: 0.625rem 1.25rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-md);
   color: var(--text-primary);
   text-transform: uppercase;
@@ -90,21 +90,21 @@ const selectCategory = (category) => {
 
 .news-filter__button:hover,
 .news-filter__button:focus {
-  border-color: rgba(0, 255, 204, 0.6);
-  box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan-alpha-60);
+  box-shadow: 0 0 15px var(--accent-cyan-alpha-20);
   transform: translateY(-2px);
 }
 
 .news-filter__button:focus {
-  outline: 2px solid rgba(0, 255, 204, 0.5);
+  outline: 2px solid var(--accent-cyan-alpha-50);
   outline-offset: 2px;
 }
 
 .news-filter__button--active {
-  background: rgba(0, 255, 204, 0.2);
-  border-color: rgba(0, 255, 204, 0.6);
+  background: var(--accent-cyan-alpha-20);
+  border-color: var(--accent-cyan-alpha-60);
   color: var(--cyan);
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  box-shadow: var(--shadow-glow-cyan);
 }
 
 .news-filter__button--active::before {
@@ -113,7 +113,7 @@ const selectCategory = (category) => {
   inset: 0;
   background: linear-gradient(
     135deg,
-    rgba(0, 255, 204, 0.1) 0%,
+    var(--accent-cyan-alpha-10) 0%,
     transparent 100%
   );
   pointer-events: none;

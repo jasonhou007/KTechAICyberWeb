@@ -53,21 +53,21 @@ const handleClick = (event) => {
 }
 
 .skip-link:hover {
-  background: var(--skip-link-hover-bg, rgba(0, 255, 204, 0.1));
-  box-shadow: 0 0 20px var(--skip-link-glow, rgba(0, 255, 204, 0.5));
+  background: var(--skip-link-hover-bg, var(--accent-cyan-alpha-10));
+  box-shadow: 0 0 20px var(--skip-link-glow, var(--accent-cyan-alpha-50));
 }
 
 .skip-link:focus {
   top: 0;
   outline: none;
-  box-shadow: 0 0 20px var(--skip-link-glow, rgba(0, 255, 204, 0.5));
+  box-shadow: 0 0 20px var(--skip-link-glow, var(--accent-cyan-alpha-50));
 }
 
 .skip-link:focus-visible {
   top: 0;
   outline: 2px solid var(--skip-link-outline, var(--cyan));
   outline-offset: -2px;
-  box-shadow: 0 0 20px var(--skip-link-glow, rgba(0, 255, 204, 0.5));
+  box-shadow: 0 0 20px var(--skip-link-glow, var(--accent-cyan-alpha-50));
 }
 
 /* Ensure high contrast for accessibility */

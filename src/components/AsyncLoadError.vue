@@ -83,7 +83,7 @@ const { t } = useLanguage()
 }
 
 .async-load-error__retry {
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   color: var(--cyan);
   border: 2px solid var(--cyan);
   border-radius: var(--radius-sm);
@@ -95,7 +95,7 @@ const { t } = useLanguage()
 }
 
 .async-load-error__retry:hover {
-  background: rgba(0, 255, 204, 0.2);
+  background: var(--accent-cyan-alpha-20);
 }
 
 .async-load-error__retry:focus-visible {

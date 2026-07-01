@@ -348,7 +348,7 @@ watch(status, (s) => {
 }
 .pulse-flash.lit {
   opacity: 1;
-  background: radial-gradient(circle, rgba(0, 255, 204, 0.25) 0%, rgba(255, 0, 170, 0.15) 100%);
+  background: radial-gradient(circle, rgba(0, 255, 204, 0.25) 0%, var(--accent-magenta-alpha-15) 100%);
 }
 
 .pulse-header {
@@ -412,7 +412,7 @@ watch(status, (s) => {
 .pulse-btn.danger {
   color: var(--neon-pink);
   border-color: var(--neon-pink);
-  box-shadow: 0 0 6px rgba(255, 0, 170, 0.4);
+  box-shadow: 0 0 6px var(--accent-magenta-alpha-40);
 }
 
 /* Input + mode radio groups */

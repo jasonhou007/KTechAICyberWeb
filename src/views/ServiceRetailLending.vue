@@ -420,7 +420,7 @@ onMounted(() => {
 
 .rl__skeleton-block {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-md);
   margin-bottom: 1rem;
   animation: rlShimmer 1.5s ease-in-out infinite;
@@ -464,7 +464,7 @@ onMounted(() => {
 }
 
 .rl__breadcrumb-separator {
-  color: rgba(0, 255, 204, 0.5);
+  color: var(--accent-cyan-alpha-50);
 }
 
 .rl__breadcrumb-current {
@@ -481,7 +481,7 @@ onMounted(() => {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   margin-bottom: 3rem;
   backdrop-filter: blur(10px);
@@ -498,7 +498,7 @@ onMounted(() => {
   line-height: 120px;
   margin: 0 auto;
   border-radius: 50%;
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -535,8 +535,8 @@ onMounted(() => {
 .rl__hero-button {
   display: inline-block;
   padding: 1rem 2.5rem;
-  background: rgba(0, 255, 204, 0.1);
-  border: 2px solid rgba(0, 255, 204, 0.4);
+  background: var(--accent-cyan-alpha-10);
+  border: 2px solid var(--accent-cyan-alpha-40);
   border-radius: var(--radius-md);
   color: var(--cyan);
   text-decoration: none;
@@ -549,9 +549,9 @@ onMounted(() => {
 
 .rl__hero-button:hover,
 .rl__hero-button:focus {
-  background: rgba(0, 255, 204, 0.2);
-  border-color: rgba(0, 255, 204, 0.6);
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-20);
+  border-color: var(--accent-cyan-alpha-60);
+  box-shadow: var(--shadow-glow-cyan);
   transform: translateY(-2px);
 }
 
@@ -582,7 +582,7 @@ onMounted(() => {
   margin: 0 auto 4rem;
   padding: 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
 }
 
@@ -608,7 +608,7 @@ onMounted(() => {
 
 .rl__card {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   padding: 2rem;
   text-align: center;
@@ -618,9 +618,9 @@ onMounted(() => {
 }
 
 .rl__card:hover {
-  border-color: rgba(0, 255, 204, 0.5);
+  border-color: var(--accent-cyan-alpha-50);
   transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15);
+  box-shadow: 0 8px 20px var(--accent-cyan-alpha-15);
 }
 
 @keyframes rlFadeInUp {
@@ -659,7 +659,7 @@ onMounted(() => {
   margin-bottom: 4rem;
   padding: 3rem 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
 }
 
@@ -704,7 +704,7 @@ onMounted(() => {
   display: flex;
   gap: 2rem;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   padding: 2rem;
   transition: all 0.3s ease;
@@ -713,8 +713,8 @@ onMounted(() => {
 }
 
 .rl__process-step:hover {
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 8px 20px rgba(0, 255, 204, 0.15);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 8px 20px var(--accent-cyan-alpha-15);
 }
 
 .rl__step-number {
@@ -728,7 +728,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   flex-shrink: 0;
 }
 
@@ -752,7 +752,7 @@ onMounted(() => {
   text-align: center;
   padding: 4rem 2rem;
   background: var(--surface-elevated);
-  border: 2px solid rgba(0, 255, 204, 0.3);
+  border: 2px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-lg);
   margin-bottom: 3rem;
 }
@@ -777,8 +777,8 @@ onMounted(() => {
 .rl__cta-button {
   display: inline-block;
   padding: 1rem 2.5rem;
-  background: rgba(0, 255, 204, 0.1);
-  border: 2px solid rgba(0, 255, 204, 0.4);
+  background: var(--accent-cyan-alpha-10);
+  border: 2px solid var(--accent-cyan-alpha-40);
   border-radius: var(--radius-md);
   color: var(--cyan);
   text-decoration: none;
@@ -791,9 +791,9 @@ onMounted(() => {
 
 .rl__cta-button:hover,
 .rl__cta-button:focus {
-  background: rgba(0, 255, 204, 0.2);
-  border-color: rgba(0, 255, 204, 0.6);
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-20);
+  border-color: var(--accent-cyan-alpha-60);
+  box-shadow: var(--shadow-glow-cyan);
   transform: translateY(-2px);
 }
 
@@ -834,17 +834,17 @@ onMounted(() => {
 /* Neon border effect */
 .neon-border {
   box-shadow:
-    0 0 5px rgba(0, 255, 204, 0.5),
-    0 0 10px rgba(0, 255, 204, 0.3),
-    inset 0 0 5px rgba(0, 255, 204, 0.1);
+    0 0 5px var(--accent-cyan-alpha-50),
+    0 0 10px var(--accent-cyan-alpha-30),
+    inset 0 0 5px var(--accent-cyan-alpha-10);
 }
 
 /* Neon text effect */
 .neon-text {
   text-shadow:
-    0 0 5px rgba(0, 255, 204, 0.5),
-    0 0 10px rgba(0, 255, 204, 0.3),
-    0 0 15px rgba(0, 255, 204, 0.2);
+    0 0 5px var(--accent-cyan-alpha-50),
+    0 0 10px var(--accent-cyan-alpha-30),
+    0 0 15px var(--accent-cyan-alpha-20);
 }
 
 /* Responsive */

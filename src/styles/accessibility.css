@@ -65,7 +65,7 @@ select:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--focus-color, var(--cyan));
   outline-offset: 2px;
-  box-shadow: 0 0 10px var(--focus-glow, rgba(0, 255, 204, 0.5));
+  box-shadow: 0 0 10px var(--focus-glow, var(--accent-cyan-alpha-50));
 }
 
 /**
@@ -159,7 +159,7 @@ nav a:focus-visible {
 @media (prefers-contrast: high) {
   :root {
     --focus-color: var(--cyan);
-    --focus-glow: rgba(0, 255, 204, 0.8);
+    --focus-glow: var(--accent-cyan-alpha-80);
   }
 
   button,

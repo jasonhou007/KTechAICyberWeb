@@ -352,7 +352,7 @@ onUnmounted(() => {
 <style scoped>
 .position-list {
   min-height: 100vh;
-  background: linear-gradient(135deg, rgba(0, 255, 204, 0.05) 0%, rgba(255, 0, 170, 0.05) 100%);
+  background: linear-gradient(135deg, var(--accent-cyan-alpha-05) 0%, rgba(255, 0, 170, 0.05) 100%);
   padding: 2rem 5%;
 }
 
@@ -374,7 +374,7 @@ onUnmounted(() => {
 }
 
 .breadcrumb-link:hover {
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+  text-shadow: 0 0 10px var(--accent-cyan-alpha-80);
 }
 
 .breadcrumb-separator {
@@ -425,8 +425,8 @@ onUnmounted(() => {
 }
 
 .filter-section {
-  background: rgba(0, 255, 204, 0.05);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  background: var(--accent-cyan-alpha-05);
+  border: 1px solid var(--accent-cyan-alpha-20);
   padding: 2rem;
   border-radius: var(--radius-md);
 }
@@ -455,7 +455,7 @@ onUnmounted(() => {
   width: 100%;
   padding: 0.75rem;
   background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   color: var(--text-primary);
   font-family: var(--font-body);
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -464,7 +464,7 @@ onUnmounted(() => {
 .filter-search input:focus {
   outline: none;
   border-color: var(--cyan);
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 10px var(--accent-cyan-alpha-50);
 }
 
 .filter-group {
@@ -483,7 +483,7 @@ onUnmounted(() => {
   width: 100%;
   padding: 0.75rem;
   background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   color: var(--text-primary);
   font-family: var(--font-body);
   transition: border-color 0.3s ease;
@@ -499,7 +499,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
   font-family: var(--font-body);
   font-size: 0.9rem;
   color: var(--text-list-label);
@@ -507,8 +507,8 @@ onUnmounted(() => {
 
 .filter-clear {
   padding: 0.5rem 1rem;
-  background: rgba(0, 255, 204, 0.1);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-10);
+  border: 1px solid var(--accent-cyan-alpha-30);
   color: var(--cyan);
   font-family: var(--font-body);
   cursor: pointer;
@@ -516,8 +516,8 @@ onUnmounted(() => {
 }
 
 .filter-clear:hover {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 10px var(--accent-cyan-alpha-50);
 }
 
 /* Positions Grid */
@@ -533,8 +533,8 @@ onUnmounted(() => {
 
 /* Position Card */
 .position-card {
-  background: rgba(0, 255, 204, 0.05);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  background: var(--accent-cyan-alpha-05);
+  border: 1px solid var(--accent-cyan-alpha-20);
   padding: 2rem;
   border-radius: var(--radius-md);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -543,7 +543,7 @@ onUnmounted(() => {
 
 .position-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 10px 30px var(--accent-cyan-alpha-20);
   border-color: var(--cyan);
 }
 
@@ -598,8 +598,8 @@ onUnmounted(() => {
 
 .position-card__badge {
   padding: 0.3rem 0.8rem;
-  background: rgba(255, 0, 170, 0.2);
-  border: 1px solid rgba(255, 0, 170, 0.4);
+  background: var(--accent-magenta-alpha-20);
+  border: 1px solid var(--accent-magenta-alpha-40);
   color: var(--accent-magenta);
   font-family: var(--font-body);
   font-size: 0.8rem;
@@ -611,7 +611,7 @@ onUnmounted(() => {
   width: 100%;
   padding: 0.8rem;
   background: transparent;
-  border: 1px solid rgba(0, 255, 204, 0.4);
+  border: 1px solid var(--accent-cyan-alpha-40);
   color: var(--cyan);
   font-family: var(--font-display);
   font-size: 0.9rem;
@@ -621,8 +621,8 @@ onUnmounted(() => {
 }
 
 .position-card__action:hover {
-  background: rgba(0, 255, 204, 0.1);
-  box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-10);
+  box-shadow: 0 0 15px var(--accent-cyan-alpha-50);
 }
 
 /* Empty State */
@@ -653,8 +653,8 @@ onUnmounted(() => {
 
 .empty-action {
   padding: 0.8rem 2rem;
-  background: rgba(0, 255, 204, 0.1);
-  border: 1px solid rgba(0, 255, 204, 0.4);
+  background: var(--accent-cyan-alpha-10);
+  border: 1px solid var(--accent-cyan-alpha-40);
   color: var(--cyan);
   font-family: var(--font-display);
   font-size: 0.9rem;
@@ -664,8 +664,8 @@ onUnmounted(() => {
 }
 
 .empty-action:hover {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 15px var(--accent-cyan-alpha-50);
 }
 
 /* Modal */
@@ -697,7 +697,7 @@ onUnmounted(() => {
   max-height: 90vh;
   overflow-y: auto;
   background: rgba(10, 10, 20, 0.95);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-lg);
 }
 
@@ -707,8 +707,8 @@ onUnmounted(() => {
   right: 1rem;
   width: 40px;
   height: 40px;
-  background: rgba(0, 255, 204, 0.1);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-10);
+  border: 1px solid var(--accent-cyan-alpha-30);
   color: var(--cyan);
   font-size: 1.2rem;
   cursor: pointer;
@@ -717,8 +717,8 @@ onUnmounted(() => {
 }
 
 .position-modal__close:hover {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 10px var(--accent-cyan-alpha-50);
 }
 
 .position-modal__content {
@@ -801,25 +801,25 @@ onUnmounted(() => {
 }
 
 .position-modal__apply {
-  background: rgba(0, 255, 204, 0.1);
-  border: 1px solid rgba(0, 255, 204, 0.4);
+  background: var(--accent-cyan-alpha-10);
+  border: 1px solid var(--accent-cyan-alpha-40);
   color: var(--cyan);
 }
 
 .position-modal__apply:hover {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 15px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 15px var(--accent-cyan-alpha-50);
 }
 
 .position-modal__share {
   background: transparent;
-  border: 1px solid rgba(255, 0, 170, 0.4);
+  border: 1px solid var(--accent-magenta-alpha-40);
   color: var(--accent-magenta);
 }
 
 .position-modal__share:hover {
-  background: rgba(255, 0, 170, 0.1);
-  box-shadow: 0 0 15px rgba(255, 0, 170, 0.5);
+  background: var(--accent-magenta-alpha-10);
+  box-shadow: 0 0 15px var(--accent-magenta-alpha-50);
 }
 
 /* Responsive */

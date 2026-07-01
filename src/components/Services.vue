@@ -119,7 +119,7 @@ const services = computed(() => [
 
 .card {
   background: rgba(13, 26, 45, 0.6);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   padding: 2.5rem;
   transition: all 0.4s ease;
   position: relative;
@@ -136,7 +136,7 @@ const services = computed(() => [
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(0, 255, 204, 0.1),
+    var(--accent-cyan-alpha-10),
     transparent
   );
   transition: left 0.6s ease;
@@ -147,9 +147,9 @@ const services = computed(() => [
 }
 
 .card:hover {
-  border-color: rgba(0, 255, 204, 0.5);
+  border-color: var(--accent-cyan-alpha-50);
   transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 255, 204, 0.15);
+  box-shadow: 0 20px 40px var(--accent-cyan-alpha-15);
 }
 
 .card-icon {

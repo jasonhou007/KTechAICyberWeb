@@ -105,14 +105,14 @@ const contacts = [
 .contact-item {
   text-align: center;
   padding: 2rem;
-  background: rgba(0, 255, 204, 0.05);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  background: var(--accent-cyan-alpha-05);
+  border: 1px solid var(--accent-cyan-alpha-20);
   transition: all 0.3s ease;
 }
 
 .contact-item:hover {
   border-color: var(--cyan);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-20);
   transform: translateY(-5px);
 }
 

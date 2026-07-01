@@ -230,7 +230,7 @@ defineProps({
    static, but the wrapper also drives a subtle hover pulse that IS motion and
    must be disabled for motion-sensitive users). */
 .about-icon {
-  filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.6));
+  filter: drop-shadow(0 0 6px var(--accent-cyan-alpha-60));
   transition: filter 0.3s ease;
 }
 
@@ -240,7 +240,7 @@ defineProps({
 }
 
 @keyframes about-icon-pulse {
-  0%, 100% { filter: drop-shadow(0 0 6px rgba(0, 255, 204, 0.6)); }
+  0%, 100% { filter: drop-shadow(0 0 6px var(--accent-cyan-alpha-60)); }
   50% { filter: drop-shadow(0 0 12px rgba(0, 255, 204, 0.95)); }
 }
 

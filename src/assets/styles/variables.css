@@ -112,6 +112,36 @@
   --shadow-glow-magenta: 0 0 20px rgba(255, 0, 170, 0.3);
   --glow-color: rgba(0, 255, 204, 0.4);
 
+  /* === Brand accent alpha steps (#285).
+   * The dominant inline rgba(0, 255, 204, A) / rgba(255, 0, 170, A) glow /
+   * shadow / border / gradient literals across views are snapped onto these
+   * closed alpha-step tokens so a future palette tweak is one edit, not a
+   * find/replace. Each token's declared rgba IS the literal it replaces, so the
+   * substitution is value-preserving by construction (no visual delta).
+   *
+   * Long-tail strategy: rare one-off alphas (e.g. 0.03, 0.06, 0.18, 0.35) are
+   * deliberately NOT tokenized — a token-per-occurrence would inflate the set
+   * faster than it pays back. Those rare alphas stay literal inline; the 9
+   * cyan + 7 magenta steps below cover the high-volume mass. The
+   * comment-stripped gate in tests/unit/style-tokenize-285.spec.js logs the
+   * residual long-tail count so the omission stays auditable. */
+  --accent-cyan-alpha-05: rgba(0, 255, 204, 0.05);
+  --accent-cyan-alpha-10: rgba(0, 255, 204, 0.1);
+  --accent-cyan-alpha-15: rgba(0, 255, 204, 0.15);
+  --accent-cyan-alpha-20: rgba(0, 255, 204, 0.2);
+  --accent-cyan-alpha-30: rgba(0, 255, 204, 0.3);
+  --accent-cyan-alpha-40: rgba(0, 255, 204, 0.4);
+  --accent-cyan-alpha-50: rgba(0, 255, 204, 0.5);
+  --accent-cyan-alpha-60: rgba(0, 255, 204, 0.6);
+  --accent-cyan-alpha-80: rgba(0, 255, 204, 0.8);
+  --accent-magenta-alpha-10: rgba(255, 0, 170, 0.1);
+  --accent-magenta-alpha-15: rgba(255, 0, 170, 0.15);
+  --accent-magenta-alpha-20: rgba(255, 0, 170, 0.2);
+  --accent-magenta-alpha-30: rgba(255, 0, 170, 0.3);
+  --accent-magenta-alpha-40: rgba(255, 0, 170, 0.4);
+  --accent-magenta-alpha-50: rgba(255, 0, 170, 0.5);
+  --accent-magenta-alpha-60: rgba(255, 0, 170, 0.6);
+
   /* === Z-index === */
   --z-nav: 100;
   --z-loading: 9999;
