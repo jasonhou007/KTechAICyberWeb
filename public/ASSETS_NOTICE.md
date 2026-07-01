@@ -98,3 +98,63 @@ separate follow-up.
   `AboutIcon.vue` for the Who We Are cards.
 - **#199** — generate `srcset` responsive image variants for the About/News
   images (this ticket ships a single `webp`/`png` per slot).
+
+## Generated SEO/favicon assets (#263)
+
+The following files under `public/` were missing before #263 (deployed 404 +
+absent from the repo), causing blank social previews and blank browser tabs.
+#263 generates them from a single inline-SVG source via
+`scripts/generate-seo-assets.mjs` (Playwright Chromium rasterizes the SVG at
+each target viewport; no external image deps):
+
+- `og-image.jpg` (1200×630 JPEG) — OpenGraph preview
+- `twitter-image.jpg` (1200×630 JPEG) — Twitter card preview
+- `apple-touch-icon.png` (180×180 PNG) — iOS home-screen icon
+- `icon-192.png` / `icon-512.png` (PNG) — PWA manifest icons
+- `logo.png` (512×512 PNG) — JSON-LD Organization logo
+- `favicon.svg` (SVG) — canonical vector source
+- `favicon.ico` (multi-size ICO: 16/32/48 PNG-in-ICO) — browser tab/bookmark
+
+### Regen command
+
+```bash
+node scripts/generate-seo-assets.mjs
+```
+
+Idempotent — re-running overwrites the same files (deterministic output).
+
+### IP attestation — original cyber primitives only
+
+This generator mirrors the #198 `AboutIcon.vue` IP-clean approach. The motif
+set is **original geometric primitives** (`rect` / `circle` / `line` /
+`polyline` / `path`) on a `#0a0a0a` background with the project cyan
+`#00ffcc`:
+
+- **NO third-party bank wordmark or official logo path data.** The generator
+  source contains no reproduction of any external trademarked mark or logo
+  path data. (The IP-gate unit test `tests/unit/seo-assets.spec.js` Group C
+  asserts the source excludes the forbidden tokens.)
+- The `"KTech"` string rendered in the SVG is the project's own abbreviated
+  name (matching `manifest.json` `short_name`), NOT any external trademark.
+- The motifs are: corner brackets, concentric rings, circuit nodes around the
+  ring, an original K monogram constructed from `<line>` + `<polyline>`, a
+  scanline, and a background circuit grid. None are derived from any
+  third-party logo or path data.
+
+### Base-path fix (#263)
+
+The `index.html` favicon `<link href>` values, the `App.vue` `useHead` favicon
+link, and the `manifest.json` `icons[].src` values were changed from a
+leading-slash form (`/favicon.ico`) to a relative form (`favicon.ico`). Under
+the Vite base subpath `/KTechAICyberWeb/`, a leading slash resolves against
+the origin root (origin/favicon.ico → 404 on GitHub Pages), while a relative
+href resolves against the document URL and serves correctly. The absolute
+`og:image` / `twitter:image` / JSON-LD `logo` URLs in `index.html` are
+intentionally left absolute (correct for OG scrapers).
+
+## Related follow-up issues (additional)
+
+- **#301** — per-route `og:image` URLs in `src/utils/seo.js` still point at
+  the (now-existing) site-level assets; deferred from #263 (the per-route
+  og-image story is tracked there).
+
