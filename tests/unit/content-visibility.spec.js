@@ -45,7 +45,13 @@ function readView(name) {
 function extractCssRuleBlocks(source) {
   const styleMatch = source.match(/<style[^>]*>([\s\S]*?)<\/style>/)
   if (!styleMatch) return []
-  const css = styleMatch[1]
+  let css = styleMatch[1]
+  // Strip /* ... */ comments FIRST. A comment that mentions the literal
+  // declaration (e.g. an explanatory "we do NOT apply content-visibility:auto
+  // here because this module is interactive") must not be mistaken for a real
+  // declaration — without this, the "every cv:auto rule has contain-intrinsic-
+  // size" guard false-positives on prose that merely references the property.
+  css = css.replace(/\/\*[\s\S]*?\*\//g, '')
   // Split into rule blocks on the closing brace.
   return css
     .split('}')
