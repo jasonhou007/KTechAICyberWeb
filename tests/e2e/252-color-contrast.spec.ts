@@ -12,11 +12,32 @@ import { test, expect } from '@playwright/test'
  *   - /careers  .position-card__badge  (was #8b00ff purple, 3.02:1 FAIL)
  *   - /about    .projects-badge        (was #fff on #ff6600 orange, 2.94:1 FAIL)
  *
- * The badge text color is read from getComputedStyle(...).color. The badge
- * background is read from getComputedStyle(...).backgroundColor (which
- * resolves to the opaque composited value the browser painted, so no manual
- * rgba-over-bg compositing is needed). Both are converted to [r,g,b] and the
- * WCAG 2.1 contrast ratio computed.
+ * MEASUREMENT METHOD (#294): computed-style contrast. We read
+ *   getComputedStyle(el).color             (resolved foreground)
+ *   getComputedStyle(el).backgroundColor   (opaque fast-path) OR
+ *   getComputedStyle(el).backgroundImage   (single-color linear-gradient,
+ *                                           transparent backgroundColor case)
+ * and run the WCAG 2.1 ratio in JS. Computed-style is AUTHORITATIVE: the
+ * browser resolves var() -> rgb() IDENTICALLY across engines (chromium,
+ * webkit, Mobile Safari) BEFORE paint, so the ratio is deterministic by
+ * construction and not subject to font anti-aliasing.
+ *
+ * WHY NOT PIXEL-SAMPLING (#294 root cause): the prior harness rasterized the
+ * .projects-badge to a canvas and sampled glyph-edge pixels. On Mobile Safari
+ * (iPhone 13 viewport, webkit engine), mobile-viewport font anti-aliasing
+ * renders glyph-edge pixels at a different blend, so the sampled fg read
+ * rgb(255,0,170) on bg rgb(84,10,68) = 3.88:1 — below the 4.5 AA gate — while
+ * the SAME badge passed on chromium AND desktop webkit (CI run 28499977525).
+ * The source tokens are unchanged across engines; the genuine computed-style
+ * contrast is 5.50:1 (fg --bg-primary=#0a0a0a on bg --accent-magenta=#ff00aa,
+ * the single-color gradient's first stop). Pixel-sampling was an
+ * engine-dependent proxy for a property the browser already resolves
+ * authoritatively; #294 replaces it with the causal measure.
+ *
+ * The /careers .position-card__badge test STILL uses samplePaintedColors
+ * because that badge's painted contrast is a known pre-existing #252 defect
+ * (~2.25:1, magenta-on-magenta over a 20%-opacity tint) that pixel-sampling
+ * surfaces for the report. Switching it is out of scope for #294.
  *
  * Note on routes: the PositionList view is served at /careers (see
  * src/main.js route table). About is at /about. Both use the Vite base
@@ -45,6 +66,106 @@ function contrastRatio(fg: { r: number; g: number; b: number }, bg: { r: number;
   const L2 = relLum(bg)
   const [hi, lo] = L1 > L2 ? [L1, L2] : [L2, L1]
   return (hi + 0.05) / (lo + 0.05)
+}
+
+// ---------- Computed-style color resolution (#294) ----------
+//
+// parseCssColor + resolveEffectiveBackground are EXPORTED so the unit gate
+// (tests/unit/contrast-resolver.spec.js) can drive their contract directly.
+// They are file-local to this spec (not extracted to tests/helpers/ — YAGNI);
+// the unit spec imports them via vi.mock('@playwright/test') to neutralize
+// Playwright's top-level test.describe() during vitest collection.
+
+/**
+ * Parse an `rgb()` / `rgba()` CSS color string into {r,g,b}. Alpha (if
+ * present) is DROPPED — callers feed only opaque representative colors into
+ * the WCAG math. Throws on anything that isn't an rgb()/rgba() triple so the
+ * resolver fails loud rather than silently returning a default that masks a
+ * malformed computed-style read.
+ *
+ * Tolerates arbitrary whitespace around commas (browsers emit both
+ * "rgb(255,0,170)" and "rgb(255, 0, 170)").
+ */
+export function parseCssColor(cssStr: string): { r: number; g: number; b: number } {
+  if (typeof cssStr !== 'string') {
+    throw new Error(`parseCssColor: expected string, got ${typeof cssStr}`)
+  }
+  const m = cssStr.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/)
+  if (!m) {
+    throw new Error(`parseCssColor: not an rgb()/rgba() color: ${JSON.stringify(cssStr)}`)
+  }
+  return { r: Number(m[1]), g: Number(m[2]), b: Number(m[3]) }
+}
+
+/**
+ * Resolve the EFFECTIVE opaque background color of an element from its
+ * computed style, for the WCAG contrast math. Order of preference:
+ *
+ *   1. Opaque backgroundColor (alpha === 1) fast-path — it is the painted
+ *      bg; return it directly, ignoring backgroundImage. (For the .projects-
+ *      badge the would-be solid bg equals the single-color gradient's stop,
+ *      so this is the authoritative measure when present.)
+ *   2. linear-gradient backgroundImage when backgroundColor is transparent —
+ *      but ONLY if the gradient has a SINGLE representative color (both stops
+ *      resolve equal). The .projects-badge case: bg rgba(0,0,0,0), gradient
+ *      linear-gradient(135deg, rgb(255,0,170), rgb(255,0,170)) -> magenta.
+ *
+ * THROWS (fail-loud — no false-green) when:
+ *   - backgroundColor is transparent AND backgroundImage is "none"/empty
+ *     (no painted bg on this element at all).
+ *   - backgroundImage is a non-linear-gradient (e.g. url() image) — we don't
+ *     sample raster images for a representative color.
+ *   - backgroundImage is a linear-gradient with DISTINCT stops — there is no
+ *     single representative color, so picking stop[0] would fabricate a
+ *     contrast number. Force a human decision instead.
+ *
+ * ANGLE-AGNOSTIC: matches the first rgb()/rgba() token inside
+ * `linear-gradient(...)` regardless of a `135deg` / `to bottom right` prefix.
+ */
+export function resolveEffectiveBackground({
+  color,
+  backgroundImage,
+  backgroundColor,
+}: {
+  color: string
+  backgroundImage: string
+  backgroundColor: string
+}): { r: number; g: number; b: number } {
+  void color // foreground not needed to resolve the bg; kept in signature for symmetry.
+  // 1. Opaque backgroundColor fast-path.
+  const bgMatches = backgroundColor.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,?\s*([0-9.]*)\s*\)/)
+  if (bgMatches) {
+    const alpha = bgMatches[4] === '' ? 1 : Number(bgMatches[4])
+    if (alpha === 1) {
+      return { r: Number(bgMatches[1]), g: Number(bgMatches[2]), b: Number(bgMatches[3]) }
+    }
+  }
+  // 2. backgroundImage must be a linear-gradient we can extract stops from.
+  const gradient = backgroundImage.trim()
+  if (!gradient.startsWith('linear-gradient(') || !gradient.endsWith(')')) {
+    throw new Error(
+      `resolveEffectiveBackground: transparent backgroundColor requires a linear-gradient backgroundImage, got backgroundImage=${JSON.stringify(backgroundImage)} backgroundColor=${JSON.stringify(backgroundColor)}`,
+    )
+  }
+  // Extract ALL rgb()/rgba() stops from inside linear-gradient(...).
+  const inner = gradient.slice('linear-gradient('.length, -')'.length)
+  const stops = [...inner.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([0-9.]+))?\s*\)/g)].map(
+    (m) => ({ r: Number(m[1]), g: Number(m[2]), b: Number(m[3]) }),
+  )
+  if (stops.length === 0) {
+    throw new Error(
+      `resolveEffectiveBackground: linear-gradient has no rgb()/rgba() stops to resolve: ${JSON.stringify(backgroundImage)}`,
+    )
+  }
+  // Single representative color iff every stop resolves equal.
+  const first = stops[0]
+  const allEqual = stops.every((s) => s.r === first.r && s.g === first.g && s.b === first.b)
+  if (!allEqual) {
+    throw new Error(
+      `resolveEffectiveBackground: linear-gradient has DISTINCT stops (${stops.length} colors) — no single representative color; refusing to fabricate a contrast number. bg=${JSON.stringify(backgroundImage)}`,
+    )
+  }
+  return first
 }
 
 /**
@@ -144,44 +265,41 @@ test.describe('#252 color contrast — WCAG AA on fixed surfaces', () => {
     expect(ratio, summary).toBeGreaterThan(1)
   })
 
-  test('/about .projects-badge clears 4.5:1 AA', async ({ page, browserName }) => {
-    // #229: skip on Mobile Safari ONLY. #229 enabled the Mobile Safari project
-    // in CI, which surfaced THIS #252 contrast test failing on it: the screenshot
-    // pixel-sampling reads fg=rgb(255,0,170) on bg=rgb(84,10,68) = ratio 3.88
-    // (below the 4.5 AA gate) on Mobile Safari, while the same badge PASSES on
-    // chromium (Mobile Chrome + desktop chromium) AND on desktop webkit. The
-    // badge's CSS color tokens are unchanged across engines — Mobile Safari's
-    // mobile-viewport text anti-aliasing/font-smoothing renders the glyph edge
-    // pixels at a different blend than chromium/desktop-webkit, which the pixel-
-    // sampling contrastRatio() picks up. This is a cross-browser pixel-sampling
-    // reliability gap in the #252 test harness on the MOBILE webkit viewport,
-    // NOT a confirmed WCAG failure (the source tokens pass the source-level
-    // contrast-audit.mjs). CI evidence: run 28499977525, Mobile Safari job
-    // 84474747742, ratio=3.88; desktop webkit job passes (run 28501418389).
+  test('/about .projects-badge clears 4.5:1 AA', async ({ page }) => {
+    // #294 AC#1 conclusion: this badge's GENUINE computed-style contrast is
+    // 5.50:1 — fg --bg-primary (#0a0a0a -> rgb(10,10,10)) on bg --accent-
+    // magenta (#ff00aa -> rgb(255,0,170), the single-color linear-gradient's
+    // stop). The browser resolves var() -> rgb() IDENTICALLY across engines
+    // before paint, so this ratio is deterministic on chromium, desktop
+    // webkit, AND Mobile Safari.
     //
-    // Discriminator: Playwright's `browserName` fixture returns the BROWSER
-    // ENGINE name ('webkit'), NOT the project name — so it is 'webkit' for BOTH
-    // the desktop 'webkit' project AND the 'Mobile Safari' project (which also
-    // uses the webkit engine). To target Mobile Safari ONLY (and keep desktop
-    // webkit enforcing this AC), discriminate on the mobile viewport: the
-    // 'Mobile Safari' project uses iPhone 13 (390x844); desktop webkit is
-    // 1280x720. chromium + firefox + Mobile Chrome + desktop webkit enforce.
-    // Filed as follow-up #<NNN> for #252 to investigate Mobile Safari pixel-
-    // sampling vs a computed-style contrast assertion.
-    const vw = page.viewportSize()
-    const isMobileSafari = browserName === 'webkit' && !!vw && vw.width <= 844
-    test.skip(isMobileSafari,
-      '#229/#252: Mobile Safari mobile-viewport pixel-sampling reads projects-badge below 4.5:1 (run 28499977525); chromium + desktop webkit pass — follow-up #<NNN>')
+    // HISTORY: the prior harness measured this via screenshot pixel-sampling
+    // (samplePaintedColors), which on Mobile Safari's iPhone 13 viewport read
+    // glyph-edge anti-aliasing as fg=rgb(255,0,170) on bg=rgb(84,10,68) =
+    // 3.88:1 (below the 4.5 AA gate) — a HARNESS artifact, not a WCAG
+    // failure (CI run 28499977525, Mobile Safari job 84474747742). The same
+    // badge passed on chromium and desktop webkit. #294 replaces the engine-
+    // dependent pixel-sampling with the causal computed-style measure and
+    // UN-SKIPS Mobile Safari (the prior `test.skip(isMobileSafari, ...)` is
+    // removed; the signature drops `browserName` since it is no longer used).
     await page.goto(ABOUT)
     const badge = page.locator('.projects-badge').first()
     await expect(badge).toBeVisible()
-    const { fg, bg, fgCss } = await samplePaintedColors(page, '.projects-badge')
-    expect(fg, 'fg pixel must be sampled').not.toBeNull()
-    expect(bg, 'bg pixel must be sampled').not.toBeNull()
-    const ratio = contrastRatio(fg!, bg!)
-    expect(
-      ratio,
-      `projects-badge contrast fg=${JSON.stringify(fg)} bg=${JSON.stringify(bg)} cssColor=${fgCss} ratio=${ratio.toFixed(2)}`,
-    ).toBeGreaterThanOrEqual(4.5)
+    // Read the THREE computed-style strings the browser resolves. We pass all
+    // three to resolveEffectiveBackground; it picks the opaque-backgroundColor
+    // fast-path when present, else extracts the single-color linear-gradient.
+    const cs = await badge.evaluate((el) => {
+      const s = getComputedStyle(el)
+      return { color: s.color, backgroundImage: s.backgroundImage, backgroundColor: s.backgroundColor }
+    })
+    const fg = parseCssColor(cs.color)
+    const bg = resolveEffectiveBackground(cs)
+    const ratio = contrastRatio(fg, bg)
+    const summary =
+      `projects-badge computed-style contrast fg=${JSON.stringify(fg)} bg=${JSON.stringify(bg)} ` +
+      `cssColor=${cs.color} cssBgImage=${cs.backgroundImage} cssBgColor=${cs.backgroundColor} ` +
+      `ratio=${ratio.toFixed(2)} (>=4.5 AA required)`
+    test.info().annotations.push({ type: 'contrast-ratio', description: summary })
+    expect(ratio, summary).toBeGreaterThanOrEqual(4.5)
   })
 })
