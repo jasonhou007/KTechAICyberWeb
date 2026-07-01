@@ -1,0 +1,60 @@
+# Lighthouse CI performance regression gate (Issue #253 AC #11).
+#
+# Runs Lighthouse against the 5 key routes (Home, About, Services, Contact,
+# News) on every PR and asserts a minimum Performance score per route. The
+# action (treosh/lighthouse-ci-action@v11) bundles its own Lighthouse binary —
+# it is a GitHub Action, NOT an npm dependency, so it does NOT bloat the shared
+# node_modules (5 dev lanes share one tree; we deliberately avoid adding
+# lighthouse as a devDependency).
+#
+# SCOPE NOTE (#253): this workflow is the CI scaffold (AC #11). The
+# device-runtime Lighthouse score verification (LCP<2.5s, INP<200ms, TTI<3.8s,
+# score>=90 on real devices) is deferred to follow-up #302 — this gate runs
+# Lighthouse in CI against the built preview and asserts a Performance score
+# threshold, which is the regression-detection half of the AC. Tuning the
+# thresholds to >=90 (AC #10) and verifying field-device numbers is #302.
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Lighthouse Performance Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Lighthouse needs the built site served over HTTP. `serve` is already a
+      # devDependency (used by the preview evidence script) — serve the dist/
+      # directory in the background on a fixed port. The base path is
+      # /KTechAICyberWeb/ (Vite config base), so the routes are served under
+      # that subpath.
+      - name: Start preview server
+        run: |
+          npx serve -s dist -l 4173 &
+          echo "PREVIEW_URL=http://localhost:4173/KTechAICyberWeb/" >> $GITHUB_ENV
+          # Wait for the server to be ready before Lighthouse hits it.
+          npx wait-on tcp:4173 -t 30000
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: ./lighthouserc.cjs
+          uploadArtifacts: true
+          temporaryPublicStorageOutput: true
