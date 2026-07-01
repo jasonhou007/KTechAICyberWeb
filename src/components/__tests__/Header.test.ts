@@ -114,9 +114,9 @@ describe('Header.vue', () => {
       expect(wrapper.findAll('ul.nav-links > li')).toHaveLength(6)
     })
 
-    it('renders exactly three NavigationDropdown instances', () => {
-      // News / Our Solutions / Join Us. (About is a direct router-link.)
-      expect(wrapper.findAll('.nav-dropdown')).toHaveLength(3)
+    it('renders exactly two NavigationDropdown instances', () => {
+      // Our Solutions / Join Us. (Home + About + News + Contact are direct router-links.)
+      expect(wrapper.findAll('.nav-dropdown')).toHaveLength(2)
     })
   })
 
@@ -197,17 +197,16 @@ describe('Header.vue', () => {
   // Dropdown submenus (real NavigationDropdown children)
   // ============================================
   describe('Dropdown submenus', () => {
-    it('opens the News dropdown on click and lists 2 items with t() labels', async () => {
-      // Index order: News(0), Solutions(1), Join Us(2). (About is now a direct link.)
-      await wrapper.findAll('.dropdown-trigger')[0].trigger('click')
-      const items = wrapper.findAll('.dropdown-menu .dropdown-item')
-      expect(items).toHaveLength(2)
-      expect(items[0].text()).toBe(wrapper.vm.t('nav.submenu.ktechNews'))
-      expect(items[1].text()).toBe(wrapper.vm.t('nav.submenu.bbtgNews'))
-    })
+    it('renders News as a direct router-link to /news with the translated label', () => {
+      // Third <li> child of nav-links is News (now a direct link, not a dropdown).
+      const news = wrapper.find('ul.nav-links > li:nth-child(3) a')
+      expect(news.exists()).toBe(true)
+      expect(news.attributes('href')).toBe('/news')
+      expect(news.text()).toBe(wrapper.vm.t('nav.news'))
+    }),
 
     it('opens the Join Us dropdown on click and lists 2 items with t() labels', async () => {
-      await wrapper.findAll('.dropdown-trigger')[2].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
       const items = wrapper.findAll('.dropdown-menu .dropdown-item')
       expect(items).toHaveLength(2)
       expect(items[0].text()).toBe(wrapper.vm.t('nav.submenu.joinUs'))
@@ -215,7 +214,7 @@ describe('Header.vue', () => {
     })
 
     it('opens the Our Solutions dropdown on click and shows 6 items across 2 groups', async () => {
-      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[0].trigger('click')
       // 6 flat items total, 2 group headings.
       expect(wrapper.findAll('.dropdown-menu .dropdown-item')).toHaveLength(6)
       expect(wrapper.findAll('.dropdown-group')).toHaveLength(2)
@@ -223,14 +222,14 @@ describe('Header.vue', () => {
     })
 
     it('renders the two Our Solutions group headings via t()', async () => {
-      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[0].trigger('click')
       const headings = wrapper.findAll('.dropdown-group-heading')
       expect(headings[0].text()).toBe(wrapper.vm.t('nav.groups.banking'))
       expect(headings[1].text()).toBe(wrapper.vm.t('nav.groups.blockchainWeb3'))
     })
 
     it('renders the Our Solutions items in grouped order via t()', async () => {
-      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[0].trigger('click')
       const items = wrapper.findAll('.dropdown-menu .dropdown-item')
       // Banking group: retailLending, supplyChainFinance.
       expect(items[0].text()).toBe(wrapper.vm.t('nav.submenu.retailLending'))
@@ -460,9 +459,9 @@ describe('Header.vue', () => {
     })
 
     it('the logo link and routed items render as focusable anchors', () => {
-      // Logo + Home + About + Contact = 4 <a> (dropdowns render <button> triggers).
+      // Logo + Home + About + News + Contact = 5 <a> (dropdowns render <button> triggers).
       const links = wrapper.findAll('nav a')
-      expect(links.length).toBeGreaterThanOrEqual(4)
+      expect(links.length).toBeGreaterThanOrEqual(5)
       links.forEach((link) => {
         expect(link.element.tagName.toLowerCase()).toBe('a')
       })
