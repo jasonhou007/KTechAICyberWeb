@@ -42,7 +42,7 @@
         <router-link to="/about" @click="closeMobile">{{ t('nav.aboutUs') }}</router-link>
       </li>
       <li>
-        <NavigationDropdown :label="t('nav.news')" :items="newsItems" />
+        <router-link to="/news" @click="closeMobile">{{ t('nav.news') }}</router-link>
       </li>
       <li>
         <NavigationDropdown
@@ -77,8 +77,9 @@
  * @description Main navigation header (#164 nav overhaul).
  *
  * Mirrors the official kaitai.tech top-level structure: Home, About Us
- * (direct router-link to /about), News, Our Solutions (grouped mega-menu),
- * Join Us, Contact. The logo is a router-link to "/" (no # anchors).
+ * (direct router-link to /about), News (direct link to /news), Our Solutions
+ * (grouped mega-menu), Join Us, Contact. The logo is a router-link to "/"
+ * (no # anchors).
  * A mobile hamburger toggles an off-canvas
  * .nav-links panel. Scroll-aware styling toggles a `scrolled` class once
  * `window.scrollY > 50`. Translation flows through the shared `useLanguage()`
@@ -110,11 +111,6 @@ let lastFocusedBeforeOpen = null
 
 // Submenu definitions. Routes point at real routed pages so the nav never
 // produces a 404. Each submenu item renders via t(item.label).
-const newsItems = [
-  { key: 'ktechNews', label: 'nav.submenu.ktechNews', route: '/news' },
-  { key: 'bbtgNews', label: 'nav.submenu.bbtgNews', route: '/news' },
-]
-
 const joinItems = [
   { key: 'joinUs', label: 'nav.submenu.joinUs', route: '/join-us' },
   { key: 'positionList', label: 'nav.submenu.positionList', route: '/careers' },
