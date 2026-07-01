@@ -91,7 +91,9 @@ function ruleBodyFor(css, sel) {
   return null
 }
 
-// The 20 routed views (verified via src/router/main.js).
+// The 20 audited views (routes defined inline in src/main.js; 18 are routed,
+// Services.vue + MobileApp.vue are pre-existing unrouted orphans kept in scope
+// per the issue's "audit all 20 views" requirement).
 const VIEWS_20 = [
   'About.vue',
   'Blockchain.vue',
