@@ -1,5 +1,6 @@
 {
   "contact": {
+    "docTitle": "联系我们",
     "title": "联系",
     "titleAccent": "我们",
     "subtitle": "欢迎与我们合作，开启您的下一个项目",
@@ -117,6 +118,7 @@
     "companyName": "开泰远景信息科技有限公司"
   },
   "home": {
+    "docTitle": "开泰远景 - 金融科技创新",
     "title": "致力于成为中国—东盟地区领先的金融科技公司",
     "subtitle": "为客户提供更好的金融服务科技",
     "hero": {
@@ -161,6 +163,7 @@
     }
   },
   "about": {
+    "docTitle": "关于我们",
     "title": "关于 KTECH",
     "subtitle": "在人工智能与人类交汇处创新",
     "pageTitle": "关于",
@@ -275,6 +278,7 @@
     "languageChanged": "语言已更改为"
   },
   "news": {
+    "docTitle": "新闻动态",
     "title": "新闻动态",
     "subtitle": "KTech 最新资讯",
     "categories": {
@@ -1201,6 +1205,7 @@
     }
   },
   "notFound": {
+    "docTitle": "页面未找到",
     "code": "404",
     "title": "页面未找到",
     "message": "您访问的页面不存在或已被移动。",
@@ -1221,6 +1226,7 @@
     "valuesDesc": "客户至上 · 开放协作<br>敏捷创新 · 专业高效"
   },
   "blockchain": {
+    "docTitle": "区块链技术",
     "breadcrumb": "区块链",
     "hero": {
       "title": "企业级",
@@ -1274,6 +1280,7 @@
     }
   },
   "joinUs": {
+    "docTitle": "加入我们",
     "title": "加入",
     "titleAccent": "我们",
     "subtitle": "与我们共建金融科技的未来。加入一支正在塑造下一代金融智能的创新团队。",
@@ -1413,6 +1420,7 @@
     }
   },
   "positions": {
+    "docTitle": "人才招聘",
     "title": "在招职位",
     "subtitle": "寻找您的下一个职位",
     "searchPlaceholder": "搜索职位...",
@@ -1696,6 +1704,7 @@
     "reducedMotion": "减弱动效模式:静态读数,动画已暂停。"
   },
   "pulse": {
+    "docTitle": "霓虹脉冲",
     "title": "霓虹脉冲",
     "subtitle": "音频反应可视化器 — 可选启用，防癫痫安全",
     "engage": "启动",

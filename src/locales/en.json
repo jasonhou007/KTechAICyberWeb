@@ -1,5 +1,6 @@
 {
   "contact": {
+    "docTitle": "Contact",
     "title": "Contact",
     "titleAccent": "Us",
     "subtitle": "Reach out to start your next project",
@@ -117,6 +118,7 @@
     "companyName": "KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)"
   },
   "home": {
+    "docTitle": "KTech - Fintech Innovation",
     "title": "Determined to Become a Leading Fintech Company in China ASEAN Region",
     "subtitle": "Better fintech for customers",
     "hero": {
@@ -161,6 +163,7 @@
     }
   },
   "about": {
+    "docTitle": "About",
     "title": "ABOUT KTECH",
     "subtitle": "Innovating at the intersection of AI and humanity",
     "pageTitle": "ABOUT",
@@ -275,6 +278,7 @@
     "languageChanged": "Language changed to"
   },
   "news": {
+    "docTitle": "News & Updates",
     "title": "News & Updates",
     "subtitle": "Latest from KTech",
     "categories": {
@@ -1201,6 +1205,7 @@
     }
   },
   "notFound": {
+    "docTitle": "Page Not Found",
     "code": "404",
     "title": "Page Not Found",
     "message": "The page you are looking for does not exist or has been moved.",
@@ -1221,6 +1226,7 @@
     "valuesDesc": "Customer First · Open Collaboration<br>Agile Innovation · Professional Excellence"
   },
   "blockchain": {
+    "docTitle": "Blockchain Solutions",
     "breadcrumb": "Blockchain",
     "hero": {
       "title": "Enterprise",
@@ -1274,6 +1280,7 @@
     }
   },
   "joinUs": {
+    "docTitle": "Join Us",
     "title": "Join",
     "titleAccent": " Us",
     "subtitle": "Build the future of fintech with us. Join a team of innovators shaping next-generation financial intelligence.",
@@ -1413,6 +1420,7 @@
     }
   },
   "positions": {
+    "docTitle": "Careers",
     "title": "Open Positions",
     "subtitle": "Find your next role",
     "searchPlaceholder": "Search positions...",
@@ -1696,6 +1704,7 @@
     "reducedMotion": "Reduced-motion mode: static readouts, animations paused."
   },
   "pulse": {
+    "docTitle": "Neon Pulse",
     "title": "Neon Pulse",
     "subtitle": "Audio-reactive visualizer — opt-in, seizure-safe",
     "engage": "Engage",
