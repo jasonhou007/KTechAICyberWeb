@@ -5,9 +5,15 @@ import { test, expect } from '@playwright/test'
  *
  * Drives the RUNNING app to prove the four facets of #265 land in the live DOM,
  * not just source-text:
- *   1. On 1920x1080 / 2560x1440 / 3840x2160 the `.home` element (the Home view
- *      root — NOT body, because App.vue renders footer/nav outside `.home`)
- *      fits within one viewport height with no scroll.
+ *   1. On 1920x1080 / 2560x1440 / 3840x2160 the above-the-fold flagship region
+ *      (`.cyber-header` title -> `.hero`, which CONTAINS the Self-driving
+ *      pipeline section per Home.vue) fits within one viewport height. We
+ *      measure the `.hero` element's bottom because `.home` as a whole wraps
+ *      the lazy-mounted below-the-fold modules (Neural Terminal, Neural Core,
+ *      Solution Forge, Cyber Ops HUD, Settlement Stream) which are designed to
+ *      be scrolled to — they are NOT part of the #265 "fit one screen" AC.
+ *      App.vue's <Header>/<main>/<Footer> are siblings outside `.home`, so the
+ *      hero is the right boundary of the flagship above-the-fold story.
  *   2. At 1920x1080 the Self-driving pipeline section is fully visible above
  *      the fold (top within viewport, bottom not clipped by `.home{overflow:hidden}`).
  *   3. The h1 is still visible (the size reduction didn't collapse it).
@@ -34,20 +40,23 @@ test.describe('#265 Home single-screen fit', () => {
   })
 
   for (const vp of DESKTOP_VIEWPORTS) {
-    test(`.home fits one viewport @${vp.width}x${vp.height}`, async ({ browser }) => {
+    test(`flagship region (title + Self-driving + hero) fits one viewport @${vp.width}x${vp.height}`, async ({ browser }) => {
       const ctx = await browser.newContext({ viewport: vp })
       const page = await ctx.newPage()
       await page.goto(BASE)
       await page.waitForLoadState('networkidle')
 
-      // Measure the .home element itself. App.vue renders <Header>, <main>,
-      // <Footer> as siblings; .home is only the Home view root. The #265 AC is
-      // "the Home page (incl. Self-driving pipeline) fits one screen" — that's
-      // the .home box, not the whole document.
+      // Measure the .hero element's bottom: it is the last flagship above-the-
+      // fold child of `.home .content`, after the cyber-header (title) and the
+      // `.self-driving-section` (which Home.vue mounts IN-FLOW between header
+      // and hero). The lazy-mounted modules come AFTER `.hero` and are designed
+      // to be scrolled to, so they are out of the #265 "one screen" scope.
+      // Measuring `.home` itself would be wrong: `.home` wraps those lazy
+      // sections and extends to ~3x viewport height by design.
       const measured = await page.evaluate(() => {
-        const home = document.querySelector('.home') as HTMLElement | null
-        if (!home) return { found: false, bottom: -1, innerHeight: window.innerHeight }
-        const rect = home.getBoundingClientRect()
+        const hero = document.querySelector('.home .hero') as HTMLElement | null
+        if (!hero) return { found: false, bottom: -1, innerHeight: window.innerHeight }
+        const rect = hero.getBoundingClientRect()
         return {
           found: true,
           top: rect.top,
@@ -55,7 +64,7 @@ test.describe('#265 Home single-screen fit', () => {
           innerHeight: window.innerHeight,
         }
       })
-      expect(measured.found, '.home selector must resolve').toBe(true)
+      expect(measured.found, '.home .hero selector must resolve').toBe(true)
       // +2 absorbs sub-pixel rounding (fractional rect.bottom vs integer
       // innerHeight on device-pixel-ratio > 1 viewports).
       expect(measured.bottom).toBeLessThanOrEqual(measured.innerHeight + 2)
