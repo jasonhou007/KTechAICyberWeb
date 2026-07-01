@@ -182,10 +182,14 @@ const liquidityLabel = computed(() =>
   color: var(--text-primary);
 }
 
+/* #258: declare the rails/scanlines/glitch as the explicit background layer
+   so the readout surface paints above it deterministically (z-index:1 below),
+   not by DOM-order accident. */
 .ss-bg {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 0;
 }
 
 /* ===== #235 seizure-safe glitch pulse =====
@@ -335,6 +339,12 @@ const liquidityLabel = computed(() =>
   padding: 1.5rem;
   pointer-events: none;
   gap: 1rem;
+  /* #258: paint above the rails (z-index:0 on .ss-bg) and CLIP any single
+     column that overflows its grid track so it cannot bleed past the section
+     box onto the footer. The section's isolation:isolate + overflow:hidden
+     (Home.vue) is the backstop; this clips at the readout surface itself. */
+  z-index: 1;
+  overflow: hidden;
 }
 
 .ss-blocks {
