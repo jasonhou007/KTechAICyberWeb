@@ -100,15 +100,6 @@
         />
       </LazySection>
 
-      <!-- Neon Pulse audio-reactive visualizer (#186) — lazy-mounted (#224, #232) -->
-      <LazySection class="neon-pulse-section" data-test="lazy-neon-pulse">
-        <NeonPulse
-          :key="`neon-pulse-${retryKeys.neonPulse}`"
-          data-test="neon-pulse"
-          @retry="bumpRetry('neonPulse')"
-        />
-      </LazySection>
-
       <!-- Ambient "Settlement Stream" — always-on cross-border payment &
            blockchain settlement cinematic BACKGROUND (#206). Lazy-mounted via
            the same LazySection + defineAsyncComponent pattern as the 5 heavy
@@ -174,12 +165,6 @@ const CyberOpsHud = defineAsyncComponent({
   timeout: 8000,
   onError: retryChunkLoad,
 })
-const NeonPulse = defineAsyncComponent({
-  loader: () => import('../components/NeonPulse.vue'),
-  errorComponent: AsyncLoadError,
-  timeout: 8000,
-  onError: retryChunkLoad,
-})
 // #206: ambient Settlement Stream — lazy chunk, same pattern as the 5 modules.
 // #232: out of scope — left in simple form (no errorComponent hardening).
 const SettlementStream = defineAsyncComponent(() => import('../components/SettlementStream.vue'))
@@ -203,7 +188,6 @@ const retryKeys = ref({
   neuralCore: 0,
   solutionForge: 0,
   cyberOpsHud: 0,
-  neonPulse: 0,
 })
 const bumpRetry = (key) => {
   retryKeys.value[key]++
@@ -585,14 +569,6 @@ h1 {
 /* Cyber Ops HUD section (#182) — same rhythm as the AI modules above so the
    interactive HUD stacks consistently on the homepage. */
 .cyber-ops-hud-section {
-  position: relative;
-  z-index: 1;
-  margin-top: 3rem;
-}
-
-/* Neon Pulse section (#186) — same rhythm as the interactive modules above so
-   the audio-reactive visualizer stacks consistently on the homepage. */
-.neon-pulse-section {
   position: relative;
   z-index: 1;
   margin-top: 3rem;

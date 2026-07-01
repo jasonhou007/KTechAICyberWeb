@@ -369,13 +369,14 @@ describe('Home.vue', () => {
 
   // ============================================
   // #224 — lazy-mount below-the-fold modules.
-  // The 5 heavy interactive components (NeuralTerminal, NeuralCore,
-  // SolutionForge, CyberOpsHud, NeonPulse) previously mounted EAGERLY on Home,
-  // spinning up ~4 simultaneous rAF loops + ~43 CSS animations from initial
-  // load despite being below the fold — the runtime lag source. #224 wraps each
-  // in <LazySection> + defineAsyncComponent so they only mount when scrolled
-  // into view. These source-level gates make the test RED if the lazy wiring is
-  // reverted to static imports.
+  // The 4 heavy interactive components (NeuralTerminal, NeuralCore,
+  // SolutionForge, CyberOpsHud) previously mounted EAGERLY on Home, spinning up
+  // simultaneous rAF loops + ~43 CSS animations from initial load despite being
+  // below the fold — the runtime lag source. #224 wraps each in <LazySection> +
+  // defineAsyncComponent so they only mount when scrolled into view. (#254
+  // removed NeonPulse from Home — its own /pulse route + tests stay.) These
+  // source-level gates make the test RED if the lazy wiring is reverted to
+  // static imports.
   // ============================================
   describe('#224 lazy-mounts below-the-fold modules', () => {
     const homeSource = fs.readFileSync(
@@ -383,43 +384,53 @@ describe('Home.vue', () => {
       'utf-8',
     )
 
-    it('converts the 5 heavy components to defineAsyncComponent', () => {
+    // #254 — NeonPulse is removed from Home entirely. The component file, its
+    // /pulse route, its own tests, useAudioPulse, and the pulse.* i18n namespace
+    // all STAY (the component is still visitable at /pulse). Only the Home mount
+    // is gone. This source-gate proves the removal in the live shipped Home.vue
+    // and is RED before the removal lands.
+    it('#254 does NOT mount NeonPulse on Home (AC1/AC2)', () => {
+      expect(homeSource).not.toMatch(/<NeonPulse\b/)
+      expect(homeSource).not.toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeonPulse\.vue['"]\)/)
+      expect(homeSource).not.toMatch(/retryKeys\.neonPulse/)
+    })
+
+    it('converts the 4 heavy components to defineAsyncComponent', () => {
       // defineAsyncComponent is the Vue 3 primitive that yields a code-split
       // chunk + defers module evaluation until first render.
       expect(homeSource).toMatch(/defineAsyncComponent/)
-      // Each of the 5 modules is dynamically imported.
+      // Each of the 4 modules is dynamically imported.
       expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeuralTerminal\.vue['"]\)/)
       expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeuralCore\.vue['"]\)/)
       expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*SolutionForge\.vue['"]\)/)
       expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*CyberOpsHud\.vue['"]\)/)
-      expect(homeSource).toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeonPulse\.vue['"]\)/)
     })
 
-    it('drops the eager static imports of the 5 heavy components', () => {
+    it('drops the eager static imports of the 4 heavy components', () => {
       // The old eager imports looked like `import X from '../components/X.vue'`.
       // They must be gone — only the dynamic import form is allowed now.
       expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/NeuralTerminal\.vue['"]/)
       expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/NeuralCore\.vue['"]/)
       expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/SolutionForge\.vue['"]/)
       expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/CyberOpsHud\.vue['"]/)
-      expect(homeSource).not.toMatch(/from\s+['"]\.\.\/components\/NeonPulse\.vue['"]/)
     })
 
     it('wraps each heavy component in <LazySection>', () => {
       // LazySection is the wrapper that defers mount until intersection.
       expect(homeSource).toMatch(/from\s+['"]\.\.\/components\/LazySection\.vue['"]/)
       expect(homeSource).toMatch(/<LazySection\b/)
-      // All lazy modules wrapped. #224 wrapped the 5 heavy interactive modules;
-      // #206 added the ambient SettlementStream as a 6th lazy-mounted child
-      // (its rAF/interval must not spin before the user scrolls near it). Count
-      // opening tags in the <template> region only (the import statement
+      // All lazy modules wrapped. #224 wrapped the heavy interactive modules;
+      // #206 added the ambient SettlementStream as a lazy-mounted child (its
+      // rAF/interval must not spin before the user scrolls near it). #254 removed
+      // NeonPulse from Home, so the count is now 4 heavy + SettlementStream = 5.
+      // Count opening tags in the <template> region only (the import statement
       // `import LazySection from ...` would otherwise inflate the count). Match
       // the template usage form: <LazySection followed by a space + attribute
       // (class/data-test), which only appears in markup.
       const template = homeSource.match(/<template>([\s\S]*?)<\/template>/)
       expect(template, 'Home.vue must have a <template>').not.toBeNull()
       const matches = template![1].match(/<LazySection\b/g) || []
-      expect(matches.length).toBe(6)
+      expect(matches.length).toBe(5)
     })
 
     it('keeps the card catalogs unchanged (blockchain 4 + banking 2 = 6 cards)', () => {
@@ -456,10 +467,10 @@ describe('Home.vue', () => {
       )
     })
 
-    it('converts the 5 lazy loaders to options form with errorComponent + onError + timeout: 8000', () => {
-      // Generic options-form gate: 5 occurrences of defineAsyncComponent({ ...
+    it('converts the 4 lazy loaders to options form with errorComponent + onError + timeout: 8000', () => {
+      // Generic options-form gate: 4 occurrences of defineAsyncComponent({ ...
       const optionsForm = homeSource.match(/defineAsyncComponent\(\s*\{/g) || []
-      expect(optionsForm.length).toBe(5)
+      expect(optionsForm.length).toBe(4)
       // Each carries the shared error affordance, the retry policy, and the
       // 8s timeout.
       expect(homeSource).toMatch(/errorComponent:\s*AsyncLoadError/)
@@ -471,7 +482,7 @@ describe('Home.vue', () => {
       )
     })
 
-    it('all 5 named sections use the hardened form', () => {
+    it('all 4 named sections use the hardened form', () => {
       // One regex per section: the options form must wrap each named loader.
       const re = (name: string) =>
         new RegExp(
@@ -481,7 +492,6 @@ describe('Home.vue', () => {
       expect(homeSource).toMatch(re('NeuralCore'))
       expect(homeSource).toMatch(re('SolutionForge'))
       expect(homeSource).toMatch(re('CyberOpsHud'))
-      expect(homeSource).toMatch(re('NeonPulse'))
     })
 
     it('does NOT widen hardening to SettlementStream or SelfDrivingDemo', () => {
@@ -507,7 +517,7 @@ describe('Home.vue', () => {
     it('wires the user-facing Reload path: :key + @retry on each hardened section', () => {
       // The AsyncLoadError Retry button reaches back up via @retry -> bumpRetry
       // -> retryKeys bump -> :key change -> async boundary remount -> loader
-      // re-runs. Each of the 5 sections must bind BOTH :key (from retryKeys)
+      // re-runs. Each of the 4 sections must bind BOTH :key (from retryKeys)
       // and @retry (to bumpRetry).
       const reKey = (k: string) =>
         new RegExp(`:key="[^"]*\\$\\{retryKeys\\.${k}\\}[^"]*"`)
@@ -517,13 +527,12 @@ describe('Home.vue', () => {
         ['neuralCore', 'NeuralCore'],
         ['solutionForge', 'SolutionForge'],
         ['cyberOpsHud', 'CyberOpsHud'],
-        ['neonPulse', 'NeonPulse'],
       ]
       for (const [key, _name] of sections) {
         expect(homeSource, `:key for ${key}`).toMatch(reKey(key))
         expect(homeSource, `@retry for ${key}`).toMatch(reRetry(key))
       }
-      // retryKeys covers exactly the 5 sections + bumpRetry increments.
+      // retryKeys covers exactly the 4 sections + bumpRetry increments.
       expect(homeSource).toMatch(/const\s+retryKeys\s*=\s*ref\(\{/)
       expect(homeSource).toMatch(/const\s+bumpRetry\s*=/)
     })

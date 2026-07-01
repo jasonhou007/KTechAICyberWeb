@@ -6,10 +6,10 @@ import { expect } from '@playwright/test'
  * @description Shared E2E helper that mounts a #224 lazy-mounted below-the-fold
  * module BEFORE a spec queries the inner component.
  *
- * Background: #224 wrapped 5 heavy Home modules in <LazySection>, which mounts
+ * Background: #224 wrapped 4 heavy Home modules in <LazySection>, which mounts
  * the inner component only after its sentinel intersects the viewport
  * (IntersectionObserver, rootMargin 200px) OR receives focus. The pre-existing
- * component E2E specs (#161/#179/#180/#182/#186) do page.goto('/') then
+ * component E2E specs (#161/#179/#180/#182) do page.goto('/') then
  * immediately expect([data-test="..."]).toBeVisible(), assuming eager mount —
  * they time out under lazy-mount because the inner component is not in the DOM
  * yet.
@@ -57,7 +57,6 @@ const LAZY_WRAPPERS = [
   'lazy-neural-core',
   'lazy-solution-forge',
   'lazy-cyber-ops-hud',
-  'lazy-neon-pulse',
 ] as const
 
 /**

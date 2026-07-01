@@ -100,12 +100,17 @@ test.describe('#224 Home overhaul — live shipped app', () => {
   })
 
   test('below-the-fold modules are absent before scroll and appear after', async ({ page }) => {
+    // #254 — NeonPulse is permanently GONE from Home (not just lazy-deferred).
+    // This is the shipped-app gate for AC1: the component must never appear on
+    // Home regardless of scroll/focus, because the mount was removed entirely.
+    // (The NeonPulse component itself is still visitable at /pulse.)
+    await expect(page.locator('[data-test="neon-pulse"]')).toHaveCount(0)
+
     // Each heavy module is wrapped in <LazySection data-test="lazy-<name>">.
     // Before scroll, the slot (the inner component) must NOT be mounted.
     // The inner-component data-test hooks that the components themselves emit.
     const innerHooks = [
       'cyber-ops-hud',
-      'neon-pulse',
     ]
 
     // 1. Before scroll: the inner known hooks must be absent.
@@ -113,23 +118,21 @@ test.describe('#224 Home overhaul — live shipped app', () => {
       await expect(page.locator(`[data-test="${hook}"]`)).toHaveCount(0)
     }
 
-    // 2. Trigger the mount of CyberOpsHud + NeonPulse via the shared
-    //    mountLazySection helper (focus-driven, with a scroll cascade
-    //    fallback). A raw scrollIntoView loop is NOT reliable on headless
-    //    chromium: each unmounted wrapper is only a 200px placeholder, so the
-    //    browser's max-scroll cannot bring the bottom-most sentinel (NeonPulse)
-    //    within the IntersectionObserver rootMargin until earlier sections
-    //    mount and grow the document — and a tight synchronous scroll loop
-    //    does not yield between iterations to let that growth happen. The
-    //    focusin path (WCAG 2.1.1 keyboard-mount) triggers the mount in place
-    //    with zero scrolling and zero sibling side-effects, and is the same
-    //    path the 21 adapted component specs (#161/#179/#180/#182/#186) use.
+    // 2. Trigger the mount of CyberOpsHud via the shared mountLazySection
+    //    helper (focus-driven, with a scroll cascade fallback). A raw
+    //    scrollIntoView loop is NOT reliable on headless chromium: each
+    //    unmounted wrapper is only a 200px placeholder, so the browser's
+    //    max-scroll cannot bring a late sentinel within the
+    //    IntersectionObserver rootMargin until earlier sections mount and grow
+    //    the document — and a tight synchronous scroll loop does not yield
+    //    between iterations to let that growth happen. The focusin path
+    //    (WCAG 2.1.1 keyboard-mount) triggers the mount in place with zero
+    //    scrolling and zero sibling side-effects, and is the same path the
+    //    component specs (#161/#179/#180/#182) use.
     await mountLazySection(page, 'lazy-cyber-ops-hud', 'cyber-ops-hud')
-    await mountLazySection(page, 'lazy-neon-pulse', 'neon-pulse')
 
-    // 3. Both inner components are now mounted.
+    // 3. The inner component is now mounted.
     await expect(page.locator('[data-test="cyber-ops-hud"]')).toHaveCount(1)
-    await expect(page.locator('[data-test="neon-pulse"]')).toHaveCount(1)
   })
 
   test('prefers-reduced-motion: reduce — page is calm, modules still lazy', async ({ browser }) => {
