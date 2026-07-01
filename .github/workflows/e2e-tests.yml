@@ -93,18 +93,23 @@ jobs:
           fail-on-error: true
 
   test-webkit:
-    # #229 AC #3 + #4: webkit + Mobile Safari run in CI, in their own job so
+    # #229 AC #3 + #4: webkit (Desktop Safari) runs in CI, in its own job so
     # webkit's slower engine gets a dedicated budget instead of serially
     # extending the chromium/firefox job past its timeout (PR #243 runs
     # 28410495122 + 28411226987 both CANCELLED at 15m/25m with webkit still
     # executing). RUN_WEBKIT=true opts the projects in (playwright.config.ts);
-    # --project filters then run only the two webkit-engine projects. The
-    # actionability races that gated webkit out (#216) are fixed: 87-privacy-
-    # policy (strict footer-link locator). The 187-rum-beacon race is moot —
-    # the RUM beacon feature was removed from production in #240. The remaining
-    # webkit/Mobile Safari actionability races across #179/#180/#182/#186 were
-    # fixed at the source by #244 (forceClick / native el.click() / focus+Enter),
-    # so those tests are UN-SKIPPED on webkit here. Only #206's packet-advance
+    # --project=webkit then runs only the desktop webkit engine. Mobile Safari
+    # runs in the PARALLEL test-mobile-safari job below — splitting the two
+    # webkit engines into concurrent jobs halves wall-clock (each is ~267 tests
+    # vs 534 combined) and gives each its own budget+check, so a single slow
+    # engine can no longer timeout the other (the combined job hit the 25m
+    # ceiling at test #522 on run 28482244942). The actionability races that
+    # gated webkit out (#216) are fixed: 87-privacy-policy (strict footer-link
+    # locator). The 187-rum-beacon race is moot — the RUM beacon feature was
+    # removed from production in #240. The remaining webkit actionability races
+    # across #179/#180/#182/#186 were fixed at the source by #244 (forceClick /
+    # native el.click() / focus+Enter bypassing the stability gate), so those
+    # tests are UN-SKIPPED on webkit here. Only #206's packet-advance
     # rAF/translateX timing test stays skipped (genuine webkit timing quirk).
     name: Playwright E2E Tests (webkit)
     timeout-minutes: 25
@@ -128,8 +133,8 @@ jobs:
       - name: Build application
         run: npm run build
 
-      - name: Run Playwright webkit + Mobile Safari tests
-        run: npx playwright test --project=webkit --project="Mobile Safari"
+      - name: Run Playwright webkit tests
+        run: npx playwright test --project=webkit
         env:
           RUN_WEBKIT: 'true'
 
@@ -170,6 +175,88 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Playwright Test Results (webkit)
+          path: 'junit-results.xml'
+          reporter: java-junit
+          fail-on-error: true
+
+  test-mobile-safari:
+    # #229 AC #3 + #4: Mobile Safari (webkit engine, iPhone 13 viewport) runs
+    # in CI in its own PARALLEL job alongside test-webkit. Splitting Mobile
+    # Safari out from the desktop webkit job (run 28482244942 ran both engines
+    # serially in one job and hit the 25m ceiling at test #522 with the engine
+    # still executing) halves wall-clock — each engine gets ~267 tests + its
+    # own budget + its own required check, so neither can timeout the other.
+    # Mobile-Safari-specific actionability (HUD event-feed tab, NeonPulse Engage
+    # on mobile viewport) was fixed at the source by #244 (native el.click()
+    # fallback in forceClick — Mobile Safari's Vue @click.stop does not receive
+    # Playwright's synthetic force-click). The neural-core keyboard-Enter test
+    # uses forceKeyboardEnter (#229) for the same combined-load async-decode
+    # convergence quirk. See test-webkit job doc above for the #216→#244 history
+    # and the single retained skip (#206 packet-advance rAF timing).
+    name: Playwright E2E Tests (Mobile Safari)
+    timeout-minutes: 25
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Build application
+        run: npm run build
+
+      - name: Run Playwright Mobile Safari tests
+        run: npx playwright test --project="Mobile Safari"
+        env:
+          RUN_WEBKIT: 'true'
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-mobile-safari
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test results JSON
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-json-mobile-safari
+          path: test-results.json
+          retention-days: 30
+
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-screenshots-mobile-safari
+          path: screenshots/
+          retention-days: 30
+
+      - name: Upload traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-mobile-safari
+          path: playwright-traces/
+          retention-days: 30
+
+      - name: Publish Test Report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Playwright Test Results (Mobile Safari)
           path: 'junit-results.xml'
           reporter: java-junit
           fail-on-error: true
