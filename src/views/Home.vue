@@ -584,6 +584,14 @@ h1 {
   z-index: 0;
   min-height: 320px;
   margin-top: 3rem;
+  /* #258: establish a fresh stacking context so the stream's absolute
+     children (rails + readouts) paint ONLY within this section, never onto the
+     footer or sibling sections. overflow:hidden crops any child that still
+     exceeds the section box (the readouts clip at their own surface too). This
+     is the load-bearing containment primitive — do NOT raise the section's own
+     z-index (would race with .content's z-index:1 siblings). */
+  isolation: isolate;
+  overflow: hidden;
 }
 
 /* Responsive */
@@ -591,5 +599,11 @@ h1 {
   h1 { font-size: 2.5rem; }
   .solution-grid { grid-template-columns: 1fr; }
   .section { padding: 3rem 5%; }
+  /* #258: on mobile the readouts collapse to a single stacked 1fr column. The
+     realistic max content height (6 block rows = the composable's slice(0,6)
+     cap + fx + liquidity, measured at 425px on Pixel 5) exceeds the desktop
+     320px floor, so give the stacked layout vertical room. 480px = measured
+     425px + ~55px headroom; the section's overflow:hidden is the backstop. */
+  .settlement-stream-section { min-height: 480px; }
 }
 </style>
