@@ -34,7 +34,7 @@ for (const device of devices) {
 
       // Check navigation is clickable
       const navLinks = page.locator('.nav-links a');
-      await expect(navLinks).toHaveCount(2);
+      await expect(navLinks).toHaveCount(3);
 
       await page.click('text=About');
       await expect(page).toHaveURL('/about');

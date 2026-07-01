@@ -3,10 +3,10 @@
  * @description Unit tests for the rewritten Header (#164 nav overhaul).
  *
  * The Header now renders 6 routed top-level nav items matching the official
- * kaitai.tech structure: Home (router-link /), About Us / News / Our Solutions
- * / Join Us (each a NavigationDropdown submenu), and Contact (router-link
- * /contact). The logo is a router-link to "/" (no # anchor). A mobile
- * hamburger button toggles an off-canvas .nav-links panel.
+ * kaitai.tech structure: Home (router-link /), About Us (direct router-link
+ * /about), News / Our Solutions / Join Us (each a NavigationDropdown submenu),
+ * and Contact (router-link /contact). The logo is a router-link to "/" (no
+ * # anchor). A mobile hamburger button toggles an off-canvas .nav-links panel.
  *
  * The dropdowns render via the REAL NavigationDropdown component (not stubbed)
  * so we assert the submenu structure too. router-link is stubbed so the Home
@@ -114,9 +114,9 @@ describe('Header.vue', () => {
       expect(wrapper.findAll('ul.nav-links > li')).toHaveLength(6)
     })
 
-    it('renders exactly four NavigationDropdown instances', () => {
-      // About / News / Our Solutions / Join Us.
-      expect(wrapper.findAll('.nav-dropdown')).toHaveLength(4)
+    it('renders exactly three NavigationDropdown instances', () => {
+      // News / Our Solutions / Join Us. (About is a direct router-link.)
+      expect(wrapper.findAll('.nav-dropdown')).toHaveLength(3)
     })
   })
 
@@ -176,6 +176,14 @@ describe('Header.vue', () => {
       expect(contact.text()).toBe(wrapper.vm.t('nav.contact'))
     })
 
+    it('renders About as a router-link to "/about" with the translated label', () => {
+      // Second <li> child of nav-links is About (now a direct link, not a dropdown).
+      const about = wrapper.find('ul.nav-links > li:nth-child(2) a')
+      expect(about.exists()).toBe(true)
+      expect(about.attributes('href')).toBe('/about')
+      expect(about.text()).toBe(wrapper.vm.t('nav.aboutUs'))
+    })
+
     it('renders Home with the English label "Home"', () => {
       expect(wrapper.vm.t('nav.home')).toBe('Home')
     })
@@ -189,30 +197,9 @@ describe('Header.vue', () => {
   // Dropdown submenus (real NavigationDropdown children)
   // ============================================
   describe('Dropdown submenus', () => {
-    it('renders About Us trigger with the translated label', () => {
-      const aboutTrigger = wrapper
-        .findAll('.dropdown-trigger')
-        .filter((b) => b.text().includes(wrapper.vm.t('nav.aboutUs')))
-      expect(aboutTrigger.length).toBe(1)
-    })
-
-    it('opens the About Us dropdown on click and lists 2 items', async () => {
-      const triggers = wrapper.findAll('.dropdown-trigger')
-      // Index order: About(0), News(1), Solutions(2), Join Us(3).
-      await triggers[0].trigger('click')
-      const items = wrapper.findAll('.dropdown-menu .dropdown-item')
-      expect(items).toHaveLength(2)
-    })
-
-    it('renders the About Us items via t()', async () => {
-      await wrapper.findAll('.dropdown-trigger')[0].trigger('click')
-      const items = wrapper.findAll('.dropdown-menu .dropdown-item')
-      expect(items[0].text()).toBe(wrapper.vm.t('nav.submenu.aboutKTech'))
-      expect(items[1].text()).toBe(wrapper.vm.t('nav.submenu.ourGroup'))
-    })
-
     it('opens the News dropdown on click and lists 2 items with t() labels', async () => {
-      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
+      // Index order: News(0), Solutions(1), Join Us(2). (About is now a direct link.)
+      await wrapper.findAll('.dropdown-trigger')[0].trigger('click')
       const items = wrapper.findAll('.dropdown-menu .dropdown-item')
       expect(items).toHaveLength(2)
       expect(items[0].text()).toBe(wrapper.vm.t('nav.submenu.ktechNews'))
@@ -220,7 +207,7 @@ describe('Header.vue', () => {
     })
 
     it('opens the Join Us dropdown on click and lists 2 items with t() labels', async () => {
-      await wrapper.findAll('.dropdown-trigger')[3].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[2].trigger('click')
       const items = wrapper.findAll('.dropdown-menu .dropdown-item')
       expect(items).toHaveLength(2)
       expect(items[0].text()).toBe(wrapper.vm.t('nav.submenu.joinUs'))
@@ -228,7 +215,7 @@ describe('Header.vue', () => {
     })
 
     it('opens the Our Solutions dropdown on click and shows 6 items across 2 groups', async () => {
-      await wrapper.findAll('.dropdown-trigger')[2].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
       // 6 flat items total, 2 group headings.
       expect(wrapper.findAll('.dropdown-menu .dropdown-item')).toHaveLength(6)
       expect(wrapper.findAll('.dropdown-group')).toHaveLength(2)
@@ -236,14 +223,14 @@ describe('Header.vue', () => {
     })
 
     it('renders the two Our Solutions group headings via t()', async () => {
-      await wrapper.findAll('.dropdown-trigger')[2].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
       const headings = wrapper.findAll('.dropdown-group-heading')
       expect(headings[0].text()).toBe(wrapper.vm.t('nav.groups.banking'))
       expect(headings[1].text()).toBe(wrapper.vm.t('nav.groups.blockchainWeb3'))
     })
 
     it('renders the Our Solutions items in grouped order via t()', async () => {
-      await wrapper.findAll('.dropdown-trigger')[2].trigger('click')
+      await wrapper.findAll('.dropdown-trigger')[1].trigger('click')
       const items = wrapper.findAll('.dropdown-menu .dropdown-item')
       // Banking group: retailLending, supplyChainFinance.
       expect(items[0].text()).toBe(wrapper.vm.t('nav.submenu.retailLending'))
@@ -473,7 +460,7 @@ describe('Header.vue', () => {
     })
 
     it('the logo link and routed items render as focusable anchors', () => {
-      // Logo + Home + Contact = 3 <a> (dropdowns render <button> triggers).
+      // Logo + Home + About + Contact = 4 <a> (dropdowns render <button> triggers).
       const links = wrapper.findAll('nav a')
       expect(links.length).toBeGreaterThanOrEqual(3)
       links.forEach((link) => {
