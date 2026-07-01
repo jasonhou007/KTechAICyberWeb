@@ -36,6 +36,27 @@ function stripComments(src: string): string {
     .replace(/\/\/[^\n]*/g, '')
 }
 
+/**
+ * Extract a single CSS rule body (text between its outer `{` and the matching
+ * `}`), honouring nested braces so a sibling rule's `infinite`/`forwards`
+ * token cannot leak into the target rule's body (iter-43 brace-counter).
+ * Returns '' if the selector start is not found.
+ */
+function extractRuleBody(src: string, startRe: RegExp, open: string, close: string): string {
+  const m = src.match(startRe)
+  if (!m || m.index === undefined) return ''
+  let i = m.index + m[0].length - 1 // position of the opening `{`
+  let depth = 0
+  let out = ''
+  for (; i < src.length; i++) {
+    const ch = src[i]
+    if (ch === open) { depth++; if (depth === 1) continue }
+    if (ch === close) { depth--; if (depth === 0) break }
+    if (depth >= 1) out += ch
+  }
+  return out
+}
+
 describe('CyberOpsHud.vue — visual-AC CSS-source gate (#182)', () => {
   let source: string
 
@@ -75,17 +96,32 @@ describe('CyberOpsHud.vue — visual-AC CSS-source gate (#182)', () => {
   })
 
   // --------------------------------------------------------------------------
-  // (c) Glitch-on-anomaly: ops-glitch declared AND applied to the anomaly toast.
+  // (c) Glitch-on-anomaly: ops-glitch declared AND applied to the anomaly toast,
+  // AND seizure-safe (#271). The original `animation: ops-glitch 0.3s infinite`
+  // strobed at 3.33Hz — OVER the <3Hz WCAG 2.3.1 photosensitivity ceiling — a
+  // transform-based strobe the #234 steps()+infinite audit missed. #271 makes
+  // it one-shot (`forwards`). This gate closes that gap at the component level
+  // (the repo-wide strobe-audit.test.ts is the catch-all).
   // RED-TEST PROOF: delete the `@keyframes ops-glitch { ... }` block (in
-  // OpsAnomalyToast.vue) and the first expect() fails; delete the
-  // `.ops-glitch { animation: ops-glitch ... }` rule and the second expect()
-  // fails.
+  // OpsAnomalyToast.vue) and the declared assertion fails; delete the
+  // `.ops-glitch { animation: ops-glitch ... }` rule and the applied assertion
+  // fails; revert to `animation: ops-glitch 0.3s infinite` and the
+  // seizure-safety assertions (forwards present, infinite absent) fail.
   // --------------------------------------------------------------------------
-  it('AC2 glitch-on-anomaly: an ACTIVE @keyframes ops-glitch is declared and applied to the anomaly toast', () => {
+  it('AC2 glitch-on-anomaly: ops-glitch declared, applied, AND seizure-safe (one-shot forwards, no infinite) (#271)', () => {
     const toastPath = path.resolve(__dirname, '../ops/OpsAnomalyToast.vue')
     const toastSrc = stripComments(fs.readFileSync(toastPath, 'utf-8'))
+    // DECLARED — identifier-anchored.
     expect(toastSrc).toMatch(/@keyframes\s+ops-glitch(?=\s*\{)/)
-    expect(toastSrc).toMatch(/animation[^;]*ops-glitch/)
+    // APPLIED to the .ops-glitch rule (brace-counted body so a sibling rule's
+    // tokens cannot leak in — iter-43 brace-counter pattern).
+    const opsGlitchRule = extractRuleBody(toastSrc, /(?:^|\})\s*\.ops-glitch\b\s*\{/, '{', '}')
+    expect(opsGlitchRule, '.ops-glitch rule body must be extractable').toBeTruthy()
+    expect(opsGlitchRule).toMatch(/animation:[^;]*ops-glitch/)
+    // SEIZURE-SAFE — one-shot forwards, NOT infinite.
+    expect(opsGlitchRule!).toMatch(/forwards/)
+    expect(opsGlitchRule!, '.ops-glitch must NOT be an infinite strobe (#271 <3Hz)')
+      .not.toMatch(/\binfinite\b/)
   })
 
   // --------------------------------------------------------------------------
