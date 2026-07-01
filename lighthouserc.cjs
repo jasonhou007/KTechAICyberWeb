@@ -4,8 +4,10 @@
  * (Issue #253 AC #11).
  *
  * Asserts a minimum Performance score on the 5 key routes (Home, About,
- * Services, Contact, News). The routes are served under the Vite base subpath
- * /KTechAICyberWeb/ — see the workflow's preview-server step.
+ * Services, Contact, News). The workflow builds an audit variant with
+ * Vite base=/ and serves it at the web root, so routes are root-relative —
+ * see lighthouse-ci.yml for why the production subpath base does not work
+ * for the local Lighthouse preview.
  *
  * SCOPE NOTE (#253): the threshold is set at 0.9 as the regression-detection
  * gate. The full device-runtime verification (LCP<2.5s / INP<200ms /
@@ -18,14 +20,17 @@
 module.exports = {
   ci: {
     collect: {
-      // The 5 key routes from AC #10. The base path matches the Vite `base`
-      // config + the workflow's PREVIEW_URL.
+      // The 5 key routes from AC #10. The workflow builds an audit variant with
+      // Vite base=/ and serves it at the web root, so routes are root-relative
+      // (NOT under /KTechAICyberWeb/ as in production). See lighthouse-ci.yml
+      // "Build (audit variant, base=/)" for why — the production base breaks
+      // local asset loading and triggers NO_FCP.
       url: [
-        'http://localhost:4173/KTechAICyberWeb/',
-        'http://localhost:4173/KTechAICyberWeb/about',
-        'http://localhost:4173/KTechAICyberWeb/services',
-        'http://localhost:4173/KTechAICyberWeb/contact',
-        'http://localhost:4173/KTechAICyberWeb/news',
+        'http://localhost:4173/',
+        'http://localhost:4173/about',
+        'http://localhost:4173/services',
+        'http://localhost:4173/contact',
+        'http://localhost:4173/news',
       ],
       // Number of Lighthouse runs per URL (LHCI median over runs to reduce
       // variance). 3 is the LHCI-recommended default.

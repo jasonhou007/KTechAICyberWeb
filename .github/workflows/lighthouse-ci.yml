@@ -44,18 +44,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
+      # Build a ROOT-base audit variant for Lighthouse. The production build uses
+      # Vite `base: /KTechAICyberWeb/` (GitHub Pages subpath), so its index.html
+      # references assets at absolute /KTechAICyberWeb/assets/... paths. When
+      # served locally at the web root (serve -s dist), those absolute asset URLs
+      # do NOT resolve — the SPA fallback returns index.html (HTML) in place of
+      # each .js/.css bundle, the browser renders nothing, and Lighthouse reports
+      # NO_FCP, failing every audit. (This is exactly the first-run failure on
+      # 2026-07-01, run 28526375311.)
+      #
+      # Fix: rebuild with base=/ so asset URLs are root-relative (/assets/...),
+      # serve dist-audit/ at the root, and request root-relative routes in
+      # lighthouserc.cjs. The app code is identical to the production build —
+      # only the asset URL prefix differs, which is irrelevant for measuring
+      # LCP / TBT / CLS / Performance score (the regression-detection goal).
+      - name: Build (audit variant, base=/)
+        run: npm run build -- --base=/ --outDir dist-audit
 
-      # Lighthouse needs the built site served over HTTP. `serve` is already a
-      # devDependency (used by the preview evidence script) — serve the dist/
-      # directory in the background on a fixed port. The base path is
-      # /KTechAICyberWeb/ (Vite config base), so the routes are served under
-      # that subpath.
       - name: Start preview server
         run: |
-          npx serve -s dist -l 4173 &
-          echo "PREVIEW_URL=http://localhost:4173/KTechAICyberWeb/" >> $GITHUB_ENV
+          npx serve -s dist-audit -l 4173 &
+          echo "PREVIEW_URL=http://localhost:4173/" >> $GITHUB_ENV
           # Wait for the server to be ready before Lighthouse hits it.
           npx wait-on tcp:4173 -t 30000
 

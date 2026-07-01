@@ -13,11 +13,17 @@
  * NO external deps — the sampler is pure rAF + Date.now, written to
  * window.__fpsSamples. The spec reads it back via page.evaluate.
  *
- * Server: the spec targets a PREVIEW server (built dist/) on a configurable
- * port (PERF_PORT env, default 4173). The companion script
- * scripts/253-perf-evidence.mjs builds + starts the preview server + invokes
- * this spec + saves the JSON+screenshots to the evidence dir. Running the spec
- * directly requires a server already up at PERF_PORT.
+ * Server — two run modes:
+ *  - Standard CI (Mobile/E2E workflows): PERF_PORT is UNSET. The spec targets
+ *    Playwright's shared `baseURL` (the Vite dev server on :3000) via RELATIVE
+ *    page.goto(BASE), exactly like every other E2E spec in this repo.
+ *  - Evidence harness (scripts/253-perf-evidence.mjs): sets PERF_PORT=4173 and
+ *    disables the shared webServer, running its own built-preview server. In
+ *    that mode the spec builds an absolute URL against the harness origin.
+ * Defaulting PERF_PORT to '4173' (the original behavior) broke standard CI:
+ * there is no server on :4173 in the Mobile/E2E workflow, so page.goto threw
+ * ERR_CONNECTION_REFUSED and the test failed before sampling a single frame
+ * (the only red check on the PR's first CI run, 2026-07-01).
  *
  * Evidence: the JSON result (with the `device` field) is written to
  * PERF_EVIDENCE_DIR (default ./projects/kttech-cyber/projects/253/evidence/).
@@ -28,13 +34,23 @@ import { test, expect, type Page } from '@playwright/test'
 import { mkdirSync, writeFileSync, existsSync } from 'node:fs'
 import { resolve } from 'node:path'
 
-const PORT = process.env.PERF_PORT || '4173'
-const ORIGIN = `http://localhost:${PORT}`
+const PORT = process.env.PERF_PORT || ''
+const ORIGIN = PORT ? `http://localhost:${PORT}` : ''
 const BASE = '/KTechAICyberWeb/'
 const EVIDENCE_DIR =
   process.env.PERF_EVIDENCE_DIR ||
   resolve(process.cwd(), 'projects/kttech-cyber/projects/253/evidence')
 mkdirSync(EVIDENCE_DIR, { recursive: true })
+
+/**
+ * Build the page.goto target for a route segment (e.g. '' for Home, 'about').
+ * - Harness mode (PERF_PORT set): absolute URL against the preview origin.
+ * - Standard CI (PERF_PORT unset): relative URL resolved against Playwright's
+ *   baseURL (the dev server), matching every other E2E spec's navigation.
+ */
+function gotoTarget(route: string): string {
+  return ORIGIN ? `${ORIGIN}${BASE}${route}` : `${BASE}${route}`
+}
 
 /** rAF FPS sampler injected before any page script runs. */
 const FPS_SAMPLER = `
@@ -102,6 +118,24 @@ function median(arr: number[]): number {
   return s[mid]
 }
 
+/**
+ * Decide whether the CURRENT Playwright project is a "mobile" form-factor run.
+ * Used by the two FPS tests' skip-gates so each only executes in its matching
+ * project: the desktop gate (>=55fps, 1280x720) on chromium/firefox/webkit, and
+ * the mobile gate (>=30fps, Pixel 5) on "Mobile Chrome"/"Mobile Safari".
+ *
+ * The PERF_DEVICE env override still wins — the evidence harness
+ * (scripts/253-perf-evidence.mjs) sets PERF_DEVICE=desktop|mobile and disables
+ * the shared webServer, so the matching test runs there regardless of project.
+ * In standard CI PERF_DEVICE is unset, so we fall back to the project name.
+ */
+function isMobileProject(): boolean {
+  const override = process.env.PERF_DEVICE
+  if (override) return override === 'mobile'
+  const name = (test.info().project?.name || '').toLowerCase()
+  return name.includes('mobile')
+}
+
 test.describe.configure({ mode: 'serial' })
 
 test.describe('FPS performance (#253)', () => {
@@ -109,8 +143,8 @@ test.describe('FPS performance (#253)', () => {
     page,
   }) => {
     test.skip(
-      process.env.PERF_DEVICE && process.env.PERF_DEVICE !== 'desktop',
-      'desktop FPS gate',
+      isMobileProject(),
+      'desktop FPS gate — skip on mobile-form-factor projects (run on chromium/firefox/webkit)',
     )
     test.setTimeout(60_000)
 
@@ -119,7 +153,7 @@ test.describe('FPS performance (#253)', () => {
 
     // Home hero
     await page.addInitScript(FPS_SAMPLER)
-    await page.goto(`${ORIGIN}${BASE}`)
+    await page.goto(gotoTarget(''))
     await page.waitForLoadState('networkidle')
     await page.setViewportSize({ width: 1280, height: 720 })
     const homeFps = await sampleFps(page, 'home-hero')
@@ -138,7 +172,7 @@ test.describe('FPS performance (#253)', () => {
     }
 
     // About hero
-    await page.goto(`${ORIGIN}${BASE}about`)
+    await page.goto(gotoTarget('about'))
     await page.waitForLoadState('networkidle')
     const aboutFps = await sampleFps(page, 'about-hero')
     samples.push(aboutFps)
@@ -178,13 +212,13 @@ test.describe('FPS performance (#253)', () => {
 
   test('Home hero median FPS >= 30 (Pixel 5 / Mobile Chrome)', async ({ page }) => {
     test.skip(
-      process.env.PERF_DEVICE && process.env.PERF_DEVICE !== 'mobile',
-      'mobile FPS gate',
+      !isMobileProject(),
+      'mobile FPS gate — run only on mobile-form-factor projects (Mobile Chrome / Mobile Safari)',
     )
     test.setTimeout(60_000)
 
     await page.addInitScript(FPS_SAMPLER)
-    await page.goto(`${ORIGIN}${BASE}`)
+    await page.goto(gotoTarget(''))
     await page.waitForLoadState('networkidle')
     // Pixel 5 viewport (matches playwright.config devices['Pixel 5']).
     await page.setViewportSize({ width: 393, height: 851 })
