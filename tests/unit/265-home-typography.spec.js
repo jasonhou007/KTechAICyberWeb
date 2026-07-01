@@ -79,6 +79,59 @@ describe('#265 Home typography tokens', () => {
   })
 })
 
+describe('#265 Home card tokens (review AC#1 — .whatwedo fit)', () => {
+  // #265 review(AC#1): the .whatwedo rhythm (6 solution cards) was tokenized
+  // so the full flagship stack compresses on 1080p. These prove the new tokens
+  // exist, have readability floors, and keep a sane hierarchy (card title >
+  // card body; group label > card title — labels head groups of cards).
+  it('variables.css declares the card + group-label tokens', () => {
+    const css = readSource('src/assets/styles/variables.css')
+    expect(css).toContain('--home-card-title:')
+    expect(css).toContain('--home-card-body:')
+    expect(css).toContain('--home-group-label:')
+  })
+
+  it('Home.vue .solution-card consumes the card tokens (old literals gone)', () => {
+    const vue = readSource('src/views/Home.vue')
+    expect(vue).toContain('var(--home-card-title)')
+    expect(vue).toContain('var(--home-card-body)')
+    expect(vue).toContain('var(--home-group-label)')
+    // The old literal card font-sizes must NOT survive (comment-stripped).
+    expect(vue).not.toMatch(/\.solution-card h4[^}]*font-size:\s*1\.1rem/)
+    expect(vue).not.toMatch(/\.solution-card p[^}]*font-size:\s*0\.95rem/)
+  })
+
+  it('card body readability floor >= 0.78rem', () => {
+    const css = readSource('src/assets/styles/variables.css')
+    const bodyLine = css.match(/--home-card-body:\s*clamp\(([^)]*)\)/)
+    expect(bodyLine).not.toBeNull()
+    const floor = parseFloat(bodyLine[1].split(',')[0].trim())
+    // 0.78rem is the readability floor agreed in the #265 review — anything
+    // smaller crushes the solution-card descriptions below legibility.
+    expect(floor).toBeGreaterThanOrEqual(0.78)
+  })
+
+  it('token hierarchy: group-label >= card-title >= card-body', () => {
+    const css = readSource('src/assets/styles/variables.css')
+    const upperOf = (token) => {
+      const m = css.match(new RegExp(`--${token}:\\s*clamp\\([^)]*\\)`))
+      if (!m) return NaN
+      const parts = m[0].split(',')
+      return parseFloat(parts[parts.length - 1].trim())
+    }
+    const group = upperOf('home-group-label')
+    const title = upperOf('home-card-title')
+    const body = upperOf('home-card-body')
+    expect(Number.isFinite(group)).toBe(true)
+    expect(Number.isFinite(title)).toBe(true)
+    expect(Number.isFinite(body)).toBe(true)
+    // Group labels head a group of cards, so they read as the larger heading.
+    expect(group).toBeGreaterThanOrEqual(title)
+    // Card titles head a card, so they read as larger than the card body.
+    expect(title).toBeGreaterThanOrEqual(body)
+  })
+})
+
 describe('#265 SelfDrivingDemo height clamped', () => {
   it('.self-driving-demo min-height uses clamp (literal 420px gone)', () => {
     const vue = readSource('src/components/SelfDrivingDemo.vue')
