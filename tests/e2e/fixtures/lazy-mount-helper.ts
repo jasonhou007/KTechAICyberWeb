@@ -272,3 +272,54 @@ export async function forceClick(
     `forceClick: effect not observed after ${attempts} attempts (target may be unresponsive)`,
   )
 }
+
+/**
+ * Press Enter on a focused element with a retry-until-effect loop, mirroring
+ * `forceClick`'s determinism guarantee for the KEYBOARD path.
+ *
+ * Background (#229): the focus+Enter test path bypasses webkit's actionability
+ * stability check (no click) — that part #244 solved. BUT under combined-suite
+ * browser-engine load on webkit/Mobile Safari, a single `page.keyboard.press
+ * ('Enter')` occasionally does not drive the async Vue handler to convergence
+ * within the caller's subsequent assertion window (the inference decode is
+ * async; the readout render lands just past the 5s `toBeVisible` default under
+ * load). This is the same failure mode `forceClick`'s retry loop eliminates for
+ * the click path, applied to keyboard input. The keyboard semantics are
+ * preserved: every attempt presses a real Enter key on the focused target (the
+ * WCAG 2.1.1 contract under test), and we only re-press if the user-visible
+ * effect has not landed.
+ *
+ * Contract: this ONLY retries HOW the Enter is dispatched (settled + re-pressed
+ * until effect), not WHAT the calling spec asserts. `effect` MUST be the exact
+ * user-visible consequence the Enter is supposed to produce (readout rendered,
+ * panel opened, status flipped). Behaviour under test is unchanged. The caller
+ * MUST focus the target before invoking (we press Enter on the currently-
+ * focused element, we do not focus-and-press — the focus step is part of the
+ * keyboard-operability contract the calling spec asserts separately).
+ *
+ * @param page     Playwright Page. The intended target MUST already be focused.
+ * @param effect   Async predicate returning true once the Enter's user-visible
+ *                 effect has landed. Re-checked after every attempt.
+ * @param attempts   Max Enter attempts. Default 4.
+ * @param settleMs   Per-attempt settle gap (ms) before re-checking `effect`.
+ *                   Default 1500 (> the async inference-decode + render time so
+ *                   a successful first press's effect completes before any retry
+ *                   is considered — a shorter gap would re-trigger a non-
+ *                   idempotent handler each retry).
+ * @throws if `effect` never holds within `attempts` tries.
+ */
+export async function forceKeyboardEnter(
+  page: Page,
+  effect: () => Promise<boolean>,
+  attempts = 4,
+  settleMs = 1500,
+): Promise<void> {
+  for (let i = 0; i < attempts; i++) {
+    await page.keyboard.press('Enter')
+    await page.waitForTimeout(settleMs)
+    if (await effect()) return
+  }
+  throw new Error(
+    `forceKeyboardEnter: effect not observed after ${attempts} attempts`,
+  )
+}

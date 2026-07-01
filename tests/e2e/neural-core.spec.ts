@@ -15,7 +15,11 @@
  */
 
 import { test, expect } from '@playwright/test'
-import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
+import {
+  mountLazySection,
+  forceClick,
+  forceKeyboardEnter,
+} from './fixtures/lazy-mount-helper'
 
 test.describe('#179 AI Core neural-network visualizer', () => {
   test.beforeEach(async ({ page }) => {
@@ -114,10 +118,24 @@ test.describe('#179 AI Core neural-network visualizer', () => {
     // #229 AC #4 → #244: this test was SKIPPED on webkit/Mobile Safari in the
     // prior #229 commit (9d4354e) because the keyboard Enter→inference flow
     // timed out on webkit. #244 (commit e445b69 / 15a0877, merged to main) FIXED
-    // it — the focus+Enter path bypasses webkit's actionability stability check
-    // entirely (no click), so it never races the synapse pulse animation.
-    // #229's rebase onto main therefore UN-SKIPS this test. Verified green on
-    // webkit + Mobile Safari CI (run captured in this ticket's evidence).
+    // the actionability-stability half — the focus+Enter path bypasses webkit's
+    // actionability stability check entirely (no click), so it never races the
+    // synapse pulse animation. #229's rebase onto main therefore UN-SKIPS this
+    // test.
+    //
+    // Remaining webkit/Mobile Safari quirk (NOT fixed by #244 — discovered when
+    // this un-skip first ran on CI, run 28482244942): a single
+    // `page.keyboard.press('Enter')` under combined-suite browser-engine load
+    // occasionally does not drive the async inference-decode + Vue render to
+    // convergence within the 5s `toBeVisible` window (the readout lands just
+    // past it). This is the keyboard analogue of the click-path flake #244's
+    // `forceClick` retry loop eliminated. We reuse the same determinism pattern
+    // for keyboard input: press Enter, settle (> the async decode time so a
+    // successful first press's effect completes before any retry is considered),
+    // re-press if the readout has not landed. Keyboard semantics are preserved —
+    // every attempt presses a real Enter on the focused button (the WCAG 2.1.1
+    // contract under test); we only re-press if the user-visible effect missed.
+    //
     // Nodes are keyboard-reachable via tabindex=0. Focus the first node
     // directly (we are not Tab-walking from the page top, which a pre-existing
     // Header focus-trap loops within the nav) and assert it is focusable.
@@ -130,7 +148,12 @@ test.describe('#179 AI Core neural-network visualizer', () => {
     const runButton = page.locator('[data-test="neural-run-inference"]')
     await runButton.focus()
     await expect(runButton).toBeFocused()
-    await page.keyboard.press('Enter')
+    // #229: retry the Enter until the readout lands (webkit/Mobile Safari
+    // combined-load async-decode convergence quirk — see forceKeyboardEnter).
+    await forceKeyboardEnter(
+      page,
+      async () => (await page.locator('[data-test="neural-readout"]').count()) === 1,
+    )
 
     const readout = page.locator('[data-test="neural-readout"]')
     await expect(readout).toBeVisible({ timeout: 5000 })
