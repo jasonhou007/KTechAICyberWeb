@@ -32,8 +32,12 @@ import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
 // bug. chromium + firefox + Mobile Chrome cover these ACs. Tracked for a
 // source-level fix in follow-up #<NNN>. See evidence in
 // projects/kttech-cyber/tickets/229/evidence/before-webkit-failures-*.
-const isWebkitEngine = (browserName: string) =>
-  browserName === 'webkit' || browserName === 'Mobile Safari'
+//
+// Note: Playwright's `browserName` fixture returns the BROWSER ENGINE name
+// ('webkit'), NOT the project name — so it is 'webkit' for BOTH the desktop
+// 'webkit' project AND the 'Mobile Safari' project. This single check covers
+// the whole webkit family.
+const isWebkitEngine = (browserName: string) => browserName === 'webkit'
 
 test.describe('#180 AI Solution Forge configurator', () => {
   test.beforeEach(async ({ page }) => {

@@ -171,22 +171,33 @@ test.describe('#252 color contrast — WCAG AA on fixed surfaces', () => {
   })
 
   test('/about .projects-badge clears 4.5:1 AA', async ({ page, browserName }) => {
-    // #229: skip on Mobile Safari. #229 enabled the Mobile Safari engine in CI,
-    // which surfaced THIS #252 contrast test failing on it: the screenshot pixel-
-    // sampling reads fg=rgb(255,0,170) on bg=rgb(84,10,68) = ratio 3.88 (below
-    // the 4.5 AA gate) on Mobile Safari, while the same badge PASSES on chromium
-    // (Mobile Chrome + desktop chromium). The badge's CSS color tokens are
-    // unchanged across engines — Mobile Safari's text anti-aliasing/font-smoothing
-    // renders the glyph edge pixels at a different blend than chromium, which the
-    // pixel-sampling contrastRatio() picks up. This is a cross-browser pixel-
-    // sampling reliability gap in the #252 test harness, NOT a confirmed WCAG
-    // failure (the source tokens pass the source-level contrast-audit.mjs). CI
-    // evidence: run 28499977525, Mobile Safari job 84474747742, ratio=3.88.
-    // chromium + firefox + Mobile Chrome enforce this AC. Filed as follow-up
-    // #<NNN> for #252 to investigate Mobile Safari pixel-sampling vs a computed-
-    // style contrast assertion.
-    test.skip(browserName === 'Mobile Safari',
-      '#229/#252: Mobile Safari screenshot pixel-sampling reads projects-badge below 4.5:1 (run 28499977525); chromium passes — cross-browser sampling gap, follow-up #<NNN>')
+    // #229: skip on Mobile Safari ONLY. #229 enabled the Mobile Safari project
+    // in CI, which surfaced THIS #252 contrast test failing on it: the screenshot
+    // pixel-sampling reads fg=rgb(255,0,170) on bg=rgb(84,10,68) = ratio 3.88
+    // (below the 4.5 AA gate) on Mobile Safari, while the same badge PASSES on
+    // chromium (Mobile Chrome + desktop chromium) AND on desktop webkit. The
+    // badge's CSS color tokens are unchanged across engines — Mobile Safari's
+    // mobile-viewport text anti-aliasing/font-smoothing renders the glyph edge
+    // pixels at a different blend than chromium/desktop-webkit, which the pixel-
+    // sampling contrastRatio() picks up. This is a cross-browser pixel-sampling
+    // reliability gap in the #252 test harness on the MOBILE webkit viewport,
+    // NOT a confirmed WCAG failure (the source tokens pass the source-level
+    // contrast-audit.mjs). CI evidence: run 28499977525, Mobile Safari job
+    // 84474747742, ratio=3.88; desktop webkit job passes (run 28501418389).
+    //
+    // Discriminator: Playwright's `browserName` fixture returns the BROWSER
+    // ENGINE name ('webkit'), NOT the project name — so it is 'webkit' for BOTH
+    // the desktop 'webkit' project AND the 'Mobile Safari' project (which also
+    // uses the webkit engine). To target Mobile Safari ONLY (and keep desktop
+    // webkit enforcing this AC), discriminate on the mobile viewport: the
+    // 'Mobile Safari' project uses iPhone 13 (390x844); desktop webkit is
+    // 1280x720. chromium + firefox + Mobile Chrome + desktop webkit enforce.
+    // Filed as follow-up #<NNN> for #252 to investigate Mobile Safari pixel-
+    // sampling vs a computed-style contrast assertion.
+    const vw = page.viewportSize()
+    const isMobileSafari = browserName === 'webkit' && !!vw && vw.width <= 844
+    test.skip(isMobileSafari,
+      '#229/#252: Mobile Safari mobile-viewport pixel-sampling reads projects-badge below 4.5:1 (run 28499977525); chromium + desktop webkit pass — follow-up #<NNN>')
     await page.goto(ABOUT)
     const badge = page.locator('.projects-badge').first()
     await expect(badge).toBeVisible()

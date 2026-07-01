@@ -25,8 +25,12 @@ import { mountLazySection, forceClick } from './fixtures/lazy-mount-helper'
 // These two inference tests are skipped on the webkit engine family with
 // cited CI evidence; chromium + firefox + Mobile Chrome cover the AC.
 // Tracked for a future source-level fix in follow-up #<NNN>.
-const isWebkitEngine = (browserName: string) =>
-  browserName === 'webkit' || browserName === 'Mobile Safari'
+//
+// Note: Playwright's `browserName` fixture returns the BROWSER ENGINE name
+// ('webkit'), NOT the project name — so it is 'webkit' for BOTH the desktop
+// 'webkit' project AND the 'Mobile Safari' project (which also uses the
+// webkit engine). This single check therefore covers the whole webkit family.
+const isWebkitEngine = (browserName: string) => browserName === 'webkit'
 
 test.describe('#179 AI Core neural-network visualizer', () => {
   test.beforeEach(async ({ page }) => {
