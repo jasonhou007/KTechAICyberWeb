@@ -61,8 +61,8 @@ const newsItems = [
   position: relative;
   padding: 5rem 5%;
   background: var(--surface-card);
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
 }
 
 .container {
@@ -92,7 +92,7 @@ const newsItems = [
 }
 
 .neon-glow {
-  filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.5));
+  filter: drop-shadow(0 0 10px var(--accent-cyan-alpha-50));
 }
 
 .section-title {
@@ -106,7 +106,7 @@ const newsItems = [
 }
 
 .neon-text {
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.8), 0 0 20px rgba(0, 255, 204, 0.5);
+  text-shadow: 0 0 10px var(--accent-cyan-alpha-80), 0 0 20px var(--accent-cyan-alpha-50);
 }
 
 .news-grid {
@@ -119,7 +119,7 @@ const newsItems = [
   display: block;
   text-decoration: none;
   background: rgba(20, 25, 40, 0.8);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all 0.3s ease;
@@ -135,8 +135,8 @@ const newsItems = [
 }
 
 .hover-glow:hover {
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.3), 0 0 60px rgba(255, 0, 170, 0.1);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-30), 0 0 60px var(--accent-magenta-alpha-10);
 }
 
 .card-image {
@@ -152,11 +152,11 @@ const newsItems = [
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(0, 255, 204, 0.1) 0%, rgba(255, 0, 170, 0.05) 100%);
+  background: linear-gradient(135deg, var(--accent-cyan-alpha-10) 0%, rgba(255, 0, 170, 0.05) 100%);
 }
 
 .neon-border {
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-lg);
 }
 
@@ -182,16 +182,16 @@ const newsItems = [
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(0, 255, 204, 0.1);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-10);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-sm);
   transition: all 0.3s ease;
 }
 
 .news-card:hover .card-cta {
-  background: rgba(255, 0, 170, 0.2);
-  border-color: rgba(255, 0, 170, 0.5);
-  box-shadow: 0 0 15px rgba(255, 0, 170, 0.3);
+  background: var(--accent-magenta-alpha-20);
+  border-color: var(--accent-magenta-alpha-50);
+  box-shadow: 0 0 15px var(--accent-magenta-alpha-30);
 }
 
 .cta-text {

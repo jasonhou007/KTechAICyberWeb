@@ -501,8 +501,8 @@ onUnmounted(() => {
   transform-origin: 100px 60px;
 }
 .forge-arc-1 { animation: forge-arc-spin 6s linear infinite; stroke: rgba(0, 255, 255, 0.3); }
-.forge-arc-2 { animation: forge-arc-spin 4s linear infinite reverse; stroke: rgba(255, 0, 170, 0.3); }
-.forge-arc-3 { animation: forge-arc-spin 3s linear infinite; stroke: rgba(0, 255, 204, 0.3); }
+.forge-arc-2 { animation: forge-arc-spin 4s linear infinite reverse; stroke: var(--accent-magenta-alpha-30); }
+.forge-arc-3 { animation: forge-arc-spin 3s linear infinite; stroke: var(--accent-cyan-alpha-30); }
 
 @keyframes forge-arc-spin {
   from { transform: rotate(0deg); }
@@ -609,7 +609,7 @@ onUnmounted(() => {
 .forge-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--cyan), var(--accent-magenta));
-  box-shadow: 0 0 8px rgba(255, 0, 170, 0.6);
+  box-shadow: 0 0 8px var(--accent-magenta-alpha-60);
   transition: width 0.1s linear;
 }
 
@@ -619,7 +619,7 @@ onUnmounted(() => {
 }
 @keyframes forge-stage-flash {
   0% { box-shadow: 0 0 0 rgba(255, 0, 170, 0); }
-  15% { box-shadow: 0 0 30px rgba(255, 0, 170, 0.5); }
+  15% { box-shadow: 0 0 30px var(--accent-magenta-alpha-50); }
   100% { box-shadow: 0 0 0 rgba(255, 0, 170, 0); }
 }
 
@@ -681,7 +681,7 @@ onUnmounted(() => {
   margin: 0.2rem 0 0;
   font-size: 0.95rem;
   color: var(--accent-magenta);
-  text-shadow: 0 0 6px rgba(255, 0, 170, 0.5);
+  text-shadow: 0 0 6px var(--accent-magenta-alpha-50);
 }
 .forge-verdict {
   font-family: var(--font-display);
@@ -691,7 +691,7 @@ onUnmounted(() => {
   color: var(--cyan);
   margin: 0 0 0.8rem;
   padding: 0.5rem;
-  border: 1px dashed rgba(0, 255, 204, 0.5);
+  border: 1px dashed var(--accent-cyan-alpha-50);
   border-radius: var(--radius-sm);
 }
 .forge-result-actions {

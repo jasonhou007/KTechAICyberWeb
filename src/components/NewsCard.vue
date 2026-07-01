@@ -126,7 +126,7 @@ const categoryLabel = computed(() => {
 .news-card {
   position: relative;
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
@@ -137,13 +137,13 @@ const categoryLabel = computed(() => {
 
 .news-card:hover {
   transform: translateY(-5px);
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 10px 30px var(--accent-cyan-alpha-20);
 }
 
 .news-card:focus-within {
-  border-color: rgba(0, 255, 204, 0.6);
-  outline: 2px solid rgba(0, 255, 204, 0.3);
+  border-color: var(--accent-cyan-alpha-60);
+  outline: 2px solid var(--accent-cyan-alpha-30);
   outline-offset: 2px;
 }
 
@@ -199,9 +199,9 @@ const categoryLabel = computed(() => {
   height: 100%;
   background: linear-gradient(
     90deg,
-    rgba(0, 255, 204, 0.1) 0%,
-    rgba(0, 255, 204, 0.2) 50%,
-    rgba(0, 255, 204, 0.1) 100%
+    var(--accent-cyan-alpha-10) 0%,
+    var(--accent-cyan-alpha-20) 50%,
+    var(--accent-cyan-alpha-10) 100%
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
@@ -224,7 +224,7 @@ const categoryLabel = computed(() => {
   bottom: 1rem;
   left: 1rem;
   background: rgba(10, 10, 15, 0.8);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   color: var(--cyan);
   font-family: var(--font-body);
   font-size: 0.7rem;
@@ -285,13 +285,13 @@ const categoryLabel = computed(() => {
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
   transition: all 0.3s ease;
 }
 
 .news-card__link:hover,
 .news-card__link:focus {
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   color: var(--text-primary);
 }
 

@@ -236,7 +236,7 @@ const handleCTA = () => {
   color: var(--text-primary);
   line-height: 1.2;
   margin-bottom: 1.5rem;
-  text-shadow: 0 0 60px rgba(0, 255, 204, 0.3);
+  text-shadow: 0 0 60px var(--accent-cyan-alpha-30);
 }
 
 .hero-title .accent {
@@ -261,8 +261,8 @@ const handleCTA = () => {
 
 .tag {
   padding: 0.5rem 1rem;
-  background: rgba(0, 255, 204, 0.1);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-10);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   color: var(--cyan);
@@ -280,7 +280,7 @@ section {
   color: var(--cyan);
   text-align: center;
   margin-bottom: 1rem;
-  text-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+  text-shadow: 0 0 30px var(--accent-cyan-alpha-20);
 }
 
 .section-description {
@@ -305,7 +305,7 @@ section {
 
 .overview-card {
   background: rgba(13, 26, 45, 0.6);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   padding: 2rem;
   border-radius: var(--radius-md);
   transition: all var(--transition-normal);
@@ -347,7 +347,7 @@ section {
   gap: 1.5rem;
   padding: 1.5rem;
   background: rgba(13, 26, 45, 0.4);
-  border-left: 3px solid rgba(0, 255, 204, 0.3);
+  border-left: 3px solid var(--accent-cyan-alpha-30);
   transition: all var(--transition-normal);
 }
 
@@ -417,9 +417,9 @@ section {
 }
 
 .cta {
-  background: linear-gradient(135deg, rgba(0, 255, 204, 0.1) 0%, rgba(255, 0, 170, 0.05) 100%);
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  background: linear-gradient(135deg, var(--accent-cyan-alpha-10) 0%, rgba(255, 0, 170, 0.05) 100%);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
 }
 
 .cta-content {
@@ -486,7 +486,7 @@ section {
   align-items: center;
   padding: 2rem;
   background: rgba(13, 26, 45, 0.4);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: all var(--transition-normal);

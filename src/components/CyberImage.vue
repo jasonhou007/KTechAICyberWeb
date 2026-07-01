@@ -135,9 +135,9 @@ const resolvedSrcset = computed(() => {
   overflow: hidden;
   border-radius: var(--radius-md);
   /* Neon border + glow */
-  border: 1px solid rgba(0, 255, 204, 0.4);
+  border: 1px solid var(--accent-cyan-alpha-40);
   box-shadow: 0 0 12px rgba(0, 255, 204, 0.25),
-    inset 0 0 8px rgba(0, 255, 204, 0.1);
+    inset 0 0 8px var(--accent-cyan-alpha-10);
   background: var(--surface-card);
 }
 

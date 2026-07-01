@@ -291,7 +291,7 @@ onMounted(() => {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(0, 255, 204, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--accent-cyan-alpha-10) 0%, transparent 70%);
   animation: pulse 10s ease-in-out infinite;
   pointer-events: none;
 }
@@ -340,7 +340,7 @@ h1 {
   font-size: var(--home-subtitle);
   color: var(--cyan);
   margin-top: clamp(0.25rem, 0.8vh, 0.75rem);
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+  text-shadow: 0 0 10px var(--accent-cyan-alpha-60);
 }
 
 /* #224: glitch-text + @keyframes glitch REMOVED (the neon flicker / strobe).
@@ -393,15 +393,15 @@ h1 {
 /* Cyber Card (About's design language) */
 .cyber-card {
   background: var(--surface-card);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
 .cyber-card:hover {
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-20);
 }
 
 .hover-lift:hover {
@@ -448,7 +448,7 @@ h1 {
 .group-label {
   font-family: var(--font-display);
   color: var(--cyan);
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.6);
+  text-shadow: 0 0 10px var(--accent-cyan-alpha-60);
   margin-bottom: clamp(0.25rem, 0.5vh, 0.75rem);
   font-size: var(--home-group-label);
 }
@@ -499,7 +499,7 @@ h1 {
   z-index: 1;
   width: 100%;
   margin: clamp(0.5rem, 1.5vh, 1.25rem) 0;
-  border: 1px solid rgba(0, 255, 204, 0.15);
+  border: 1px solid var(--accent-cyan-alpha-15);
   border-radius: var(--radius-sm);
   overflow: hidden;
   /* scroll-margin-top: when an E2E/user scrollIntoView()'s the demo, leave
@@ -518,7 +518,7 @@ h1 {
 
 .cyber-button {
   display: inline-block;
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   color: var(--cyan);
   border: 2px solid var(--cyan);
   padding: 1rem 3rem;
@@ -532,8 +532,8 @@ h1 {
 }
 
 .cyber-button:hover {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-50);
   transform: scale(1.05);
 }
 
@@ -542,7 +542,7 @@ h1 {
   box-shadow:
     0 0 5px var(--cyan),
     0 0 10px var(--cyan),
-    inset 0 0 5px rgba(0, 255, 204, 0.2);
+    inset 0 0 5px var(--accent-cyan-alpha-20);
 }
 
 .neon-text {

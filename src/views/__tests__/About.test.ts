@@ -524,7 +524,10 @@ describe('About.vue', () => {
       const cardBlock = aboutSource.match(/\.achievement-card\s*\{([^}]*)\}/)
       expect(cardBlock).not.toBeNull()
       const body = cardBlock![1]
-      expect(body).toMatch(/border:\s*1px solid rgba\(0,\s*255,\s*204,\s*0\.2\)/)
+      // #285 tokenized the cyan alpha literal onto var(--accent-cyan-alpha-20).
+      // Accept EITHER the literal rgba OR the token — both are the same 0.2
+      // cyan border, which is the #241 rectangular-card invariant under test.
+      expect(body).toMatch(/border:\s*1px solid (?:rgba\(0,\s*255,\s*204,\s*0\.2\)|var\(--accent-cyan-alpha-20\))/)
       // #242: border-radius tokenized to var(--radius-lg) (was 10px). The card
       // is still rectangular (radius-lg = 12px), NOT circular (50%).
       expect(body).toMatch(/border-radius:\s*var\(--radius-lg\)/)

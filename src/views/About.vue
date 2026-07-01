@@ -375,7 +375,7 @@ const { enabled } = useParallax({
   width: 100%;
   margin: 2rem auto;
   max-width: 1200px;
-  border: 1px solid rgba(0, 255, 204, 0.15);
+  border: 1px solid var(--accent-cyan-alpha-15);
   border-radius: var(--radius-sm);
   overflow: hidden;
   /* scroll-margin-top: leave head-room for the fixed Header so the demo's
@@ -391,7 +391,7 @@ const { enabled } = useParallax({
   justify-content: center;
   text-align: center;
   background: var(--surface-card);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
   position: relative;
   overflow: hidden;
 }
@@ -403,7 +403,7 @@ const { enabled } = useParallax({
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(0, 255, 204, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--accent-cyan-alpha-10) 0%, transparent 70%);
   animation: pulse 10s ease-in-out infinite;
 }
 
@@ -431,7 +431,7 @@ const { enabled } = useParallax({
 
 .page-title .accent {
   color: var(--cyan);
-  text-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
+  text-shadow: 0 0 20px var(--accent-cyan-alpha-80);
 }
 
 .page-subtitle {
@@ -487,15 +487,15 @@ const { enabled } = useParallax({
 /* Cyber Card */
 .cyber-card {
   background: var(--surface-card);
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
 }
 
 .cyber-card:hover {
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-20);
 }
 
 .hover-lift:hover {
@@ -504,7 +504,7 @@ const { enabled } = useParallax({
 
 /* Neon Border */
 .neon-border {
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -516,18 +516,18 @@ const { enabled } = useParallax({
 }
 
 .neon-border:hover {
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.5), inset 0 0 20px rgba(0, 255, 204, 0.2);
+  box-shadow: 0 0 20px var(--accent-cyan-alpha-50), inset 0 0 20px var(--accent-cyan-alpha-20);
 }
 
 /* Neon Glow */
 .neon-glow {
-  background: rgba(0, 255, 204, 0.05);
-  border: 1px solid rgba(0, 255, 204, 0.3);
-  box-shadow: 0 0 15px rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-05);
+  border: 1px solid var(--accent-cyan-alpha-30);
+  box-shadow: 0 0 15px var(--accent-cyan-alpha-10);
 }
 
 .neon-glow:hover {
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-30);
 }
 
 /* Achievements Grid */
@@ -549,7 +549,7 @@ const { enabled } = useParallax({
 .achievement-card {
   padding: 1.5rem;
   text-align: center;
-  border: 1px solid rgba(0, 255, 204, 0.2);
+  border: 1px solid var(--accent-cyan-alpha-20);
   border-radius: var(--radius-lg);
   background: var(--surface-card);
   backdrop-filter: blur(10px);
@@ -557,8 +557,8 @@ const { enabled } = useParallax({
 }
 
 .achievement-card:hover {
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-20);
   transform: scale(1.05);
 }
 
@@ -705,8 +705,8 @@ const { enabled } = useParallax({
 
 /* Stats Section */
 .stats-section {
-  background: rgba(0, 255, 204, 0.05);
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
+  background: var(--accent-cyan-alpha-05);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
   /* #253 perf: skip rendering/layout/paint of this offscreen subtree until it
      scrolls near the viewport. contain-intrinsic-size reserves the box height
      BEFORE first render so the browser does not reflow (CLS guard — AC #3). */

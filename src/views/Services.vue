@@ -282,7 +282,7 @@ onMounted(() => {
 /* Service card */
 .service-card {
   background: var(--surface-elevated);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-lg);
   padding: 2.5rem 2rem;
   text-align: center;
@@ -299,7 +299,7 @@ onMounted(() => {
 
 .service-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 0 40px rgba(0, 255, 204, 0.4);
+  box-shadow: 0 0 40px var(--accent-cyan-alpha-40);
   border-color: var(--cyan);
 }
 
@@ -322,13 +322,13 @@ onMounted(() => {
   line-height: 90px;
   margin: 0 auto 1.5rem;
   border-radius: 50%;
-  background: rgba(0, 255, 204, 0.05);
+  background: var(--accent-cyan-alpha-05);
   transition: all 0.3s ease;
 }
 
 .service-card:hover .service-icon {
   transform: scale(1.1);
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
 }
 
 /* Service title */
@@ -339,7 +339,7 @@ onMounted(() => {
   color: var(--cyan);
   letter-spacing: 0.15em;
   margin: 0 0 1rem 0;
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  text-shadow: 0 0 10px var(--accent-cyan-alpha-50);
 }
 
 /* Service description */
@@ -394,20 +394,20 @@ onMounted(() => {
   color: var(--cyan);
   border: 1px solid var(--cyan);
   border-radius: var(--radius-sm);
-  background: rgba(0, 255, 204, 0.05);
+  background: var(--accent-cyan-alpha-05);
   transition: all 0.3s ease;
 }
 
 .service-link:hover,
 .service-link:focus {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 20px var(--accent-cyan-alpha-50);
   transform: translateY(-2px);
 }
 
 /* CTA Button */
 .cyber-button {
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   color: var(--cyan);
   border: 2px solid var(--cyan);
   padding: 1.2rem 3.5rem;
@@ -422,8 +422,8 @@ onMounted(() => {
 }
 
 .cyber-button:hover {
-  background: rgba(0, 255, 204, 0.2);
-  box-shadow: 0 0 30px rgba(0, 255, 204, 0.5);
+  background: var(--accent-cyan-alpha-20);
+  box-shadow: 0 0 30px var(--accent-cyan-alpha-50);
   transform: scale(1.05);
 }
 
@@ -436,7 +436,7 @@ onMounted(() => {
   box-shadow:
     0 0 5px var(--cyan),
     0 0 10px var(--cyan),
-    inset 0 0 5px rgba(0, 255, 204, 0.2);
+    inset 0 0 5px var(--accent-cyan-alpha-20);
 }
 
 .neon-text {

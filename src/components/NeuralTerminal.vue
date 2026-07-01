@@ -625,7 +625,7 @@ onUnmounted(() => {
   z-index: 9001;
   box-shadow:
     0 0 24px rgba(0, 255, 255, 0.35),
-    0 0 60px rgba(255, 0, 170, 0.15);
+    0 0 60px var(--accent-magenta-alpha-15);
   font-family: inherit;
   color: var(--cyan);
 }
@@ -688,7 +688,7 @@ onUnmounted(() => {
 
 .neural-close {
   background: transparent;
-  border: 1px solid rgba(255, 0, 170, 0.5);
+  border: 1px solid var(--accent-magenta-alpha-50);
   color: var(--accent-magenta);
   width: 1.6rem;
   height: 1.6rem;
@@ -699,7 +699,7 @@ onUnmounted(() => {
 }
 
 .neural-close:hover {
-  box-shadow: 0 0 8px rgba(255, 0, 170, 0.6);
+  box-shadow: 0 0 8px var(--accent-magenta-alpha-60);
 }
 
 /* ---- output ---------------------------------------------------------------*/
@@ -721,7 +721,7 @@ onUnmounted(() => {
 .terminal-prompt {
   margin-right: 0.4rem;
   color: var(--cyan);
-  text-shadow: 0 0 6px rgba(0, 255, 204, 0.6);
+  text-shadow: 0 0 6px var(--accent-cyan-alpha-60);
 }
 
 .terminal-input-text {
@@ -867,7 +867,7 @@ onUnmounted(() => {
   position: relative;
   z-index: 2;
   padding: 0.5rem 0.75rem 0.75rem;
-  border-top: 1px solid rgba(0, 255, 204, 0.3);
+  border-top: 1px solid var(--accent-cyan-alpha-30);
   background: rgba(0, 0, 0, 0.35);
 }
 
@@ -898,7 +898,7 @@ onUnmounted(() => {
 }
 
 .terminal-chip:hover {
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+  box-shadow: 0 0 10px var(--accent-cyan-alpha-50);
 }
 
 /* ---- mobile breakpoint ----------------------------------------------------*/

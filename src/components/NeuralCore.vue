@@ -580,7 +580,7 @@ onUnmounted(() => {
   font-size: 0.95rem;
   letter-spacing: 0.08em;
   color: var(--accent-magenta);
-  text-shadow: 0 0 6px rgba(255, 0, 170, 0.6);
+  text-shadow: 0 0 6px var(--accent-magenta-alpha-60);
 }
 
 .neural-readout-label {

@@ -23,7 +23,7 @@ defineEmits(['pulse'])
 
 <style scoped>
 .ops-pulse-btn {
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   color: var(--neon-green);
   border: 1px solid var(--neon-green);
   font-family: var(--font-display);
@@ -45,7 +45,7 @@ defineEmits(['pulse'])
 }
 
 .ops-pulse-applied {
-  background: rgba(0, 255, 204, 0.3);
+  background: var(--accent-cyan-alpha-30);
   box-shadow: 0 0 20px var(--neon-green);
 }
 </style>

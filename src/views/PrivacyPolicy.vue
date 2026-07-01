@@ -140,8 +140,8 @@ const { t } = useLanguage()
 .privacy-hero {
   padding: var(--spacing-lg) 5%;
   text-align: center;
-  background: rgba(0, 255, 204, 0.05);
-  border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+  background: var(--accent-cyan-alpha-05);
+  border-bottom: 1px solid var(--accent-cyan-alpha-20);
 }
 .page-title {
   font-family: var(--font-display);
@@ -210,7 +210,7 @@ const { t } = useLanguage()
   padding: var(--spacing-xs) var(--spacing-sm);
   margin-bottom: var(--spacing-xs);
   background: rgba(0, 255, 204, 0.03);
-  border: 1px solid rgba(0, 255, 204, 0.15);
+  border: 1px solid var(--accent-cyan-alpha-15);
   border-radius: var(--radius-sm);
 }
 .item-list li strong {

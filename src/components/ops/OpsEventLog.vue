@@ -99,7 +99,7 @@ function timeLabel(ts) {
 }
 
 .ops-event-tab.active {
-  background: rgba(0, 255, 204, 0.15);
+  background: var(--accent-cyan-alpha-15);
   border-color: var(--neon-green);
   color: var(--neon-green);
 }

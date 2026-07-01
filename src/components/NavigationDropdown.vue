@@ -231,7 +231,7 @@ defineExpose({ isOpen, menuRef, open, close })
 }
 
 .dropdown-trigger:hover {
-  text-shadow: 0 0 10px rgba(0, 255, 204, 0.8);
+  text-shadow: 0 0 10px var(--accent-cyan-alpha-80);
 }
 
 .dropdown-arrow {
@@ -248,7 +248,7 @@ defineExpose({ isOpen, menuRef, open, close })
   top: 100%;
   left: 0;
   background: rgba(10, 10, 20, 0.95);
-  border: 1px solid rgba(0, 255, 204, 0.3);
+  border: 1px solid var(--accent-cyan-alpha-30);
   border-radius: var(--radius-sm);
   min-width: 200px;
   padding: 0.5rem 0;
@@ -267,14 +267,14 @@ defineExpose({ isOpen, menuRef, open, close })
 
 .dropdown-item:hover,
 .dropdown-item:focus-visible {
-  background: rgba(0, 255, 204, 0.1);
+  background: var(--accent-cyan-alpha-10);
   color: var(--cyan);
   padding-left: 1.25rem;
   outline: none;
 }
 
 .dropdown-item:focus-visible {
-  box-shadow: inset 0 0 0 2px rgba(0, 255, 204, 0.6);
+  box-shadow: inset 0 0 0 2px var(--accent-cyan-alpha-60);
 }
 
 /* Grouped mega-menu mode */
@@ -283,7 +283,7 @@ defineExpose({ isOpen, menuRef, open, close })
 }
 
 .dropdown-group + .dropdown-group {
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
   margin-top: 0.25rem;
   padding-top: 0.5rem;
 }

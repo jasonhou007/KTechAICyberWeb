@@ -177,7 +177,7 @@ export default {
 }
 .cyber-footer {
   padding: 2rem 3rem; background: rgba(10, 10, 15, 0.8);
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
 }
 .footer-content { display: flex; justify-content: space-between; align-items: center; }
 .footer-text { font-family: var(--font-body); font-size: 0.9rem; color: var(--text-secondary); }
@@ -194,8 +194,8 @@ export default {
   transition: all 0.3s ease;
 }
 .footer-link:hover {
-  border-color: rgba(0, 255, 204, 0.5);
-  box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
+  border-color: var(--accent-cyan-alpha-50);
+  box-shadow: 0 0 10px var(--accent-cyan-alpha-20);
 }
 .footer-status {
   display: flex;

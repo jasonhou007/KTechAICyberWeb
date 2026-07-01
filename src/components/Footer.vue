@@ -24,7 +24,7 @@ const { t } = useLanguage()
 .footer {
   padding: 3rem 8%;
   background: var(--surface-card);
-  border-top: 1px solid rgba(0, 255, 204, 0.2);
+  border-top: 1px solid var(--accent-cyan-alpha-20);
   text-align: center;
 }
 
