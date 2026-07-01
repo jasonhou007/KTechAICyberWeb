@@ -98,11 +98,11 @@
             </div>
 
             <p class="position-card__description">
-              {{ truncateDescription(position.description[currentLanguage.value]) }}
+              {{ truncateDescription(position.description[currentLanguage]) }}
             </p>
 
             <div class="position-card__footer">
-              <div class="position-card__salary">{{ position.salary[currentLanguage.value] }}</div>
+              <div class="position-card__salary">{{ position.salary[currentLanguage] }}</div>
               <span class="position-card__badge">{{ position.type.toUpperCase() }}</span>
             </div>
 
@@ -152,18 +152,18 @@
             <span>•</span>
             <span>{{ getLocationLabel(selectedPosition.location) }}</span>
             <span>•</span>
-            <span>{{ selectedPosition.salary[currentLanguage.value] }}</span>
+            <span>{{ selectedPosition.salary[currentLanguage] }}</span>
           </div>
 
           <section class="position-modal__section">
             <h3>{{ t('positions.detail.description') }}</h3>
-            <p>{{ selectedPosition.description[currentLanguage.value] }}</p>
+            <p>{{ selectedPosition.description[currentLanguage] }}</p>
           </section>
 
           <section class="position-modal__section">
             <h3>{{ t('positions.detail.responsibilities') }}</h3>
             <ul class="position-modal__list">
-              <li v-for="(item, idx) in selectedPosition.responsibilities[currentLanguage.value]" :key="idx">
+              <li v-for="(item, idx) in selectedPosition.responsibilities[currentLanguage]" :key="idx">
                 {{ item }}
               </li>
             </ul>
@@ -172,7 +172,7 @@
           <section class="position-modal__section">
             <h3>{{ t('positions.detail.requirements') }}</h3>
             <ul class="position-modal__list">
-              <li v-for="(item, idx) in selectedPosition.requirements[currentLanguage.value]" :key="idx">
+              <li v-for="(item, idx) in selectedPosition.requirements[currentLanguage]" :key="idx">
                 {{ item }}
               </li>
             </ul>
@@ -181,7 +181,7 @@
           <section class="position-modal__section">
             <h3>{{ t('positions.detail.benefits') }}</h3>
             <ul class="position-modal__list">
-              <li v-for="(item, idx) in selectedPosition.benefits[currentLanguage.value]" :key="idx">
+              <li v-for="(item, idx) in selectedPosition.benefits[currentLanguage]" :key="idx">
                 {{ item }}
               </li>
             </ul>
@@ -189,7 +189,7 @@
 
           <section class="position-modal__section">
             <h3>{{ t('positions.detail.culture') }}</h3>
-            <p>{{ selectedPosition.culture[currentLanguage.value] }}</p>
+            <p>{{ selectedPosition.culture[currentLanguage] }}</p>
           </section>
 
           <div class="position-modal__actions">
