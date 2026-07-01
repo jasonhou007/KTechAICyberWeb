@@ -531,14 +531,14 @@ const { enabled } = useParallax({
 }
 
 /* Achievements Grid */
-/* #253 perf: content-visibility:auto on the .achievements section lets the
-   browser skip rendering the certificate-grid subtree while it is offscreen.
-   contain-intrinsic-size reserves the box height before first render so the
-   page does not reflow when the section scrolls into view (CLS guard — AC #3). */
-.achievements {
-  content-visibility: auto;
-  contain-intrinsic-size: 800px;
-}
+/* NOTE: content-visibility:auto is intentionally NOT applied to .achievements.
+   .achievements contains .projects-badge (line 118) which has an active #252
+   WCAG contrast AC. content-visibility:auto skips paint of the offscreen
+   subtree, so the contrast pixel-sampling reads the unpainted default
+   (fg=bg=rgb(10,10,10), ratio=1.00) and fails the >=4.5 AA gate — the same
+   lesson as commit d74ea88 (drop cv:auto from subtrees with active
+   paint-dependent ACs). The section still gets the perf win via the other
+   cv:auto rules below (.vision-mission, .service-provider, .stats-section). */
 
 .achievements-grid {
   display: grid;
