@@ -143,8 +143,12 @@ const { t } = useLanguage()
   box-shadow: 0 0 6px var(--neon-green);
 }
 
-/* Glitch-on-anomaly: capped slow tear (0.3s, non-strobe, mirrors Home's glitch
-   rate). Disabled under reduced-motion. */
+/* Glitch-on-anomaly: one-shot reveal tear (#271). Previously `0.3s infinite`
+   = 3.33Hz, OVER the <3Hz WCAG 2.3.1 photosensitivity ceiling — a transform-
+   based strobe that the #234 steps()+infinite audit missed. Now `forwards`
+   fires once on toast mount and holds the final frame (cyber aesthetic without
+   a continuous strobe). Disabled under reduced-motion below. (Mirrors the
+   SolutionForge forge-glitch one-shot pattern.) */
 @keyframes ops-glitch {
   0% { transform: translate(0); }
   20% { transform: translate(-1px, 1px); }
@@ -155,7 +159,7 @@ const { t } = useLanguage()
 }
 
 .ops-glitch {
-  animation: ops-glitch 0.3s infinite;
+  animation: ops-glitch 0.45s steps(2) forwards;
 }
 
 .ops-investigating {
@@ -171,5 +175,15 @@ const { t } = useLanguage()
 .ops-toast-enter-from,
 .ops-toast-leave-to {
   opacity: 0;
+}
+
+/* ---- REDUCED MOTION GUARD (#271) -----------------------------------------
+ * Kill the glitch tear under prefers-reduced-motion so the one-shot reveal
+ * never runs for users who opt out of motion. The previous comment claimed
+ * "Disabled under reduced-motion" but no guard existed — now it does. */
+@media (prefers-reduced-motion: reduce) {
+  .ops-glitch {
+    animation: none;
+  }
 }
 </style>

@@ -227,13 +227,20 @@ onMounted(() => {
 
 .glitch-text::before {
   color: var(--accent-magenta);
-  animation: glitch 0.3s infinite;
+  /* #271: one-shot reveal glitch (forwards), NOT infinite. The previous
+     `glitch 0.3s infinite` strobed at 3.33Hz — OVER the <3Hz WCAG 2.3.1
+     photosensitivity ceiling — on the page H1, which auto-mounts on every
+     Services page load. `forwards` fires the chromatic tear once on render
+     and holds the final frame: the cyber aesthetic lands without a continuous
+     strobe. (Mirrors the SolutionForge forge-glitch one-shot pattern; the
+     repo-wide strobe-audit.test.ts gate now prevents any regression.) */
+  animation: glitch 0.45s steps(2) forwards;
   clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
 }
 
 .glitch-text::after {
   color: var(--cyan);
-  animation: glitch 0.3s infinite reverse;
+  animation: glitch 0.45s steps(2) forwards reverse;
   clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
 }
 
@@ -498,6 +505,18 @@ onMounted(() => {
 
   .service-card {
     padding: 1.5rem 1rem;
+  }
+}
+
+/* ---- REDUCED MOTION GUARD (#271) -----------------------------------------
+ * Belt-and-suspenders photosafety: kill the glitch-text tear under
+ * prefers-reduced-motion so even the one-shot reveal cannot run for users who
+ * opt out of motion. The base rule is already seizure-safe (one-shot), but
+ * this guard ensures no animation reaches a reduced-motion user. */
+@media (prefers-reduced-motion: reduce) {
+  .glitch-text::before,
+  .glitch-text::after {
+    animation: none;
   }
 }
 </style>
