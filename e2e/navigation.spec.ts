@@ -27,7 +27,7 @@ test.describe('Navigation Tests', () => {
 
   test('should have working navigation links', async ({ page }) => {
     const navLinks = page.locator('.nav-links a');
-    await expect(navLinks).toHaveCount(3);
+    await expect(navLinks).toHaveCount(4);
 
     const homeLink = page.locator('.nav-links a').first();
     await expect(homeLink).toHaveAttribute('href', '/');
