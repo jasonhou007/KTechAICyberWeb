@@ -86,8 +86,8 @@ audits pass; **zero** remaining a11y failures on the route.
 
 ## No-regression verification
 
-- **`node_modules/.bin/vitest run`** — `Test Files 101 passed | 1 skipped (102)`
-  / `Tests 2521 passed | 6 skipped (2527)`. **0 failed.** (No `PositionList`
+- **`node_modules/.bin/vitest run`** — `Test Files 102 passed (102)`
+  / `Tests 2527 passed (2527)`. **0 failed, 0 skipped.** (No `PositionList`
   flake in this run; the #287 order-dependent flake is the only accepted
   pre-existing failure and did not surface here.)
 - **`node_modules/.bin/vite build`** — passes (`✓ built in 1.20s`).
