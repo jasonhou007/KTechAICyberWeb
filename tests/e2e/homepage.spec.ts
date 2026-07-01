@@ -36,7 +36,7 @@ test.describe.skip('Homepage Loading', { tag: '@smoke' }, () => {
     expect(homePage.getUrl()).toContain('/');
 
     // Verify page title
-    await expect(homePage.page).toHaveTitle(/开泰科技|KTech|KBight/);
+    await expect(homePage.page).toHaveTitle(/开泰科技|KTech/);
 
     // Verify navbar is visible
     await expect(homePage.navbar).toBeVisible();

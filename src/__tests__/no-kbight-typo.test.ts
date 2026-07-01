@@ -41,14 +41,17 @@ describe('#260 typo elimination — no "KBight" anywhere in SEO surfaces', () =>
     expect(spec.toLowerCase()).not.toContain('kbight')
   })
 
-  it('git grep reports zero KBight occurrences repo-wide (excludes node_modules)', () => {
+  it('git grep reports zero KBight occurrences in shipped surfaces', () => {
     // Walks the live working tree, so a typo reintroduced in ANY tracked file
-    // (not just the three above) fails the build.
+    // (not just the three above) fails the build. Excludes this guard file
+    // itself (its JSDoc legitimately references the misspelling it documents)
+    // and node_modules.
     let out = ''
     try {
-      out = execSync("git grep -in kbight -- ':!node_modules'", {
-        encoding: 'utf8',
-      })
+      out = execSync(
+        "git grep -in kbight -- ':!node_modules' ':!src/__tests__/no-kbight-typo.test.ts'",
+        { encoding: 'utf8' },
+      )
     } catch {
       // git grep exits non-zero (and prints nothing on stdout) when there are
       // zero matches — that is exactly the GREEN state we want.
