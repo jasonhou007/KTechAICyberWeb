@@ -383,6 +383,17 @@ describe('Home.vue', () => {
       'utf-8',
     )
 
+    // #254 — NeonPulse is removed from Home entirely. The component file, its
+    // /pulse route, its own tests, useAudioPulse, and the pulse.* i18n namespace
+    // all STAY (the component is still visitable at /pulse). Only the Home mount
+    // is gone. This source-gate proves the removal in the live shipped Home.vue
+    // and is RED before the removal lands.
+    it('#254 does NOT mount NeonPulse on Home (AC1/AC2)', () => {
+      expect(homeSource).not.toMatch(/<NeonPulse\b/)
+      expect(homeSource).not.toMatch(/\(\)\s*=>\s*import\(['"][^'"]*NeonPulse\.vue['"]\)/)
+      expect(homeSource).not.toMatch(/retryKeys\.neonPulse/)
+    })
+
     it('converts the 5 heavy components to defineAsyncComponent', () => {
       // defineAsyncComponent is the Vue 3 primitive that yields a code-split
       // chunk + defers module evaluation until first render.
