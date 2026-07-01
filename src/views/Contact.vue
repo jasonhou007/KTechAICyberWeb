@@ -632,7 +632,7 @@ select.form-input {
 
 select.form-input option {
   color: var(--text-primary);
-  background: #0a0a14;
+  background: var(--bg-primary);
 }
 
 /* Textarea: multiline variant of the cyber input. */
