@@ -1,5 +1,5 @@
 <template>
-  <div class="neural-terminal-root" data-test="neural-terminal">
+  <div class="neural-terminal-root" data-test="neural-terminal" ref="rootEl">
     <!-- Easter-egg burst overlay: a transient full-screen glitch/particle
          burst fired when a hidden command runs (sudo/coffee/hackplanet/konami).
          Purely decorative — aria-hidden so AT ignores it. Honors
@@ -170,6 +170,13 @@ import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import Scanlines from './Scanlines.vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useTerminal } from '../composables/useTerminal.js'
+// #253 perf: pause the always-on activityDecay interval when the console is
+// offscreen or the tab is hidden — the matrix-decay timer does visible work
+// (relaxes the grid intensity), so running it while nobody is looking wastes a
+// 150ms-interval tick on every offscreen NeuralTerminal. Generic composable:
+// the same hidden/offscreen pause is the correct behavior for any always-on
+// view-level timer.
+import { useAnimationThrottle } from '../composables/useAnimationThrottle.js'
 
 const { t } = useLanguage()
 
@@ -197,6 +204,7 @@ const {
 const inputId = 'neural-terminal-input'
 
 // --- refs -------------------------------------------------------------------
+const rootEl = ref(null)
 const consoleEl = ref(null)
 const inputEl = ref(null)
 const outputEl = ref(null)
@@ -225,6 +233,39 @@ const MATRIX_BASE_OPACITY = 0.12
 const MATRIX_STEP = 0.02 // extra opacity per keystroke
 const ACTIVITY_DECAY_MS = 150
 let activityDecayTimer = null
+
+// #253 perf: start/stop helpers for the activityDecay interval so the throttle
+// watcher can pause (clearInterval) and resume (re-arm) it cleanly. The
+// interval body is unchanged from the pre-throttle inline setInterval.
+function startDecayTimer() {
+  if (activityDecayTimer) return // already armed — no double-arm
+  activityDecayTimer = setInterval(() => {
+    if (activity.value > 0) {
+      activity.value = Math.max(0, activity.value - 1)
+    }
+  }, ACTIVITY_DECAY_MS)
+}
+
+function stopDecayTimer() {
+  if (activityDecayTimer) {
+    clearInterval(activityDecayTimer)
+    activityDecayTimer = null
+  }
+}
+
+// #253 perf: gate the always-on decay interval on visibility. When the console
+// is offscreen or the tab is hidden, the decay does no visible work (nobody is
+// looking at the matrix), so we pause the interval. On resume we re-arm it.
+// useAnimationThrottle is reactive: isPaused flips on document visibilitychange
+// and on IntersectionObserver crossing the viewport boundary.
+const { isPaused } = useAnimationThrottle(rootEl)
+watch(isPaused, (paused) => {
+  if (paused) {
+    stopDecayTimer()
+  } else {
+    startDecayTimer()
+  }
+})
 
 const matrixOpacity = computed(() => {
   // More keystrokes = brighter matrix, capped so it never washes out.
@@ -485,19 +526,16 @@ onMounted(() => {
   // AC 1.6: decay the activity level so the matrix relaxes back to idle when
   // the user stops typing. The composable only exposes `activity`; the view
   // owns the decay cadence (per the composable's JSDoc).
-  activityDecayTimer = setInterval(() => {
-    if (activity.value > 0) {
-      activity.value = Math.max(0, activity.value - 1)
-    }
-  }, ACTIVITY_DECAY_MS)
+  // #253 perf: only arm the interval if the console is currently visible —
+  // the throttle watcher re-arms/pauses it on visibility transitions.
+  if (!isPaused.value) {
+    startDecayTimer()
+  }
 })
 
 onUnmounted(() => {
   document.removeEventListener('keydown', onDocKeydown)
-  if (activityDecayTimer) {
-    clearInterval(activityDecayTimer)
-    activityDecayTimer = null
-  }
+  stopDecayTimer()
   // Clear EVERY outstanding decode-chain timer (rapid typing can leave several
   // chains in flight; the Set tracks them all so none leak on unmount). S-3.
   decodeTimers.forEach((id) => clearTimeout(id))
