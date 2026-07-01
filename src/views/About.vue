@@ -531,6 +531,15 @@ const { enabled } = useParallax({
 }
 
 /* Achievements Grid */
+/* #253 perf: content-visibility:auto on the .achievements section lets the
+   browser skip rendering the certificate-grid subtree while it is offscreen.
+   contain-intrinsic-size reserves the box height before first render so the
+   page does not reflow when the section scrolls into view (CLS guard — AC #3). */
+.achievements {
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
+}
+
 .achievements-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -586,6 +595,14 @@ const { enabled } = useParallax({
 }
 
 /* VMC Grid */
+/* #253 perf: content-visibility:auto on the vision/mission/culture section.
+   contain-intrinsic-size reserves the height (two card rows + culture grid)
+   before first render (CLS guard — AC #3). */
+.vision-mission {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+
 .vmc-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -642,6 +659,14 @@ const { enabled } = useParallax({
 }
 
 /* Service Provider */
+/* #253 perf: content-visibility:auto on the service-provider section.
+   contain-intrinsic-size reserves the three-card row height before first
+   render (CLS guard — AC #3). */
+.service-provider {
+  content-visibility: auto;
+  contain-intrinsic-size: 500px;
+}
+
 .service-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -682,6 +707,11 @@ const { enabled } = useParallax({
 .stats-section {
   background: rgba(0, 255, 204, 0.05);
   border-top: 1px solid rgba(0, 255, 204, 0.2);
+  /* #253 perf: skip rendering/layout/paint of this offscreen subtree until it
+     scrolls near the viewport. contain-intrinsic-size reserves the box height
+     BEFORE first render so the browser does not reflow (CLS guard — AC #3). */
+  content-visibility: auto;
+  contain-intrinsic-size: 300px;
 }
 
 .stats-grid {

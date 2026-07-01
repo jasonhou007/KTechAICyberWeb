@@ -547,6 +547,11 @@ h1 {
   position: relative;
   z-index: 1;
   margin-top: 3rem;
+  /* #253 perf: skip rendering/layout/paint of this offscreen subtree until it
+     scrolls near the viewport. contain-intrinsic-size reserves the box height
+     BEFORE first render so the browser does not reflow (CLS guard — AC #3). */
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
 }
 
 /* AI Core neural-network visualizer section (#179) — mirrors the
@@ -556,6 +561,8 @@ h1 {
   position: relative;
   z-index: 1;
   margin-top: 3rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
 }
 
 /* AI Solution Forge configurator section (#180) — same rhythm as the AI Core
@@ -564,6 +571,8 @@ h1 {
   position: relative;
   z-index: 1;
   margin-top: 3rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
 }
 
 /* Cyber Ops HUD section (#182) — same rhythm as the AI modules above so the
@@ -572,6 +581,8 @@ h1 {
   position: relative;
   z-index: 1;
   margin-top: 3rem;
+  content-visibility: auto;
+  contain-intrinsic-size: 600px;
 }
 
 /* Ambient Settlement Stream section (#206). The stream itself is positioned
@@ -592,6 +603,13 @@ h1 {
      z-index (would race with .content's z-index:1 siblings). */
   isolation: isolate;
   overflow: hidden;
+  /* #253 perf: skip rendering/layout/paint of this offscreen PASSIVE subtree
+     until it scrolls near the viewport (the stream is a background backdrop,
+     not interactive — safe for content-visibility:auto). contain-intrinsic-size
+     reserves the box height BEFORE first render so the browser does not reflow
+     (CLS guard — AC #3). */
+  content-visibility: auto;
+  contain-intrinsic-size: 320px;
 }
 
 /* Responsive */
