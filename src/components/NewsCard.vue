@@ -65,12 +65,15 @@ const props = defineProps({
 
 const { t } = useLanguage()
 
-// Responsive image variants (#199). Most News images are SVGs mislabeled .webp
-// (intrinsic width 800) and only one is a real raster (news-iso27001-official,
-// 258x258). Rather than rasterize/upscale the SVGs (anti-pattern), emit a
-// single-descriptor srcset at each image's intrinsic/native width: this tells
-// the browser the source is good up to that display width and lets it skip the
-// src vs. currentSrc round-trip. NO new image files are generated for News.
+// Responsive image variants (#199 / #278). Most News images are now correctly
+// served as .svg (purpose-built cyberpunk vector art, intrinsic width 800); the
+// only real raster is news-iso27001-official.webp (258x258). An "800w" srcset
+// descriptor on a vector is meaningless (vectors scale without loss), so for
+// SVG paths we emit no srcset/sizes at all and let CyberImage render the bare
+// <img src>. Only the real raster gets a single-descriptor srcset at its
+// intrinsic width — tells the browser the source is good up to that display
+// width and lets it skip the src-vs-currentSrc round-trip. NO new image files
+// are generated for News.
 const NATIVE_WIDTH_MAP = {
   '/images/news/news-iso27001-official.webp': 258,
 }
@@ -82,11 +85,20 @@ const imageNativeWidth = computed(() => {
   return NATIVE_WIDTH_MAP[img] || DEFAULT_NEWS_WIDTH
 })
 
-const imageSrcset = computed(() =>
-  props.article.image ? `${props.article.image} ${imageNativeWidth.value}w` : '',
+const isVectorImage = computed(() =>
+  Boolean(props.article.image) && props.article.image.toLowerCase().endsWith('.svg'),
 )
 
-const imageSizes = computed(() => `(max-width: 600px) 100vw, ${imageNativeWidth.value}px`)
+const imageSrcset = computed(() => {
+  if (!props.article.image) return ''
+  if (isVectorImage.value) return '' // srcset/sizes are meaningless for vectors
+  return `${props.article.image} ${imageNativeWidth.value}w`
+})
+
+const imageSizes = computed(() => {
+  if (isVectorImage.value) return '' // srcset/sizes are meaningless for vectors
+  return `(max-width: 600px) 100vw, ${imageNativeWidth.value}px`
+})
 
 const formattedDate = computed(() => {
   if (!props.article.date) return ''

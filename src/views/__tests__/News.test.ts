@@ -48,7 +48,7 @@ vi.mock('../data/news.json', () => [
     excerpt: 'We are proud to announce that KTech has achieved ISO27001 certification.',
     date: '2024-01-15',
     category: 'Company News',
-    image: '/images/news/iso-certification.webp',
+    image: '/images/news/iso-certification.svg',
     author: 'KTech Team',
   },
   {
@@ -58,7 +58,7 @@ vi.mock('../data/news.json', () => [
     excerpt: 'Explore how blockchain technology is revolutionizing financial services.',
     date: '2024-01-10',
     category: 'Industry Insights',
-    image: '/images/news/blockchain-finance.webp',
+    image: '/images/news/blockchain-finance.svg',
     author: 'KTech Research Team',
   },
   {
@@ -68,7 +68,7 @@ vi.mock('../data/news.json', () => [
     excerpt: 'Join us at the upcoming Fintech Innovation Summit.',
     date: '2024-01-08',
     category: 'Events',
-    image: '/images/news/fintech-conference.webp',
+    image: '/images/news/fintech-conference.svg',
     author: 'KTech Events Team',
   },
   {
@@ -78,7 +78,7 @@ vi.mock('../data/news.json', () => [
     excerpt: 'Discover how KTech AI solutions are transforming financial services.',
     date: '2024-01-05',
     category: 'Technology Updates',
-    image: '/images/news/ai-fintech.webp',
+    image: '/images/news/ai-fintech.svg',
     author: 'KTech AI Team',
   },
 ])

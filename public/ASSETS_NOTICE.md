@@ -35,8 +35,11 @@ this development preview.
 ### News (`public/images/news/`)
 
 - `news-iso27001-official.webp` — official ISO 27001 news content image (258x258)
-- (pre-existing placeholders) `ai-fintech.webp`, `blockchain-finance.webp`,
-  `fintech-conference.webp`, `iso-certification.webp`
+- (original cyberpunk vector illustrations, served at vector fidelity #278)
+  `ai-fintech.svg`, `blockchain-finance.svg`, `fintech-conference.svg`,
+  `iso-certification.svg` — purpose-built SVGs (gradients, grids, neon strokes,
+  `<text>` labels) that were previously mislabeled `.webp`; renamed to their
+  true vector format so the browser renders them as scalable SVGs.
 
 ## Assets deliberately SKIPPED (trademarked / branded)
 
@@ -56,10 +59,13 @@ or branded. They were intentionally NOT extracted to avoid trademark misuse:
 
 The official news listing page renders its card images client-side via
 JavaScript, so they could not be bulk-extracted by simple asset harvesting.
-Only one official news content image (`news-iso27001-official.webp`) was
-available as a static asset; the remaining news cards continue to use the
-pre-existing `public/images/news/*.webp` placeholders. Replacing those
-placeholders is out of scope for this ticket.
+Only one official news content image (`news-iso27001-official.webp`, 258x258)
+was available as a real raster; the remaining news cards use purpose-built
+cyberpunk vector illustrations (gradients, grids, neon strokes, `<text>`
+labels) that were originally shipped mislabeled as `.webp`. Issue #278 renamed
+those 4 files to their true vector format (`.svg`) so the browser serves them
+at vector fidelity instead of treating them as broken/unknown bitmaps.
+`news-iso27001-official.webp` is now the only News bitmap.
 
 ## Original About icons (`src/components/icons/AboutIcon.vue`)
 
