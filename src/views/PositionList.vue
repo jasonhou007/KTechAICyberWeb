@@ -378,7 +378,7 @@ onUnmounted(() => {
 }
 
 .breadcrumb-separator {
-  color: var(--text-muted);
+  color: var(--text-caption);
 }
 
 .breadcrumb-current {
@@ -446,7 +446,7 @@ onUnmounted(() => {
 .filter-search label {
   display: block;
   font-family: var(--font-body);
-  color: var(--text-muted);
+  color: var(--text-list-label);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
@@ -474,7 +474,7 @@ onUnmounted(() => {
 .filter-group label {
   display: block;
   font-family: var(--font-body);
-  color: var(--text-muted);
+  color: var(--text-list-label);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
 }
@@ -502,7 +502,7 @@ onUnmounted(() => {
   border-top: 1px solid rgba(0, 255, 204, 0.2);
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--text-list-label);
 }
 
 .filter-clear {
@@ -568,7 +568,7 @@ onUnmounted(() => {
   gap: 0.5rem;
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--text-timestamp);
 }
 
 .position-card__icon {
@@ -579,7 +579,7 @@ onUnmounted(() => {
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   margin-bottom: 1.5rem;
 }
 
@@ -647,7 +647,7 @@ onUnmounted(() => {
 .empty-message {
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--text-muted);
+  color: var(--text-caption);
   margin-bottom: 2rem;
 }
 
@@ -738,7 +738,7 @@ onUnmounted(() => {
   gap: 1rem;
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-muted);
+  color: var(--text-timestamp);
   margin-bottom: 2rem;
 }
 
@@ -758,7 +758,7 @@ onUnmounted(() => {
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.8;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
 }
 
 .position-modal__list {
@@ -773,7 +773,7 @@ onUnmounted(() => {
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-caption);
 }
 
 .position-modal__list li::before {

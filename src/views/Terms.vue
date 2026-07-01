@@ -158,13 +158,13 @@ const { t } = useLanguage()
 .page-subtitle {
   font-family: var(--font-body);
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   margin-bottom: var(--spacing-xs);
 }
 .page-meta {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: var(--text-timestamp);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -176,7 +176,7 @@ const { t } = useLanguage()
 .disclaimer {
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   padding: var(--spacing-sm);
   margin-bottom: var(--spacing-md);
   background: rgba(255, 0, 170, 0.05);
@@ -196,7 +196,7 @@ const { t } = useLanguage()
   font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.8;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
 }
 .item-list {
   list-style: none;
@@ -207,7 +207,7 @@ const { t } = useLanguage()
   font-family: var(--font-body);
   font-size: 1.05rem;
   line-height: 1.7;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   padding: var(--spacing-xs) var(--spacing-sm);
   margin-bottom: var(--spacing-xs);
   background: rgba(0, 255, 204, 0.03);
@@ -222,7 +222,7 @@ const { t } = useLanguage()
 .note {
   margin-top: var(--spacing-sm);
   font-style: italic;
-  color: var(--text-secondary);
+  color: var(--text-caption);
 }
 .contact-line {
   font-family: var(--font-body);

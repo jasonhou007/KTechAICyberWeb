@@ -301,7 +301,7 @@ onMounted(() => {
 }
 
 .scf__breadcrumb-link {
-  color: var(--text-secondary);
+  color: var(--text-caption);
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -370,7 +370,7 @@ onMounted(() => {
 
 .scf__hero-subtitle {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   max-width: 800px;
   margin: 0 auto 2rem;
   line-height: 1.6;
@@ -437,7 +437,7 @@ onMounted(() => {
 .scf__overview-text {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   text-align: center;
 }
 
@@ -503,7 +503,7 @@ onMounted(() => {
 .scf__feature-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   text-align: center;
 }
 
@@ -549,7 +549,7 @@ onMounted(() => {
 .scf__benefit-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
 }
 
 /* Process Section */
@@ -608,7 +608,7 @@ onMounted(() => {
 .scf__step-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   margin: 0;
 }
 
@@ -632,7 +632,7 @@ onMounted(() => {
 
 .scf__cta-description {
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: var(--text-caption);
   margin-bottom: 2rem;
   max-width: 600px;
   margin-left: auto;

@@ -437,7 +437,7 @@ const { enabled } = useParallax({
 .page-subtitle {
   font-family: var(--font-body);
   font-size: 1.3rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   max-width: 600px;
   margin: 0 auto;
 }
@@ -480,7 +480,7 @@ const { enabled } = useParallax({
 .content-card p {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
 }
 
@@ -591,7 +591,7 @@ const { enabled } = useParallax({
 .achievement-card p {
   font-family: var(--font-body);
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
 }
 
 /* VMC Grid */
@@ -631,7 +631,7 @@ const { enabled } = useParallax({
 .vmc-card p {
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
 }
 
 /* Culture Grid */
@@ -699,7 +699,7 @@ const { enabled } = useParallax({
 .service-card p {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
 }
 
@@ -736,7 +736,7 @@ const { enabled } = useParallax({
 .stat-label {
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--text-muted);
+  color: var(--text-list-label);
   text-transform: uppercase;
   letter-spacing: 0.15em;
 }

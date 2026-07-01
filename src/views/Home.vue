@@ -418,7 +418,7 @@ h1 {
 .hero .cyber-card p {
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.1vw, 1.05rem);
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
   margin: 0 0 1rem 0;
 }
@@ -485,7 +485,7 @@ h1 {
 
 .solution-card p {
   font-family: var(--font-body);
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   font-size: var(--home-card-body);
   margin: 0;
   line-height: 1.4;

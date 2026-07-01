@@ -74,7 +74,7 @@ export default {
 .message {
   font-family: var(--font-body);
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   margin: 0 0 2.5rem 0;
 }
 

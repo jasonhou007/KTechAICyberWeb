@@ -173,7 +173,7 @@ const handleCTA = () => {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.9rem;
-  color: var(--text-secondary);
+  color: var(--text-caption);
   background: rgba(0, 255, 204, 0.03);
 }
 
@@ -247,7 +247,7 @@ const handleCTA = () => {
 
 .hero-subtitle {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   margin-bottom: 2rem;
   line-height: 1.7;
 }
@@ -285,7 +285,7 @@ section {
 
 .section-description {
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   max-width: 700px;
   margin: 0 auto 3rem;
   line-height: 1.7;
@@ -330,7 +330,7 @@ section {
 }
 
 .overview-card p {
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
 }
 
@@ -373,7 +373,7 @@ section {
 }
 
 .feature-content p {
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
   font-size: 0.95rem;
 }
@@ -413,7 +413,7 @@ section {
 }
 
 .benefit-item span {
-  color: var(--text-secondary);
+  color: var(--text-caption);
 }
 
 .cta {
@@ -436,7 +436,7 @@ section {
 }
 
 .cta-content p {
-  color: var(--text-secondary);
+  color: var(--text-caption);
   margin-bottom: 2rem;
   line-height: 1.7;
 }

@@ -186,7 +186,7 @@ onMounted(() => {
 
 .subtitle {
   font-size: 1.25rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   margin-bottom: 40px;
   line-height: 1.6;
 }
@@ -238,7 +238,7 @@ onMounted(() => {
 
 .section-description {
   text-align: center;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   font-size: 1.1rem;
   max-width: 700px;
   margin: 0 auto 50px;
@@ -274,7 +274,7 @@ onMounted(() => {
 }
 
 .culture-card p {
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.6;
 }
 
@@ -306,7 +306,7 @@ onMounted(() => {
 }
 
 .benefit-card p {
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.5;
   font-size: 0.95rem;
 }
@@ -368,7 +368,7 @@ onMounted(() => {
 }
 
 .process-step p {
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
   line-height: 1.5;
   font-size: 0.95rem;
 }

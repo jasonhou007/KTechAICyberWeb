@@ -337,7 +337,7 @@ onMounted(() => {
 }
 
 .cbp__breadcrumb-link {
-  color: var(--text-secondary);
+  color: var(--text-caption);
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -401,7 +401,7 @@ onMounted(() => {
 
 .cbp__hero-subtitle {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   max-width: 800px;
   margin: 0 auto 2rem;
   line-height: 1.6;
@@ -466,7 +466,7 @@ onMounted(() => {
 .cbp__overview-text {
   font-size: 1.1rem;
   line-height: 1.8;
-  color: var(--text-secondary);
+  color: var(--text-section-subtitle);
   text-align: center;
 }
 
@@ -527,7 +527,7 @@ onMounted(() => {
 .cbp__card-description {
   font-size: 0.95rem;
   line-height: 1.6;
-  color: var(--text-secondary);
+  color: var(--text-card-meta);
 }
 
 .cbp__cta {
@@ -549,7 +549,7 @@ onMounted(() => {
 
 .cbp__cta-description {
   font-size: 1.1rem;
-  color: var(--text-secondary);
+  color: var(--text-caption);
   margin-bottom: 2rem;
   max-width: 600px;
   margin-left: auto;
