@@ -167,6 +167,29 @@ describe('getRouteMeta(route)', () => {
     })
   })
 
+  // -------------------------------------------------------------------------
+  // #301 — /privacy and /terms og:image + twitter:image contract hardening.
+  // seo.js emits per-route og/twitter URLs for these two routes (lines 145-156)
+  // but the test suite never asserted them before #301. This is a hardening
+  // block (not a RED): the implementation already satisfies it. The shape
+  // mirrors the existing /about (lines 141-144) and /news (lines 164-167)
+  // assertions.
+  // -------------------------------------------------------------------------
+  describe.each([
+    { path: '/privacy', slug: 'privacy' },
+    { path: '/terms', slug: 'terms' },
+  ])('$path route og/twitter image contract (AC #301)', ({ path, slug }) => {
+    const meta = getRouteMeta(makeRoute(path))
+
+    it('emits a route-specific og:image', () => {
+      expect(meta.ogImage).toBe(`${SITE_URL}/og-image-${slug}.jpg`)
+    })
+
+    it('emits a route-specific twitter:image', () => {
+      expect(meta.twitterImage).toBe(`${SITE_URL}/twitter-image-${slug}.jpg`)
+    })
+  })
+
   describe('/news/:slug (news detail) route', () => {
     // seo.js does not carry a specific entry for dynamic news detail paths,
     // so the function must still return sensible fallback meta without crashing.
