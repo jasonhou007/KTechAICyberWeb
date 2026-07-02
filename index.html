@@ -49,6 +49,20 @@
        regression from FOIT/FOUT reflow on Home + About. -->
 
 
+  <!-- #334 perf: preload the /about hero LCP image IN PARALLEL with the JS
+       bundle. Lighthouse measured this image's Load Delay at 3058ms (72% of
+       the /about LCP) because the <img> is rendered by the SPA only AFTER
+       hydration — the browser cannot discover it from the initial HTML. A
+       <link rel=preload as=image> in <head> lets the parser start the fetch
+       immediately on first paint, before the JS bundle even arrives, so the
+       image is in flight while the bundle parses. fetchpriority=high marks it
+       as the LCP candidate so it wins contention against other sub-resources.
+       The 800w variant is the descriptor Lighthouse flagged as the actual LCP
+       element (the srcset selects it for typical mobile widths). Root-relative
+       /images/... resolves under the Vite base subpath in dev+prod via the
+       same mechanism CyberImage uses for its <img src>. -->
+  <link rel="preload" as="image" fetchpriority="high" href="/images/about/about-who-we-are-800w.webp">
+
   <title>开泰科技 - KTech Fintech | 金融科技创新</title>
   <style>
     /* Critical-path no-FOUC block (#188): paints the dark background before
