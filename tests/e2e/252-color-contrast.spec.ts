@@ -155,11 +155,21 @@ export function resolveEffectiveBackground({
   // Extract ALL rgb()/rgba() stops from inside linear-gradient(...).
   const inner = gradient.slice('linear-gradient('.length, -')'.length)
   const stops = [...inner.matchAll(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([0-9.]+))?\s*\)/g)].map(
-    (m) => ({ r: Number(m[1]), g: Number(m[2]), b: Number(m[3]) }),
+    (m) => ({ r: Number(m[1]), g: Number(m[2]), b: Number(m[3]), a: m[4] === undefined ? 1 : Number(m[4]) }),
   )
   if (stops.length === 0) {
     throw new Error(
       `resolveEffectiveBackground: linear-gradient has no rgb()/rgba() stops to resolve: ${JSON.stringify(backgroundImage)}`,
+    )
+  }
+  // Reject any semi-transparent stop outright — a stop with alpha<1 is NOT an
+  // opaque representative color (consistent with the parseCssColor "drop alpha"
+  // rationale: rgba(alpha<1) has no single opaque representative). Throwing
+  // here prevents fabricating a contrast number from a gradient whose painted
+  // color is a translucent tint composited over an ancestor. (#318)
+  if (stops.some((s) => s.a < 1)) {
+    throw new Error(
+      `resolveEffectiveBackground: linear-gradient has semi-transparent stop(s) (alpha<1) — no opaque representative color. bg=${JSON.stringify(backgroundImage)}`,
     )
   }
   // Single representative color iff every stop resolves equal.
@@ -170,7 +180,7 @@ export function resolveEffectiveBackground({
       `resolveEffectiveBackground: linear-gradient has DISTINCT stops (${stops.length} colors) — no single representative color; refusing to fabricate a contrast number. bg=${JSON.stringify(backgroundImage)}`,
     )
   }
-  return first
+  return { r: first.r, g: first.g, b: first.b }
 }
 
 /**

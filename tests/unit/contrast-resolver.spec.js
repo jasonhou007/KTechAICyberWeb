@@ -159,4 +159,34 @@ describe('#294 resolveEffectiveBackground — gradient/transparent resolution', 
     })
     expect(resolved).toEqual({ r: 255, g: 0, b: 170 })
   })
+
+  it('RED-PROOF (#318): transparent bg + RGB-equal stops with DIFFERENT alpha THROWS', () => {
+    // Latent bug from #318: previously the allEqual check compared only
+    // {r,g,b}, so two stops with identical RGB but different alpha
+    // (rgba(255,0,170,0.2) vs rgba(255,0,170,0.9)) would pass the single-color
+    // gate and return magenta — fabricating an opaque contrast number for a
+    // gradient whose two stops have genuinely different opacities. Option (b)
+    // rejects ANY semi-transparent stop, so this throws.
+    expect(() =>
+      resolveEffectiveBackground({
+        color: 'rgb(10, 10, 10)',
+        backgroundImage: 'linear-gradient(135deg, rgba(255, 0, 170, 0.2), rgba(255, 0, 170, 0.9))',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+      }),
+    ).toThrow()
+  })
+
+  it('RED-PROOF (#318): transparent bg + RGB-equal stops BOTH semi-transparent (same alpha<1) THROWS', () => {
+    // The stricter sibling: even when both stops share the SAME alpha (e.g.
+    // both 0.2), the painted color is a 20% magenta tint — NOT opaque magenta
+    // — so there is no opaque representative. Option (b) throws; this proves
+    // (b) is stricter than (a), under which this case would return magenta.
+    expect(() =>
+      resolveEffectiveBackground({
+        color: 'rgb(10, 10, 10)',
+        backgroundImage: 'linear-gradient(135deg, rgba(255, 0, 170, 0.2), rgba(255, 0, 170, 0.2))',
+        backgroundColor: 'rgba(0, 0, 0, 0)',
+      }),
+    ).toThrow()
+  })
 })
