@@ -123,19 +123,42 @@ describe('#335 Group B — fonts.css declares the 9 self-hosted faces', () => {
     expect(count).toBeGreaterThanOrEqual(9)
   })
 
-  it('NO @font-face src references http(s):// (all are self-hosted)', () => {
+  it('NO @font-face src references http(s):// (web fonts self-hosted, fallbacks local-only)', () => {
     const src = stripComments(read(FONTS_CSS))
-    // Split into @font-face blocks and assert each src is a local url('/fonts/...').
+    // Split into @font-face blocks. Two face kinds are permitted:
+    //   - WEB-font faces (the 9 Orbitron/Rajdhani): src MUST be url('/fonts/...')
+    //   - METRIC-MATCHED fallback faces (family contains 'Fallback'): src MUST
+    //     be local(...) only (no woff2 — they exist only to carry size-adjust).
+    // No face may reference http(s):// under any name (#335 review fix:
+    // added a metric-matched 'Rajdhani Fallback' face so the `optional`
+    // fallback renders at Rajdhani width and .solution-card body text does
+    // not wrap to a 2nd line in CI's colder decode timing — keeps the #313
+    // .cta above-the-fold assertion deterministic without weakening CLS).
     const blocks = src.split(/@font-face\s*\{/).slice(1)
     expect(blocks.length).toBeGreaterThanOrEqual(9)
+    let webFontCount = 0
+    let fallbackCount = 0
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i].split(/\}/)[0]
+      const familyDecl = block.match(/font-family:\s*['"]([^'"]+)['"]/)
+      const family = familyDecl ? familyDecl[1] : ''
       const srcDecl = block.match(/src:\s*([^;]+);/)
-      if (!srcDecl) continue // a face with no src would also be a bug, but covered by build
+      if (!srcDecl) continue
       const srcVal = srcDecl[1]
       expect(srcVal).not.toMatch(/https?:\/\//)
-      expect(srcVal).toMatch(/url\(['"]?\/fonts\//)
+      if (/Fallback/.test(family)) {
+        // metric-matched fallback face: local-only, no url()
+        expect(srcVal).toMatch(/local\(/)
+        expect(srcVal).not.toMatch(/url\(/)
+        fallbackCount++
+      } else {
+        // web-font face: must be url('/fonts/...')
+        expect(srcVal).toMatch(/url\(['"]?\/fonts\//)
+        webFontCount++
+      }
     }
+    expect(webFontCount).toBeGreaterThanOrEqual(9)
+    expect(fallbackCount).toBeGreaterThanOrEqual(1)
   })
 })
 

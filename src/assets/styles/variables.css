@@ -65,12 +65,17 @@
   --status-success: var(--cyan);
 
   /* === Fonts.
-   * 'Orbitron'/'Rajdhani' loaded via the Google Fonts <link> in index.html
-   * (#188 corrected these from the never-loaded Clash Display/Satoshi).
+   * 'Orbitron'/'Rajdhani' are self-hosted (#335) in src/assets/styles/fonts.css
+   * with font-display: optional (zero-swap → zero CLS). The metric-matched
+   * 'Rajdhani Fallback' face (also in fonts.css) sits between the web font
+   * and the bare system-ui tail: when `optional` falls back (cold CI decode
+   * timing), the fallback renders at Rajdhani's glyph width so no .solution-card
+   * body text wraps to a 2nd line and above-the-fold geometry is stable.
+   * (#188 originally corrected these from never-loaded Clash/Satoshi.)
    * --font-mono is the terminal-monospace token (Courier New) used by cyber.css
    * body + NeuralCore/NeuralTerminal/SolutionForge terminal blocks. */
   --font-display: 'Orbitron', system-ui, sans-serif;
-  --font-body: 'Rajdhani', system-ui, sans-serif;
+  --font-body: 'Rajdhani', 'Rajdhani Fallback', system-ui, sans-serif;
   --font-mono: 'Courier New', monospace;
 
   /* === Spacing === */
