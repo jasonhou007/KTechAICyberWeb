@@ -226,6 +226,34 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* #313 (follow-up to #265) — Home above-the-fold rhythm tightening.
+ *
+ * Scope decision (2026-07-02): the literal #265 AC1 ("entire Home visible
+ * without scrolling @1920x1080") is geometrically IMPOSSIBLE without breaking
+ * #203 AC1 (SelfDrivingDemo mounted IN-FLOW as the FIRST content block, also
+ * on About.vue). The full eager stack overflows 1080p by 402px and 1440p by
+ * 128px (live-DOM measured 2026-07-02):
+ *   @1920x1080: header=466 selfdriving=844 hero=1014 whatwedo=1390 cta=1482 (OVER by 402)
+ *   @2560x1440: header=484 selfdriving=866 hero=1057 whatwedo=1469 cta=1568 (OVER by 128)
+ *   @3840x2160: header=484 selfdriving=866 hero=1083 whatwedo=1557 cta=1667 (UNDER by 493)
+ *
+ * The lever is vertical RHYTHM (section padding, group/label margins, grid
+ * gaps) expressed as clamp() so the stack compresses on shorter viewports and
+ * breathes on 4K. Tightening the vh middle arms + selected upper bounds flips
+ * 2560x1440 from FAIL (128px over) to PASS while 3840x2160 stays UNDER. At
+ * 1920x1080 the header + Self-driving + hero already fit (hero.bottom=1014 <=
+ * 1080) and stay fitting; the full .whatwedo+.cta is reachable within one
+ * screen-height of scroll (revised honest AC wording).
+ *
+ * UNTOUCHED (HARD CONSTRAINTS):
+ *   - SelfDrivingDemo.vue min-height clamp(280px, 38vh, 360px) — #203 flagship.
+ *   - .solution-card padding floor 0.45rem — iter-13 readability floor.
+ *   - .solution-card h4/p font-size clamps + .hero .cyber-card p font-size.
+ *   - variables.css — NO new --home-* tokens (rhythm stays scoped, not
+ *     over-tokenized; avoids cross-page blast on About.vue).
+ *   - .whatwedo stays EAGERLY rendered (NOT <LazySection>) — Option 2 rejected.
+ */
+
 .home {
   min-height: 100vh;
   display: flex;
@@ -280,8 +308,8 @@ onMounted(() => {
 .cyber-header {
   position: relative;
   overflow: hidden;
-  padding: clamp(1.5rem, 3vh, 2.5rem) 1rem;
-  margin-bottom: clamp(0.5rem, 1.5vh, 1.25rem);
+  padding: clamp(1.5rem, 2vh, 2rem) 1rem;
+  margin-bottom: clamp(0.5rem, 1vh, 1rem);
 }
 
 .cyber-header::before {
@@ -379,7 +407,7 @@ h1 {
   color: var(--cyan);
   letter-spacing: 0.15em;
   text-align: center;
-  margin-bottom: clamp(1rem, 2.5vh, 2rem);
+  margin-bottom: clamp(1rem, 1.5vh, 1.5rem);
   text-transform: uppercase;
 }
 
@@ -387,7 +415,7 @@ h1 {
 .hero {
   position: relative;
   z-index: 1;
-  padding: clamp(0.75rem, 2vh, 1.5rem) 5%;
+  padding: clamp(0.75rem, 1vh, 1rem) 5%;
 }
 
 /* Cyber Card (About's design language) */
@@ -410,8 +438,8 @@ h1 {
 
 /* Hero card sizing */
 .hero .cyber-card {
-  padding: clamp(0.6rem, 1.5vh, 2rem);
-  margin-bottom: clamp(0.25rem, 0.6vh, 1rem);
+  padding: clamp(0.6rem, 1vh, 1.5rem);
+  margin-bottom: clamp(0.2rem, 0.3vh, 0.6rem);
   text-align: left;
 }
 
@@ -438,29 +466,29 @@ h1 {
  * (tightest 2-row packing of 6 cards). */
 .whatwedo {
   text-align: left;
-  padding: clamp(0.4rem, 0.8vh, 1.25rem) 5%;
+  padding: clamp(0.3rem, 0.3vh, 0.75rem) 5%;
 }
 
 .solution-group {
-  margin-bottom: clamp(0.3rem, 0.6vh, 1.25rem);
+  margin-bottom: clamp(0.3rem, 0.4vh, 1rem);
 }
 
 .group-label {
   font-family: var(--font-display);
   color: var(--cyan);
   text-shadow: 0 0 10px var(--accent-cyan-alpha-60);
-  margin-bottom: clamp(0.25rem, 0.5vh, 0.75rem);
+  margin-bottom: clamp(0.25rem, 0.4vh, 0.6rem);
   font-size: var(--home-group-label);
 }
 
 .solution-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: clamp(0.4rem, 0.6vh, 1rem);
+  gap: clamp(0.3rem, 0.3vh, 0.6rem);
 }
 
 .solution-card {
-  padding: clamp(0.45rem, 0.7vh, 1.1rem);
+  padding: clamp(0.45rem, 0.5vh, 1rem);
   animation: fadeInUp 0.6s ease forwards;
   opacity: 0;
 }
@@ -498,7 +526,7 @@ h1 {
   position: relative;
   z-index: 1;
   width: 100%;
-  margin: clamp(0.5rem, 1.5vh, 1.25rem) 0;
+  margin: clamp(0.5rem, 1vh, 1rem) 0;
   border: 1px solid var(--accent-cyan-alpha-15);
   border-radius: var(--radius-sm);
   overflow: hidden;
@@ -513,7 +541,7 @@ h1 {
   position: relative;
   z-index: 1;
   text-align: center;
-  padding: clamp(0.4rem, 0.8vh, 1.5rem) 5%;
+  padding: clamp(0.3rem, 0.3vh, 0.75rem) 5%;
 }
 
 .cyber-button {
