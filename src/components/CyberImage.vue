@@ -322,6 +322,6 @@ const resolvedSrcset = computed(() => {
 /* A cyber sigil inside the ring — pure decoration; the aria-label carries the
    meaningful text. */
 .cyber-image__fallback-glyph::before {
-  content: '\\25C8'; /* diamond glyph as placeholder sigil */
+  content: '\25C8'; /* diamond glyph as placeholder sigil */
 }
 </style>

@@ -203,6 +203,21 @@ describe('CyberImage.vue', () => {
       const stripped = style.replace(/@keyframes\s+cyber-glitch[^}]*\}\s*/g, '')
       expect(glitchCheck(stripped)).toBe(false)
     })
+
+    // Evaluator Low finding (#305 review): the decorative fallback glyph must
+    // use a SINGLE backslash CSS escape ('\25C8'), not a double backslash
+    // ('\\25C8'). A double backslash is a literal-escape in CSS — it parses as
+    // an escaped backslash + the literal text "25C8", so the intended diamond
+    // glyph ◈ (U+25C8) renders as literal text/nothing. This locks the fix.
+    // In JS regex a single literal backslash is written as \\, so the pattern
+    // /content:\s*['"]\\25C8['"]/ matches exactly ONE backslash before 25C8.
+    it('uses a single-backslash CSS escape for the fallback glyph (\\25C8, not \\\\25C8)', () => {
+      // The correct single-backslash form MUST match.
+      expect(style).toMatch(/content:\s*['"]\\25C8['"]/)
+      // The buggy double-backslash form MUST NOT match (locks the fix against
+      // regression — if someone "fixes" it back to \\25C8 this flips RED).
+      expect(style).not.toMatch(/content:\s*['"]\\\\25C8['"]/)
+    })
   })
 
   // ============================================
