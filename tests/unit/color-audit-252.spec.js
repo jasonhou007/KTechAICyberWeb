@@ -129,21 +129,26 @@ function ruleBodiesFor(css, sel) {
 describe('#252 PositionList.vue off-theme purple -> magenta token', () => {
   const css = () => vueStyleSource('PositionList.vue')
 
-  it('.position-card__badge color uses var(--text-primary) for AA contrast (#310)', () => {
+  it('.position-card__badge color uses var(--accent-magenta) on a solid dark surface for AA contrast (#310)', () => {
     const body = ruleBodyFor(css(), '.position-card__badge')
     expect(body, '.position-card__badge rule must exist').not.toBeNull()
-    expect(body).toMatch(/color:\s*var\(--text-primary\)/)
+    // #310: text stays magenta (brand accent); the FIX is the background, which
+    // moved off the 20% magenta tint (magenta-on-magenta ~2.25:1) onto a SOLID
+    // dark surface so the painted ratio is deterministic (~5.31:1, AA 4.5:1)
+    // rather than dependent on whatever sits behind the translucent tint.
+    expect(body).toMatch(/color:\s*var\(--accent-magenta\)/)
     expect(body).not.toMatch(/#8b00ff/i)
     expect(body).not.toMatch(/rgba\(\s*139/)
   })
 
-  it('.position-card__badge background+border use magenta rgba, not purple', () => {
+  it('.position-card__badge background is an opaque dark surface, border is magenta (#310)', () => {
     const body = ruleBodyFor(css(), '.position-card__badge')
-    // #285 tokenized the brand magenta alpha literals onto
-    // var(--accent-magenta-alpha-NN). Accept EITHER the literal rgba OR the
-    // token — both satisfy "magenta (255,0,170), not purple (139,0,255)".
-    expect(body).toMatch(/background:\s*(?:rgba\(\s*255,\s*0,\s*170|var\(--accent-magenta-alpha-)/)
-    expect(body).toMatch(/border:\s*1px solid (?:rgba\(\s*255,\s*0,\s*170|var\(--accent-magenta-alpha-)/)
+    // #310: bg moved to --bg-primary (#0a0a0a, fully opaque) so the painted
+    // contrast is DETERMINISTIC (magenta #ff00aa on #0a0a0a = 5.5:1, AA 4.5:1)
+    // and measurable via getComputedStyle — not dependent on the translucent
+    // tint's compositing layer. Border keeps the magenta accent.
+    expect(body).toMatch(/background:\s*var\(--bg-primary\)/)
+    expect(body).toMatch(/border:\s*1px solid var\(--accent-magenta-alpha-40\)/)
     expect(body).not.toMatch(/rgba\(\s*139,\s*0,\s*255/)
   })
 

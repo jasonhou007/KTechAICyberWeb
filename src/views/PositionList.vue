@@ -598,9 +598,9 @@ onUnmounted(() => {
 
 .position-card__badge {
   padding: 0.3rem 0.8rem;
-  background: var(--accent-magenta-alpha-20);
+  background: var(--bg-primary);   /* #310: was a 20% magenta tint composited over the card, which made the painted bg luminance depend on whatever sat behind it and dropped contrast to ~2.25:1 (magenta-on-magenta) / a CI-flaky 4.12:1 with light text. A fully OPAQUE dark background (--bg-primary #0a0a0a) makes the ratio deterministic: magenta #ff00aa on #0a0a0a = 5.5:1, WCAG AA 4.5:1 with ~1.0 margin. The magenta border keeps the chip's brand accent. */
   border: 1px solid var(--accent-magenta-alpha-40);
-  color: var(--text-primary);   /* #310: was magenta-on-magenta ~2.25:1; light text on the magenta tint = ~12.10:1, WCAG AA */
+  color: var(--accent-magenta);
   font-family: var(--font-body);
   font-size: 0.8rem;
   text-transform: uppercase;
