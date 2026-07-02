@@ -4,125 +4,43 @@
  * on /about, /contact, /news, deferred from #302).
  *
  * Diagnosis (from #302 mobile Lighthouse audits): the bottleneck is
- * RENDER-BLOCKING CSS, not JS (TBT=0 on all 3 routes). Two root causes:
- *   (A) the Google Fonts `<link rel="stylesheet">` in index.html blocks the
- *       first paint for the full font-fetch round-trip (~1480ms measured).
+ * RENDER-BLOCKING CSS, not JS (TBT=0 on all 3 routes). The surviving root
+ * cause for #334 is:
  *   (B) CSS `@import` chains in App.vue `<style>` and main.css force a SERIAL
  *       fetch of the imported sheets (each @import is its own blocking request
  *       that cannot be parallelized), inflating the critical CSS chain by
  *       ~730ms measured.
  *
- * The fix is a CSS-DELIVERY change (not a CSS-content change): convert the
- * blocking font link to a preload+async-onload pattern, and convert each
+ * The fix is a CSS-DELIVERY change (not a CSS-content change): convert each
  * CSS-side `@import` to a JS-side `import` (Vite bundles JS-side CSS imports
  * into a single stylesheet with no serial fetch). Because the fix is delivery
  * plumbing, the unit-test burden is to assert the SOURCE of the fix exists as
- * active code — these are the iter-13 visual/structural-source gates adapted
- * to perf. A green Lighthouse run is the final evidence, but the source gate
- * is what prevents a future refactor from silently reverting the fix.
+ * active code. A green Lighthouse run is the final evidence, but the source
+ * gate is what prevents a future refactor from silently reverting the fix.
  *
- * These tests are RED against the pre-fix code: the current index.html uses a
- * blocking `<link rel="stylesheet" ... fonts.googleapis.com>` (no preload/
- * async-onload pattern) and src/ contains 3 `@import` statements
- * (App.vue ×2, main.css ×1). After the fix, both invariants hold.
+ * HISTORY — Fix A was DROPPED on the #335 rebase:
+ *   Fix A originally targeted the Google Fonts CDN `<link rel="stylesheet">`
+ *   in index.html (a ~1480ms render-blocking font round-trip) by converting it
+ *   to a preload+async-onload pattern. Issue #335 (merged to main DURING #334's
+ *   PR CI) solved the SAME problem better by self-hosting Orbitron/Rajdhani
+ *   woff2 with font-display: optional in src/assets/styles/fonts.css — zero
+ *   swap, zero CLS reflow, AND no render-blocking CDN round-trip. There is no
+ *   Google Fonts `<link>` left in index.html, so the Fix A assertions (preload
+ *   pattern, noscript fallback, preconnect pair, display=swap) became dead
+ *   and were deleted from this file. The #335 font-selfhost tests cover the
+ *   self-hosted direction. The image-priority work (Fix C/D/E) lives in
+ *   tests/unit/334-perf-image-priority.spec.js and is orthogonal.
  *
  * @ticket #334
  */
 import { describe, it, expect } from 'vitest'
-import { readFileSync, existsSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { execSync } from 'node:child_process'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..', '..')
-
-const INDEX_HTML = readFileSync(resolve(ROOT, 'index.html'), 'utf8')
-
-describe('#334 Fix A — non-blocking Google Fonts in index.html', () => {
-  it('uses rel=preload + async onload for the Google Fonts stylesheet (not a blocking <link rel=stylesheet>)', () => {
-    // The fix replaces the blocking
-    //   <link rel="stylesheet" href="...fonts.googleapis.com/css2...">
-    // with the preload-then-swap pattern:
-    //   <link rel="preload" as="style" href="...fonts.googleapis.com/css2..." onload="...this.rel='stylesheet'">
-    //   <noscript><link rel="stylesheet" href="..."></noscript>
-    // The perf contract is the PRELOAD + ONLOAD swap — that is what makes the
-    // resource non-render-blocking. Assert both tokens are present on a
-    // fonts.googleapis.com href.
-    const fontHrefPattern = /href=["']https:\/\/fonts\.googleapis\.com\/css2[^"']+["']/i
-    const fontHrefs = INDEX_HTML.match(new RegExp(fontHrefPattern.source, 'gi')) || []
-    expect(fontHrefs.length, 'index.html must reference the Google Fonts CSS').toBeGreaterThan(0)
-
-    const preloadFontLine = INDEX_HTML.match(
-      /<link[^>]*rel=["']preload["'][^>]*as=["']style["'][^>]*fonts\.googleapis\.com[^>]*>/i,
-    )
-    expect(
-      preloadFontLine,
-      'expected a <link rel=preload as=style ... fonts.googleapis.com ...> (the non-blocking font load). ' +
-        'Found: ' + (INDEX_HTML.match(/<link[^>]*fonts\.googleapis\.com[^>]*>/gi) || []).join(' | '),
-    ).not.toBeNull()
-
-    const onloadSwap = /onload=["'][^"']*this\.rel\s*=\s*['"]?stylesheet['"]?[^"']*["']/i
-    expect(
-      onloadSwap.test(preloadFontLine[0]),
-      'the preload link must swap rel to stylesheet via onload (async pattern). Found: ' + preloadFontLine[0],
-    ).toBe(true)
-  })
-
-  it('does NOT keep a plain blocking <link rel=stylesheet> for Google Fonts outside <noscript> (the preload pattern replaces it)', () => {
-    // After the fix, the ONLY fonts.googleapis.com stylesheet references should
-    // be the preload (with onload swap) and the <noscript> fallback. A plain
-    // blocking <link ... rel="stylesheet" ...> pointing at fonts.googleapis.com
-    // OUTSIDE <noscript> would re-introduce the render-blocking fetch. The
-    // <noscript> fallback is intentionally a plain stylesheet link — it only
-    // loads for no-JS clients and is itself non-render-blocking for the JS
-    // path because it lives inside <noscript>, so we strip
-    // <noscript>...</noscript> before scanning for offenders.
-    //
-    // The match is ORDER-INDEPENDENT on the rel/href attributes: the pre-fix
-    // markup was `<link href="..." rel="stylesheet">` (href first), so a regex
-    // requiring rel-before-href would false-negative. We scan every <link> tag
-    // and flag any that has BOTH rel="stylesheet" AND a fonts.googleapis.com
-    // href — that is the render-blocking resource Lighthouse flags.
-    const withoutNoscript = INDEX_HTML.replace(/<noscript>[\s\S]*?<\/noscript>/gi, '')
-    const linkTags = withoutNoscript.match(/<link[^>]*>/gi) || []
-    const blocking = linkTags.filter(
-      (tag) => /rel=["']stylesheet["']/i.test(tag)
-        && /href=["']https:\/\/fonts\.googleapis\.com\/css2/i.test(tag),
-    )
-    expect(
-      blocking,
-      'found a BLOCKING <link rel=stylesheet> for Google Fonts outside <noscript> — should be converted to preload+onload. ' +
-        'Match: ' + (blocking[0] || ''),
-    ).toEqual([])
-  })
-
-  it('keeps display=swap in the font URL (FOUT, not FOIT)', () => {
-    // display=swap is the font-render-behavior flag (show fallback immediately,
-    // swap when the webfont arrives). It is independent of the stylesheet-load
-    // blocking behavior (which Fix A addresses via preload), but must remain
-    // present so the font does not become invisible while loading.
-    const fontUrl = INDEX_HTML.match(/https:\/\/fonts\.googleapis\.com\/css2[^"'\s]+/i)
-    expect(fontUrl, 'a fonts.googleapis.com/css2 URL must be present').not.toBeNull()
-    expect(fontUrl[0], 'font URL must contain display=swap').toMatch(/display=swap/i)
-  })
-
-  it('preconnects to both fonts.googleapis.com and fonts.gstatic.com', () => {
-    // preconnect warms the DNS+TLS handshake so the preload fetch is not
-    // delayed by connection setup. Both hosts are required: googleapis.com is
-    // the stylesheet host, gstatic.com is the font-file host (crossOrigin).
-    expect(INDEX_HTML).toMatch(/<link[^>]*rel=["']preconnect["'][^>]*fonts\.googleapis\.com/i)
-    expect(INDEX_HTML).toMatch(/<link[^>]*rel=["']preconnect["'][^>]*fonts\.gstatic\.com[^>]*crossorigin/i)
-  })
-
-  it('provides a <noscript> stylesheet fallback for the preload pattern (no-JS clients still get the font)', () => {
-    // The preload+onload pattern only swaps to a stylesheet if JS runs. A
-    // <noscript><link rel=stylesheet></noscript> guarantees the font still
-    // loads for no-JS clients (and is itself non-render-blocking for the JS
-    // path because it lives in noscript).
-    expect(INDEX_HTML).toMatch(/<noscript>[^<]*<link[^>]*rel=["']stylesheet["'][^>]*fonts\.googleapis\.com/i)
-  })
-})
 
 describe('#334 Fix B — no CSS @import chains in src/', () => {
   it('src/**/*.css contains zero @import statements (Vite bundles JS-side imports instead)', () => {
