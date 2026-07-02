@@ -1,13 +1,29 @@
 <template>
   <figure :class="['cyber-image', className]">
     <img
+      v-show="!errored"
       :src="resolvedSrc"
       :alt="alt"
       :loading="eager ? 'eager' : 'lazy'"
       :srcset="resolvedSrcset"
       :sizes="resolvedSizes"
       class="cyber-image__img"
+      @error="onError"
     />
+    <!-- CSS-only cyberpunk fallback placeholder (AC #305). Shown when the inner
+         <img> fails to load (404, broken src, network error) so the user never
+         sees the browser's broken-image icon. role="img" + aria-label keep the
+         image's purpose announced to AT (WCAG 2.1 AA — non-text content needs a
+         text alternative). The placeholder is decorative CSS only — no new
+         binary asset, reuses theme variables for the neon seal look. -->
+    <div
+      v-if="errored"
+      class="cyber-image__fallback"
+      role="img"
+      :aria-label="alt"
+    >
+      <span class="cyber-image__fallback-glyph" aria-hidden="true"></span>
+    </div>
     <!-- Local scanline overlay (NOT the global Scanlines.vue, which is
          position:fixed and covers the whole viewport). This overlay is
          absolutely positioned over the image and clipped to the figure. -->
@@ -67,7 +83,45 @@ const props = defineProps({
   },
 })
 
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
+
+/**
+ * Reactive error flag (AC #305). Flips to true when the inner <img> fails to
+ * load (404, broken src, network error). The img is hidden via v-show and the
+ * CSS-only fallback placeholder is rendered in its place. A ref (not a local
+ * var) so the template re-renders reactively on the error event.
+ *
+ * @member {import('vue').Ref<boolean>}
+ */
+const errored = ref(false)
+
+/**
+ * @error handler (AC #305). Hides the broken <img> and reveals the cyberpunk
+ * fallback placeholder. Wired to the native img `error` event in the template.
+ * Kept as a named method (not inline) so the wiring is greppable and the
+ * behavior is unit-testable as a real event-driven path.
+ */
+const onError = () => {
+  errored.value = true
+}
+
+/**
+ * Reset the error flag when `src` changes (review(security) #305).
+ *
+ * The article-image <CyberImage> in NewsDetail.vue lives outside the v-for and
+ * is reused across SPA navigation when <router-view> has no :key. If article A's
+ * image 404s (errored=true) and the user navigates to article B (working image),
+ * `:src` updates but `errored` would otherwise stay true → the good image stays
+ * hidden behind the placeholder until a full reload. Watching the primary `src`
+ * prop and resetting the flag restores correct fallback behavior on route nav.
+ */
+watch(
+  () => props.src,
+  () => {
+    errored.value = false
+  },
+)
+
 
 /**
  * Resolve a public-asset image path against the Vite base path.
@@ -212,5 +266,62 @@ const resolvedSrcset = computed(() => {
   .cyber-image__img {
     transition: none;
   }
+}
+
+/* ============================================
+ * CSS-only cyberpunk fallback placeholder (AC #305)
+ * ============================================
+ * Shown when the inner <img> fails to load (404, broken src). The figure's
+ * box is preserved by the parent's height/object-fit rule, so this placeholder
+ * fills the same box the image would have occupied. No new binary asset — the
+ * neon seal glyph is a ::before content char, and every color uses existing
+ * theme variables so dark/light theme variants stay consistent.
+ */
+.cyber-image__fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Inherit the figure's background so the placeholder blends, then layer a
+     subtle cyan tint to signal "image area, intentionally empty". */
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--accent-cyan-alpha-05),
+      var(--accent-cyan-alpha-05) 12px,
+      transparent 12px,
+      transparent 24px
+    ),
+    var(--surface-card);
+  border-radius: inherit;
+}
+
+/* The neon seal glyph — a centered content char on a glowing cyan ring.
+   aria-hidden on the parent span keeps it out of the a11y tree (the label
+   comes from the wrapper's aria-label). */
+.cyber-image__fallback-glyph {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid var(--accent-cyan-alpha-50);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--accent-cyan-alpha-30),
+    inset 0 0 8px var(--accent-cyan-alpha-20);
+  color: var(--cyan);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 0 8px var(--accent-cyan-alpha-60);
+}
+
+/* A cyber sigil inside the ring — pure decoration; the aria-label carries the
+   meaningful text. */
+.cyber-image__fallback-glyph::before {
+  content: '\25C8'; /* diamond glyph as placeholder sigil */
 }
 </style>

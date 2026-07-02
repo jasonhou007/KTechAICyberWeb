@@ -427,6 +427,76 @@ describe('NewsDetail.vue', () => {
       expect(heading.exists()).toBe(true)
       expect(heading.element.tagName.toLowerCase()).toBe('h2')
     })
+
+    // ============================================
+    // AC #305: related-articles images render via CyberImage
+    // ============================================
+    // The related-articles section previously used a raw <img> with no base-path
+    // resolution (404 under /KTechAICyberWeb/), no @error fallback, and an
+    // un-localized :alt="related.title". It must now use CyberImage so the
+    // image is rebased, has the cyberpunk fallback, and the alt comes from the
+    // localized altKey (falling back to the title if the key is absent).
+    it('renders each related card image inside a CyberImage figure (no raw img)', async () => {
+      wrapper = mountDetail() // iso-cert → 2 related siblings
+      await finishLoading()
+      const cards = wrapper.findAll('.news-detail__related-card')
+      expect(cards.length).toBe(2)
+
+      // Every related card must wrap its image in a CyberImage figure, and there
+      // must be NO raw <img> directly inside the related-image-wrapper (the img
+      // now lives inside figure.cyber-image).
+      for (const card of cards) {
+        const fig = card.find('.news-detail__related-image-wrapper figure.cyber-image')
+        expect(fig.exists(), 'related card should wrap its img in figure.cyber-image').toBe(true)
+        // The wrapper itself must not directly contain a bare img child.
+        const bareImgs = card
+          .find('.news-detail__related-image-wrapper')
+          .findAll(':scope > img')
+        expect(bareImgs.length).toBe(0)
+      }
+    })
+
+    it('rebases the related image src under the Vite base subpath', async () => {
+      // Simulate the production base /KTechAICyberWeb/.
+      vi.stubEnv('BASE_URL', '/KTechAICyberWeb/')
+      wrapper = mountDetail() // iso-cert
+      await finishLoading()
+      const img = wrapper.find(
+        '.news-detail__related-card figure.cyber-image img',
+      )
+      expect(img.exists()).toBe(true)
+      // The fixture related image src is /images/news/second.webp; under the
+      // subpath it must be rebased to /KTechAICyberWeb/images/news/second.webp.
+      expect(img.attributes('src')).toBe('/KTechAICyberWeb/images/news/second.webp')
+    })
+
+    it('uses the localized altKey for the related image alt (not the raw title)', async () => {
+      wrapper = mountDetail() // iso-cert
+      await finishLoading()
+      const img = wrapper.find(
+        '.news-detail__related-card figure.cyber-image img',
+      )
+      expect(img.exists()).toBe(true)
+      // The related fixture altKey is 'news.articleAlts.related', which the
+      // i18n mock maps to 'Related article image'. The alt must NOT be the
+      // raw title 'Second Company Milestone'.
+      expect(img.attributes('alt')).toBe('Related article image')
+      expect(img.attributes('alt')).not.toBe('Second Company Milestone')
+    })
+
+    it('related images carry the CyberImage @error fallback (placeholder exists on error)', async () => {
+      wrapper = mountDetail() // iso-cert
+      await finishLoading()
+      const fig = wrapper.find(
+        '.news-detail__related-card figure.cyber-image',
+      )
+      // No fallback initially.
+      expect(fig.find('.cyber-image__fallback').exists()).toBe(false)
+      // Fire the native error event on the related img.
+      await fig.find('img').trigger('error')
+      // The CyberImage fallback placeholder must appear.
+      expect(fig.find('.cyber-image__fallback').exists()).toBe(true)
+    })
   })
 
   // ============================================

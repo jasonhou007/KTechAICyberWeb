@@ -102,11 +102,15 @@
             class="news-detail__related-card"
           >
             <div class="news-detail__related-image-wrapper">
-              <img
+              <!-- AC #305: swap the raw <img> for CyberImage so the related
+                   thumbnail gets base-path resolution (no 404 under the
+                   /KTechAICyberWeb/ subpath), the CSS-only @error fallback
+                   (no broken-image icon), and a localized alt via t(altKey)
+                   falling back to the title when the key is absent. -->
+              <CyberImage
                 :src="related.image"
-                :alt="related.title"
-                class="news-detail__related-image"
-                loading="lazy"
+                :alt="t(related.altKey) || related.title"
+                class-name="news-detail__related-image"
               />
             </div>
             <div class="news-detail__related-content">
@@ -793,14 +797,30 @@ onMounted(() => {
   overflow: hidden;
 }
 
+/* AC #305: the related thumbnail is now a CyberImage figure (className passes
+   through here). The figure fills the fixed-height wrapper and the inner img
+   covers it (object-fit:cover — same thumbnail standard as NewsCard, no
+   distortion). The fallback placeholder (figure > .cyber-image__fallback) is
+   position:absolute inset:0 so it fills the same box on error. */
 .news-detail__related-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 0; /* thumbnails sit flush in the card, no double-radius */
+}
+
+.news-detail__related-image :deep(.cyber-image__img) {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.3s ease;
 }
 
-.news-detail__related-card:hover .news-detail__related-image {
+/* The CSS-only fallback placeholder fills the wrapper box on error. */
+.news-detail__related-image :deep(.cyber-image__fallback) {
+  border-radius: 0;
+}
+
+.news-detail__related-card:hover .news-detail__related-image :deep(.cyber-image__img) {
   transform: scale(1.05);
 }
 

@@ -203,6 +203,21 @@ describe('CyberImage.vue', () => {
       const stripped = style.replace(/@keyframes\s+cyber-glitch[^}]*\}\s*/g, '')
       expect(glitchCheck(stripped)).toBe(false)
     })
+
+    // Evaluator Low finding (#305 review): the decorative fallback glyph must
+    // use a SINGLE backslash CSS escape ('\25C8'), not a double backslash
+    // ('\\25C8'). A double backslash is a literal-escape in CSS — it parses as
+    // an escaped backslash + the literal text "25C8", so the intended diamond
+    // glyph ◈ (U+25C8) renders as literal text/nothing. This locks the fix.
+    // In JS regex a single literal backslash is written as \\, so the pattern
+    // /content:\s*['"]\\25C8['"]/ matches exactly ONE backslash before 25C8.
+    it('uses a single-backslash CSS escape for the fallback glyph (\\25C8, not \\\\25C8)', () => {
+      // The correct single-backslash form MUST match.
+      expect(style).toMatch(/content:\s*['"]\\25C8['"]/)
+      // The buggy double-backslash form MUST NOT match (locks the fix against
+      // regression — if someone "fixes" it back to \\25C8 this flips RED).
+      expect(style).not.toMatch(/content:\s*['"]\\\\25C8['"]/)
+    })
   })
 
   // ============================================
@@ -401,6 +416,125 @@ describe('CyberImage.vue', () => {
       const partlyStripped =
         '/images/about/about-who-we-are-400w.webp 400w, /KTechAICyberWeb/images/about/about-who-we-are-800w.webp 800w'
       expect(srcsetRebaseCheck(partlyStripped, base)).toBe(false)
+    })
+  })
+
+  // ============================================
+  // @error fallback (AC #305 — broken/missing image placeholder)
+  // ============================================
+  // When the inner <img> fails to load (404, broken src, network error), the
+  // browser fires a native `error` event. CyberImage must catch it, hide the
+  // broken <img>, and reveal a CSS-only cyberpunk fallback placeholder so the
+  // user never sees the browser's broken-image icon. The placeholder carries
+  // role="img" and the original alt text so screen readers still announce the
+  // image's purpose (WCAG 2.1 AA — non-text content has a text alternative).
+  describe('@error fallback', () => {
+    it('renders a fallback placeholder when the img fires an error event', async () => {
+      const w = mount(CyberImage, {
+        props: { src: '/broken.webp', alt: 'Missing cyberpunk seal' },
+      })
+      // Initially: no fallback, img visible.
+      expect(w.find('.cyber-image__fallback').exists()).toBe(false)
+
+      // Fire a REAL error event on the rendered <img> — this is the user-visible
+      // trigger (browser fails to load the src), not an internal flag flip.
+      await w.find('img').trigger('error')
+
+      // The fallback placeholder must now be in the DOM.
+      expect(w.find('.cyber-image__fallback').exists()).toBe(true)
+      w.unmount()
+    })
+
+    it('hides the broken <img> after an error (no broken-image icon)', async () => {
+      const w = mount(CyberImage, {
+        props: { src: '/broken.webp', alt: 'x' },
+      })
+      const img = w.find('img')
+      // Happy path: img has no inline display:none — it is painted.
+      expect(img.attributes('style') || '').not.toContain('display: none')
+
+      await img.trigger('error')
+
+      // After the error, v-show flips the broken img to display:none so the
+      // browser never paints its broken-image icon. We assert the inline style
+      // (the actual contract v-show enforces) rather than isVisible() because
+      // happy-dom's getComputedStyle does not always reflect inline display:none
+      // for the test-utils visibility walker. The img element still EXISTS in
+      // the DOM (so it can be reshown if src ever changes), but is not painted.
+      expect(w.find('img').attributes('style') || '').toContain('display: none')
+      w.unmount()
+    })
+
+    it('labels the fallback with role=img and the original alt text', async () => {
+      const w = mount(CyberImage, {
+        props: { src: '/broken.webp', alt: 'Official ISO27001 seal' },
+      })
+      await w.find('img').trigger('error')
+
+      const fallback = w.find('.cyber-image__fallback')
+      // role=img so AT treats the placeholder as an image.
+      expect(fallback.attributes('role')).toBe('img')
+      // aria-label carries the alt so the image's purpose is still announced.
+      expect(fallback.attributes('aria-label')).toBe('Official ISO27001 seal')
+      w.unmount()
+    })
+
+    it('does not show the fallback on the happy path (img loads normally)', () => {
+      // No error event fired → fallback must stay absent, img must stay visible.
+      const w = mount(CyberImage, {
+        props: { src: '/images/about/about-who-we-are.webp', alt: 'hero' },
+      })
+      expect(w.find('.cyber-image__fallback').exists()).toBe(false)
+      expect(w.find('img').isVisible()).toBe(true)
+      w.unmount()
+    })
+
+    // RED-TEST PROOF: the fallback is event-driven. If a future refactor removes
+    // the @error listener, the assertion above silently passes (no error fired,
+    // no fallback shown) while the production user still sees a broken-image
+    // icon. This proof confirms the behavior is genuinely event-driven: trigger
+    // the error and assert the state changed — a no-op / unwired listener would
+    // leave the fallback absent.
+    it('RED-TEST PROOF: error event actually flips state (listener is wired)', async () => {
+      const w = mount(CyberImage, {
+        props: { src: '/broken.webp', alt: 'x' },
+      })
+      expect(w.find('.cyber-image__fallback').exists()).toBe(false)
+      await w.find('img').trigger('error')
+      expect(w.find('.cyber-image__fallback').exists()).toBe(true)
+      w.unmount()
+    })
+
+    // Security-agent Low finding (#305 review): when a <CyberImage> instance is
+    // reused across SPA navigation (e.g. the main article image in NewsDetail.vue
+    // lives outside the v-for and is reused when <router-view> has no :key), if
+    // article A's image 404s (errored=true) and the user navigates to article B
+    // (working image), :src updates but errored MUST reset so the good image is
+    // not stuck behind the placeholder until a full reload.
+    it('resets the errored state when src prop changes (SPA-nav instance reuse)', async () => {
+      const w = mount(CyberImage, {
+        props: { src: '/broken-a.webp', alt: 'Article A' },
+      })
+      // Article A's image fails to load → fallback shows, img hidden.
+      await w.find('img').trigger('error')
+      expect(w.find('.cyber-image__fallback').exists()).toBe(true)
+      expect(w.find('img').attributes('style') || '').toContain('display: none')
+
+      // SPA-navigate to article B: only the src prop changes; the component
+      // instance is reused. errored must reset so article B's good image is
+      // shown (fallback gone, img v-show visible again).
+      await w.setProps({ src: '/good-b.webp', alt: 'Article B' })
+
+      // The fallback placeholder must be gone.
+      expect(w.find('.cyber-image__fallback').exists()).toBe(false)
+      // The img must be visible again (no inline display:none from v-show).
+      expect(w.find('img').attributes('style') || '').not.toContain(
+        'display: none',
+      )
+      // The new src must reach the rendered <img> (sanity: the prop really
+      // changed, so a reset-to-visible is the correct behavior, not a stuck hide).
+      expect(w.find('img').attributes('src')).toBe('/good-b.webp')
+      w.unmount()
     })
   })
 
