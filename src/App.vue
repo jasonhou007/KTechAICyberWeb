@@ -169,10 +169,14 @@ export default {
 </script>
 
 <style>
-/* Import global accessibility styles */
-@import './styles/accessibility.css';
-/* Cyberpunk theme variables (driven by <html data-theme="dark">) */
-@import './assets/styles/cyber.css';
+/* #334 perf: the global accessibility.css + cyber.css sheets were previously
+ * loaded here via CSS @import (render-blocking AND serial — each @import is a
+ * separate blocking round-trip the browser cannot parallelize). They are now
+ * imported JS-side in main.js (after variables.css + main.css, preserving the
+ * order they appeared here: accessibility first, then cyber), which lets Vite
+ * inline all global CSS into a single bundled stylesheet with no serial fetch.
+ * The <style> block is retained for any genuinely component-scoped global
+ * rules; it is intentionally empty now. */
 </style>
 
 <style scoped>

@@ -5,6 +5,7 @@
       :src="resolvedSrc"
       :alt="alt"
       :loading="eager ? 'eager' : 'lazy'"
+      :fetchpriority="fetchpriority || undefined"
       :srcset="resolvedSrcset"
       :sizes="resolvedSizes"
       class="cyber-image__img"
@@ -62,6 +63,18 @@ const props = defineProps({
   eager: {
     type: Boolean,
     default: false,
+  },
+  // Fetch-priority hint (#334 LCP). HTML spec values: "high" | "low" | "auto".
+  // Empty string (default) OMITS the attribute entirely (see the template
+  // binding `:fetchpriority="fetchpriority || undefined"` — Vue omits an
+  // attr bound to undefined), matching the "absent prop => no attribute"
+  // contract CyberImage already follows for srcset/sizes. Used to promote the
+  // above-the-fold LCP image (e.g. the About hero, the first News card) to a
+  // high-priority fetch so the browser does not wait for SPA hydration to
+  // discover it.
+  fetchpriority: {
+    type: String,
+    default: '',
   },
   className: {
     type: String,

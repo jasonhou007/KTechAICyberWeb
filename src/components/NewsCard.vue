@@ -12,6 +12,8 @@
         :src="article.image"
         :alt="t(article.altKey) || article.title"
         className="news-card__image"
+        :eager="lcpCandidate"
+        :fetchpriority="lcpCandidate ? 'high' : ''"
         :srcset="imageSrcset"
         :sizes="imageSizes"
       />
@@ -58,6 +60,16 @@ const props = defineProps({
     required: true
   },
   isLoading: {
+    type: Boolean,
+    default: false
+  },
+  // #334 LCP: when true, this card holds the page's LCP image (the first card
+  // in NewsList). The CyberImage is rendered eager + fetchpriority=high so the
+  // browser fetches it early and at high priority; when false (default), the
+  // CyberImage stays lazy with no fetchpriority hint, preserving off-screen
+  // lazy-load on the remaining cards. Only ONE card per list should be the
+  // candidate — NewsList sets lcp-candidate on index === 0.
+  lcpCandidate: {
     type: Boolean,
     default: false
   }

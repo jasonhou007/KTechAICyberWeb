@@ -49,6 +49,29 @@
        regression from FOIT/FOUT reflow on Home + About. -->
 
 
+  <!-- #334 perf: preload the /about hero LCP image IN PARALLEL with the JS
+       bundle. Lighthouse measured this image's Load Delay at 3058ms (72% of
+       the /about LCP) because the <img> is rendered by the SPA only AFTER
+       hydration — the browser cannot discover it from the initial HTML. A
+       <link rel=preload as=image> in <head> lets the parser start the fetch
+       immediately on first paint, before the JS bundle even arrives, so the
+       image is in flight while the bundle parses. fetchpriority=high marks it
+       as the LCP candidate so it wins contention against other sub-resources.
+
+       IMPORTANT — imagesrcset + imagesizes (not a fixed href): the About hero
+       <img> uses srcset (400w/800w/1200w) + sizes="(max-width: 600px) 100vw,
+       50vw" so the browser picks the variant per viewport. Preloading a FIXED
+       href would override that responsive selection (the preloaded source wins
+       the <img> currentSrc) and break the #199 responsive-image contract
+       (mobile must pick 400w, desktop 800w). The W3C responsive-preload pattern
+       mirrors the <img>'s srcset + sizes on the <link> via imagesrcset +
+       imagesizes, so preload and <img> select the SAME variant per viewport.
+       Root-relative /images/... URLs resolve under the Vite base subpath in
+       dev+prod via the same mechanism CyberImage uses for its <img src>. -->
+  <link rel="preload" as="image" fetchpriority="high"
+        imagesrcset="/images/about/about-who-we-are-400w.webp 400w, /images/about/about-who-we-are-800w.webp 800w, /images/about/about-who-we-are.webp 1200w"
+        imagesizes="(max-width: 600px) 100vw, 50vw">
+
   <title>开泰科技 - KTech Fintech | 金融科技创新</title>
   <style>
     /* Critical-path no-FOUC block (#188): paints the dark background before

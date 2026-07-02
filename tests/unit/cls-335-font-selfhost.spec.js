@@ -189,10 +189,29 @@ describe('#335 Group C — public/fonts/ holds the 9 woff2 binaries', () => {
   }
 })
 
-describe('#335 Group D — fonts.css wired into main.css', () => {
-  it("main.css @imports './fonts.css'", () => {
-    const src = stripComments(read(MAIN_CSS))
-    expect(src).toMatch(/@import\s+['"]\.\/fonts\.css['"]/)
+describe('#335 Group D — fonts.css wired into the global CSS bundle', () => {
+  // The #335 invariant is "fonts.css ships in the global stylesheet bundle so
+  // its @font-face rules are available to every var(--font-display)/
+  // var(--font-body) consumer". Originally that wiring was a CSS
+  // `@import './fonts.css'` at the top of main.css. The #334 rebase moved ALL
+  // global CSS wiring to JS-side imports in main.js (CSS @import is
+  // render-blocking + serial; JS-side imports are Vite-bundled into one
+  // stylesheet with no serial fetch — see tests/unit/334-perf-css-delivery).
+  // Functionally identical: either edge puts fonts.css in the same entry
+  // chunk. This test accepts either wiring so the invariant survives the
+  // delivery-mechanism change.
+  it("fonts.css is wired via main.css @import OR main.js JS import", () => {
+    const mainCss = stripComments(read(MAIN_CSS))
+    const cssImported = /@import\s+['"]\.\/fonts\.css['"]/.test(mainCss)
+    let jsImported = false
+    try {
+      const mainJs = read(path.join(ROOT, 'src/main.js'))
+      jsImported = /['"][^'"]*\/fonts\.css['"]/.test(mainJs)
+    } catch { /* main.js absent — fall through to cssImported */ }
+    expect(
+      cssImported || jsImported,
+      'fonts.css must be wired into the bundle (main.css @import or main.js import)',
+    ).toBe(true)
   })
 })
 

@@ -19,6 +19,7 @@
             src="/images/about/about-who-we-are.webp"
             :alt="t('about.hero.imageAlt')"
             eager
+            fetchpriority="high"
             srcset="/images/about/about-who-we-are-400w.webp 400w, /images/about/about-who-we-are-800w.webp 800w, /images/about/about-who-we-are.webp 1200w"
             sizes="(max-width: 600px) 100vw, 50vw"
           />

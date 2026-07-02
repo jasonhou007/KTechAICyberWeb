@@ -3,10 +3,11 @@
     <!-- News Grid -->
     <div class="news-list__grid" role="list">
       <NewsCard
-        v-for="article in visibleArticles"
+        v-for="(article, index) in visibleArticles"
         :key="article.id"
         :article="article"
         :is-loading="isLoading"
+        :lcp-candidate="index === 0"
         class="news-list__item"
         role="listitem"
       />
