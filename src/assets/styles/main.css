@@ -1,10 +1,25 @@
 /**
  * KTech Fintech - Main Styles
  * Global styles and reset
+ *
+ * #334 perf: variables.css + fonts.css are NO LONGER @imported here. CSS
+ * @import is render-blocking AND serial — the browser must fetch this sheet,
+ * parse it, discover the @import, then fetch the imported sheet in a separate
+ * round-trip (Lighthouse measured ~730ms of render-blocking delay
+ * attributable to this chain). Both sheets are now imported JS-side in
+ * main.js, which lets Vite inline all global CSS into a single bundled
+ * stylesheet at build time (no serial fetch). main.js imports variables.css
+ * and fonts.css BEFORE main.css so custom properties + @font-face rules are
+ * defined before main.css's rules that consume them.
+ *
+ * #335 originally re-introduced `@import './fonts.css'` here (self-hosted
+ * Orbitron/Rajdhani, font-display: optional). On the #334/#335 rebase we move
+ * that @import to main.js too, for consistency with the #334 JS-side-import
+ * invariant (zero @import in src CSS — see tests/unit/334-perf-css-delivery).
+ * Functionally identical: Vite bundles fonts.css into the same entry chunk
+ * either way; the only change is the @import is resolved at build time via a
+ * JS import graph edge instead of a CSS @import edge.
  */
-
-@import './variables.css';
-@import './fonts.css';
 
 /* Reset and Base Styles */
 *, *::before, *::after {

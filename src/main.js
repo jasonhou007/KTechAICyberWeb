@@ -11,7 +11,27 @@ import { createHead } from '@vueuse/head'
 // Global theme (CSS variables + reset) — required by all components.
 // Without this the SPA renders unstyled because component styles reference
 // var(--cyan), var(--font-display), etc. defined in assets/styles/variables.css.
+//
+// #334 perf: variables.css + fonts.css are imported JS-side (BEFORE main.css)
+// instead of via CSS @import inside main.css. CSS @import is render-blocking
+// AND serial; JS-side CSS imports are bundled by Vite into a single stylesheet
+// (no serial fetch). Order matters: variables.css must load before main.css
+// so the custom properties main.css consumes are defined, and fonts.css
+// (#335 self-hosted Orbitron/Rajdhani, font-display: optional) loads before
+// main.css so the @font-face rules are declared before any rule resolves a
+// var(--font-display)/var(--font-body) family to a real face. main.css
+// previously did `@import './variables.css'` + `@import './fonts.css'` at its
+// top — both lines are removed and the ordering is reproduced here.
+import './assets/styles/variables.css'
+import './assets/styles/fonts.css'
 import './assets/styles/main.css'
+// #334 perf: accessibility.css + cyber.css were previously loaded via CSS
+// @import inside App.vue's <style> block (render-blocking + serial). They are
+// now imported JS-side here so Vite bundles them into the single global
+// stylesheet. Order matches App.vue's former @import order (accessibility,
+// then cyber) to preserve cascade specificity.
+import './styles/accessibility.css'
+import './assets/styles/cyber.css'
 
 import App from './App.vue'
 
