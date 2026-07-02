@@ -362,18 +362,20 @@
     "verification": "vitest 85/2395 pass; build green; i18n exit 0 (876 keys, 1037/1037 leaves); security 0/0/0/0; evaluator EXCELLENT; #223 E2E absence spec passes live; full chromium E2E 95 pass/0 fail (one #165 image-timing flake did not reproduce).",
     "archivedAt": "2026-06-29T17:41:02.774Z"
   },
-  "issue": 222,
-  "title": "[bug] Fix latent cross-browser E2E failures exposed by #216",
-  "branch": "autodev-222-cross-browser-e2e (deleted)",
+  "issue": 302,
+  "title": "[PERF] Lighthouse runtime verification: LCP/INP/CLS/TTI + score ≥90 on key routes (deferred from #253)",
+  "branch": "autodev-302-perf-lighthouse-verify (merged)",
   "status": "Done",
   "stage": "archived",
-  "iteration": 29,
-  "startedAt": "2026-06-29",
+  "iteration": 30,
+  "startedAt": "2026-07-02",
   "resumedAt": "2026-06-29",
   "followUpIssues": [
-    229
+    333,
+    334,
+    335
   ],
-  "notes": "Class B (firefox+chromium) failures fixed + verified: test CI job green (run 28380687882, 0 failures vs main's 9). webkit AC #1/#5 deferred to #229 with corrected premise (webkit NOT systemic — 140-router-base passes on webkit in CI; failures concentrated in 87-privacy footer-link flow + 187-rum-beacon, CI-runner-specific). Security PASS, evaluator EXCELLENT.",
+  "notes": "Verified 4 deferred #253 ACs via Lighthouse 12.8.2 on 5 routes x 2 devices. Desktop: all targets pass (LCP 424-791ms, TTI 424-791ms, TBT 0, score 91-100). Tightened lighthouserc.cjs to error-level (Performance/LCP/TBT/TTI); CLS stays warn (Home 0.132/About 0.191 regression -> #335). INP lab-unsatisfiable -> #333. Mobile LCP/score gaps on about/contact/news -> #334. PR #336 merged bb50149 (--merge, all 5 commits preserved), all 8 CI green incl. tightened Lighthouse audit. Evaluator 96% EXCELLENT. Evidence: projects/kttech-cyber/tickets/302/ (10 device-tagged JSON + metrics-summary, formFactorAssertions.allMatched=true). Perf-honesty gate satisfied.",
   "224": {
     "title": "[HOME][P1] Home overhaul: fix lag, remove neon flicker, add 'Our Business' + China-ASEAN mission",
     "status": "InProgress",
@@ -401,5 +403,36 @@
     "final_tests": "91 files / 2454 tests pass",
     "evaluator_verdict": "GOOD 94/100 — APPROVED; numeric-drift items in SUMMARY/REVIEW prose corrected (iter-11/12/25 family); all code/tests/gates correct",
     "followups": "#235 (seizure-safe glitch for AC 2.1, Backlog)"
+  },
+  "302": {
+    "title": "[PERF] Lighthouse runtime verification: LCP/INP/CLS/TTI + score ≥90 on key routes (deferred from #253)",
+    "branch": "autodev-302-perf-lighthouse-verify (merged)",
+    "status": "Done",
+    "stage": "archived",
+    "pr": 336,
+    "mergeSha": "bb50149",
+    "mergedAt": "2026-07-02",
+    "commits": [
+      "8e7aeaa",
+      "d55ec00",
+      "96dc683",
+      "5b61896",
+      "21df900"
+    ],
+    "followUpIssues": [
+      333,
+      334,
+      335
+    ],
+    "evaluatorScore": "96% EXCELLENT",
+    "securityVerdict": "0 Critical / 0 High",
+    "ciChecks": "8/8 pass (Lighthouse Performance Audit pass with tightened error-level assertions)",
+    "acVerdict": {
+      "LCP_lt_2_5s": "[x] desktop / [~] mobile -> #334",
+      "INP_lt_200ms": "[~] lab-unsatisfiable (TBT=0 proxy) -> #333",
+      "TTI_lt_3_8s": "[x] all 10 routes",
+      "score_ge_90": "[x] desktop / [~] mobile -> #334",
+      "CLS_lt_0_1": "regression surfaced (Home/About) -> #335 (lighthouserc kept at warn)"
+    }
   }
 }
