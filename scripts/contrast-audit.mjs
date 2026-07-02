@@ -21,6 +21,13 @@
  *
  * Output: stdout table + summary. Pasted verbatim into COLOR_AUDIT.md.
  *
+ * Column note (Issue #328): the `color-decl` column carries the RESOLVED color
+ * value (var(--) tokens expanded via resolveValue(), rgba() composited) so that
+ * downstream consumers (e.g. contrast-286.spec.js) can regex-match the literal
+ * rgba form. The trailing `color-raw` column preserves the raw source
+ * declaration (e.g. `var(--accent-cyan-alpha-50)`) for dev debuggability; it is
+ * beyond column 3 and thus invisible to the spec's 3-column parser.
+ *
  * Usage: node scripts/contrast-audit.mjs
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs'
@@ -260,7 +267,8 @@ for (const file of listVueFiles()) {
     const row = {
       file: relative(ROOT, file),
       selector: rule.selector.split('\n').map(s => s.trim()).filter(Boolean).join(', '),
-      colorDecl: decls.color,
+      colorDecl: textResolved,
+      colorDeclRaw: decls.color,
       bgDecl: bgRaw === BG_PRIMARY ? '(page bg)' : bgRaw,
       resolvedFg: fgHex,
       resolvedBg: bgHex,
@@ -286,11 +294,11 @@ console.log(`# PASS: ${passRows.length}   FAIL: ${findings.length}`)
 console.log('')
 if (findings.length) {
   console.log('## FAILING pairs (below AA threshold):')
-  console.log('file                                        | selector                                          | color-decl              | resolved-fg | resolved-bg | ratio | thr | large')
-  console.log('--------------------------------------------+---------------------------------------------------+-------------------------+-------------+-------------+-------+-----+------')
+  console.log('file                                        | selector                                          | color-decl              | resolved-fg | resolved-bg | ratio | thr | large | color-raw')
+  console.log('--------------------------------------------+---------------------------------------------------+-------------------------+-------------+-------------+-------+-----+------|----------')
   for (const f of findings.sort((a, b) => a.ratio - b.ratio)) {
     console.log(
-      `${f.file.padEnd(43)}| ${f.selector.padEnd(50)}| ${f.colorDecl.padEnd(24)}| ${f.resolvedFg.padEnd(12)}| ${f.resolvedBg.padEnd(12)}| ${String(f.ratio).padEnd(6)}| ${String(f.threshold).padEnd(4)}| ${f.large}`
+      `${f.file.padEnd(43)}| ${f.selector.padEnd(50)}| ${f.colorDecl.padEnd(24)}| ${f.resolvedFg.padEnd(12)}| ${f.resolvedBg.padEnd(12)}| ${String(f.ratio).padEnd(6)}| ${String(f.threshold).padEnd(4)}| ${f.large} | ${f.colorDeclRaw}`
     )
   }
   console.log('')
