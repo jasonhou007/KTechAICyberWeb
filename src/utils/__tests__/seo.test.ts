@@ -411,6 +411,87 @@ describe('getStructuredData(route)', () => {
 })
 
 // ---------------------------------------------------------------------------
+// getStructuredData(route, t, locale) — JSON-LD locale consistency (AC #300)
+//
+// #260 follow-up: the JSON-LD WebPage schema must agree with document.title
+// (resolved from the same per-route i18n titleKey) and with the ACTIVE locale
+// (BCP-47 hyphen form, distinct from og:locale's underscore form). The legacy
+// no-arg contract (hardcoded name + zh-CN inLanguage) stays intact for backward
+// compat. tEn/tZh mirror useLanguage.t — dotted-key lookup, returns the key on
+// miss.
+// ---------------------------------------------------------------------------
+describe('getStructuredData(route, t, locale) — JSON-LD locale consistency (AC #300)', () => {
+  const en: Record<string, unknown> = enLocale as unknown as Record<string, unknown>
+  const tEn = (key: string): string => {
+    const val = key.split('.').reduce<any>((o, k) => (o == null ? undefined : o[k]), en)
+    return val == null ? key : String(val)
+  }
+  const zh: Record<string, unknown> = zhLocale as unknown as Record<string, unknown>
+  const tZh = (key: string): string => {
+    const val = key.split('.').reduce<any>((o, k) => (o == null ? undefined : o[k]), zh)
+    return val == null ? key : String(val)
+  }
+
+  const findWebPage = (data: ReturnType<typeof getStructuredData>) =>
+    data.find((e) => e['@type'] === 'WebPage') as Record<string, unknown>
+
+  it('WebPage.name resolves to the localized en title when t is provided (AC #300)', () => {
+    const webpage = findWebPage(getStructuredData(makeRoute('/about'), tEn as unknown as (k: string) => string, 'en'))
+    expect(webpage.name).toBe('About - KTech')
+  })
+
+  it('WebPage.name resolves to the localized zh title when t is provided (AC #300)', () => {
+    const webpage = findWebPage(getStructuredData(makeRoute('/about'), tZh as unknown as (k: string) => string, 'zh'))
+    expect(webpage.name).toBe('关于我们 - 开泰远景')
+  })
+
+  it('inLanguage reflects the active en locale in hyphen BCP-47 form (AC #300)', () => {
+    const webpage = findWebPage(getStructuredData(makeRoute('/about'), tEn as unknown as (k: string) => string, 'en'))
+    expect(webpage.inLanguage).toBe('en-US')
+  })
+
+  it('inLanguage reflects the active zh locale in hyphen BCP-47 form (AC #300)', () => {
+    const webpage = findWebPage(getStructuredData(makeRoute('/about'), tZh as unknown as (k: string) => string, 'zh'))
+    expect(webpage.inLanguage).toBe('zh-CN')
+  })
+
+  it('inLanguage uses hyphen form distinct from og:locale underscore form (AC #300)', () => {
+    const webpage = findWebPage(getStructuredData(makeRoute('/about'), tEn as unknown as (k: string) => string, 'en'))
+    expect(webpage.inLanguage).toBe('en-US')
+    expect(webpage.inLanguage).not.toBe('en_US')
+  })
+
+  // AC3: WebPage.name and document.title share a single source of truth — the
+  // per-route titleKey resolved via getRouteMeta(route, t). Both must equal the
+  // expected localized title across Home, About, and a Service route in BOTH
+  // locales.
+  it.each([
+    { path: '/', locale: 'en', t: 'tEn', expected: 'KTech - Fintech Innovation' },
+    { path: '/', locale: 'zh', t: 'tZh', expected: '开泰远景 - 金融科技创新' },
+    { path: '/about', locale: 'en', t: 'tEn', expected: 'About - KTech' },
+    { path: '/about', locale: 'zh', t: 'tZh', expected: '关于我们 - 开泰远景' },
+    { path: '/services/supply-chain-finance', locale: 'en', t: 'tEn', expected: 'Supply Chain Finance Solution - KTech' },
+    { path: '/services/supply-chain-finance', locale: 'zh', t: 'tZh', expected: '供应链金融解决方案 - 开泰远景' },
+  ])(
+    'WebPage.name matches the route\'s document.title source for $path in $locale (AC #300)',
+    ({ path, locale, t, expected }) => {
+      const translator = (t === 'tZh' ? tZh : tEn) as unknown as (k: string) => string
+      const route = makeRoute(path)
+      const webpage = findWebPage(getStructuredData(route, translator, locale))
+      // Single source of truth: WebPage.name === getRouteMeta(route, t).title
+      expect(webpage.name).toBe(getRouteMeta(route, translator).title)
+      expect(webpage.name).toBe(expected)
+    },
+  )
+
+  it('falls back to the legacy hardcoded name + zh-CN inLanguage when t and locale are omitted (backward compat, AC #300)', () => {
+    const webpage = findWebPage(getStructuredData(makeRoute('/about')))
+    expect(webpage.name).toBe('关于我们 - KTech')
+    expect(webpage.inLanguage).toBe('zh-CN')
+  })
+})
+
+// ---------------------------------------------------------------------------
 // getSitemapRoutes()
 // ---------------------------------------------------------------------------
 describe('getSitemapRoutes()', () => {

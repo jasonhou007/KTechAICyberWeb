@@ -101,7 +101,14 @@ export default {
     // — every route gets its own localized <title> instead of sharing the
     // static index.html value).
     const currentMeta = computed(() => getRouteMeta(route, t))
-    const structuredData = computed(() => getStructuredData(route))
+    // #300: pass the live translator + active locale so the JSON-LD WebPage
+    // schema agrees with document.title (same per-route titleKey) and reflects
+    // the active locale in BCP-47 hyphen form. Recomputes on route OR locale
+    // change (both reactive). currentLanguage?.value — the focused theme-lock
+    // tests mock useLanguage without currentLanguage; reading undefined falls
+    // through to getStructuredData's optional-locale (zh-CN) backward-compat
+    // path, so those mocks stay green.
+    const structuredData = computed(() => getStructuredData(route, t, currentLanguage?.value))
 
     // #239 / #260: og:locale follows the ACTIVE language, not a static floor.
     // Default is English (en_US); Chinese visitors get zh_CN. This is what

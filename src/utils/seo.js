@@ -179,9 +179,17 @@ export function getRouteMeta(route, t) {
 /**
  * Get JSON-LD structured data for a page
  * @param {Object} route - Vue Router route object
+ * @param {Function} [t] - optional i18n translator (useLanguage.t). When
+ *   provided, the WebPage.name resolves to the localized per-route title (the
+ *   same docTitle / service-title key document.title uses, so JSON-LD and the
+ *   <title> tag agree). When omitted, the legacy hardcoded name is used.
+ * @param {string} [locale] - optional 'en' | 'zh'. When provided, inLanguage
+ *   reflects the active locale in BCP-47 hyphen form ('en-US' / 'zh-CN'). When
+ *   omitted, defaults to 'zh-CN' (the pre-#300 behavior, kept for backward
+ *   compat with no-`t` callers).
  * @returns {Array} Array of structured data objects
  */
-export function getStructuredData(route) {
+export function getStructuredData(route, t, locale) {
   const path = route.path || '/'
   const fullUrl = `${SITE_URL}${path}`
 
@@ -256,9 +264,9 @@ export function getStructuredData(route) {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     url: fullUrl,
-    name: getRouteMeta(route).title,
+    name: getRouteMeta(route, t).title,
     description: getRouteMeta(route).description,
-    inLanguage: 'zh-CN',
+    inLanguage: locale === 'en' ? 'en-US' : 'zh-CN',
     about: {
       '@type': 'Thing',
       name: '金融科技',
