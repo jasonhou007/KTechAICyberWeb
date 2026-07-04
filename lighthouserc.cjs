@@ -1,8 +1,31 @@
 /**
  * @file lighthouserc.cjs
- * @description Lighthouse CI configuration for the perf regression gate.
- * Originated in #253 (AC #11 scaffold, all-warn thresholds); tightened in
- * #302 to error-level per the measured runtime numbers.
+ * @description Lighthouse CI configuration for the DESKTOP perf regression
+ * gate. Originated in #253 (AC #11 scaffold, all-warn thresholds); tightened
+ * in #302 to error-level per the measured runtime numbers.
+ *
+ * MOBILE GATE LIVES ELSEWHERE (#342):
+ * This config gates the DESKTOP form factor only (collect.settings.preset =
+ * 'desktop'). The MOBILE counterpart — same URLs, same numberOfRuns, same
+ * error-level assertions, but preset='mobile' — lives in
+ * `lighthouserc.mobile.cjs`, added by #342. The two configs are wired to two
+ * separate CI jobs in .github/workflows/lighthouse-ci.yml (`lighthouse` for
+ * desktop, `lighthouse-mobile` for mobile) so a regression on either form
+ * factor fails the PR.
+ *
+ * The mobile gate was deferred from #302 (mobile LCP missed AC on /about,
+ * /contact, /news) and again from #340 (which shipped the structural
+ * mobile-LCP fixes — defer render-blocking global CSS bundle via preload +
+ * async-onload, move cyber.css to an async chunk, expand the inline
+ * critical-CSS seed, preload the /news first-card image). #340 did NOT
+ * re-enable the mobile preset because #344 had not yet landed: #340's
+ * defer-entry-CSS optimization was a no-op in the CI audit build (a regex
+ * bug in the inline-script rewriting index.html matched the production
+ * /KTechAICyberWeb/ base but NOT the audit base=/, so the audit build kept
+ * the render-blocking CSS bundle and the mobile LCP did not move in CI).
+ * #344 fixed the regex; with #344 merged (PR #345) the audit build reflects
+ * the deferred-CSS optimization, so the mobile preset's error level now
+ * reflects the real end-user experience and was turned on by #342.
  *
  * #302 TIGHTENING (measured, not assumed):
  * The capture harness (scripts/302-lighthouse-capture.mjs) ran Lighthouse
@@ -74,10 +97,13 @@ module.exports = {
       numberOfRuns: 3,
       // Settings passed through to each Lighthouse run. Desktop form factor +
       // no throttling mirrors the dev-machine profile the FPS sampler targets.
-      // Mobile/4G throttling verification was captured separately in #302 (the
-      // perf preset) but the CI gate runs desktop-only for stability — mobile
-      // LCP/CLS regressions surfaced in #302 are tracked as follow-ups, and
-      // adding mobile to CI would fail it on the known /about + /contact gaps.
+      // The MOBILE preset (4G throttling, formFactor=mobile) lives in a
+      // separate config — lighthouserc.mobile.cjs, added by #342 — wired to
+      // its own CI job (lighthouse-mobile). Mobile was previously tracked as
+      // a follow-up because the mobile LCP missed AC on /about, /contact,
+      // /news (#302 measurement); #340 fixed the structural causes and #344
+      // fixed the regex bug that had kept #340's defer-entry-CSS optimization
+      // from landing in the CI audit build, so the mobile gate is now live.
       settings: {
         preset: 'desktop',
       },

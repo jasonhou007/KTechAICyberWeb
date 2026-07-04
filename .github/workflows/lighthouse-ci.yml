@@ -74,3 +74,51 @@ jobs:
           configPath: ./lighthouserc.cjs
           uploadArtifacts: true
           temporaryPublicStorageOutput: true
+
+  # Mobile Lighthouse gate (#342). Mirrors the desktop `lighthouse` job above
+  # but uses a SEPARATE config (lighthouserc.mobile.cjs, preset='mobile'),
+  # a SEPARATE build output dir (dist-audit-mob), and a SEPARATE preview port
+  # (4174) so the two jobs can run concurrently without racing on the same
+  # port or outDir. The mobile gate was deferred from #302 (mobile LCP missed
+  # AC on /about, /contact, /news) and again from #340 (which shipped the
+  # structural mobile-LCP fixes but could not re-enable the mobile CI preset
+  # until #344 made the defer-entry-CSS optimization land in the audit build).
+  # With #344 merged (PR #345), the audit build reflects the deferred-CSS
+  # optimization, so the mobile preset's error level reflects the real
+  # end-user experience.
+  lighthouse-mobile:
+    name: Lighthouse Mobile Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Build a ROOT-base audit variant for Lighthouse (same rationale as the
+      # desktop job above: production /KTechAICyberWeb/ base breaks local
+      # asset loading -> NO_FCP). Separate outDir (dist-audit-mob) so the two
+      # jobs do not collide if they share a workspace cache.
+      - name: Build (audit variant, base=/)
+        run: npm run build -- --base=/ --outDir dist-audit-mob
+
+      - name: Start preview server
+        run: |
+          npx serve -s dist-audit-mob -l 4174 &
+          echo "PREVIEW_URL=http://localhost:4174/" >> $GITHUB_ENV
+          # Wait for the server to be ready before Lighthouse hits it.
+          npx wait-on tcp:4174 -t 30000
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: ./lighthouserc.mobile.cjs
+          uploadArtifacts: true
+          temporaryPublicStorageOutput: true
