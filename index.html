@@ -126,6 +126,10 @@
     }
     #app{min-height:100vh}
     h1,h2,h3{font-family:var(--font-display);letter-spacing:.05em}
+    /* #346: /contact LCP element is <h2 class="section-title"> — seed its
+       font so it paints in Orbitron from the initial HTML document without
+       waiting on the deferred route-chunk CSS. */
+    .section-title{font-family:var(--font-display);font-weight:700;letter-spacing:.05em}
   </style>
 
   <!-- JSON-LD Structured Data -->
