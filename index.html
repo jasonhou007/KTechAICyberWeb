@@ -72,14 +72,60 @@
         imagesrcset="/images/about/about-who-we-are-400w.webp 400w, /images/about/about-who-we-are-800w.webp 800w, /images/about/about-who-we-are.webp 1200w"
         imagesizes="(max-width: 600px) 100vw, 50vw">
 
+  <!-- #340 perf: preload the /news first-card LCP image. Lighthouse measured
+       this image's Load Delay at 3154ms (83% of /news LCP) because the
+       NewsCard <img> is rendered by CyberImage only AFTER the SPA parses
+       ~100KB JS + hydrates — the browser cannot discover it from the initial
+       HTML. A <link rel=preload as=image> in <head> lets the parser start the
+       fetch on first paint, before the JS bundle even arrives. Mirrors the
+       /about hero preload above (#334 Fix D).
+
+       The srcset/sizes literals are DERIVED from src/data/news.json[0].image
+       (the first news card = the LCP candidate, NewsList sets
+       lcp-candidate on index===0) + src/components/NewsCard.vue
+       NATIVE_WIDTH_MAP. The first card image is the iso27001 webp (a real
+       258x258 raster, NOT an SVG), so NewsCard emits a single-descriptor
+       srcset at its intrinsic width. The unit test at
+       tests/unit/340-perf-news-image-preload.spec.js re-derives these
+       literals from source and asserts they match this preload, so any drift
+       (a new first-card image, a NATIVE_WIDTH_MAP edit) without updating
+       this line fails the suite. -->
+  <link rel="preload" as="image" fetchpriority="high"
+        imagesrcset="/images/news/news-iso27001-official.webp 258w"
+        imagesizes="(max-width: 600px) 100vw, 258px">
+
   <title>开泰科技 - KTech Fintech | 金融科技创新</title>
   <style>
-    /* Critical-path no-FOUC block (#188): paints the dark background before
-       the JS bundle hydrates. The pre-Vue skeleton selectors that used to
-       live here were dead — Vue mounts #app and renders its own components —
-       and have been purged. Only the background-paint rule is kept. */
-    :root{--bg:#0a0a0a;--cyan:#00ffcc}
-    body{background:var(--bg)}
+    /* Critical-path no-FOUC + minimal-layout-seed (#188 kept only the dark
+       background; #340 Step 2 expanded to typography + container layout).
+       Under the 1500-byte css-purge budget.
+
+       #340 review(perf): a former `main{max-width:1400px;margin:0 auto}` rule
+       is REMOVED — it caused a 0.158 CLS hit on /news. `.app` is a flex
+       COLUMN container (App.vue scoped); `margin:auto` on a flex child
+       ABSORBS free space and defeats `flex-grow`, so the seed made the outer
+       <main class="main-content"> shrink-to-fit instead of stretching
+       full-width as `.main-content{flex:1}` intends. When /news's onMounted
+       setTimeout flipped isLoading and the wider news cards rendered, the
+       outer <main>'s width jumped 922 -> 1350px. Per-route containers
+       (`.news-page`, etc.) carry their own `max-width;margin:0 auto`. */
+    :root{
+      --bg:#0a0a0a; --cyan:#00ffcc;
+      --font-display:'Orbitron',system-ui,sans-serif;
+      --font-body:'Rajdhani',system-ui,sans-serif;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{min-height:100%}
+    body{
+      background:var(--bg);
+      color:#e0e0e0;
+      font-family:var(--font-body);
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+    }
+    #app{min-height:100vh}
+    h1,h2,h3{font-family:var(--font-display);letter-spacing:.05em}
   </style>
 
   <!-- JSON-LD Structured Data -->

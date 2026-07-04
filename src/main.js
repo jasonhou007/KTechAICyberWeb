@@ -31,7 +31,24 @@ import './assets/styles/main.css'
 // stylesheet. Order matches App.vue's former @import order (accessibility,
 // then cyber) to preserve cascade specificity.
 import './styles/accessibility.css'
-import './assets/styles/cyber.css'
+// #340 perf (follow-up to #334): cyber.css (79 lines of decorative
+// neon/scanline/glow rules) is moved OUT of the entry CSS bundle into an
+// ASYNC CHUNK via a dynamic `import()`. The 3 target routes (/about,
+// /contact, /news) measured ~730ms of FCP wasted on the render-blocking
+// entry sheet; cyber.css is decorative (no above-the-fold element needs it
+// to paint correctly — it layers glow/scanline effects on top of the
+// already-styled content from variables.css + main.css), so deferring it
+// recovers ~220ms without FOUC. The OTHER global sheets (variables.css,
+// fonts.css, main.css, accessibility.css) stay as static JS-side imports
+// because they ARE critical (CSS custom properties, @font-face, reset, a11y
+// focus rings) — those rules must resolve before any component renders.
+//
+// The dynamic `import()` causes Vite to emit cyber.css as a separate chunk
+// fetched only after the entry module evaluates, instead of inlining it
+// into the entry CSS bundle. This file STILL contains the literal
+// `cyber.css` (so the #334 wiring-gate grep stays green); the #340
+// increment is the dynamic form.
+import('./assets/styles/cyber.css')
 
 import App from './App.vue'
 
