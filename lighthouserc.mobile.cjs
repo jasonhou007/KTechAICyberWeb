@@ -145,16 +145,36 @@ module.exports = {
       // passes them on mobile); TTI stays at warn (out of #346 AC#3 scope).
       // When #348 closes the architectural floor (mobile LCP <2500ms on /about,
       // /contact, /news in CI), re-tighten largest-contentful-paint to error.
+      //
+      // #348 RE-TIGHTEN (SSG landed): vite-ssg pre-renders the 5 marketing
+      // routes at build time so first-paint HTML+CSS lands in the initial
+      // document, eliminating the SPA hydration gate. Post-#348 mobile
+      // capture (preset=perf, formFactor asserted mobile, arm64 node, single
+      // run):
+      //   route        LCP     score
+      //   /about       1987ms   97    <- was 2894ms / 92
+      //   /contact     1447ms  100    <- was 2861ms / 93
+      //   /news        1975ms   93    <- was 3479ms / 88
+      //   / (witness)  1436ms  100    <- was 2254ms / 96
+      //   /services    1960ms   97    <- was 2767ms / 94  (witness, closed)
+      // ALL 5 routes <2500ms with comfortable headroom (the slowest is
+      // /about at 1987ms — 513ms under the gate). The architectural floor is
+      // closed; largest-contentful-paint moves warn -> error (the AC1
+      // gate that #346 explicitly deferred). categories:performance stays
+      // at error (unchanged from #346). TBT/CLS unchanged. TTI stays warn
+      // (still out of AC scope; would be a separate ticket).
       assertions: {
         // Performance score (0..1) — ERROR at 0.9. AC#2 MET post-#346: /about
         // climbed 84 -> 92, /contact 93, /news 88 (close but /about holds the
         // gate at >=90 going forward). Re-tightened from warn in #346 commit 4.
         'categories:performance': ['error', { minScore: 0.9 }],
-        // LCP — WARN at 2500ms. AC#1 NOT MET post-#346: /about 2894,
-        // /contact 2861, /news 3479 all miss; /services witness also misses
-        // (2767) proving architectural floor. Stays warn pending #348 (SSG
-        // investigation). Re-tighten to error once #348 lands.
-        'largest-contentful-paint': ['warn', { maxNumericValue: 2500 }],
+        // LCP — ERROR at 2500ms. AC#1 MET post-#348 (SSG): all 5 routes now
+        // pass with >=513ms headroom (/about 1987ms is the slowest). Was warn
+        // pending #348 (architectural floor); re-tightened to error in #348
+        // because the SSG render eliminated the hydration gate that set the
+        // ~2800ms floor. Numbers trace to
+        // projects/kttech-cyber/tickets/348/evidence/metrics-summary-after.json.
+        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
         // TBT — error at 200ms. All 5 routes pass on mobile (max 1.2ms).
         'total-blocking-time': ['error', { maxNumericValue: 200 }],
         // TTI — WARN at 3800ms. Out of #346 AC#3 scope (no AC threshold was

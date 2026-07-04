@@ -97,12 +97,22 @@ describe.skipIf(!existsSync(ASSETS_DIR))('#340 Step 1 — built entry CSS chunk 
   // Lazy: resolve the entry chunk name inside each `it` so module-eval does
   // not scandir a path that may be skipped (mirrors css-purge.spec.js
   // findEntryCss() pattern).
+  //
+  // #348 update: vite-ssg renames the entry CSS chunk from `index-*.css` to
+  // `app-*.css`. Accept EITHER name so the gate stays valid across SSG and
+  // non-SSG builds. Prefer `index-` for backward compat (a future revert to
+  // vite build needs no test edit); fall back to `app-` for the SSG build.
   function getEntryCssName() {
-    return readdirSync(ASSETS_DIR).find((f) => /^index-.*\.css$/.test(f)) || null
+    const files = readdirSync(ASSETS_DIR)
+    return (
+      files.find((f) => /^index-.*\.css$/.test(f)) ||
+      files.find((f) => /^app-.*\.css$/.test(f)) ||
+      null
+    )
   }
 
   it('entry CSS chunk exists in dist/assets (did the build run?)', () => {
-    expect(getEntryCssName(), 'expected an index-*.css chunk in dist/assets').not.toBeNull()
+    expect(getEntryCssName(), 'expected an index-*.css or app-*.css chunk in dist/assets').not.toBeNull()
   })
 
   it('entry CSS chunk does NOT contain the cyber.css `[data-theme-initializing]` rule', () => {

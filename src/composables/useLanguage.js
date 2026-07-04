@@ -26,7 +26,16 @@ function getNestedValue(obj, path) {
 // Initialize language from localStorage or default.
 // Exported at module scope so it can be called directly (e.g. App.vue onMounted)
 // without first invoking useLanguage().
+// #348 SSG: guard `localStorage` reads with typeof so the function is safe to
+// call during vite-ssg's build-time SSR pass (where localStorage is undefined).
+// On the server we fall through to DEFAULT_LANGUAGE; on the client App.vue's
+// onMounted re-invokes this AFTER hydration, so the user's saved preference
+// still wins at runtime.
 export function initLanguage() {
+  if (typeof localStorage === 'undefined') {
+    currentLanguage.value = DEFAULT_LANGUAGE
+    return
+  }
   const saved = localStorage.getItem(LANGUAGE_KEY)
   if (saved && (saved === 'en' || saved === 'zh')) {
     currentLanguage.value = saved
@@ -40,7 +49,12 @@ export function useLanguage() {
   function setLanguage(lang) {
     if (lang === 'en' || lang === 'zh') {
       currentLanguage.value = lang
-      localStorage.setItem(LANGUAGE_KEY, lang)
+      // #348 SSG: guard the localStorage write so setLanguage is SSR-safe.
+      // The server render path never calls setLanguage (no LanguageSwitcher
+      // interaction during SSG), but the guard keeps the function total.
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem(LANGUAGE_KEY, lang)
+      }
     }
   }
 

@@ -78,19 +78,23 @@ export default {
     // persists language. The lock below is unconditional and reads nothing
     // from the store, so the DOM is always dark regardless of any stale theme
     // value left in a user's localStorage.
-    document.documentElement.setAttribute('data-theme', 'dark')
-
-    // Initialize language on app mount. Translations are bundled at module
-    // scope in useLanguage.js (static imports of en.json/zh.json), so they
-    // are already available — there is nothing to fetch/load at runtime.
-    // (An earlier fetch-based version exposed loadCurrentTranslations() here;
-    // it was removed when translations became bundled, and the dangling
-    // destructure below threw "loadCurrentTranslations is not a function"
-    // on every page load — non-fatal for static text, but it aborted the
-    // microtask queue and broke the PositionList page's async positions
-    // import so no cards rendered. Removing the dead call lets the page
-    // finish loading.)
+    // #348 SSG: the setAttribute lives inside onMounted (NOT the setup() body)
+    // because vite-ssg runs setup() on the BUILD-SERVER where `document` is
+    // undefined. onMounted is skipped during SSR (only the client fires it),
+    // so the theme lock applies on hydration. The SSR HTML is dark regardless
+    // because index.html seeds <html data-theme="dark"> (no FOUC).
     onMounted(() => {
+      document.documentElement.setAttribute('data-theme', 'dark')
+      // Initialize language on app mount. Translations are bundled at module
+      // scope in useLanguage.js (static imports of en.json/zh.json), so they
+      // are already available — there is nothing to fetch/load at runtime.
+      // (An earlier fetch-based version exposed loadCurrentTranslations() here;
+      // it was removed when translations became bundled, and the dangling
+      // destructure below threw "loadCurrentTranslations is not a function"
+      // on every page load — non-fatal for static text, but it aborted the
+      // microtask queue and broke the PositionList page's async positions
+      // import so no cards rendered. Removing the dead call lets the page
+      // finish loading.)
       initLanguage()
     })
 

@@ -61,20 +61,21 @@ describe.skipIf(!existsSync(DIST_HTML_PATH))('#340 Step 2 — built dist/index.h
     expect(html).toMatch(/<link[^>]*rel=["']preload["'][^>]*as=["']style["'][^>]*>/)
   })
 
-  it('the preload link points at the hashed entry CSS chunk (assets/index-*.css)', () => {
+  it('the preload link points at the hashed entry CSS chunk (assets/index-*.css or app-*.css)', () => {
     // The preload must target the SAME hashed chunk Vite emitted as the
     // original render-blocking <link>. A preload to a different URL would be
-    // a wasted fetch. assets/index-HASH.css is the Vite-emitted entry chunk
-    // under the base subpath. Match a single <link> element that has BOTH
-    // rel="preload" AND href=".../assets/index-*.css" (in any order) — the
-    // regex captures one link element and asserts both attrs are present.
+    // a wasted fetch. assets/index-HASH.css (vite build) or assets/app-HASH.css
+    // (vite-ssg build, see #348) is the Vite-emitted entry chunk under the
+    // base subpath. Match a single <link> element that has BOTH rel="preload"
+    // AND href=".../assets/(index|app)-*.css" (in any order) — the regex
+    // captures one link element and asserts both attrs are present.
     const linkMatches = html.match(/<link\b[^>]*>/gi) || []
     const preloadEntryLink = linkMatches.find((l) =>
-      /rel=["']preload["']/i.test(l) && /href=["'][^"']*assets\/index-[^"']*\.css["']/i.test(l),
+      /rel=["']preload["']/i.test(l) && /href=["'][^"']*assets\/(?:index|app)-[^"']*\.css["']/i.test(l),
     )
     expect(
       preloadEntryLink,
-      'no <link rel="preload" href=".../assets/index-*.css"> found in dist/index.html — the preload does not target the entry CSS chunk',
+      'no <link rel="preload" href=".../assets/(index|app)-*.css"> found in dist/index.html — the preload does not target the entry CSS chunk',
     ).toBeDefined()
   })
 
@@ -91,14 +92,24 @@ describe.skipIf(!existsSync(DIST_HTML_PATH))('#340 Step 2 — built dist/index.h
     // disabled. Without it, no-JS users would see an unstyled page (the
     // preload never fires the onload swap because JS is off). Assert the
     // fallback link is INSIDE <noscript> and points at the same hashed chunk.
-    expect(html).toMatch(/<noscript>\s*<link[^>]*rel=["']stylesheet["'][^>]*assets\/index-[^"']*\.css[^>]*>\s*<\/noscript>/)
+    // #348: vite-ssg names the entry `app-*.css`; accept both names.
+    expect(html).toMatch(/<noscript>\s*<link[^>]*rel=["']stylesheet["'][^>]*assets\/(?:index|app)-[^"']*\.css[^>]*>\s*<\/noscript>/)
   })
 
-  it('dist/index.html does NOT contain a render-blocking stylesheet <link> outside <noscript>', () => {
-    // After the rewrite, the ONLY standalone `rel="stylesheet"` link in the
-    // built HTML must be the one inside <noscript>. A render-blocking
-    // stylesheet <link> in the main flow would mean the rewrite failed / the
-    // original Vite injection is still present.
+  it('dist/index.html does NOT contain a render-blocking ENTRY stylesheet <link> outside <noscript>', () => {
+    // After the rewrite, the ENTRY CSS chunk (index-*.css for vite build or
+    // app-*.css for vite-ssg build, see #348) must NOT appear as a standalone
+    // `rel="stylesheet"` link in the main flow. A render-blocking entry
+    // stylesheet <link> would mean the rewrite failed / the original Vite
+    // injection is still present.
+    //
+    // #348 update: under vite-ssg, the route's OWN async CSS chunk
+    // (e.g. About-*.css, Contact-*.css) is injected as a `<link
+    // rel="stylesheet">` next to its modulepreload — this is Vite's standard
+    // async-chunk behavior and is NOT the #340 target. The #340 AC was
+    // "defer the entry CSS bundle" (the global sheet that combines variables
+    // + cyber + main + scoped App styles). Route-async CSS chunks are a
+    // separate (and smaller) optimization, deferred to a follow-up.
     //
     // CAUTION: the preload link's onload HANDLER contains the literal text
     // `rel='stylesheet'` (inside the onload="..." attribute value), so a
@@ -107,7 +118,8 @@ describe.skipIf(!existsSync(DIST_HTML_PATH))('#340 Step 2 — built dist/index.h
     // The robust check is: enumerate every <link> element, classify each by
     // its TOP-LEVEL rel attribute (the rel= that appears as a link attribute,
     // NOT inside an onload="..." handler), and assert none outside <noscript>
-    // has rel="stylesheet" as its primary rel token.
+    // has rel="stylesheet" as its primary rel token AND points at the ENTRY
+    // chunk (assets/(index|app)-*.css).
     const stripped = html.replace(/<noscript>[\s\S]*?<\/noscript>/gi, '')
     const linkMatches = stripped.match(/<link\b[^>]*>/gi) || []
     // For each link, extract the rel attribute value. The regex
@@ -120,11 +132,16 @@ describe.skipIf(!existsSync(DIST_HTML_PATH))('#340 Step 2 — built dist/index.h
       const relMatch = l.match(/\brel=["']([^"']*)["']/i)
       if (!relMatch) return false
       const rels = relMatch[1].split(/\s+/)
-      return rels.includes('stylesheet')
+      if (!rels.includes('stylesheet')) return false
+      // Only flag ENTRY chunks (index-*.css or app-*.css). Route-async CSS
+      // chunks (About-*.css, Contact-*.css, SelfDrivingDemo-*.css, etc.) are
+      // allowed — Vite injects them alongside their JS modulepreload and they
+      // are out of scope for #340.
+      return /href=["'][^"']*\/assets\/(?:index|app)-[^"']*\.css["']/i.test(l)
     })
     expect(
       blockingLinks,
-      'a render-blocking <link rel="stylesheet"> remains in dist/index.html outside <noscript> — the defer rewrite did not apply. Found: ' +
+      'a render-blocking <link rel="stylesheet"> for the ENTRY chunk remains in dist/index.html outside <noscript> — the defer rewrite did not apply. Found: ' +
         JSON.stringify(blockingLinks),
     ).toEqual([])
   })

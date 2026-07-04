@@ -1,28 +1,45 @@
 // tests/unit/346-perf-mobile-gate-retightened.spec.js
 //
-// Gate test for #346 commit 4 (post-revert honest-partial re-tightening).
+// Gate test for #346 commit 4 (post-revert honest-partial re-tightening),
+// reconciled post-#348 (SSG closed the architectural LCP floor).
 //
 // AC#3 of #346 says: "Re-tighten lighthouserc.mobile.cjs assertions for
 // largest-contentful-paint AND categories:performance from warn back to error
 // once #1+#2 hold."
 //
-// Post-#346 measurement:
+// Post-#346 measurement (the deferred state):
 //   - AC#1 (LCP <2500ms on /about,/contact,/news) — NOT MET. Architectural
-//     floor (~2800ms) exists even on the witness /services route (2767ms);
-//     bottleneck is SPA hydration on 4G throttling, not route-specific.
-//   - AC#2 (/about score >=90) — MET (92, up from baseline 84). All 3 AC
-//     routes now score >=88 with /about at 92.
+//     floor (~2800ms) existed even on the witness /services route (2767ms);
+//     bottleneck was SPA hydration on 4G throttling, not route-specific.
+//   - AC#2 (/about score >=90) — MET (92, up from baseline 84).
 //
-// Honest-partial re-tightening decision (do NOT auto-fail CI on an
-// architectural floor; do hold the met-AC going forward):
-//   - categories:performance   warn -> error  (AC#2 met; #348 covers LCP)
+// #346 honest-partial re-tightening decision (held the met-AC at error;
+// kept the un-met-AC at warn):
+//   - categories:performance   warn -> error  (AC#2 met)
 //   - largest-contentful-paint STAYS warn     (AC#1 not met; tracked by #348)
 //   - interactive (TTI)        STAYS warn     (out of AC#3 scope)
 //   - total-blocking-time      STAYS error    (unchanged)
 //   - cumulative-layout-shift  STAYS error    (unchanged)
 //
+// #348 UPDATE (reconcile): #348 closed the architectural floor via build-time
+// SSG (vite-ssg). Post-#348 mobile capture (preset=perf, formFactor asserted
+// mobile, arm64 node, single run):
+//   route        LCP     score
+//   /about       1987ms   97    <- was 2894ms / 92
+//   /contact     1447ms  100    <- was 2861ms / 93
+//   /news        1975ms   93    <- was 3479ms / 88
+//   / (witness)  1436ms  100    <- was 2254ms / 96
+//   /services    1960ms   97    <- was 2767ms / 94  (witness, closed)
+// ALL 5 routes <2500ms with >=513ms headroom. The deferred-AC#1 hold is no
+// longer correct — largest-contentful-paint moves warn -> error, completing
+// #346's AC#3. The other assertions are unchanged:
+//   - categories:performance   STAYS error (AC#2 still met)
+//   - interactive (TTI)        STAYS warn  (still out of scope)
+//   - total-blocking-time      STAYS error
+//   - cumulative-layout-shift  STAYS error
+//
 // This test reads lighthouserc.mobile.cjs source, strips comments, and asserts
-// the final assert block matches this honest-partial re-tightened state.
+// the final assert block matches the post-#348 reconciled state.
 
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
@@ -42,25 +59,28 @@ function stripComments(s) {
 
 const code = stripComments(source)
 
-describe('#346 mobile-gate honest-partial re-tightening (commit 4, post-revert)', () => {
-  it('re-tightens categories:performance from warn to error (AC#2 met)', () => {
+describe('#346 mobile-gate re-tightening (reconciled post-#348)', () => {
+  it('keeps categories:performance at error (AC#2 met, set in #346)', () => {
     // Must match the literal `['error', { minScore: 0.9 }]` form, not warn.
     expect(code).toMatch(
       /['"]categories:performance['"]:\s*\[\s*['"]error['"]\s*,\s*\{\s*minScore:\s*0\.9\s*\}\s*\]/
     )
-    // And must NOT still be warn.
+    // And must NOT be warn.
     expect(code).not.toMatch(
       /['"]categories:performance['"]:\s*\[\s*['"]warn['"]/
     )
   })
 
-  it('keeps largest-contentful-paint at warn (AC#1 not met; tracked by follow-up #348)', () => {
+  it('re-tightens largest-contentful-paint warn -> error post-#348 (AC#1 closed)', () => {
+    // #348 closed the architectural floor — all 5 routes pass with >=513ms
+    // headroom (slowest = /about at 1987ms). The deferred-AC#1 hold from #346
+    // is no longer correct; the gate moves to error to complete #346's AC#3.
     expect(code).toMatch(
-      /['"]largest-contentful-paint['"]:\s*\[\s*['"]warn['"]\s*,\s*\{\s*maxNumericValue:\s*2500\s*\}\s*\]/
+      /['"]largest-contentful-paint['"]:\s*\[\s*['"]error['"]\s*,\s*\{\s*maxNumericValue:\s*2500\s*\}\s*\]/
     )
-    // And must NOT have been re-tightened to error.
+    // And must NOT still be warn.
     expect(code).not.toMatch(
-      /['"]largest-contentful-paint['"]:\s*\[\s*['"]error['"]/
+      /['"]largest-contentful-paint['"]:\s*\[\s*['"]warn['"]/
     )
   })
 
@@ -82,17 +102,25 @@ describe('#346 mobile-gate honest-partial re-tightening (commit 4, post-revert)'
     )
   })
 
-  it('comment block references follow-up issue #348', () => {
+  it('comment block references #348 (the SSG follow-up that closed the floor)', () => {
     // The full source (comments included) must reference the follow-up issue
-    // number so the deferred-AC trail is discoverable from the config itself.
+    // number so the deferred-AC -> closed-AC trail is discoverable from the
+    // config itself.
     expect(source).toContain('#348')
   })
 
-  it('comment block cites the post-#346 measured numbers (LCP floor evidence)', () => {
-    // The honest-partial justification must cite the architectural-floor
-    // evidence (witness /services LCP) so future readers see WHY LCP stays
-    // warn while performance moved to error.
+  it('comment block cites the post-#346 architectural-floor evidence (2767ms witness)', () => {
+    // The historical justification for WHY #346 deferred LCP must remain in
+    // the comments — the witness /services 2767ms LCP — so future readers see
+    // the architectural-floor diagnosis that #348 later disproved by closing.
     expect(source).toMatch(/2767/)
     expect(source).toMatch(/2894|2861|3479/)
+  })
+
+  it('comment block cites the post-#348 measured numbers (floor-closed evidence)', () => {
+    // The reconciliation justification must cite the post-#348 numbers so the
+    // warn -> error move is auditable against measured evidence, not a guessed
+    // threshold relaxation.
+    expect(source).toMatch(/1987|1447|1975|1436|1960/)
   })
 })

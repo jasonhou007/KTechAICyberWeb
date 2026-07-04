@@ -1,5 +1,13 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<!-- #348 SSG: data-theme="dark" is seeded on <html> so the build-server-
+     rendered HTML (vite-ssg) AND the no-JS fallback paint dark immediately.
+     App.vue's onMounted re-applies the same value on hydration (the lock is
+     unconditional post-#239), so the SSR->hydrate transition is theme-stable
+     (no FOUC). Without this seed, vite-ssg would emit <html lang="zh-CN">
+     with no data-theme and the SSR HTML would paint unstyled until the
+     client chunk hydrates and App.vue's onMounted fires — defeating #348's
+     "first paint in the document" SSG win. -->
+<html lang="zh-CN" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
