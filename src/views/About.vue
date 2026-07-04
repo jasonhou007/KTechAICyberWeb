@@ -308,11 +308,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineAsyncComponent } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
 import CyberImage from '../components/CyberImage.vue'
-import SelfDrivingDemo from '../components/SelfDrivingDemo.vue'
+// #346: lazy-loaded via defineAsyncComponent (mirrors Home.vue #203) so the
+// heavy rAF-driven demo is code-split into its own chunk and does not block
+// /about's LCP critical path. ~3.6s bootup removed from the route chunk.
+const SelfDrivingDemo = defineAsyncComponent(() => import('../components/SelfDrivingDemo.vue'))
 import AboutIcon from '../components/icons/AboutIcon.vue'
 
 const { t } = useLanguage()

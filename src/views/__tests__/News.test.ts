@@ -355,23 +355,25 @@ describe('News.vue', () => {
   })
 
   describe('Data Loading', () => {
-    it('starts with loading state true', () => {
+    // #346: articles + isLoading initialize synchronously (news.json is a
+    // static import); the legacy 300ms setTimeout has been removed from the
+    // LCP critical path. Tests updated to assert the new synchronous-load
+    // semantics.
+    it('starts with loading state false (synchronous init — #346)', () => {
       wrapper = mount(News, {
         global: {
           components: { RouterLink: RouterLinkStub },
         },
       })
-      expect(wrapper.vm.isLoading).toBe(true)
+      expect(wrapper.vm.isLoading).toBe(false)
     })
 
-    it('loads articles after mounted delay', async () => {
+    it('loads articles synchronously on mount (no delay — #346)', async () => {
       wrapper = mount(News, {
         global: {
           components: { RouterLink: RouterLinkStub },
         },
       })
-      expect(wrapper.vm.articles.length).toBe(0)
-      await new Promise(resolve => setTimeout(resolve, 350))
       expect(wrapper.vm.articles.length).toBeGreaterThan(0)
     })
 
@@ -381,7 +383,7 @@ describe('News.vue', () => {
           components: { RouterLink: RouterLinkStub },
         },
       })
-      await new Promise(resolve => setTimeout(resolve, 350))
+      await wrapper.vm.$nextTick()
       expect(wrapper.vm.isLoading).toBe(false)
     })
 
@@ -392,10 +394,7 @@ describe('News.vue', () => {
         },
       })
       const newsList = wrapper.findComponent(NewsList)
-      // Initially loading
-      expect(newsList.props('isLoading')).toBe(true)
-      await new Promise(resolve => setTimeout(resolve, 350))
-      // After loading completes
+      // Synchronous init — never loading
       expect(newsList.props('isLoading')).toBe(false)
     })
   })

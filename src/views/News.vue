@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import NewsFilter from '../components/NewsFilter.vue'
 import NewsList from '../components/NewsList.vue'
 import { useLanguage } from '../i18n'
@@ -38,10 +38,15 @@ import newsData from '../data/news.json'
 
 const { t } = useLanguage()
 
-const articles = ref([])
+// #346: articles and isLoading initialize synchronously — news.json is a
+// static import so it resolves in the same tick. The previous 300ms setTimeout
+// gating isLoading flipped on the LCP critical path with zero UX benefit
+// (the skeleton slot only matters under real async latency). isLoading stays
+// as a ref so NewsList's :is-loading prop shape is preserved.
+const articles = ref(newsData)
 const selectedCategory = ref('All')
 const visibleCount = ref(6)
-const isLoading = ref(true)
+const isLoading = ref(false)
 
 const filteredArticles = computed(() => {
   if (selectedCategory.value === 'All') {
@@ -65,14 +70,6 @@ const handleFilterChange = (category) => {
 const handleLoadMore = () => {
   visibleCount.value += 6
 }
-
-onMounted(() => {
-  // Simulate loading delay for better UX
-  setTimeout(() => {
-    articles.value = newsData
-    isLoading.value = false
-  }, 300)
-})
 </script>
 
 <style scoped>
