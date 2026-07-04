@@ -48,7 +48,7 @@ function deferEntryCss() {
       // href ending in /assets/index-*.css, in any order, separated by
       // other attributes. The capture group is the href value.
       const blockingLinkRegex =
-        /<link\s+([^>]*?rel=["']stylesheet["'][^>]*?href=["']([^"']+\/assets\/index-[^"']+\.css)["'][^>]*?|[^>]*?href=["']([^"']+\/assets\/index-[^"']+\.css)["'][^>]*?rel=["']stylesheet["'][^>]*?)>/i
+        /<link\s+([^>]*?rel=["']stylesheet["'][^>]*?href=["']([^"']*\/assets\/index-[^"']+\.css)["'][^>]*?|[^>]*?href=["']([^"']*\/assets\/index-[^"']+\.css)["'][^>]*?rel=["']stylesheet["'][^>]*?)>/i
       const match = html.match(blockingLinkRegex)
       if (!match) {
         // No render-blocking entry link found. In dev this is expected (Vite
@@ -96,3 +96,5 @@ export default defineConfig({
     }
   }
 })
+
+export { deferEntryCss }
