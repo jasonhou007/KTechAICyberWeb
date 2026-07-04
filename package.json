@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite-ssg build",
+    "build:spa": "vite build",
     "build:ssg": "vite-ssg build",
     "build:ssg:audit": "vite-ssg build --base=/ --outDir dist-audit",
     "preview": "vite preview",
