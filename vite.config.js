@@ -96,3 +96,5 @@ export default defineConfig({
     }
   }
 })
+
+export { deferEntryCss }
