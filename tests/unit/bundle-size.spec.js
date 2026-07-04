@@ -86,7 +86,34 @@ function listJsChunks() {
 // correct direction — lowering the ceiling after a shrink would mask a future
 // regression that re-adds comparable weight. MAX_ROUTE_CHUNK_GZIP_BUDGET
 // unchanged (the deleted web-vitals chunk was already well under the cap).
-const TOTAL_ENTRY_GZIP_BUDGET = 175000
+//
+// Updated for #348 (build-time SSG via vite-ssg): vite-ssg renames the entry
+// chunk from `index-*.js` to `app-*.js` (the SSG client entry that hydrates
+// the pre-rendered HTML) and re-organizes the chunk graph: app shell + router
+// + pinia + head + the route-import manifest land in `app-*.js`, while vue +
+// vue-router + pinia + @vueuse stay in `vendor-*.js` via the function-form
+// manualChunks. The measured post-#348 totals (fresh `vite-ssg build`,
+// 2026-07-04):
+//   - app-*.js     gzip 60,115 bytes  (was index-*.js gzip 54,102 pre-SSG)
+//   - vendor-*.js  gzip ~47,000 bytes (unchanged from pre-SSG)
+//   - total dist/assets gzip 178,721 bytes / 58 chunks
+// The 14,580-byte total-vs-pre-#240 growth is the vite-ssg runtime + the SSG
+// hydration bootstrap. TOTAL_ENTRY_GZIP_BUDGET is RAISED 175,000 -> 185,000
+// (restores ~3% headroom over the new measured total, consistent with the
+// #187/#203 philosophy: a properly-isolated SSG entry warrants a documented
+// bump rather than a hack — the LCP win from #348 (>900ms on every AC route)
+// is the trade-off). MAX_ROUTE_CHUNK_GZIP_BUDGET UNCHANGED — the per-route
+// lazy chunks (About-*.js, News-*.js, etc.) all stay well under 7,000 gzip
+// individually; the 60KB `app-*.js` is the ENTRY (filtered out by the
+// `app-*` / `index-*` / `vendor-*` exclusion), not a route chunk.
+//
+// ENTRY-CHUNK FILTER UPDATE: the route-chunk filter (was `!vendor-` &&
+// `!index-`) MUST also exclude `app-` because vite-ssg names the SSG entry
+// `app-*.js`. Without this exclusion, the SSG entry would be classified as a
+// "route chunk" and the per-chunk budget (7,000 gzip) would flag the 60KB
+// entry as a regression — a false positive that masks real per-route
+// regressions.
+const TOTAL_ENTRY_GZIP_BUDGET = 185000
 const MAX_ROUTE_CHUNK_GZIP_BUDGET = 7000
 
 // The suite is skipped entirely when no build is present. describe.skipIf
@@ -129,11 +156,14 @@ describe.skipIf(!existsSync(ASSETS_DIR))('bundle-size performance budget (#18)',
 
   it('no single non-vendor route chunk exceeds the per-chunk budget', () => {
     // Excludes the vendor chunk (shared, cached across navigations) and any
-    // 'index-*' entry chunk (the router/app shell, bounded by the total
-    // budget above). What's left are the per-route lazy chunks; a single one
-    // ballooning signals a view imported a heavy dependency.
+    // 'index-*' or 'app-*' entry chunk (the router/app shell, bounded by the
+    // total budget above). What's left are the per-route lazy chunks; a
+    // single one ballooning signals a view imported a heavy dependency.
+    // #348: 'app-*' is vite-ssg's entry-chunk name (the SSG client entry
+    // that hydrates the pre-rendered HTML); the pre-SSG 'index-*' name is
+    // kept for backward compat in case a future build reverts to vite build.
     const routeChunks = chunks.filter(
-      (f) => !f.startsWith('vendor-') && !f.startsWith('index-')
+      (f) => !f.startsWith('vendor-') && !f.startsWith('index-') && !f.startsWith('app-')
     )
     const perFile = routeChunks.map((f) => ({ file: f, ...chunkSizes(f) }))
     const worst = perFile.reduce(
@@ -164,9 +194,15 @@ describe.skipIf(!existsSync(ASSETS_DIR))('bundle-size performance budget (#18)',
   //
   // Measured baseline (post #253 build): index-* gzip 53,241 + vendor-* gzip
   // 40,273 = 93,514 bytes total (re-derived from a fresh `vite build`).
+  //
+  // #348 update: vite-ssg names the SSG client entry `app-*.js` instead of
+  // `index-*.js`. The filter accepts BOTH names so the gate stays valid
+  // across SSG and non-SSG builds. Post-#348 entry total: app-* gzip 60,115
+  // + vendor-* gzip ~47,000 = ~107,000 bytes total — still well under the
+  // 500,000 byte AC9 budget.
   it('main entry gzipped < 500KB (#253 AC9)', () => {
     const entryChunks = chunks.filter(
-      (f) => f.startsWith('index-') || f.startsWith('vendor-')
+      (f) => f.startsWith('index-') || f.startsWith('vendor-') || f.startsWith('app-')
     )
     const perFile = entryChunks.map((f) => ({ file: f, ...chunkSizes(f) }))
     const entryGzip = perFile.reduce((sum, c) => sum + c.gzip, 0)

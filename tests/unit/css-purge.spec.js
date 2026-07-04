@@ -58,11 +58,22 @@ function extractInlineStyleBlock(html) {
   return m ? m[0] : ''
 }
 
-/** Find the single entry CSS chunk (index-*.css) in dist/assets, or null. */
+/** Find the single entry CSS chunk in dist/assets, or null.
+ *
+ * #348 update: vite-ssg renames the entry CSS chunk from `index-*.css` to
+ * `app-*.css`. The function accepts EITHER name so the gate stays valid
+ * across SSG (vite-ssg build -> `app-*.css`) and non-SSG (vite build ->
+ * `index-*.css`) builds. We prefer `index-` for backward compat (so a
+ * future revert to vite build does not need a test edit); fall back to
+ * `app-` for the SSG build.
+ */
 function findEntryCss() {
   if (!existsSync(ASSETS_DIR)) return null
+  const files = readdirSync(ASSETS_DIR)
   return (
-    readdirSync(ASSETS_DIR).find((f) => /^index-.*\.css$/.test(f)) || null
+    files.find((f) => /^index-.*\.css$/.test(f)) ||
+    files.find((f) => /^app-.*\.css$/.test(f)) ||
+    null
   )
 }
 
@@ -91,7 +102,7 @@ describe.skipIf(!existsSync(ASSETS_DIR))('CSS purge — entry chunk non-regressi
   const entryCssName = findEntryCss()
 
   it('entry CSS chunk exists in dist/assets', () => {
-    expect(entryCssName, 'expected an index-*.css chunk in dist/assets').not.toBeNull()
+    expect(entryCssName, 'expected an index-*.css or app-*.css chunk in dist/assets').not.toBeNull()
   })
 
   it('entry CSS raw size stays bounded (< 76000 bytes; post-purge 74859)', () => {
