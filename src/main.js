@@ -1,11 +1,13 @@
-import { createApp } from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { ViteSSG } from 'vite-ssg'
 import { createPinia } from 'pinia'
 // #260: App.vue calls useHead(() => ({ title, meta, ... })) to drive per-route
 // document titles + OG tags. Before #260, createHead() was never installed, so
 // useHead was a silent no-op and document.title stayed frozen at the static
 // index.html value on every route. Installing the plugin makes the head effect
-// live (the AC2 fix).
+// live (the AC2 fix). vite-ssg v28 ships @unhead/vue auto-installed in its
+// SSR context, but App.vue's useHead() (from @vueuse/head, the legacy export)
+// still needs createHead() installed client-side — vite-ssg tolerates the
+// double-install (both clients share the same DOM patch queue).
 import { createHead } from '@vueuse/head'
 
 // Global theme (CSS variables + reset) — required by all components.
@@ -48,6 +50,12 @@ import './styles/accessibility.css'
 // into the entry CSS bundle. This file STILL contains the literal
 // `cyber.css` (so the #334 wiring-gate grep stays green); the #340
 // increment is the dynamic form.
+//
+// #348 SSG note: vite-ssg's build-time render runs the entry module to
+// bootstrap the SSR app, so this dynamic import resolves during SSG
+// (cyber.css lands in the SSR-rendered <head> via the critical-CSS
+// inliner). At runtime the dynamic import is a no-op (the sheet is already
+// in the document) — verified by the no-FOUC manual check.
 import('./assets/styles/cyber.css')
 
 import App from './App.vue'
@@ -98,19 +106,40 @@ const routes = [
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('./views/NotFound.vue') }
 ]
 
-// The app is deployed at the GitHub Pages subpath /KTechAICyberWeb/ (see the
-// `base` in vite.config.js). createWebHistory() with no argument strips that
-// prefix, so the router matched no route in production and the site rendered
-// blank. import.meta.env.BASE_URL is the Vite base ('/KTechAICyberWeb/'), so
-// the router now matches paths under the subpath. #140.
-const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes
-})
-
-const app = createApp(App)
-const head = createHead()
-app.use(createPinia())
-app.use(router)
-app.use(head)
-app.mount('#app')
+// #348: build-time SSG (vite-ssg) replaces the createApp().mount() form so the
+// 5 marketing routes (/, /about, /contact, /news, /services) are PRE-RENDERED
+// at build time. Their LCP HTML+CSS lands in the initial document, so first
+// paint is no longer gated on the SPA's JS-bundle download + parse + hydrate
+// cycle under Lighthouse's simulated 4G throttling — the architectural
+// ~2800ms floor measured on every non-Home route in the #346 post-state
+// (witness /services at 2767ms confirmed it was NOT route-specific) is closed
+// by shipping first-paint HTML that does not wait for hydration. The non-
+// marketing routes fall through to SPA-hydrated fallback (the index document's
+// app shell mounts and the router takes over).
+//
+// ViteSSG's signature: ViteSSG(App, routerOptions, fn?, clientOptions?).
+// The callback receives ({ app, router, ... }) after the app is created (both
+// on the SSG server AND in the browser on hydration) — the plugin chain
+// (pinia, head) lives here so both render paths install them identically.
+// routerOptions.base MUST be import.meta.env.BASE_URL so the deployed subpath
+// /KTechAICyberWeb/ is preserved (same as the pre-SSG createWebHistory
+// argument — #140 blank-page fix).
+//
+// The SSG build-time options (dirStyle, includedRoutes) live under
+// ssgOptions in vite.config.js (not here) because they are build-only —
+// the client entry just hydrates. The includedRoutes filter enumerates the
+// 5 marketing routes explicitly so dynamic routes (/news/:slug, the
+// per-service routes) keep their existing SPA-fallback behaviour (their
+// content is data-driven and would need a per-entry build-time crawl that
+// is out of scope for #348).
+export const createApp = ViteSSG(
+  App,
+  {
+    routes,
+    base: import.meta.env.BASE_URL,
+  },
+  ({ app }) => {
+    app.use(createPinia())
+    app.use(createHead())
+  },
+)

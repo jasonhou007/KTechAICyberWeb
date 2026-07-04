@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:ssg": "vite-ssg build",
+    "build:ssg:audit": "vite-ssg build --base=/ --outDir dist-audit",
     "preview": "vite preview",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
@@ -31,6 +33,7 @@
     "happy-dom": "^20.10.6",
     "serve": "^14.2.6",
     "vite": "^5.0.0",
+    "vite-ssg": "^28.3.0",
     "vitest": "^4.1.9"
   }
 }
