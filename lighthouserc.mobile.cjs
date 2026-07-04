@@ -9,6 +9,21 @@
  * jobs (see .github/workflows/lighthouse-ci.yml `lighthouse` + `lighthouse-mobile`),
  * each pointing at its own configPath.
  *
+ * PRESET NAME: the CI config uses `preset: 'perf'`, which IS the canonical
+ * Lighthouse mobile preset (formFactor=mobile + 4G CPU/network throttling +
+ * mobile screen emulation, per the Lighthouse spec). Lighthouse's CLI accepts
+ * only `perf|experimental|desktop` as preset values. The literal string
+ * `'mobile'` is a newer-Lighthouse alias for `perf` that the CI action's
+ * bundled binary does NOT recognize — `treosh/lighthouse-ci-action@v11` ships
+ * an older Lighthouse whose CLI rejects `'mobile'` with
+ * `Argument: preset, Given: "mobile", Choices: "perf", "experimental", "desktop"`,
+ * crashing the `lighthouse-mobile` job before any audit runs (PR #347).
+ * The local capture script `scripts/334-lighthouse-capture.mjs` uses
+ * `preset: 'perf'` (Lighthouse 12.8.2, which accepts the alias) and asserts
+ * `formFactor==='mobile'` on every capture — SAME mobile semantics that
+ * produced the measured evidence in
+ * `projects/kttech-cyber/tickets/342/evidence/metrics-summary-mobile.json`.
+ *
  * Originated in #342. The mobile gate was deferred from #302 (which measured
  * the desktop routes at error level) and again from #340 (which shipped the
  * structural mobile-LCP fixes — defer render-blocking global CSS bundle via
@@ -24,7 +39,7 @@
  * production /KTechAICyberWeb/ base but NOT the audit base=/, so the audit
  * build kept the render-blocking CSS bundle and the mobile LCP did not move
  * in CI. #344 fixed the regex. With #344 merged (PR #345), the audit build
- * now reflects the deferred-CSS optimization, so the mobile preset's error
+ * now reflects the deferred-CSS optimization, so the perf preset's error
  * level reflects the real end-user experience.
  *
  * ASSERTION LEVELS — honest-partial (deferred-AC rule, iter-22):
@@ -63,11 +78,17 @@ module.exports = {
       // variance). 3 is the LHCI-recommended default and matches the desktop
       // config — keeping them symmetric makes the two gates comparable.
       numberOfRuns: 3,
-      // Mobile preset: formFactor=mobile + Lighthouse's default mobile
-      // throttling (4G CPU/network). This is what surfaces mobile LCP
-      // regressions — the structural concern behind #334 / #340.
+      // perf preset = canonical Lighthouse mobile preset: formFactor=mobile +
+      // Lighthouse's default mobile throttling (4G CPU/network) + mobile
+      // screen emulation. This is what surfaces mobile LCP regressions — the
+      // structural concern behind #334 / #340. NOTE: the literal is 'perf'
+      // (not 'mobile') because the treosh/lighthouse-ci-action@v11 bundled
+      // Lighthouse CLI only accepts perf|experimental|desktop; 'mobile' is a
+      // newer-Lighthouse alias it rejects (see header @file block + PR #347).
+      // Same semantics as scripts/334-lighthouse-capture.mjs (preset:'perf',
+      // asserts formFactor==='mobile').
       settings: {
-        preset: 'mobile',
+        preset: 'perf',
       },
     },
     assert: {
