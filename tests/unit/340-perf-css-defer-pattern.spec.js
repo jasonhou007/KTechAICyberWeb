@@ -3,6 +3,13 @@
  * @description Build-output gate for Issue #340 Step 2 (defer the entry CSS
  * bundle via preload + async-onload pattern with a <noscript> fallback).
  *
+ * Scope: this gate covers the PROD-BASE build variant only — the built
+ * dist/index.html uses the base subpath '/KTechAICyberWeb/assets/...'. The
+ * CI Lighthouse audit variant (built with --base=/, which emits
+ * '/assets/index-HASH.css' with zero chars before /assets/) is covered
+ * hermetically by 344-perf-css-defer-regex.spec.js, which drives the
+ * plugin's transformIndexHtml hook directly (no build dependency).
+ *
  * The Vite-emitted `<link rel="stylesheet" href="/KTechAICyberWeb/assets/index-HASH.css">`
  * is render-blocking: the browser stops parsing the HTML until the sheet
  * downloads + parses. The web-standard pattern to make it non-blocking
