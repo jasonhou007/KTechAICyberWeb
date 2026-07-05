@@ -53,6 +53,11 @@
   --text-caption: #9aa0b0;            /* inline caption/helper/empty-state; 7.57:1 (new hue) */
   --text-timestamp: #8a9acc;          /* timestamps/dates == --text-muted; 7.14:1 */
 
+  /* #353: default nav-link color. Brand cyan — same hue as the Contact link on
+   * hover/active and as NavigationDropdown's .dropdown-trigger. WCAG: #00ffcc
+   * on the composited nav bg (~rgb(10,14,24)) = 14.85:1, well above 4.5:1 AA. */
+  --nav-link: var(--cyan);
+
   /* === Surfaces === */
   --surface-card: rgba(10, 15, 28, 0.8);
   --surface-elevated: rgba(26, 26, 46, 0.8);
