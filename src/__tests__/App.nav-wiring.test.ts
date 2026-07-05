@@ -138,11 +138,12 @@ describe('App.vue -> Header nav wiring (#164 shipped-app gate)', () => {
     expect(wrapper.findAll('nav#navbar .dropdown-trigger')).toHaveLength(2)
   })
 
-  it('renders the KTech brand logo from Header (KAI<span>TECH</span>)', async () => {
+  it('renders the KTech brand logo from Header (K<span>Tech</span>)', async () => {
     const wrapper = await mountApp()
     const logo = wrapper.find('nav#navbar .nav-logo')
     expect(logo.exists()).toBe(true)
-    expect(logo.text()).toBe('KAITECH')
+    // #351: visible logo text is exactly "KTech" (was the old wrong brand).
+    expect(logo.text()).toBe('KTech')
     // The brand is a router-link to "/" (no # anchor).
     expect(logo.attributes('href')).toBe('/')
   })

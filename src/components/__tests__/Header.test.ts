@@ -124,18 +124,21 @@ describe('Header.vue', () => {
   // Logo (now a router-link to "/")
   // ============================================
   describe('Logo', () => {
-    it('renders the "KAI" base text in the logo', () => {
-      expect(wrapper.find('.nav-logo').text()).toContain('KAI')
+    it('renders the "K" base text in the logo', () => {
+      // #351: brand is "KTech" (K<span class="accent">Tech</span>); visible-text
+      // assertion guards against any regression to the old wrong brand markup.
+      expect(wrapper.find('.nav-logo').text()).toContain('K')
     })
 
-    it('renders the "TECH" accent text inside a span.accent', () => {
+    it('renders the "Tech" accent text inside a span.accent', () => {
       const accent = wrapper.find('.nav-logo .accent')
       expect(accent.exists()).toBe(true)
-      expect(accent.text()).toBe('TECH')
+      expect(accent.text()).toBe('Tech')
     })
 
-    it('renders the full logo text as "KAITECH"', () => {
-      expect(wrapper.find('.nav-logo').text()).toBe('KAITECH')
+    it('renders the full logo text as "KTech"', () => {
+      // #351: nav-logo visible text must be exactly "KTech", never the old brand.
+      expect(wrapper.find('.nav-logo').text()).toBe('KTech')
     })
 
     it('renders the logo as a router-link pointing at "/" (NOT a # anchor)', () => {
@@ -525,7 +528,7 @@ describe('Header.vue', () => {
       ]
       wrappers.forEach((w) => {
         expect(w.exists()).toBe(true)
-        expect(w.text()).toContain('KAITECH')
+        expect(w.text()).toContain('KTech')
         expect(w.findAll('ul.nav-links > li')).toHaveLength(6)
       })
       wrappers.forEach((w) => w.unmount())
@@ -536,7 +539,7 @@ describe('Header.vue', () => {
       const fresh = mount(Header, {
         global: { stubs: { 'router-link': RouterLinkStub } },
       })
-      expect(fresh.find('.nav-logo').text()).toBe('KAITECH')
+      expect(fresh.find('.nav-logo').text()).toBe('KTech')
       expect(fresh.findAll('ul.nav-links > li')).toHaveLength(6)
       expect(fresh.findAll('ul.nav-links a[href^="#"]')).toHaveLength(0)
       fresh.unmount()

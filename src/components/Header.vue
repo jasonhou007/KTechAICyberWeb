@@ -1,7 +1,7 @@
 <template>
   <nav class="nav" :class="{ 'scrolled': isScrolled }" id="navbar">
     <router-link to="/" class="nav-logo">
-      KAI<span class="accent">TECH</span>
+      K<span class="accent">Tech</span>
     </router-link>
 
     <!-- Mobile hamburger toggle (off-canvas nav). Hidden on desktop via CSS. -->
