@@ -37,6 +37,27 @@
  *   - email `kaitaitech.cn`
  *   - domain `www.kaitai.tech`
  *   - loading-screen `KTECH.AI` mark
+ *
+ * SCOPE LIMITATION — what this guard CANNOT catch (be honest about it):
+ * This guard scans source for the LITERAL CONTIGUOUS string "KAITECH". The
+ * original #351 bug was split-markup: `KAI<span class="accent">TECH</span>`
+ * — the literal "KAITECH" NEVER appears contiguously in source because the
+ * `<span>` tag interrupts it, so `git grep "KAITECH"` cannot detect a
+ * regression to that markup. We have EMPIRICALLY VERIFIED this blind spot:
+ * temporarily reverting Header.vue line 4 to `KAI<span>TECH</span>` leaves
+ * this guard GREEN at 2/2 passing.
+ *
+ * The LOAD-BEARING guard against the split-markup regression is the Header
+ * unit assertion in `src/components/__tests__/Header.test.ts`:
+ *     expect(wrapper.find('.nav-logo').text()).toBe('KTech')
+ * Vue Test Utils' `.text()` collapses the `<span>` into its visible text,
+ * so a regression to `KAI<span>TECH</span>` makes `.text()` return
+ * "KAITECH" and the assertion fails. (Empirically: that regression makes
+ * Header.test.ts fail 4 of 63 cases.) This guard's value is therefore
+ * COMPLEMENTARY, not redundant: it catches the literal "KAITECH"
+ * reappearing in OTHER places the unit test does not cover — comments,
+ * config files, i18n values, future components' hardcoded text — while
+ * Header.test.ts catches the original visible-markup bug pattern.
  */
 
 import { describe, it, expect } from 'vitest'
