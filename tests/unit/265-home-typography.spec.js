@@ -55,7 +55,7 @@ describe('#265 Home typography tokens', () => {
     expect(vue).not.toContain('clamp(2.5rem, 6vw, 5rem)')
   })
 
-  it('token hierarchy: h1-max >= 1.5 * section-title-max >= 1.5 * body-max', () => {
+  it('token hierarchy: h1-max > section-title-max >= 1.5 * body-max', () => {
     const css = readSource('src/assets/styles/variables.css')
     // Extract each token's clamp() value.
     const h1Line = css.match(/--home-h1:\s*(clamp\([^)]*\));/)
@@ -68,12 +68,18 @@ describe('#265 Home typography tokens', () => {
     expect(Number.isFinite(h1Max)).toBe(true)
     expect(Number.isFinite(sectionMax)).toBe(true)
 
-    // h1 (3.25rem) must be at least 1.5x the section title (1.75rem).
-    expect(h1Max).toBeGreaterThanOrEqual(sectionMax * 1.5)
+    // #355 demoted the mission h1 to ~2/3 of its #265 value (was 3.25rem ->
+    // 2.17rem). The h1 must still read as the page's primary heading, so it
+    // stays strictly larger than the section title — but the old 1.5x ratio
+    // no longer holds by design (the user filed #355 specifically to shrink
+    // the mission statement). Assert h1-max > section-title-max preserves the
+    // visual hierarchy intent ("not a flat shuffle") without re-imposing the
+    // superseded 1.5x multiplier.
+    expect(h1Max).toBeGreaterThan(sectionMax)
 
     // Body max is 1.05rem (the hero card <p> upper bound). Section title
     // (1.75rem) must be at least 1.5x body — the same hierarchy the old site
-    // had, just compressed.
+    // had, just compressed. (#355 did not touch body or section-title sizing.)
     const bodyMax = 1.05
     expect(sectionMax).toBeGreaterThanOrEqual(bodyMax * 1.5)
   })

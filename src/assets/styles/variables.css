@@ -93,8 +93,16 @@
   /* === Home page typography (#265). Above-the-fold sizing so the title +
    * Self-driving pipeline + hero fit one 1920x1080 screen without scrolling.
    * clamp() lower bound = mobile floor (no mobile regression); upper bound =
-   * desktop cap (4K stays bounded). */
-  --home-h1: clamp(2rem, 4.5vw, 3.25rem);
+   * desktop cap (4K stays bounded).
+   *
+   * #355: --home-h1 reduced to ~2/3 of its pre-#355 value so the mission
+   * statement ("Determined to Become a Leading Fintech Company in China ASEAN
+   * Region") no longer dominates the Home hero. Each clamp term scaled by 2/3:
+   *   was clamp(2rem, 4.5vw, 3.25rem) -> clamp(1.33rem, 3vw, 2.17rem).
+   * Sibling Home typography tokens (--home-subtitle, --home-section-title,
+   * --home-card-*, --home-group-label) are UNCHANGED — only the mission h1
+   * shrinks; the rest of the #265/#313 page rhythm is preserved. */
+  --home-h1: clamp(1.33rem, 3vw, 2.17rem);
   --home-subtitle: clamp(1rem, 1.6vw, 1.2rem);
   --home-section-title: clamp(1.4rem, 2.2vw, 1.75rem);
   --home-section-gap: clamp(1.5rem, 3vh, 2.5rem);
