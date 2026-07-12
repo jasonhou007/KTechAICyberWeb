@@ -1840,5 +1840,9 @@
     "title": "This section could not be loaded",
     "message": "A part of the page failed to load. Check your connection and try again.",
     "retry": "Reload section"
+  },
+  "ambient": {
+    "aboutAriaLabel": "Company pulse ambient animation showing data flow from vision to mission to culture",
+    "servicesAriaLabel": "Service flow ambient animation cycling through five KTech services"
   }
 }

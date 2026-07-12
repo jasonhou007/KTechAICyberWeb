@@ -1840,5 +1840,9 @@
     "title": "此区块无法加载",
     "message": "页面部分内容加载失败，请检查网络连接后重试。",
     "retry": "重新加载区块"
+  },
+  "ambient": {
+    "aboutAriaLabel": "公司脉搏环境动画，展示从愿景到使命到文化的数据流",
+    "servicesAriaLabel": "服务流程环境动画，循环展示五项 KTech 服务"
   }
 }

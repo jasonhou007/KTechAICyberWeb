@@ -14,6 +14,13 @@
         <p class="subtitle">{{ t('services.subtitle') }}</p>
       </header>
 
+      <!-- Service flow ambient animation (#361). Cycles through 5 KTech services
+           with data particle effects. Self-driving demo synchronized with
+           intersection observer and reduced-motion preferences. -->
+      <section class="ambient-section">
+        <ServicesAmbient />
+      </section>
+
       <!-- Services grid with lazy loading -->
       <section class="services-grid">
         <article
@@ -55,9 +62,11 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, defineAsyncComponent } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useIntersectionObserverList } from '../composables/useIntersectionObserver'
+// #361: ServicesAmbient ambient animation - service flow cycling through 5 services
+const ServicesAmbient = defineAsyncComponent(() => import('../components/ServicesAmbient.vue'))
 
 const { t } = useLanguage()
 const { visibleItems, observeItem } = useIntersectionObserverList({

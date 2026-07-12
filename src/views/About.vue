@@ -35,6 +35,13 @@
       <SelfDrivingDemo />
     </section>
 
+    <!-- Company pulse ambient animation (#361). Shows particle flow from
+         vision → mission → culture. Self-driving demo synchronized with
+         intersection observer and reduced-motion preferences. -->
+    <section class="ambient-section">
+      <AboutAmbient />
+    </section>
+
     <!-- Who We Are Section -->
     <section class="section who-we-are">
       <div class="container">
@@ -316,6 +323,8 @@ import CyberImage from '../components/CyberImage.vue'
 // heavy rAF-driven demo is code-split into its own chunk and does not block
 // /about's LCP critical path. ~3.6s bootup removed from the route chunk.
 const SelfDrivingDemo = defineAsyncComponent(() => import('../components/SelfDrivingDemo.vue'))
+// #361: AboutAmbient ambient animation - company pulse particle flow
+const AboutAmbient = defineAsyncComponent(() => import('../components/AboutAmbient.vue'))
 import AboutIcon from '../components/icons/AboutIcon.vue'
 
 const { t } = useLanguage()
