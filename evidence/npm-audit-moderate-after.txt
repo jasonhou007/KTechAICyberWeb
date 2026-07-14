@@ -1,0 +1,32 @@
+# npm audit report
+
+esbuild  <=0.24.2
+Severity: moderate
+esbuild enables any website to send any requests to the development server and read the response - https://github.com/advisories/GHSA-67mh-4wv8-2f99
+fix available via `npm audit fix --force`
+Will install vite@8.1.4, which is a breaking change
+node_modules/esbuild
+  vite  <=6.4.2
+  Depends on vulnerable versions of esbuild
+  node_modules/vite
+
+unhead  <=2.1.12
+Severity: moderate
+Unhead Vulnerable to Bypass of URI Scheme Sanitization in makeTagSafe via Case-Sensitivity - https://github.com/advisories/GHSA-5339-hvwr-7582
+Unhead has XSS bypass in `useHeadSafe` via attribute name injection and case-sensitive protocol check - https://github.com/advisories/GHSA-g5xx-pwrp-g3fv
+Unhead has a hasDangerousProtocol() bypass via leading-zero padded HTML entities in useHeadSafe() - https://github.com/advisories/GHSA-95h2-gj7x-gx9w
+fix available via `npm audit fix --force`
+Will install @vueuse/head@0.9.8, which is a breaking change
+node_modules/unhead
+  @unhead/vue  <=0.6.3 || 1.0.22 - 2.1.10
+  Depends on vulnerable versions of unhead
+  node_modules/@unhead/vue
+    @vueuse/head  >=1.0.0-next.1
+    Depends on vulnerable versions of @unhead/vue
+    node_modules/@vueuse/head
+
+
+5 vulnerabilities (2 low, 2 moderate, 1 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
