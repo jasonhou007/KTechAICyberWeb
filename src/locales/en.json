@@ -1787,9 +1787,11 @@
   },
   "selfDriving": {
     "aria": {
-      "regionLabel": "Self-driving dev pipeline — live demo"
+      "regionLabel": "Self-driving dev pipeline — live demo",
+      "regionLabel6Agent": "6-Agent Adversarial Pipeline — live demo"
     },
     "heading": "Self-Driving Dev Pipeline",
+    "heading6Agent": "6-Agent Adversarial Dev Pipeline",
     "phases": {
       "intake": {
         "title": "Intake",
@@ -1833,7 +1835,9 @@
       "plannerLine": "planner: analyzing requirements…",
       "coderLine": "coder: +export function resolve() {",
       "securityLine": "security: no vulnerabilities found",
-      "evalLine": "evaluator: 8/8 acceptance criteria met"
+      "evalLine": "evaluator: 8/8 acceptance criteria met",
+      "reviewerLine": "reviewer: challenging implementation…",
+      "mergerLine": "merger: merging PR to main"
     }
   },
   "asyncLoadError": {
