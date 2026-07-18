@@ -55,9 +55,12 @@ const INDEX_HTML = readFileSync(resolve(ROOT, 'index.html'), 'utf8')
 // Minimal 3-article fixture for NewsList/NewsCard. NewsCard only reads
 // {image, altKey, title, excerpt, date, category, slug} — values chosen so
 // the CyberImage branch renders (article.image truthy). The first article
-// uses the real raster path so imageSrcset is non-empty (exercises the
-// non-vector branch); the others use SVG paths so they take the vector
-// (empty-srcset) branch. Either way the CyberImage renders an <img>.
+// uses a fake raster path (no real News raster remains after #374 removed
+// news-iso27001-official.webp; this fixture path intentionally does not
+// exist on disk — NewsCard never fetches it in jsdom) so imageSrcset is
+// non-empty (exercises the non-vector branch); the others use SVG paths so
+// they take the vector (empty-srcset) branch. Either way the CyberImage
+// renders an <img>.
 const NEWS_FIXTURE = [
   {
     id: 1,
@@ -66,7 +69,7 @@ const NEWS_FIXTURE = [
     excerpt: 'Should render eager + fetchpriority=high.',
     date: '2024-01-15',
     category: 'Company News',
-    image: '/images/news/news-iso27001-official.webp',
+    image: '/images/news/fixture-raster.webp',
     altKey: 'news.articleAlts.iso27001',
   },
   {

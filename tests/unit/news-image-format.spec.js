@@ -8,7 +8,9 @@ import newsData from '../../src/data/news.json'
  *
  * 4 of 5 News images in public/images/news/ were SVGs mislabeled as .webp
  * (purpose-built cyberpunk vector art: gradients, grids, neon strokes, <text>
- * labels). The 5th (news-iso27001-official.webp) is a real 258x258 RIFF/WebP.
+ * labels), renamed to .svg by #278. The 5th (a 258x258 RIFF/WebP raster) was
+ * replaced by #374 with a purpose-built SVG illustration
+ * (iso27001-shield.svg) and the raster deleted — ALL News images are now SVG.
  *
  * This file-integration test reads the real bytes on disk (NOT mocked) and
  * asserts:
@@ -17,8 +19,8 @@ import newsData from '../../src/data/news.json'
  *  - AC #5 — every image's filename extension matches its actual magic-byte
  *    format (RIFF/WEBP -> .webp, <svg / <?xml -> .svg). This is the regression
  *    that catches a future mislabel.
- *  - exactly one News image is a real raster (.webp); the rest are vector
- *    (.svg).
+ *  - every News image is a vector (.svg); zero non-SVG news images remain
+ *    (#374).
  *
  * It would FAIL on the pre-rename checkout (4 paths end .webp but the files
  * are SVGs) and pass once the files are `git mv`-ed to .svg + news.json is
@@ -83,19 +85,15 @@ describe('#278 — News image format integrity', () => {
     }
   })
 
-  it('the real raster is the only non-SVG News image', () => {
-    const webpPaths = newsData
+  it('every News image is a vector (.svg) — zero non-SVG news images (#374)', () => {
+    const nonSvgPaths = newsData
       .map((a) => a.image)
-      .filter((p) => path.extname(p).toLowerCase() === '.webp')
+      .filter((p) => path.extname(p).toLowerCase() !== '.svg')
     const svgPaths = newsData
       .map((a) => a.image)
       .filter((p) => path.extname(p).toLowerCase() === '.svg')
 
-    expect(webpPaths, 'exactly one real raster (.webp) News image').toEqual([
-      '/images/news/news-iso27001-official.webp',
-    ])
-    expect(svgPaths.length, 'the remaining News images are vector (.svg)').toBe(
-      newsData.length - 1,
-    )
+    expect(nonSvgPaths, 'no non-SVG News images remain (#374 removed the last raster)').toEqual([])
+    expect(svgPaths.length, 'all News images are vector (.svg)').toBe(newsData.length)
   })
 })
