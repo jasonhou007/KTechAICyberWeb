@@ -57,9 +57,9 @@ jobs:
         # disjoint) so each matrix leg runs in parallel (~5m vs ~15m serial).
         # fail-fast:false keeps all 3 shards running so a red shard can be
         # re-run alone via "re-run failed jobs" (gh run rerun --failed).
-        # #375: temporarily ignore 253-perf-fps.spec.ts (flaky FPS gate
-        # tracking #381; post-#361/#364 load caused CI runner throttling).
-        run: npx playwright test --project=chromium --project=firefox --project="Mobile Chrome" --shard=${{ matrix.shardIndex }}/3 --ignore="tests/e2e/253-perf-fps.spec.ts"
+        # #375: 253-perf-fps.spec.ts ignored via testIgnore in playwright.config.ts
+        # (flaky FPS gate tracking #381; post-#361/#364 load caused CI runner throttling).
+        run: npx playwright test --project=chromium --project=firefox --project="Mobile Chrome" --shard=${{ matrix.shardIndex }}/3
 
       - name: Upload test results
         if: always()
