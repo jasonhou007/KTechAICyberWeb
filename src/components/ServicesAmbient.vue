@@ -34,7 +34,7 @@
           :cy="p.y"
           :r="0.5"
           :opacity="p.opacity"
-          fill="var(--color-cyber-primary, #ff00ff)"
+          fill="var(--color-cyber-primary)"
         />
       </g>
     </svg>
@@ -72,7 +72,19 @@ const services = ref([
 const ambientRef = ref(null)
 const svgRef = ref(null)
 
-const { target, isPaused, isStatic, isPlaying, progress } = useAmbientAnimation()
+const { 
+  target, 
+  isPaused, 
+  isStatic, 
+  isPlaying, 
+  progress,
+  isMobile,
+  adaptiveUpdateInterval
+} = useAmbientAnimation({
+  mobileUpdateIntervalMs: 48, // Slower update rate on mobile (~20fps)
+  enableThrottling: true
+})
+
 target.value = ambientRef
 
 // Current service based on progress (0..1)
@@ -89,13 +101,14 @@ function calculateOpacity(index) {
   return 0.2
 }
 
-// Service particles
+// Service particles - fewer on mobile
 function getServiceParticles(serviceIndex) {
   // Only show particles for current/nearby services
   if (Math.abs(serviceIndex - currentServiceIndex.value) > 1) return []
 
   const service = services.value[serviceIndex]
-  const baseParticles = 5
+  // Use adaptive particle count based on device
+  const baseParticles = isMobile.value ? 2 : 5
 
   return Array.from({ length: baseParticles }, (_, i) => ({
     id: `${serviceIndex}-${i}`,
@@ -112,6 +125,9 @@ function getServiceParticles(serviceIndex) {
   width: 100%;
   height: 500px;
   overflow: hidden;
+  /* CSS containment for performance optimization */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
 }
 
 .ambient-svg {
@@ -140,6 +156,7 @@ function getServiceParticles(serviceIndex) {
 @media (max-width: 768px) {
   .services-ambient {
     height: 400px;
+    contain-intrinsic-size: auto 400px;
   }
 }
 </style>

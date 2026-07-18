@@ -50,7 +50,22 @@ const ambientRef = ref(null)
 const canvasRef = ref(null)
 const canvasSize = ref({ width: 1920, height: 600 })
 
-const { target, isPaused, isStatic, isPlaying, progress, startLoop, stopLoop } = useAmbientAnimation()
+const { 
+  target, 
+  isPaused, 
+  isStatic, 
+  isPlaying, 
+  progress, 
+  startLoop, 
+  stopLoop,
+  isMobile,
+  adaptiveParticles
+} = useAmbientAnimation({
+  particles: props.particleCount,
+  mobileParticles: 20, // Reduced particles on mobile
+  enableThrottling: true
+})
+
 target.value = ambientRef
 
 // Particle system
@@ -64,7 +79,11 @@ const anchors = [
 ]
 
 function initParticles() {
-  for (let i = 0; i < props.particleCount; i++) {
+  // Use adaptive particle count based on device
+  const count = adaptiveParticles.value
+  particles.value = []
+  
+  for (let i = 0; i < count; i++) {
     particles.value.push({
       x: anchors[0].x, // Start at vision
       y: anchors[0].y,
@@ -91,8 +110,9 @@ function updateParticles(deltaTime) {
     p.phase += deltaTime * 0.001
     p.opacity = 0.3 + Math.sin(p.phase) * 0.2
 
-    // Cycle targets on phase change
-    if (Math.random() < 0.001) {
+    // Cycle targets on phase change (less frequent on mobile)
+    const cycleChance = isMobile.value ? 0.0005 : 0.001
+    if (Math.random() < cycleChance) {
       p.targetIndex = (p.targetIndex + 1) % anchors.length
     }
   })
@@ -116,9 +136,11 @@ function drawCanvas() {
     ctx.fillStyle = `rgba(0, 255, 204, ${p.opacity})` // Cyan neon
     ctx.fill()
 
-    // Glow effect
-    ctx.shadowColor = '#00ffcc'
-    ctx.shadowBlur = 10
+    // Glow effect (reduced on mobile)
+    if (!isMobile.value) {
+      ctx.shadowColor = '#00ffcc'
+      ctx.shadowBlur = 10
+    }
   })
 
   // Reset shadow
@@ -166,6 +188,9 @@ function resizeCanvas() {
   width: 100%;
   height: 600px;
   overflow: hidden;
+  /* CSS containment for performance optimization */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
 }
 
 .ambient-canvas {
@@ -197,6 +222,7 @@ function resizeCanvas() {
 @media (max-width: 768px) {
   .about-ambient {
     height: 400px;
+    contain-intrinsic-size: auto 400px;
   }
 }
 </style>

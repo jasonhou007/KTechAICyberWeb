@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useServiceFlow } from '../composables/useServiceFlow'
+import { useDeviceDetection } from '../composables/useDeviceDetection'
 
 // ========== PROPS ==========
 const props = defineProps({
@@ -24,6 +25,8 @@ const canvasRef = ref(null)
 const containerRef = ref(null)
 
 // ========== COMPOSABLES ==========
+const { isMobile } = useDeviceDetection()
+
 const {
   animationConfig,
   isAnimating,
@@ -41,9 +44,11 @@ function handleResize() {
   const container = containerRef.value
   const canvas = canvasRef.value
 
-  // Set canvas size to match container
+  // Set canvas size to match container (mobile uses smaller height)
   canvas.width = container.clientWidth
-  canvas.height = Math.min(400, container.clientWidth * 0.5)
+  canvas.height = isMobile.value ? 
+    Math.min(250, container.clientWidth * 0.4) : 
+    Math.min(400, container.clientWidth * 0.5)
 }
 
 // ========== WATCHERS ==========
@@ -129,6 +134,9 @@ onUnmounted(() => {
   overflow: hidden;
   margin: 2rem 0;
   box-shadow: 0 0 10px var(--color-cyber-glow, rgba(0, 255, 0, 0.3));
+  /* CSS containment for performance optimization */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
 }
 
 .ambient-service-flow::before {
@@ -165,7 +173,7 @@ onUnmounted(() => {
   background: var(--color-bg-secondary, rgba(0, 0, 0, 0.8));
   border: 1px solid var(--color-cyber-border, #00ff00);
   color: var(--color-cyber-primary, #00ff00);
-  font-family: var(--font-cyber, 'Orbitron', sans-serif);
+  font-family: var(--font-cyber);
   font-size: 0.75rem;
   border-radius: 4px;
   z-index: 3;
@@ -184,13 +192,13 @@ onUnmounted(() => {
 }
 
 .service-big-data-ai {
-  --service-color: #00ffff;
-  --service-glow: rgba(0, 255, 255, 0.3);
+  --service-color: var(--color-cyber-secondary);
+  --service-glow: var(--color-cyber-secondary-glow);
 }
 
 .service-retail-lending {
-  --service-color: #ff00ff;
-  --service-glow: rgba(255, 0, 255, 0.3);
+  --service-color: var(--color-cyber-primary);
+  --service-glow: var(--color-cyber-primary-glow);
 }
 
 .service-project-management {
@@ -204,8 +212,8 @@ onUnmounted(() => {
 }
 
 .service-stablecoin {
-  --service-color: #00ff88;
-  --service-glow: rgba(0, 255, 136, 0.3);
+  --service-color: var(--color-cyber-success);
+  --service-glow: var(--color-cyber-success-glow);
 }
 
 .service-cross-border-payment {
@@ -240,6 +248,7 @@ onUnmounted(() => {
   .ambient-service-flow {
     min-height: 200px;
     margin: 1rem 0;
+    contain-intrinsic-size: auto 200px;
   }
 
   .animation-status {
