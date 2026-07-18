@@ -11,8 +11,8 @@
  * on first paint, before the JS bundle even arrives.
  *
  * #374 RATIONALE UPDATE: the /news first-card image changed from a 258x258
- * raster (news-iso27001-official.webp) to a purpose-built SVG illustration
- * (iso27001-shield.svg). A vector has no intrinsic pixel width, so the
+ * raster to a purpose-built SVG illustration (iso27001-shield.svg). A vector
+ * has no intrinsic pixel width, so the
  * responsive-srcset rationale (#340's original imagesrcset+imagesizes mirror
  * of NewsCard's raster branch) no longer applies: NewsCard/NewsDetail emit NO
  * srcset/sizes for .svg paths, and the preload is a plain
