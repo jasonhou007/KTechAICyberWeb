@@ -29,6 +29,13 @@ vi.mock('@/composables/useAmbientAnimation', () => ({
   }))
 }))
 
+// Mock vue-i18n
+vi.mock('vue-i18n', () => ({
+  useI18n: () => ({
+    t: (key) => key
+  })
+}))
+
 // Mock requestAnimationFrame and cancelAnimationFrame
 let rafCallbacks = []
 let rafIdCounter = 0
@@ -68,9 +75,11 @@ describe('ContactNetwork.vue', () => {
     it('should render canvas element when not static', () => {
       wrapper = mount(ContactNetwork)
       const canvas = wrapper.find('canvas')
+      const container = wrapper.find('.contact-network')
 
       expect(canvas.exists()).toBe(true)
-      expect(canvas.attributes('aria-hidden')).toBe('true')
+      expect(container.attributes('role')).toBe('img')
+      expect(container.attributes('aria-label')).toBeTruthy()
     })
 
     it('should render static fallback when prefers-reduced-motion', async () => {
@@ -90,10 +99,12 @@ describe('ContactNetwork.vue', () => {
       await flushPromises()
 
       const staticElement = wrapper.find('.network-static')
+      const container = wrapper.find('.contact-network')
       const canvas = wrapper.find('canvas')
 
       expect(staticElement.exists()).toBe(true)
-      expect(staticElement.attributes('aria-hidden')).toBe('true')
+      expect(container.attributes('role')).toBe('img')
+      expect(container.attributes('aria-label')).toBeTruthy()
       expect(canvas.exists()).toBe(false)
     })
 
@@ -262,14 +273,15 @@ describe('ContactNetwork.vue', () => {
   })
 
   describe('Accessibility', () => {
-    it('should have aria-hidden="true" on canvas', () => {
+    it('should have role="img" and aria-label on container', () => {
       wrapper = mount(ContactNetwork)
-      const canvas = wrapper.find('canvas')
+      const container = wrapper.find('.contact-network')
 
-      expect(canvas.attributes('aria-hidden')).toBe('true')
+      expect(container.attributes('role')).toBe('img')
+      expect(container.attributes('aria-label')).toBeTruthy()
     })
 
-    it('should have aria-hidden="true" on static fallback', () => {
+    it('should have role="img" and aria-label on static fallback', () => {
       // Mock isStatic to true
       vi.doMock('@/composables/useAmbientAnimation', () => ({
         useAmbientAnimation: () => ({
@@ -284,9 +296,10 @@ describe('ContactNetwork.vue', () => {
       }))
 
       wrapper = mount(ContactNetwork)
-      const staticElement = wrapper.find('.network-static')
+      const container = wrapper.find('.contact-network')
 
-      expect(staticElement.attributes('aria-hidden')).toBe('true')
+      expect(container.attributes('role')).toBe('img')
+      expect(container.attributes('aria-label')).toBeTruthy()
     })
 
     it('should provide static fallback for reduced motion', () => {

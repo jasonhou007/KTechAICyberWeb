@@ -3,7 +3,8 @@
     ref="networkRef"
     class="contact-network"
     :class="{ 'network-static': isStatic }"
-    aria-hidden="true"
+    role="img"
+    :aria-label="t('ambient.contactAriaLabel')"
   >
     <canvas
       v-if="!isStatic"
@@ -27,7 +28,10 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useAmbientAnimation } from '@/composables/useAmbientAnimation'
+
+const { t } = useI18n()
 
 const props = defineProps({
   nodeCount: {
