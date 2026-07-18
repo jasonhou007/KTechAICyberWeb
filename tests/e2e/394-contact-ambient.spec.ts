@@ -9,8 +9,8 @@ import { test, expect } from '@playwright/test'
  * AC1: ContactNetwork component renders on Contact page
  * AC2: Canvas element exists with aria-hidden="true" when not in reduced motion mode
  * AC3: Static fallback renders when prefers-reduced-motion is enabled
- * AC4: Network has 15 nodes on desktop (>=768px viewport)
- * AC5: Network has 8 nodes on mobile (<768px viewport)
+ * AC4: Network has 12 nodes on desktop (>=768px viewport)
+ * AC5: Network has 6 nodes on mobile (<768px viewport)
  * AC6: Animation runs smoothly at 60fps
  * AC7: Contact form remains fully functional and accessible
  * AC8: Component has proper positioning (fixed, z-index: 0, opacity: 0.4)
@@ -51,7 +51,7 @@ test.describe('#394 Contact ambient network background', () => {
     await expect(canvas).not.toBeVisible()
   })
 
-  test('AC4: Network has 15 nodes on desktop (>=768px viewport)', async ({ page }) => {
+  test('AC4: Network has 12 nodes on desktop (>=768px viewport)', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 })
     
     // Wait for canvas to be ready
@@ -64,7 +64,7 @@ test.describe('#394 Contact ambient network background', () => {
     await expect(networkComponent).toHaveAttribute('class', /contact-network/)
   })
 
-  test('AC5: Network has 8 nodes on mobile (<768px viewport)', async ({ page }) => {
+  test('AC5: Network has 6 nodes on mobile (<768px viewport)', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
     
     // Wait for canvas to be ready

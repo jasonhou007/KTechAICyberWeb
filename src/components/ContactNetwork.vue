@@ -56,7 +56,7 @@ const dataFlowParticles = ref([])
 
 const computedNodeCount = computed(() => {
   if (props.nodeCount !== null) return props.nodeCount
-  return typeof window !== 'undefined' && window.innerWidth < 768 ? 8 : 15
+  return typeof window !== 'undefined' && window.innerWidth < 768 ? 6 : 12
 })
 
 const staticNodes = computed(() => {
@@ -255,12 +255,11 @@ function setupCanvas() {
   if (!canvasRef.value) return
 
   const canvas = canvasRef.value
-  const parent = networkRef.value?.parentElement
 
-  if (parent) {
-    canvas.width = parent.clientWidth
-    canvas.height = parent.clientHeight
-  }
+  // Set canvas size to window size immediately for fixed positioning
+  // This prevents layout shift from canvas resizing
+  canvas.width = window.innerWidth || 1920
+  canvas.height = window.innerHeight || 1080
 
   ctx.value = canvas.getContext('2d')
   generateNodes()
@@ -274,14 +273,13 @@ function handleResize() {
 }
 
 onMounted(() => {
-  setTimeout(() => {
-    setupCanvas()
-    if (isPlaying.value) {
-      lastTime = null
-      animationFrameId = requestAnimationFrame(animate)
-    }
-    emit('ready')
-  }, 100)
+  // Set up canvas immediately to prevent layout shift
+  setupCanvas()
+  if (isPlaying.value) {
+    lastTime = null
+    animationFrameId = requestAnimationFrame(animate)
+  }
+  emit('ready')
   window.addEventListener('resize', handleResize)
 })
 
@@ -314,12 +312,17 @@ watch(isPlaying, (playing) => {
   z-index: 0;
   pointer-events: none;
   opacity: 0.4;
+  /* GPU acceleration and prevent layout shift */
+  will-change: opacity;
+  contain: layout style paint;
 }
 
 .network-canvas {
   width: 100%;
   height: 100%;
   display: block;
+  /* Prevent canvas from causing layout shift */
+  contain: strict;
 }
 
 .network-static.nodes-grid {
@@ -330,6 +333,7 @@ watch(isPlaying, (playing) => {
     linear-gradient(rgba(0, 255, 204, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 204, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
+  contain: layout style paint;
 }
 
 .static-node {
