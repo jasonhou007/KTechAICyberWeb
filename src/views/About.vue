@@ -423,6 +423,14 @@ const { enabled } = useParallax({
   min-height: 620px;
 }
 
+/* #385: Reduce who-we-are top padding to fill the post-#383 white space.
+   After culture-icon.png removal, there was ~8rem total gap (4rem ambient margin + 4rem section padding).
+   This reduces who-we-are padding by 50% to improve visual flow.
+   Using pixel values to ensure consistent spacing across viewport-specific root font sizes. */
+.who-we-are {
+  padding-top: 32px; /* 2rem at 16px root */
+}
+
 /* Hero Section */
 .about-hero {
   min-height: 50vh;
@@ -875,6 +883,11 @@ const { enabled } = useParallax({
   .section {
     padding: 3rem 5%;
   }
+
+  /* #385: Keep who-we-are at 2rem on tablet (768px), don't apply 3rem section padding */
+  .who-we-are.section {
+    padding-top: 32px; /* 2rem at 16px root */
+  }
 }
 
 @media (max-width: 480px) {
@@ -887,6 +900,11 @@ const { enabled } = useParallax({
 
   .culture-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* #385: Mobile who-we-are padding reduced to 1.5rem (50% reduction) */
+  .section.who-we-are {
+    padding-top: 24px; /* 1.5rem at 16px root */
   }
 }
 </style>
