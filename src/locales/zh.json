@@ -1787,11 +1787,9 @@
   },
   "selfDriving": {
     "aria": {
-      "regionLabel": "自动驾驶开发流水线 — 实时演示",
-      "regionLabel6Agent": "六代理对抗流水线 — 实时演示"
+      "regionLabel": "自动驾驶开发流水线 — 实时演示"
     },
     "heading": "自动驾驶开发流水线",
-    "heading6Agent": "六代理对抗开发流水线",
     "phases": {
       "intake": {
         "title": "议题接入",
@@ -1835,9 +1833,7 @@
       "plannerLine": "规划器：正在分析需求…",
       "coderLine": "编码器：+export function resolve() {",
       "securityLine": "安全：未发现漏洞",
-      "evalLine": "评估器：8/8 验收标准已达成",
-      "reviewerLine": "审查员：正在挑战实现…",
-      "mergerLine": "合并器：正在合并 PR 到主分支"
+      "evalLine": "评估器：8/8 验收标准已达成"
     }
   },
   "asyncLoadError": {
