@@ -249,6 +249,13 @@ describe('#335 Group G — async SelfDrivingDemo wrapper reserves its min-height
     expect(block, '.self-driving-section rule block not found').not.toBeNull()
     expect(block[1]).toMatch(/min-height:\s*clamp\(\s*280px/)
   })
+
+  it("About.vue .self-driving-section reserves min-height (clamp 280px floor)", () => {
+    const src = stripComments(read(ABOUT_VUE))
+    const block = src.match(/\.self-driving-section\s*\{([^}]*)\}/)
+    expect(block, '.self-driving-section rule block not found').not.toBeNull()
+    expect(block[1]).toMatch(/min-height:\s*clamp\(\s*280px/)
+  })
 })
 
 describe('#335 Group H — About hero figure reserves image aspect-ratio', () => {

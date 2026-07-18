@@ -27,6 +27,13 @@
       </div>
     </section>
 
+    <!-- Self-Driving dev pipeline flagship demo (#203). Auto-plays the full
+         INTAKE -> ... -> RESOLVED loop with zero interaction. Mounted IN-FLOW
+         (not as a global fixed background) so the pipeline rail, streaming
+         code feed, and status readout are visible page content (AC1). -->
+    <section class="self-driving-section">
+      <SelfDrivingDemo />
+    </section>
 
     <!-- Company pulse ambient animation (#361). Shows particle flow from
          vision → mission → culture. Self-driving demo synchronized with
@@ -312,6 +319,10 @@ import { ref, defineAsyncComponent } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
 import { useParallax } from '../composables/useParallax'
 import CyberImage from '../components/CyberImage.vue'
+// #346: lazy-loaded via defineAsyncComponent (mirrors Home.vue #203) so the
+// heavy rAF-driven demo is code-split into its own chunk and does not block
+// /about's LCP critical path. ~3.6s bootup removed from the route chunk.
+const SelfDrivingDemo = defineAsyncComponent(() => import('../components/SelfDrivingDemo.vue'))
 // #361: AboutAmbient ambient animation - company pulse particle flow
 const AboutAmbient = defineAsyncComponent(() => import('../components/AboutAmbient.vue'))
 import AboutIcon from '../components/icons/AboutIcon.vue'
@@ -384,6 +395,27 @@ const { enabled } = useParallax({
   margin: 0 auto;
 }
 
+/* Self-Driving demo flagship section (#203). The demo component owns its own
+   background + min-height; this wrapper gives it vertical breathing room and a
+   relative positioning context above the grid-bg. */
+.self-driving-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 2rem auto;
+  max-width: 1200px;
+  border: 1px solid var(--accent-cyan-alpha-15);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  /* #335: reserve the demo's min-height on the eagerly-rendered wrapper so
+   * the sections below it (esp. .cyber-footer, the dominant About shifter
+   * at 0.0968) do not reflow when the demo finishes mounting. Matches
+   * SelfDrivingDemo.vue's .self-driving-demo min-height. */
+  min-height: clamp(280px, 38vh, 360px);
+  /* scroll-margin-top: leave head-room for the fixed Header so the demo's
+     StatusReadout is NOT occluded by the nav (mobile Chrome E2E gate). */
+  scroll-margin-top: 6rem;
+}
 
 /* Hero Section */
 .about-hero {

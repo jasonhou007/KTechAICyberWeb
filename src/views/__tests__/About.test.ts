@@ -27,7 +27,16 @@ describe('About.vue', () => {
   let wrapper: VueWrapper
 
   beforeEach(() => {
-    wrapper = mount(About)
+    wrapper = mount(About, {
+      global: {
+        stubs: {
+          // #203: About mounts <SelfDrivingDemo /> as an in-flow section.
+          // Stub it so this suite's heading/section counts assert About's OWN
+          // card structure (the demo is exercised by its own dedicated suites).
+          SelfDrivingDemo: true,
+        },
+      },
+    })
   })
 
   afterEach(() => {
