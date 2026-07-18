@@ -86,11 +86,15 @@ test.describe('#203 Self-Driving ambient demo background', () => {
   })
 
   test('global: the ambient layer is present on BOTH / and /about (not dead code)', async ({ page }) => {
+    // Post-#361 the ambient layer is page-specific: SelfDrivingDemo on /
+    // (data-selfdriving-root), AboutAmbient on /about. Both carry the shared
+    // data-ambient-root marker so this not-dead-code gate stays meaningful.
     await page.goto(BASE, { waitUntil: 'networkidle' })
     await expect(page.locator('[data-selfdriving-root]')).toBeVisible()
+    await expect(page.locator('[data-ambient-root]')).toBeVisible()
 
     await page.goto(`${BASE}about`, { waitUntil: 'networkidle' })
-    await expect(page.locator('[data-selfdriving-root]')).toBeVisible()
+    await expect(page.locator('[data-ambient-root="about"]')).toBeVisible()
   })
 
   // -------------------------------------------------------------------------
@@ -169,10 +173,10 @@ test.describe('#203 Self-Driving ambient demo background', () => {
     })
     expect(rootHitInDemo, 'the demo root center must hit an element inside the demo (no overlay covers the section)').toBe(true)
 
-    // The demo must render at least one pipeline card (the cards are the
-    // primary content; their presence + phase-driven advancement is the
-    // visible "alive" signal, exercised by the auto-play E2E).
-    const cardCount = await root.locator('.pipeline-card').count()
+    // The demo must render at least one agent card (post-#364 the cards are
+    // .agent-card inside AgentPipelineTrack; their presence + phase-driven
+    // advancement is the visible "alive" signal, exercised by the auto-play E2E).
+    const cardCount = await root.locator('.agent-card').count()
     expect(cardCount).toBeGreaterThan(0)
   })
 })

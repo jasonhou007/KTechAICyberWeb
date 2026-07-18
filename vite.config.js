@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url'
 
 const SITE_URL = 'https://jasonhou007.github.io/KTechAICyberWeb'
 
@@ -74,6 +75,17 @@ function deferEntryCss() {
 export default defineConfig({
   plugins: [vue(), deferEntryCss()],
   base: '/KTechAICyberWeb/',
+  resolve: {
+    alias: {
+      // #375: `@` -> src alias. vitest.config.ts has always defined this
+      // (so unit tests importing `@/composables/useLanguage` passed), but
+      // the build config never did — so #361's AboutAmbient.vue /
+      // ServicesAmbient.vue `@/...` imports broke `vite build` (Rollup
+      // failed to resolve) while the TDD suite stayed green. Mirror the
+      // vitest alias here so build and test resolve identically.
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   server: {
     port: 3000
   },

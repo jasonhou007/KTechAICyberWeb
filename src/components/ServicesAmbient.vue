@@ -3,6 +3,7 @@
     ref="ambientRef"
     class="services-ambient"
     :class="{ 'ambient-static': isStatic }"
+    data-ambient-root="services"
     role="img"
     :aria-label="t('ambient.servicesAriaLabel')"
   >
