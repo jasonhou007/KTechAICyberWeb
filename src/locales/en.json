@@ -311,6 +311,15 @@
     "learnMore": "Learn More",
     "ktechNews": "KTech News",
     "kbtgNews": "KBTG News",
+    "ticker": {
+      "breaking": "BREAKING",
+      "latest": "LATEST",
+      "label": "Latest updates",
+      "pause": "Ticker paused",
+      "resume": "Ticker playing",
+      "noNews": "No news available",
+      "article": "{title}"
+    },
     "articleAlts": {
       "iso27001": "KTech ISO27001 information security certification announcement",
       "blockchain": "Blockchain technology reshaping financial services illustration",

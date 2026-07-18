@@ -9,6 +9,9 @@
       <span class="news-detail__breadcrumb-current">{{ article?.title }}</span>
     </nav>
 
+    <!-- Ambient News Ticker -->
+    <NewsTicker v-if="!isLoading && article" :articles="relatedArticles" />
+
     <!-- Loading State -->
     <div v-if="isLoading" class="news-detail__loading">
       <div class="news-detail__skeleton-title"></div>
@@ -132,6 +135,7 @@ import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { useLanguage } from '../i18n'
 import CyberImage from '../components/CyberImage.vue'
+import NewsTicker from '../components/NewsTicker.vue'
 import newsData from '../data/news.json'
 
 const props = defineProps({

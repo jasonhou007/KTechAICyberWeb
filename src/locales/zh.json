@@ -311,6 +311,15 @@
     "learnMore": "了解更多",
     "ktechNews": "开泰科技动态",
     "kbtgNews": "KBTG 动态",
+    "ticker": {
+      "breaking": "最新",
+      "latest": "最新",
+      "label": "最新资讯",
+      "pause": "滚动已暂停",
+      "resume": "滚动播放中",
+      "noNews": "暂无新闻",
+      "article": "{title}"
+    },
     "articleAlts": {
       "iso27001": "KTech 通过 ISO27001 信息安全认证公告",
       "blockchain": "区块链技术重塑金融服务示意图",

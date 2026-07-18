@@ -7,6 +7,9 @@
       <span class="news-page__breadcrumb-current">{{ t('news.title') }}</span>
     </nav>
 
+    <!-- Ambient News Ticker -->
+    <NewsTicker :articles="filteredArticles" />
+
     <!-- Header -->
     <header class="news-page__header">
       <h1 class="news-page__title">{{ t('news.title') }}</h1>
@@ -33,6 +36,7 @@
 import { ref, computed } from 'vue'
 import NewsFilter from '../components/NewsFilter.vue'
 import NewsList from '../components/NewsList.vue'
+import NewsTicker from '../components/NewsTicker.vue'
 import { useLanguage } from '../i18n'
 import newsData from '../data/news.json'
 
