@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test'
  * Solution: Add ContactNetwork component with canvas-based animated network background
  *
  * AC1: ContactNetwork component renders on Contact page
- * AC2: Canvas element exists with aria-hidden="true" when not in reduced motion mode
+ * AC2: Canvas element exists with proper aria attributes (role="img", aria-label) when not in reduced motion mode
  * AC3: Static fallback renders when prefers-reduced-motion is enabled
  * AC4: Network has 12 nodes on desktop (>=768px viewport)
  * AC5: Network has 6 nodes on mobile (<768px viewport)
@@ -28,13 +28,17 @@ test.describe('#394 Contact ambient network background', () => {
     await expect(networkComponent).toBeVisible()
   })
 
-  test('AC2: Canvas element exists with aria-hidden when not in reduced motion', async ({ page }) => {
+  test('AC2: Canvas element exists with proper aria attributes when not in reduced motion', async ({ page }) => {
     const canvas = page.locator('.contact-network canvas')
     await expect(canvas).toBeVisible()
-    
-    // Verify aria-hidden attribute
-    const ariaHidden = await canvas.getAttribute('aria-hidden')
-    expect(ariaHidden).toBe('true')
+
+    // Verify container has role="img" and aria-label
+    const networkContainer = page.locator('.contact-network')
+    const role = await networkContainer.getAttribute('role')
+    expect(role).toBe('img')
+
+    const ariaLabel = await networkContainer.getAttribute('aria-label')
+    expect(ariaLabel).toBeTruthy()
   })
 
   test('AC3: Static fallback renders when prefers-reduced-motion is enabled', async ({ page }) => {
@@ -172,12 +176,15 @@ test.describe('#394 Contact ambient network background', () => {
     expect(count).toBeGreaterThan(0)
   })
 
-  test('Accessibility: Component does not interfere with screen readers', async ({ page }) => {
-    // Verify that the network component is properly hidden from screen readers
+  test('Accessibility: Component has proper ARIA attributes', async ({ page }) => {
+    // Verify that the network component has proper accessibility attributes
     const networkComponent = page.locator('.contact-network')
-    const ariaHidden = await networkComponent.getAttribute('aria-hidden')
-    expect(ariaHidden).toBe('true')
-    
+    const role = await networkComponent.getAttribute('role')
+    expect(role).toBe('img')
+
+    const ariaLabel = await networkComponent.getAttribute('aria-label')
+    expect(ariaLabel).toBeTruthy()
+
     // Verify that form content is still accessible
     const mainContent = page.locator('.contact-content')
     await expect(mainContent).toBeVisible()
