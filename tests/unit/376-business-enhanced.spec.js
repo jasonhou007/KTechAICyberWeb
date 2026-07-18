@@ -64,8 +64,8 @@ describe('#376 Business section cyberpunk enhancements', () => {
 
     it('CSS includes box-shadow glow effects for cards', () => {
       const vue = readSource('src/views/Home.vue')
-      // Card hover should have enhanced glow
-      expect(vue).toMatch(/box-shadow:.*var\(--cyan\)/)
+      // Card hover should have enhanced glow (uses alpha-cyan variables)
+      expect(vue).toMatch(/box-shadow:.*var\(--accent-cyan-alpha/)
     })
   })
 

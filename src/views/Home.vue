@@ -409,6 +409,13 @@ h1 {
   text-align: center;
   margin-bottom: clamp(1rem, 1.5vh, 1.5rem);
   text-transform: uppercase;
+  /* #376: Enhanced neon glow effect (AC1, AC3) */
+  text-shadow:
+    0 0 10px var(--cyan),
+    0 0 20px var(--cyan),
+    0 0 30px var(--cyan),
+    0 0 40px var(--accent-cyan-alpha-60);
+  animation: neonPulseEnhanced 2s ease-in-out infinite alternate;
 }
 
 /* Hero section */
@@ -465,12 +472,51 @@ h1 {
  * stack compresses on 1080p and breathes on 4K. The card grid stays 3-col
  * (tightest 2-row packing of 6 cards). */
 .whatwedo {
+  position: relative;
   text-align: left;
   padding: clamp(0.3rem, 0.3vh, 0.75rem) 5%;
   /* #335: isolate layout shifts (font reflow, card stagger) so they cannot
    * propagate CLS to ancestor scoring. Named as the biggest Home shifter
    * (section.whatwedo 0.1116) in the saved Lighthouse layout-shifts audit. */
   contain: layout;
+  /* #376: Position relative for pseudo-element background layers */
+  overflow: hidden;
+}
+
+/* #376: Network/circuit background animation layers (AC1, AC4) */
+.whatwedo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(0, 255, 204, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(255, 0, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(0, 255, 204, 0.02) 0%, transparent 50%);
+  background-size: 200% 200%;
+  animation: networkPulse 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* #376: Animated circuit lines (AC4) */
+.whatwedo::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image:
+    linear-gradient(90deg, transparent 49.5%, rgba(0, 255, 204, 0.05) 49.5%, rgba(0, 255, 204, 0.05) 50.5%, transparent 50.5%),
+    linear-gradient(0deg, transparent 49.5%, rgba(0, 255, 204, 0.05) 49.5%, rgba(0, 255, 204, 0.05) 50.5%, transparent 50.5%);
+  background-size: 60px 60px;
+  animation: circuitMove 12s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
 }
 
 .solution-group {
@@ -478,11 +524,25 @@ h1 {
 }
 
 .group-label {
+  position: relative;
   font-family: var(--font-display);
   color: var(--cyan);
   text-shadow: 0 0 10px var(--accent-cyan-alpha-60);
   margin-bottom: clamp(0.25rem, 0.4vh, 0.6rem);
   font-size: var(--home-group-label);
+  /* #376: Enhanced cyber styling (AC3) */
+}
+
+/* #376: Group label underline glow effect (AC3) */
+.group-label::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  animation: lineGlow 2s ease-in-out infinite;
 }
 
 .solution-grid {
@@ -492,9 +552,54 @@ h1 {
 }
 
 .solution-card {
+  position: relative;
   padding: clamp(0.45rem, 0.5vh, 1rem);
   animation: fadeInUp 0.6s ease forwards;
   opacity: 0;
+  /* #376: Setup for 3D transforms (AC2) */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  z-index: 1;
+}
+
+/* #376: Enhanced 3D card hover effects (AC2) */
+.solution-card.cyber-card:hover {
+  transform: translateY(-12px) rotateX(5deg) scale(1.02);
+  box-shadow:
+    0 0 20px var(--accent-cyan-alpha-30),
+    0 0 40px var(--accent-cyan-alpha-20),
+    0 12px 24px rgba(0, 0, 0, 0.4);
+  border-color: var(--accent-cyan-alpha-50);
+}
+
+/* #376: Animated gradient border on hover (AC2) */
+.solution-card.cyber-card:hover::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, var(--cyan), transparent, var(--cyan));
+  background-size: 400% 400%;
+  animation: borderRotate 3s linear infinite;
+  border-radius: var(--radius-lg);
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* #376: Holographic shimmer effect (AC2) */
+.solution-card.cyber-card:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 1.5s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes fadeInUp {
@@ -508,11 +613,109 @@ h1 {
   }
 }
 
+/* #376: Network pulse animation for background (AC4) */
+@keyframes networkPulse {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* #376: Circuit move animation for background lines (AC4) */
+@keyframes circuitMove {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(30px, 30px);
+  }
+  50% {
+    transform: translate(0, 60px);
+  }
+  75% {
+    transform: translate(-30px, 30px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* #376: Border rotate animation for card hover (AC2) */
+@keyframes borderRotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* #376: Shimmer animation for holographic effect (AC2) */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* #376: Line glow animation for group labels (AC3) */
+@keyframes lineGlow {
+  0%, 100% {
+    opacity: 0.4;
+    width: 80%;
+    left: 10%;
+  }
+  50% {
+    opacity: 1;
+    width: 100%;
+    left: 0%;
+  }
+}
+
+/* #376: Enhanced neon pulse for stronger glow (AC1, AC3) */
+@keyframes neonPulseEnhanced {
+  from {
+    text-shadow:
+      0 0 10px var(--cyan),
+      0 0 20px var(--cyan),
+      0 0 30px var(--cyan),
+      0 0 40px var(--accent-cyan-alpha-60);
+  }
+  to {
+    text-shadow:
+      0 0 20px var(--cyan),
+      0 0 30px var(--cyan),
+      0 0 40px var(--cyan),
+      0 0 50px var(--cyan),
+      0 0 60px var(--accent-cyan-alpha-60);
+  }
+}
+
 .solution-card h4 {
   font-family: var(--font-display);
   color: var(--cyan);
   margin: 0 0 0.25rem 0;
   font-size: var(--home-card-title);
+  /* #376: Enhanced hover effect (AC3) */
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* #376: Card title hover enhancement (AC3) */
+.solution-card.cyber-card:hover h4 {
+  color: var(--cyan);
+  text-shadow:
+    0 0 10px var(--cyan),
+    0 0 20px var(--accent-cyan-alpha-60),
+    0 0 30px var(--accent-cyan-alpha-40);
 }
 
 .solution-card p {
@@ -665,6 +868,25 @@ h1 {
      (CLS guard — AC #3). */
   content-visibility: auto;
   contain-intrinsic-size: 320px;
+}
+
+/* #376: Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .whatwedo::before,
+  .whatwedo::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .solution-card.cyber-card:hover::before,
+  .solution-card.cyber-card:hover::after {
+    animation-duration: 0.01ms !important;
+  }
+  .group-label::after {
+    animation-duration: 0.01ms !important;
+  }
+  .section-title {
+    animation-duration: 0.01ms !important;
+  }
 }
 
 /* Responsive */
