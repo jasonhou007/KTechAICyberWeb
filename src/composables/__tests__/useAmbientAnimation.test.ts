@@ -11,10 +11,26 @@ vi.mock('@vueuse/core', () => ({
   useMediaQuery: () => ref(false)
 }))
 
+// Mock useDeviceDetection - desktop by default
+const mockIsMobile = ref(false)
+const mockIsDesktop = ref(true)
+const mockCleanup = vi.fn()
+
+vi.mock('../useDeviceDetection', () => ({
+  useDeviceDetection: () => ({
+    isMobile: mockIsMobile,
+    isDesktop: mockIsDesktop,
+    cleanup: mockCleanup
+  })
+}))
+
 describe('useAmbientAnimation', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     vi.clearAllMocks()
+    // Reset to desktop state
+    mockIsMobile.value = false
+    mockIsDesktop.value = true
   })
 
   it('should initialize with paused state', () => {
@@ -64,5 +80,72 @@ describe('useAmbientAnimation', () => {
 
     const { startLoop } = useAmbientAnimation()
     expect(() => startLoop()).not.toThrow()
+  })
+
+  describe('mobile adaptive parameters', () => {
+    it('should use desktop defaults when isMobile is false', () => {
+      const { adaptiveLoopDuration, adaptiveParticles, adaptiveUpdateInterval, isMobile } = useAmbientAnimation()
+      
+      expect(isMobile.value).toBe(false)
+      expect(adaptiveLoopDuration.value).toBe(45000)
+      expect(adaptiveParticles.value).toBe(50)
+      expect(adaptiveUpdateInterval.value).toBe(16)
+    })
+
+    it('should use mobile-specific parameters when isMobile is true', () => {
+      // Switch to mobile mode
+      mockIsMobile.value = true
+      mockIsDesktop.value = false
+
+      const { adaptiveLoopDuration, adaptiveParticles, adaptiveUpdateInterval, isMobile } = useAmbientAnimation({
+        mobileLoopDurationMs: 60000,
+        mobileParticles: 20,
+        mobileUpdateIntervalMs: 32
+      })
+      
+      expect(isMobile.value).toBe(true)
+      expect(adaptiveLoopDuration.value).toBe(60000)
+      expect(adaptiveParticles.value).toBe(20)
+      expect(adaptiveUpdateInterval.value).toBe(32)
+    })
+
+    it('should expose isMobile from device detection', () => {
+      const { isMobile } = useAmbientAnimation()
+      expect(isMobile).toBeDefined()
+      expect(typeof isMobile.value).toBe('boolean')
+    })
+
+    it('should have custom mobile parameters override defaults', () => {
+      // Switch to mobile mode
+      mockIsMobile.value = true
+      mockIsDesktop.value = false
+
+      const { adaptiveParticles } = useAmbientAnimation({
+        particles: 100,
+        mobileParticles: 30
+      })
+
+      expect(adaptiveParticles.value).toBe(30)
+    })
+  })
+
+  describe('throttling behavior', () => {
+    it('should support throttling configuration', () => {
+      const { startLoop, stopLoop } = useAmbientAnimation({
+        enableThrottling: true
+      })
+
+      expect(() => startLoop()).not.toThrow()
+      stopLoop()
+    })
+
+    it('should allow disabling throttling', () => {
+      const { startLoop, stopLoop } = useAmbientAnimation({
+        enableThrottling: false
+      })
+
+      expect(() => startLoop()).not.toThrow()
+      stopLoop()
+    })
   })
 })
