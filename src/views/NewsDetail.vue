@@ -153,16 +153,15 @@ const findArticle = () => {
   return found || null
 }
 
-// Responsive image variants (#199 / #278). Most News images are now correctly
-// served as .svg (purpose-built cyberpunk vector art, intrinsic width 800); the
-// only real raster is news-iso27001-official.webp (258x258). An "800w" srcset
-// descriptor on a vector is meaningless (vectors scale without loss), so for
-// SVG paths we emit no srcset/sizes at all and let CyberImage render the bare
-// <img src>. Only the real raster gets a single-descriptor srcset at its
+// Responsive image variants (#199 / #278 / #374). ALL News images are now
+// purpose-built .svg cyberpunk vector art (intrinsic width 800) — #374
+// replaced the last raster (the iso27001 webp) with iso27001-shield.svg. An
+// "800w" srcset descriptor on a vector is meaningless (vectors scale without
+// loss), so for SVG paths we emit no srcset/sizes at all and let CyberImage
+// render the bare <img src>. The NATIVE_WIDTH_MAP + non-vector branch is kept
+// so a future raster news image still gets a single-descriptor srcset at its
 // intrinsic width. NO new image files are generated for News.
-const NATIVE_WIDTH_MAP = {
-  '/images/news/news-iso27001-official.webp': 258,
-}
+const NATIVE_WIDTH_MAP = {}
 const DEFAULT_NEWS_WIDTH = 800 // SVGs declare width="800"
 
 const imageNativeWidth = computed(() => {

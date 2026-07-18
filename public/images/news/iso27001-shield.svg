@@ -1,0 +1,52 @@
+<svg width="800" height="450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradShield" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0f;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a2e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00ffcc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bgGradShield)" />
+  <g opacity="0.1">
+    <pattern id="gridShield" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00f0ff" stroke-width="1"/>
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridShield)" />
+  </g>
+  <!-- orbit arcs around the shield -->
+  <path d="M 250 120 A 190 110 0 0 1 550 130" fill="none" stroke="#00f0ff" stroke-width="1" opacity="0.4" />
+  <path d="M 240 300 A 200 120 0 0 0 560 290" fill="none" stroke="#00f0ff" stroke-width="1" opacity="0.3" />
+  <path d="M 290 90 A 170 170 0 0 1 520 100" fill="none" stroke="#00ffcc" stroke-width="1" opacity="0.5" stroke-dasharray="6,6" />
+  <!-- corner circuit traces -->
+  <path d="M 30 30 L 90 30 L 110 50 L 160 50" fill="none" stroke="#00f0ff" stroke-width="1.5" opacity="0.6" />
+  <path d="M 770 420 L 710 420 L 690 400 L 640 400" fill="none" stroke="#00f0ff" stroke-width="1.5" opacity="0.6" />
+  <circle cx="160" cy="50" r="5" fill="#00f0ff" opacity="0.9" />
+  <circle cx="640" cy="400" r="5" fill="#00f0ff" opacity="0.9" />
+  <circle cx="250" cy="120" r="4" fill="#00f0ff" opacity="0.8" />
+  <circle cx="560" cy="290" r="4" fill="#00f0ff" opacity="0.8" />
+  <circle cx="520" cy="100" r="6" fill="#00ffcc" opacity="0.9" />
+  <!-- hero security shield (~200px tall, centered at x=400) -->
+  <path d="M 400 105 L 490 140 L 490 225 C 490 280 450 315 400 335 C 350 315 310 280 310 225 L 310 140 Z"
+        fill="#00f0ff" fill-opacity="0.05" stroke="url(#shieldGrad)" stroke-width="4" />
+  <!-- layered inner shield outline -->
+  <path d="M 400 130 L 468 157 L 468 224 C 468 266 438 294 400 310 C 362 294 332 266 332 224 L 332 157 Z"
+        fill="none" stroke="url(#shieldGrad)" stroke-width="2" opacity="0.5" />
+  <!-- padlock: shackle arc + rounded body + keyhole -->
+  <path d="M 370 205 L 370 185 C 370 165 430 165 430 185 L 430 205" fill="none" stroke="#00f0ff" stroke-width="6" />
+  <rect x="355" y="205" width="90" height="70" rx="10" fill="none" stroke="#00f0ff" stroke-width="4" />
+  <circle cx="400" cy="232" r="9" fill="none" stroke="#00ffcc" stroke-width="3" />
+  <path d="M 400 238 L 400 255" stroke="#00ffcc" stroke-width="4" stroke-linecap="round" />
+  <!-- certification badge/rosette overlapping shield lower-right -->
+  <g transform="translate(505, 300)">
+    <path d="M -14 26 L -24 62 L -6 52 L 2 66 L 10 30 Z" fill="#0a0a0f" stroke="url(#shieldGrad)" stroke-width="2" />
+    <path d="M 14 26 L 28 60 L 10 52 L 2 66 L -2 32 Z" fill="#0a0a0f" stroke="url(#shieldGrad)" stroke-width="2" opacity="0.8" />
+    <path d="M 0 -32 L 8 -24 L 18 -27 L 21 -17 L 31 -14 L 29 -4 L 36 3 L 30 11 L 32 21 L 22 24 L 19 34 L 9 32 L 0 39 L -9 32 L -19 34 L -22 24 L -32 21 L -30 11 L -36 3 L -29 -4 L -31 -14 L -21 -17 L -18 -27 L -8 -24 Z"
+          fill="#0a0a0f" stroke="url(#shieldGrad)" stroke-width="3" />
+    <path d="M -14 0 L -4 11 L 16 -11" fill="none" stroke="#00ffcc" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+  <text x="400" y="390" font-family="Arial, sans-serif" font-size="36" fill="#00f0ff" text-anchor="middle" letter-spacing="6">ISO 27001</text>
+  <text x="400" y="420" font-family="Arial, sans-serif" font-size="20" fill="#00ffcc" text-anchor="middle" opacity="0.9" letter-spacing="4">CERTIFIED</text>
+</svg>

@@ -88,19 +88,20 @@
        fetch on first paint, before the JS bundle even arrives. Mirrors the
        /about hero preload above (#334 Fix D).
 
-       The srcset/sizes literals are DERIVED from src/data/news.json[0].image
-       (the first news card = the LCP candidate, NewsList sets
-       lcp-candidate on index===0) + src/components/NewsCard.vue
-       NATIVE_WIDTH_MAP. The first card image is the iso27001 webp (a real
-       258x258 raster, NOT an SVG), so NewsCard emits a single-descriptor
-       srcset at its intrinsic width. The unit test at
-       tests/unit/340-perf-news-image-preload.spec.js re-derives these
-       literals from source and asserts they match this preload, so any drift
-       (a new first-card image, a NATIVE_WIDTH_MAP edit) without updating
-       this line fails the suite. -->
+       #374: the first-card image switched from a 258x258 raster to a
+       purpose-built SVG illustration (iso27001-shield.svg). A vector has no intrinsic pixel width and
+       NewsCard/NewsDetail emit NO srcset/sizes for .svg paths, so this
+       preload is a plain href with NO imagesrcset/imagesizes (the /about
+       preload above keeps them — that image is still a raster).
+
+       The href literal is DERIVED from src/data/news.json[0].image (the
+       first news card = the LCP candidate, NewsList sets lcp-candidate on
+       index===0). The unit test at
+       tests/unit/340-perf-news-image-preload.spec.js re-derives this href
+       from source and asserts it matches this preload, so any drift (a new
+       first-card image) without updating this line fails the suite. -->
   <link rel="preload" as="image" fetchpriority="high"
-        imagesrcset="/images/news/news-iso27001-official.webp 258w"
-        imagesizes="(max-width: 600px) 100vw, 258px">
+        href="/images/news/iso27001-shield.svg">
 
   <title>开泰科技 - KTech Fintech | 金融科技创新</title>
   <style>
