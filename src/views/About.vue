@@ -418,9 +418,19 @@ const { enabled } = useParallax({
   max-width: 1200px;
   /* Ensure ambient animation has proper spacing from self-driving section */
   clear: both;
-  /* Reserve the section's min-height to prevent collapse and overlap with sections below.
-     Matches AboutAmbient.vue's .about-ambient height (600px) with extra margin space. */
-  min-height: 620px;
+  /* #380: CLS fix - reserve stable dimensions responsive to viewport.
+     Matches AboutAmbient.vue's .about-ambient height (600px desktop / 400px mobile)
+     with aspect-ratio to prevent layout shift from content-visibility: auto.
+     Desktop: 16:5 aspect ratio (600px height) + 20px margin = 620px min-height.
+     Mobile: 8:5 aspect ratio (400px height) + 20px margin = 420px min-height. */
+  aspect-ratio: 16 / 5;
+  min-height: 420px;
+  /* Desktop-specific min-height override */
+}
+@media (min-width: 769px) {
+  .ambient-section {
+    min-height: 620px;
+  }
 }
 
 /* #385: Reduce who-we-are top padding to fill the post-#383 white space.
@@ -888,6 +898,11 @@ const { enabled } = useParallax({
   .who-we-are.section {
     padding-top: 32px; /* 2rem at 16px root */
   }
+
+  /* #380: Mobile ambient section min-height (400px + 20px margin) */
+  .ambient-section {
+    min-height: 420px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -905,6 +920,11 @@ const { enabled } = useParallax({
   /* #385: Mobile who-we-are padding reduced to 1.5rem (50% reduction) */
   .section.who-we-are {
     padding-top: 24px; /* 1.5rem at 16px root */
+  }
+
+  /* #380: Mobile ambient section min-height (400px + 20px margin) */
+  .ambient-section {
+    min-height: 420px;
   }
 }
 </style>

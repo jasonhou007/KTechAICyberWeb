@@ -925,10 +925,10 @@ describe('About.vue', () => {
   })
 
   // ============================================
-  // Layout Verification (AC #386) — verification tests for duplicate ticket #386
-  // confirming the #385 layout adjustments are working correctly.
+  // Layout Verification (AC #386 + #380) — verification tests for duplicate ticket #386
+  // confirming the #385 layout adjustments and #380 CLS fixes are working correctly.
   // ============================================
-  describe('Layout Verification (AC #386)', () => {
+  describe('Layout Verification (AC #386 + #380)', () => {
     const aboutSource = fs.readFileSync(
       path.resolve(process.cwd(), 'src', 'views', 'About.vue'),
       'utf-8',
@@ -954,9 +954,20 @@ describe('About.vue', () => {
       expect(aboutSource).toMatch(/\.section\.who-we-are\s*\{[^}]*padding-top:\s*24px/)
     })
 
-    it('ambient-section maintains its min-height to prevent layout shift', () => {
-      // Verify the ambient section has min-height to prevent CLS (#335)
-      expect(aboutSource).toMatch(/\.ambient-section\s*\{[^}]*min-height:\s*620px/)
+    it('ambient-section maintains responsive min-height to prevent layout shift', () => {
+      // Verify the ambient section has responsive min-height to prevent CLS (#380)
+      expect(aboutSource).toMatch(/\.ambient-section\s*\{[^}]*min-height:\s*420px/)
+      expect(aboutSource).toMatch(/aspect-ratio:\s*16\s*\/\s*5/)
+    })
+
+    it('ambient-section has desktop-specific min-height (620px)', () => {
+      // Verify desktop override for CLS prevention (#380)
+      expect(aboutSource).toMatch(/@media\s*\(min-width:\s*769px\)[\s\S]*\.ambient-section[\s\S]*min-height:\s*620px/)
+    })
+
+    it('ambient-section has mobile-specific min-height (420px)', () => {
+      // Verify mobile media query has the 420px min-height (#380)
+      expect(aboutSource).toMatch(/@media\s*\(max-width:\s*768px\)[\s\S]*\.ambient-section[\s\S]*min-height:\s*420px/)
     })
 
     it('self-driving section maintains its min-height to prevent layout shift', () => {
