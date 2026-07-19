@@ -1186,6 +1186,7 @@
   "ambient": {
     "aboutAriaLabel": "Company pulse ambient animation showing data flow from vision to mission to culture",
     "servicesAriaLabel": "Service flow ambient animation cycling through five KTech services",
-    "contactAriaLabel": "Ambient cyber-network background with animated connection nodes and data flow visualization"
+    "contactAriaLabel": "Ambient cyber-network background with animated connection nodes and data flow visualization",
+	    "careersAriaLabel": "Career path ambient visualization showing talent pipeline from Junior to Principal levels with skill particles"
   }
 }

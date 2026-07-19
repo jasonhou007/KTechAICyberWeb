@@ -1186,6 +1186,7 @@
   "ambient": {
     "aboutAriaLabel": "公司脉搏环境动画，展示从愿景到使命到文化的数据流",
     "servicesAriaLabel": "服务流程环境动画，循环展示五项 KTech 服务",
-    "contactAriaLabel": "环境赛博网络背景，具有动画连接节点和数据流可视化"
+    "contactAriaLabel": "环境赛博网络背景，具有动画连接节点和数据流可视化",
+	    "careersAriaLabel": "职业路径环境可视化，展示从初级到首席级别的人才管道和技能粒子"
   }
 }
