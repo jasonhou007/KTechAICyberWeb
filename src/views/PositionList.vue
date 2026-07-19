@@ -15,6 +15,9 @@
       <p class="position-list__title-accent">{{ t('positions.subtitle') }}</p>
     </section>
 
+    <!-- Career Path Ambient Visualization -->
+    <CareerPathAmbient :positions="filteredPositions" />
+
     <!-- Main Content -->
     <div class="position-list__main">
       <!-- Filters Sidebar -->
@@ -205,6 +208,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useLanguage } from '../composables/useLanguage'
+import CareerPathAmbient from '../components/CareerPathAmbient.vue'
 
 // Load positions data
 const positions = ref([])
