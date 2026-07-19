@@ -157,6 +157,11 @@ function animate(timestamp) {
     return
   }
 
+  // Issue #404: Performance monitoring for RAF loop
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('contact-network-raf-start')
+  }
+
   if (!lastTime) lastTime = timestamp
   const deltaTime = timestamp - lastTime
   lastTime = timestamp
@@ -169,6 +174,12 @@ function animate(timestamp) {
   drawConnections()
   drawNodes()
   drawDataFlow()
+
+  // Issue #404: Mark RAF end and measure duration
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('contact-network-raf-end')
+    performance.measure('contact-network-raf-duration', 'contact-network-raf-start', 'contact-network-raf-end')
+  }
 
   animationFrameId = requestAnimationFrame(animate)
 }

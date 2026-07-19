@@ -3,6 +3,19 @@ import { useIntersectionObserver } from '@vueuse/core'
 import { useMediaQuery } from '@vueuse/core'
 import { useDeviceDetection } from './useDeviceDetection'
 
+// Performance mark names for Issue #404
+export const PERF_MARKS = {
+  RAF_START: 'ambient-raf-start',
+  RAF_END: 'ambient-raf-end',
+  RAF_DURATION: 'ambient-raf-duration',
+  LOOP_START: 'ambient-loop-start',
+  LOOP_END: 'ambient-loop-end',
+  FRAME_DURATION: 'ambient-frame-duration',
+  PAUSED: 'ambient-paused',
+  RESUMED: 'ambient-resumed',
+  THROTTLED: 'ambient-throttled'
+}
+
 export function useAmbientAnimation(options = {}) {
   const {
     loopDurationMs = 45000,
@@ -24,7 +37,17 @@ export function useAmbientAnimation(options = {}) {
   useIntersectionObserver(
     target,
     (entries) => {
+      const wasIntersecting = isIntersecting.value
       isIntersecting.value = entries[0]?.isIntersecting || false
+
+      // Issue #404: Mark pause/resume events
+      if (typeof performance !== 'undefined' && performance.mark) {
+        if (wasIntersecting && !isIntersecting.value) {
+          performance.mark(PERF_MARKS.PAUSED)
+        } else if (!wasIntersecting && isIntersecting.value) {
+          performance.mark(PERF_MARKS.RESUMED)
+        }
+      }
     },
     {
       threshold: 0.1,
@@ -60,6 +83,12 @@ export function useAmbientAnimation(options = {}) {
     if (rafId || isStatic.value) return
     lastTime = performance.now()
     lastUpdateTime = lastTime
+
+    // Issue #404: Mark loop start
+    if (typeof performance !== 'undefined' && performance.mark) {
+      performance.mark(PERF_MARKS.LOOP_START)
+    }
+
     rafId = requestAnimationFrame(loop)
   }
 
@@ -69,17 +98,37 @@ export function useAmbientAnimation(options = {}) {
       return
     }
 
+    // Issue #404: Mark RAF start
+    if (typeof performance !== 'undefined' && performance.mark) {
+      performance.mark(PERF_MARKS.RAF_START)
+    }
+
     const delta = now - lastTime
     lastTime = now
 
     // Throttling for mobile: only update progress at adaptive interval
-    const shouldUpdate = !enableThrottling || !isMobile.value || 
+    const shouldUpdate = !enableThrottling || !isMobile.value ||
       (now - lastUpdateTime >= adaptiveUpdateInterval.value)
 
     if (shouldUpdate) {
       // Update progress (0..1)
       progress.value = (progress.value + delta / adaptiveLoopDuration.value) % 1
       lastUpdateTime = now
+    } else {
+      // Issue #404: Mark throttling on mobile
+      if (typeof performance !== 'undefined' && performance.mark) {
+        performance.mark(PERF_MARKS.THROTTLED)
+      }
+    }
+
+    // Issue #404: Mark RAF end and measure duration
+    if (typeof performance !== 'undefined' && performance.mark) {
+      performance.mark(PERF_MARKS.RAF_END)
+      performance.measure(PERF_MARKS.RAF_DURATION, PERF_MARKS.RAF_START, PERF_MARKS.RAF_END)
+
+      // Also measure full frame duration
+      performance.mark(PERF_MARKS.LOOP_END)
+      performance.measure(PERF_MARKS.FRAME_DURATION, PERF_MARKS.LOOP_START, PERF_MARKS.LOOP_END)
     }
 
     rafId = requestAnimationFrame(loop)
@@ -117,6 +166,7 @@ export function useAmbientAnimation(options = {}) {
     adaptiveParticles,
     adaptiveUpdateInterval,
     startLoop,
-    stopLoop
+    stopLoop,
+    PERF_MARKS // Issue #404: Export performance mark names for testing
   }
 }

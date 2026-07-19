@@ -152,11 +152,22 @@ let lastFrameTime = null
 function animationLoop(now) {
   if (!isPlaying.value) return
 
+  // Issue #404: Performance monitoring for RAF loop
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('about-ambient-raf-start')
+  }
+
   const deltaTime = lastFrameTime ? now - lastFrameTime : 0
   lastFrameTime = now
 
   updateParticles(deltaTime)
   drawCanvas()
+
+  // Issue #404: Mark RAF end and measure duration
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('about-ambient-raf-end')
+    performance.measure('about-ambient-raf-duration', 'about-ambient-raf-start', 'about-ambient-raf-end')
+  }
 
   requestAnimationFrame(animationLoop)
 }

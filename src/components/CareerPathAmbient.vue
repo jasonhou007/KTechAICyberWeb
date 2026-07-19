@@ -73,6 +73,11 @@ const frameInterval = computed(() => 1000 / targetFPS.value)
 const animate = (timestamp: number) => {
   if (!ctx || !canvasRef.value) return
 
+  // Issue #404: Performance monitoring for RAF loop
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('career-path-raf-start')
+  }
+
   const elapsed = timestamp - lastTime.value
 
   if (elapsed < frameInterval.value) {
@@ -87,6 +92,12 @@ const animate = (timestamp: number) => {
 
   // Draw animation
   drawFrame()
+
+  // Issue #404: Mark RAF end and measure duration
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('career-path-raf-end')
+    performance.measure('career-path-raf-duration', 'career-path-raf-start', 'career-path-raf-end')
+  }
 
   animationFrameId = requestAnimationFrame(animate)
 }
