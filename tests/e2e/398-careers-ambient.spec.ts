@@ -15,7 +15,8 @@ import { test, expect } from '@playwright/test'
 
 test.describe('#398 CareerPathAmbient on Careers page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/careers')
+    await page.goto('/KTechAICyberWeb/careers')
+    await page.waitForLoadState('networkidle')
   })
 
   test('should render CareerPathAmbient component', async ({ page }) => {
@@ -46,7 +47,8 @@ test.describe('#398 CareerPathAmbient on Careers page', () => {
   test('should respect reduced motion preference', async ({ page }) => {
     // Simulate reduced motion preference
     await page.emulateMedia({ reducedMotion: 'reduce' })
-    await page.goto('/careers')
+    await page.goto('/KTechAICyberWeb/careers')
+    await page.waitForLoadState('networkidle')
 
     const ambientSection = page.locator('.career-path-ambient')
     await expect(ambientSection).toBeVisible()
@@ -59,7 +61,8 @@ test.describe('#398 CareerPathAmbient on Careers page', () => {
   test('should be responsive on mobile viewport', async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 })
-    await page.goto('/careers')
+    await page.goto('/KTechAICyberWeb/careers')
+    await page.waitForLoadState('networkidle')
 
     const ambientSection = page.locator('.career-path-ambient')
     await expect(ambientSection).toBeVisible()
@@ -72,7 +75,8 @@ test.describe('#398 CareerPathAmbient on Careers page', () => {
   test('should be responsive on desktop viewport', async ({ page }) => {
     // Set desktop viewport
     await page.setViewportSize({ width: 1920, height: 1080 })
-    await page.goto('/careers')
+    await page.goto('/KTechAICyberWeb/careers')
+    await page.waitForLoadState('networkidle')
 
     const ambientSection = page.locator('.career-path-ambient')
     await expect(ambientSection).toBeVisible()

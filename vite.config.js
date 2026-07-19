@@ -121,7 +121,7 @@ export default defineConfig({
       // is the SAME content the SPA served pre-SSG, so the before/after LCP
       // comparison is apples-to-apples (same route, just pre-rendered HTML
       // vs SPA-hydrated).
-      return ['/', '/about', '/contact', '/news', '/services']
+      return ['/', '/about', '/contact', '/news', '/services', '/careers']
     },
   },
   build: {
