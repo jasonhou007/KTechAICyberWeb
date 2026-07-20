@@ -201,6 +201,7 @@ const { enabled } = useParallax({
     { selector: '.grid-bg', intensity: 12 },
     { selector: '.grid-bg-2', intensity: 6 },
     { selector: '.cyber-header', intensity: 20 },
+    { selector: '.hero .cyber-card', intensity: 8 },
   ],
 })
 
