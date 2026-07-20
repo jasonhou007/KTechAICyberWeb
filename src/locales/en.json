@@ -122,8 +122,8 @@
     "title": "Determined to Become a Leading Fintech Company in China ASEAN Region",
     "subtitle": "Better fintech for customers",
     "hero": {
-      "description": "Dedicated to becoming a leading fintech company in the China-ASEAN region.",
-      "description2": "Providing customers with better financial-service technology."
+      "description": "Pioneering autonomous development with AI-powered self-driving software engineering.",
+      "description2": "Transforming how financial technology is built through intelligent automation."
     },
     "cta": "Learn more",
     "whatwedo": {
@@ -287,6 +287,7 @@
     "pageChange": "Page changed to",
     "languageChanged": "Language changed to"
   },
+  "loading": "Loading",
   "news": {
     "docTitle": "News & Updates",
     "title": "News & Updates",
