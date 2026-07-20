@@ -49,8 +49,8 @@
  * Provides clear visual feedback for keyboard users
  */
 :focus-visible {
-  outline: 2px solid var(--focus-color, var(--cyan));
-  outline-offset: 2px;
+  outline: 3px solid var(--focus-color, var(--cyan));
+  outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
 
@@ -63,16 +63,16 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid var(--focus-color, var(--cyan));
-  outline-offset: 2px;
-  box-shadow: 0 0 10px var(--focus-glow, var(--accent-cyan-alpha-50));
+  outline: 3px solid var(--focus-color, var(--cyan));
+  outline-offset: 3px;
+  box-shadow: 0 0 15px var(--focus-glow, var(--accent-cyan-alpha-50));
 }
 
 /**
  * Focus styles for navigation links
  */
 nav a:focus-visible {
-  outline: 2px solid var(--focus-color, var(--cyan));
+  outline: 3px solid var(--focus-color, var(--cyan));
   outline-offset: 4px;
   border-radius: var(--radius-sm);
 }
