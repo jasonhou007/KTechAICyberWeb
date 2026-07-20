@@ -188,6 +188,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 1rem;
+  min-height: 3rem;
   padding: 0.75rem 1rem;
   background: var(--surface-elevated);
   border: 1px solid var(--accent-cyan-alpha-20);
@@ -370,6 +371,7 @@ onUnmounted(() => {
 /* Mobile optimizations */
 @media (max-width: 768px) {
   .news-ticker {
+    min-height: 2.5rem;
     padding: 0.625rem 0.75rem;
     margin-bottom: 1.5rem;
   }
