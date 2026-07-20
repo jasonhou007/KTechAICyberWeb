@@ -95,7 +95,7 @@ export function useAmbientAnimation(options = {}) {
   function loop(now) {
     if (isPaused.value || isStatic.value) {
       rafId = null
-      return
+      return // Do NOT reschedule rAF when paused/stopped
     }
 
     // Issue #404: Mark RAF start
@@ -131,7 +131,12 @@ export function useAmbientAnimation(options = {}) {
       performance.measure(PERF_MARKS.FRAME_DURATION, PERF_MARKS.LOOP_START, PERF_MARKS.LOOP_END)
     }
 
-    rafId = requestAnimationFrame(loop)
+    // Only reschedule if still playing (Issue #382 fix)
+    if (!isPaused.value && !isStatic.value) {
+      rafId = requestAnimationFrame(loop)
+    } else {
+      rafId = null
+    }
   }
 
   function stopLoop() {
