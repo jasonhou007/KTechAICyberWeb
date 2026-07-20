@@ -292,15 +292,18 @@ onUnmounted(() => {
   color: var(--nav-link);
   text-decoration: none;
   font-size: 0.9rem;
-  transition: color 0.3s ease;
+  transition: color 0.25s ease, transform 0.25s ease, text-shadow 0.25s ease;
   position: relative;
   padding: 0.25rem 0;
+  display: inline-block;
 }
 
 .nav-links a:hover,
 .nav-links a:focus {
   color: var(--cyan);
   outline: none;
+  transform: translateY(-1px);
+  text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
 }
 
 .nav-links a::after {
@@ -310,8 +313,9 @@ onUnmounted(() => {
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--cyan);
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, var(--cyan), rgba(0, 255, 255, 0.6));
+  transition: width 0.25s ease;
+  box-shadow: 0 0 6px rgba(0, 255, 255, 0.5);
 }
 
 .nav-links a:hover::after,
@@ -322,6 +326,7 @@ onUnmounted(() => {
 
 .nav-links a.router-link-active {
   color: var(--cyan);
+  text-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
 }
 
 /* Toolbar: language + theme toggles injected by App.vue via the #toolbar
