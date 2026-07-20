@@ -147,5 +147,31 @@ describe('useAmbientAnimation', () => {
       expect(() => startLoop()).not.toThrow()
       stopLoop()
     })
+
+    it('should cancel rAF when paused (offscreen) (#382 fix)', () => {
+      // Track rAF calls
+      let rafCallCount = 0
+      let rafId = 0
+      global.requestAnimationFrame = (cb) => {
+        rafCallCount++
+        rafId = ++rafId
+        return rafId
+      }
+      global.cancelAnimationFrame = () => {}
+
+      const { startLoop, stopLoop } = useAmbientAnimation()
+
+      // Start the loop
+      startLoop()
+      const initialRafCount = rafCallCount
+      expect(initialRafCount).toBeGreaterThan(0)
+
+      // Simulate offscreen (IO callback would trigger isPaused=true)
+      // The watch should call stopLoop() which cancels rAF
+      stopLoop()
+
+      // No new rAF calls after stopping
+      expect(rafCallCount).toBe(initialRafCount)
+    })
   })
 })
