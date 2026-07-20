@@ -122,8 +122,8 @@
     "title": "致力于成为中国—东盟地区领先的金融科技公司",
     "subtitle": "为客户提供更好的金融服务科技",
     "hero": {
-      "description": "致力于成为中国—东盟地区领先的金融科技公司。",
-      "description2": "为客户提供更好的金融服务科技。"
+      "description": "引领自主开发革命，通过AI驱动的自动驾驶软件工程重新定义开发模式。",
+      "description2": "通过智能自动化转型金融科技构建方式。"
     },
     "cta": "了解更多",
     "whatwedo": {
@@ -287,6 +287,7 @@
     "pageChange": "页面已更改为",
     "languageChanged": "语言已更改为"
   },
+  "loading": "加载中",
   "news": {
     "docTitle": "新闻动态",
     "title": "新闻动态",
