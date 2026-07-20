@@ -104,7 +104,7 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Run npm audit
-        run: npm audit --audit-level=moderate
+        run: npm audit --audit-level=high
 
       - name: Check for HIGH/CRITICAL vulnerabilities
         run: |
