@@ -82,6 +82,7 @@ import Home from './views/Home.vue'
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: () => import('./views/About.vue') },
+  { path: '/services', component: () => import('./views/Services.vue') },
   { path: '/news', component: () => import('./views/News.vue') },
   { path: '/news/:slug', component: () => import('./views/NewsDetail.vue'), props: true },
   { path: '/services/supply-chain-finance', component: () => import('./views/SupplyChainFinance.vue') },

@@ -1187,6 +1187,49 @@
       "evalLine": "评估器：8/8 验收标准已达成"
     }
   },
+  "servicesSelfDriving": {
+    "aria": {
+      "regionLabel": "AI 服务流水线 — 实时演示"
+    },
+    "heading": "AI 服务流水线",
+    "phases": {
+      "dataIngestion": {
+        "title": "数据接入",
+        "status": "处理输入流"
+      },
+      "aiAnalysis": {
+        "title": "AI 分析",
+        "status": "模型分析模式"
+      },
+      "pipelineValidation": {
+        "title": "验证",
+        "status": "质量门禁通过"
+      },
+      "serviceExecution": {
+        "title": "执行",
+        "status": "运行服务"
+      },
+      "resultDelivery": {
+        "title": "交付",
+        "status": "结果流式传输"
+      },
+      "serviceComplete": {
+        "title": "完成",
+        "status": "服务已交付"
+      }
+    },
+    "readout": {
+      "delivered": "服务已交付 · 循环 {n}",
+      "cycling": "循环 {n}",
+      "complete": "流水线完成"
+    },
+    "streaming": {
+      "dataLine": "接入：读取数据流…",
+      "analysisLine": "AI：模式检测激活",
+      "validationLine": "验证：所有检查通过",
+      "executionLine": "执行：服务容器就绪"
+    }
+  },
   "asyncLoadError": {
     "title": "此区块无法加载",
     "message": "页面部分内容加载失败，请检查网络连接后重试。",
