@@ -327,12 +327,12 @@ describe('useAutoDemoLoop()', () => {
 
   // 5. throttled-when-offscreen -------------------------------------------
 
-  it('throttled-when-offscreen: IntersectionObserver not-intersecting throttles', () => {
+  it('throttled-when-offscreen: IntersectionObserver not-intersecting pauses rAF (#382 fix)', () => {
     mockMatchMedia({ '(prefers-reduced-motion: reduce)': false })
     const raf = queueRAF()
     mockIntersectionObserver()
     const { wrapper, getApi } = mountHost()
-    const { throttleLevel } = getApi()
+    const { throttleLevel, isActive } = getApi()
 
     // The composable observed its root; fire an offscreen entry.
     const io = lastIO()
@@ -341,8 +341,21 @@ describe('useAutoDemoLoop()', () => {
       [{ isIntersecting: false, intersectionRatio: 0 } as any],
       {} as any,
     )
-    // Offscreen => throttled (half or paused), not full.
-    expect(throttleLevel.value).not.toBe('full')
+    // Issue #382 fix: Offscreen => paused (rAF cancelled completely), NOT half.
+    expect(throttleLevel.value).toBe('paused')
+    // isActive remains true (visibility state is separate), but rAF is cancelled
+    expect(isActive.value).toBe(true)
+    // rAF queue should be empty (cancelled by onFrame early return)
+    expect(raf.pending).toBe(0)
+
+    // Coming back onscreen should resume rAF
+    io.callback(
+      [{ isIntersecting: true, intersectionRatio: 1 } as any],
+      {} as any,
+    )
+    expect(throttleLevel.value).toBe('full')
+    expect(raf.pending).toBeGreaterThan(0)
+
     wrapper.unmount()
   })
 
