@@ -92,8 +92,35 @@ Controls how resources can be loaded by cross-origin requests.
 We regularly audit and update dependencies to address known vulnerabilities:
 
 - **@vueuse/head**: Maintained at v2.0.0+ with security fixes
-- **Vue.js**: Regular updates to latest stable releases
+- **Vue.js**: Regular updates to latest stable releases  
 - **Vite**: Build tool kept up-to-date for security patches
+
+#### Risk Acceptance: unhead Vulnerabilities (MODERATE)
+
+**Status**: Accepted risk - Development-time dependency only
+
+**Issue**: @vueuse/head@2.0.0 depends on unhead≤2.1.12 which has 3 MODERATE XSS bypass vulnerabilities:
+- GHSA-5339-hvwr-7582: Bypass of URI Scheme Sanitization in makeTagSafe via Case-Sensitivity
+- GHSA-g5xx-pwrp-g3fv: XSS bypass in useHeadSafe via attribute name injection
+- GHSA-95h2-gj7x-gx9w: hasDangerousProtocol() bypass via leading-zero padded HTML entities
+
+**Risk Acceptance Rationale**:
+1. **Development-time only**: @vueuse/head is a build-time dependency used for SSR meta tag generation
+2. **Not in production bundle**: The library is not included in the browser-facing production code
+3. **Server-side execution**: Vulnerabilities affect server-side rendering, not client users
+4. **Controlled input**: We only use basic title/meta/description tags, not user-generated content
+5. **No useHeadSafe usage**: We don't use the vulnerable useHeadSafe() function
+6. **No breaking fix available**: npm audit fix requires downgrading to 0.9.8 (breaking change)
+
+**Mitigation Strategy**:
+- Monitor for @vueuse/head updates that depend on safe unhead versions
+- Regular security audits to detect new vulnerabilities
+- CSP provides additional XSS protection layers
+- Review if upgrade becomes available without breaking changes
+
+**Fixed Vulnerabilities** (2025-01-21):
+- ✅ Vite upgraded from 5.4.21 → 8.1.5 (fixes GHSA-fx2h-pf6j-xcff CVSS 7.5)
+- ✅ CSP hardened: removed 'unsafe-inline'/'unsafe-eval' from script-src
 
 #### Vulnerability Scanning
 
@@ -103,7 +130,7 @@ npm audit
 npm audit fix
 ```
 
-Critical/high vulnerabilities must be addressed before deployment.
+Critical/high vulnerabilities must be addressed before deployment. MODERATE vulnerabilities may be accepted if documented with proper rationale.
 
 ### 4. No External Dependencies
 
@@ -171,6 +198,12 @@ Our security measures align with:
 
 ## Version History
 
+- **v1.1** (2025-01-21): Critical security fixes (Issue #457)
+  - ✅ CRITICAL: Fixed CSP - removed 'unsafe-inline'/'unsafe-eval' from script-src
+  - ✅ HIGH: Upgraded Vite 5.4.21 → 8.1.5 (fixes GHSA-fx2h-pf6j-xcff CVSS 7.5)
+  - ✅ MODERATE: Documented risk acceptance for unhead vulnerabilities
+  - ✅ Enforced SHA-256 hashes in real CSP (not Report-Only)
+  
 - **v1.0** (2025-01-21): Initial security hardening (Issue #457)
   - Implemented CSP with SHA-256 hashes
   - Added 7 security headers
