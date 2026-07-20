@@ -227,7 +227,8 @@ defineExpose({ isOpen, menuRef, open, close })
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.3s ease;
+  transition: text-shadow 0.25s ease;
+  will-change: text-shadow;
 }
 
 .dropdown-trigger:hover {
@@ -236,7 +237,8 @@ defineExpose({ isOpen, menuRef, open, close })
 
 .dropdown-arrow {
   font-size: 0.7rem;
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
+  will-change: transform;
 }
 
 .dropdown-arrow.open {
@@ -262,7 +264,8 @@ defineExpose({ isOpen, menuRef, open, close })
   color: var(--text-primary);
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: color 0.25s ease, background-color 0.25s ease, padding-left 0.25s ease;
+  will-change: color, background-color, padding-left;
 }
 
 .dropdown-item:hover,
@@ -307,7 +310,8 @@ defineExpose({ isOpen, menuRef, open, close })
 
 .dropdown-fade-enter-active,
 .dropdown-fade-leave-active {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  will-change: opacity, transform;
 }
 
 .dropdown-fade-enter-from,
@@ -327,6 +331,17 @@ defineExpose({ isOpen, menuRef, open, close })
     left: 0;
     right: 0;
     border-radius: var(--radius-xl) 20px 0 0;
+  }
+}
+
+/* #432 AC4: Respect prefers-reduced-motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .dropdown-trigger,
+  .dropdown-arrow,
+  .dropdown-item,
+  .dropdown-fade-enter-active,
+  .dropdown-fade-leave-active {
+    transition-duration: 0s;
   }
 }
 </style>

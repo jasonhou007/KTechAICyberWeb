@@ -293,6 +293,7 @@ onUnmounted(() => {
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.25s ease, transform 0.25s ease, text-shadow 0.25s ease;
+  will-change: transform, color, text-shadow;
   position: relative;
   padding: 0.25rem 0;
   display: inline-block;
@@ -417,6 +418,24 @@ onUnmounted(() => {
 
   .nav-toggle {
     display: flex;
+  }
+}
+
+/* #432 AC4: Respect prefers-reduced-motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .nav-links a,
+  .nav-logo,
+  .nav-toggle-bar,
+  .nav-links a::after {
+    transition-duration: 0s;
+  }
+
+  .nav {
+    transition-duration: 0s;
+  }
+
+  .nav-mobile-dialog {
+    transition-duration: 0s;
   }
 }
 </style>
