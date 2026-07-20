@@ -23,10 +23,12 @@ const props = defineProps({
   isDone: { type: Boolean, default: false },
   // CSS variable name from the existing palette, e.g. '--cyan'.
   accentVar: { type: String, default: '--cyan' },
+  // i18n prefix for services variant (default 'selfDriving')
+  i18nPrefix: { type: String, default: 'selfDriving' },
 })
 
-const titleKey = `selfDriving.phases.${props.phase}.title`
-const statusKey = `selfDriving.phases.${props.phase}.status`
+const titleKey = `${props.i18nPrefix}.phases.${props.phase}.title`
+const statusKey = `${props.i18nPrefix}.phases.${props.phase}.status`
 </script>
 
 <template>

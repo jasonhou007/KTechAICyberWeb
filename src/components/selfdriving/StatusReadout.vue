@@ -19,35 +19,37 @@ const props = defineProps({
   phaseId: { type: String, default: 'intake' },
   // Key into selfDriving.readout.* ; parent picks merged/cycling/complete.
   readoutKey: { type: String, default: 'cycling' },
+  // i18n prefix for services variant (default 'selfDriving')
+  i18nPrefix: { type: String, default: 'selfDriving' },
 })
 
 const readoutText = computed(() => {
-  const raw = t(`selfDriving.readout.${props.readoutKey}`)
+  const raw = t(`${props.i18nPrefix}.readout.${props.readoutKey}`)
   // Interpolate {n} with the current cycle count (1-indexed for display).
   return raw.replace('{n}', String(props.loopIteration + 1))
 })
 
 // Map EVERY phase to a narration line so the cycling readout always surfaces
-// the live stage (MEDIUM-2 — the dead-reactive-state gate flagged that the
-// earlier map only covered 4 of 8 phases, so for intake/triage/merger/resolved
-// the phase line silently vanished). For the coder-ish stages we reuse the
-// dedicated streaming.* lines (they read like a live console feed); for the
-// other four we fall back to that phase's status prose, which already exists
-// in both locales and is user-facing. Phase ids not in the map yield '' and
-// the v-if below hides the line — the contract stays defensive.
+// the live stage. For the coder-ish stages we reuse the dedicated streaming.*
+// lines; for other phases we fall back to that phase's status prose.
 const STREAMING_PHASES = {
   planner: 'plannerLine',
   coder: 'coderLine',
   security: 'securityLine',
   evaluator: 'evalLine',
+  // Services streaming phases
+  aiAnalysis: 'analysisLine',
+  pipelineValidation: 'validationLine',
+  serviceExecution: 'executionLine',
 }
-const STATUS_PHASES = ['intake', 'triage', 'merger', 'resolved']
+const STATUS_PHASES = ['intake', 'triage', 'merger', 'resolved', 'dataIngestion', 'serviceComplete', 'resultDelivery']
 const phaseLine = computed(() => {
+  const prefix = props.i18nPrefix
   if (STREAMING_PHASES[props.phaseId]) {
-    return t(`selfDriving.streaming.${STREAMING_PHASES[props.phaseId]}`)
+    return t(`${prefix}.streaming.${STREAMING_PHASES[props.phaseId]}`)
   }
   if (STATUS_PHASES.includes(props.phaseId)) {
-    return t(`selfDriving.phases.${props.phaseId}.status`)
+    return t(`${prefix}.phases.${props.phaseId}.status`)
   }
   return ''
 })

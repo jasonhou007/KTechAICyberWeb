@@ -1187,6 +1187,49 @@
       "evalLine": "evaluator: 8/8 acceptance criteria met"
     }
   },
+  "servicesSelfDriving": {
+    "aria": {
+      "regionLabel": "AI Service Pipeline — live demo"
+    },
+    "heading": "AI Service Pipeline",
+    "phases": {
+      "dataIngestion": {
+        "title": "Data Ingestion",
+        "status": "Processing input streams"
+      },
+      "aiAnalysis": {
+        "title": "AI Analysis",
+        "status": "Models analyzing patterns"
+      },
+      "pipelineValidation": {
+        "title": "Validation",
+        "status": "Quality gates passed"
+      },
+      "serviceExecution": {
+        "title": "Execution",
+        "status": "Running services"
+      },
+      "resultDelivery": {
+        "title": "Delivery",
+        "status": "Results streaming"
+      },
+      "serviceComplete": {
+        "title": "Complete",
+        "status": "Service delivered"
+      }
+    },
+    "readout": {
+      "delivered": "SERVICE DELIVERED · CYCLE {n}",
+      "cycling": "CYCLE {n}",
+      "complete": "PIPELINE COMPLETE"
+    },
+    "streaming": {
+      "dataLine": "ingest: reading data streams…",
+      "analysisLine": "ai: pattern detection active",
+      "validationLine": "validation: all checks passed",
+      "executionLine": "execute: service container ready"
+    }
+  },
   "asyncLoadError": {
     "title": "This section could not be loaded",
     "message": "A part of the page failed to load. Check your connection and try again.",

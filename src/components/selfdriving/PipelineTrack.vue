@@ -31,11 +31,16 @@ const ACCENT = {
 const props = defineProps({
   // Current phase id (e.g. 'planner').
   phaseId: { type: String, default: 'intake' },
+  // Optional custom phases array (for services pipeline).
+  phases: { type: Array, default: () => PHASES },
+  // i18n prefix for services variant (default 'selfDriving')
+  i18nPrefix: { type: String, default: 'selfDriving' },
 })
 
 function isDone(phase) {
-  const cur = PHASES.indexOf(props.phaseId)
-  const idx = PHASES.indexOf(phase)
+  const phases = props.phases.length > 0 ? props.phases : PHASES
+  const cur = phases.indexOf(props.phaseId)
+  const idx = phases.indexOf(phase)
   return idx < cur
 }
 </script>
@@ -43,12 +48,13 @@ function isDone(phase) {
 <template>
   <div class="pipeline-track" role="list">
     <PipelineCard
-      v-for="phase in PHASES"
+      v-for="phase in (phases.length > 0 ? phases : PHASES)"
       :key="phase"
       :phase="phase"
       :is-current="phase === phaseId"
       :is-done="isDone(phase)"
       :accent-var="ACCENT[phase] || '--cyan'"
+      :i18n-prefix="i18nPrefix"
     />
   </div>
 </template>
