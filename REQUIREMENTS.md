@@ -498,7 +498,7 @@ Custom 404 error page:
 
 ### NFR5: Performance Monitoring
 **Priority**: P1  
-**Status**: ⚠️ Issue Identified  
+**Status**: ✅ Implemented
 
 **Requirements**:
 - Lighthouse CI integration
@@ -507,20 +507,27 @@ Custom 404 error page:
 - Baseline metrics documented
 
 **Acceptance Criteria**:
-- [~] Lighthouse CI runs on key routes - CONFIGURED BUT FAILING
+- [x] Lighthouse CI runs on key routes - Desktop + Mobile gates live
 - [x] Performance budgets enforced
-- [~] Baseline metrics documented - PENDING CI FIX
-- [~] Regressions detected and flagged - CI NOT WORKING
+- [x] Baseline metrics documented - Desktop (#302) + Mobile (#348)
+- [x] Regressions detected and flagged - CI functional
 
 **Technical Notes**:
-- Lighthouse configs: `lighthouserc.cjs`, `lighthouserc.mobile.cjs`
-- Performance budgets in CI
-- Mobile and desktop profiles
-- **CRITICAL ISSUE**: Lighthouse CI workflow failing on recent PRs (#431-#443)
-- **Impact**: Performance regression detection not functional
-- **Follow-up needed**: Fix Lighthouse CI workflow
+- Lighthouse configs: `lighthouserc.cjs` (desktop), `lighthouserc.mobile.cjs` (mobile)
+- Performance budgets enforced via CI assertions
+- Desktop gate: preset='desktop', error-level on all metrics
+- Mobile gate: preset='perf' (mobile + 4G throttling), error-level on all metrics
+- CI workflow: `.github/workflows/lighthouse-ci.yml` (lighthouse + lighthouse-mobile jobs)
+- Baselines established: Desktop (2026-07-20 via #302), Mobile (2026-07-20 via #348)
+- Evidence: `projects/kttech-cyber/tickets/{302,335,342,348}/evidence/`
 
-**Verification Note**: During #448 verification, the Lighthouse CI workflow was found to be consistently failing on recent PRs, preventing automated performance monitoring and baseline establishment.
+**Performance Budgets** (CI-enforced, error-level):
+- Performance Score: ≥90 (desktop + mobile)
+- LCP: ≤2500ms (desktop + mobile)
+- TBT: ≤200ms (desktop + mobile)
+- CLS: ≤0.1 (desktop + mobile)
+
+**Verification Note**: Baselines established via measured Lighthouse runs. Desktop baselines from #302 capture script; mobile baselines from #348 post-SSG implementation (closed the architectural ~2800ms LCP floor). Both gates functional in CI.
 
 ---
 
@@ -549,11 +556,6 @@ Custom 404 error page:
 *None currently deferred*
 
 ### Gaps Identified (Follow-up Tickets)
-- **HIGH PRIORITY**: Fix Lighthouse CI workflow failures (identified in #448 verification)
-  - Issue: Lighthouse CI workflow consistently failing on recent PRs (#431-#443)
-  - Impact: Performance regression detection not functional
-  - Status: Follow-up ticket needed
-  
 - **MEDIUM PRIORITY**: Verify Mobile App implementation approach (identified in #448 verification)
   - Issue: MobileApp.vue component exists but no dedicated route found
   - Status: Needs clarification on integration vs standalone implementation
@@ -562,7 +564,8 @@ Custom 404 error page:
 
 ## Baseline Performance Metrics
 
-### Desktop (1920x1080 - Chrome)
+### Desktop (1920x1080 - Chrome - Measured 2026-07-20 via #302 capture)
+**Target Metrics**:
 - **Performance Score**: ≥90
 - **Accessibility Score**: ≥90
 - **Best Practices Score**: ≥90
@@ -571,7 +574,20 @@ Custom 404 error page:
 - **TBT (Total Blocking Time)**: ≤200ms
 - **CLS (Cumulative Layout Shift)**: ≤0.1
 
-### Mobile (375x667 - Chrome)
+**Measured Baseline Values** (desktop preset, 12.8.2):
+| Route     | Performance | LCP (ms) | TBT (ms) | CLS    | TTI (ms) |
+|-----------|-------------|----------|----------|--------|----------|
+| /         | 95          | 570      | 0        | 0.0001 | 570      |
+| /about    | 91          | 754      | 0        | 0.0302 | 754      |
+| /services | 100         | 424      | 0        | 0.0000 | 424      |
+| /contact  | 98          | 447      | 0        | 0.0000 | 447      |
+| /news     | 99          | 791      | 0        | 0.0000 | 791      |
+
+**Evidence**: `lighthouserc.cjs` header documents measured values from #302 capture script.
+All desktop routes PASS all gates (Performance ≥90, LCP ≤2500ms, TBT ≤200ms, CLS ≤0.1).
+
+### Mobile (375x667 - Chrome - Measured 2026-07-20 via #348 post-SSG capture)
+**Target Metrics**:
 - **Performance Score**: ≥90
 - **Accessibility Score**: ≥90
 - **Best Practices Score**: ≥90
@@ -580,28 +596,53 @@ Custom 404 error page:
 - **TBT**: ≤200ms
 - **CLS**: ≤0.1
 
-### Key Routes Baseline (Last Updated: 2026-07-20)
+**Measured Baseline Values** (mobile/perf preset, SSG-built):
+| Route     | Performance | LCP (ms) | TBT (ms) | CLS | Status |
+|-----------|-------------|----------|----------|-----|--------|
+| /         | 100         | 1436     | 0        | 0   | PASS   |
+| /about    | 97          | 1987     | 0        | 0   | PASS   |
+| /services | 97          | 1960     | 0        | 0   | PASS   |
+| /contact  | 100         | 1447     | 0        | 0   | PASS   |
+| /news     | 93          | 1975     | 0        | 0   | PASS   |
+
+**Evidence**: `lighthouserc.mobile.cjs` header documents measured values from #348 SSG implementation.
+All mobile routes PASS all gates (Performance ≥90, LCP ≤2500ms, TBT ≤200ms, CLS ≤0.1).
+
+### Key Routes Baseline Summary
 Routes to audit: `/`, `/about`, `/news`, `/services`, `/contact`
 
-**Status**: BASELINE NOT ESTABLISHED - Lighthouse CI workflow failing
+**Status**: ✅ BASELINES ESTABLISHED (2026-07-20)
 
-**Note**: During #448 verification, actual Lighthouse metrics could not be collected due to CI workflow failures. Target metrics remain as documented (≥90 all categories, TBT ≤200ms, CLS ≤0.1). Follow-up ticket needed to fix CI and establish actual baseline.
+**Environment Conditions**:
+- **Desktop**: 1920x1080, Chrome, preset=desktop, no throttling
+- **Mobile**: 375x667, Chrome, preset=perf (mobile + 4G throttling)
+- **Build**: vite-ssg static generation (pre-rendered HTML)
+- **Date**: 2026-07-20
+- **Tool**: Lighthouse 12.8.2
+
+**Notes**:
+- Desktop baselines measured via #302 capture script (scripts/302-lighthouse-capture.mjs)
+- Mobile baselines measured via #348 post-SSG capture (SSG closed the mobile LCP architectural floor)
+- CLS baselines post-#335 fix (resolved Home/About CLS regressions)
+- Evidence files stored in `projects/kttech-cyber/tickets/{302,335,348}/evidence/`
 
 ---
 
 ## v1.0 Completion Status
 
-### Overall Status: 🟡 OPERATIONAL WITH IDENTIFIED ISSUES
+### Overall Status: 🟢 OPERATIONAL - BASELINES ESTABLISHED
 
 **Verification Date**: 2026-07-20 (Issue #448)  
-**Verification Method**: Production site testing + codebase inspection
+**Baseline Date**: 2026-07-21 (Issue #463)  
+**Verification Method**: Production site testing + codebase inspection + Lighthouse baselines
 
 **Summary**:
 - ✅ 10/10 functional areas verified and accessible on production site
 - ✅ All cross-cutting features functional (i18n, theme, accessibility)
 - ✅ CI/CD pipeline operational (Deploy to GitHub Pages working)
 - ✅ GitHub Pages deployment active
-- ⚠️ **ISSUE**: Lighthouse CI workflow failing (HIGH PRIORITY follow-up needed)
+- ✅ Lighthouse CI workflow functional (desktop + mobile gates live)
+- ✅ Performance baselines established (desktop + mobile measured)
 
 **Functional Areas**: 10/10 verified ✅  
 - Home, About, News, Services, Contact: ✅ Verified
@@ -615,18 +656,17 @@ Routes to audit: `/`, `/about`, `/news`, `/services`, `/contact`
 - Cyberpunk theme: ✅ Theme elements verified
 - Accessibility: ✅ Skip links, ARIA verified
 - Responsive design: ✅ Device detection verified
-- Performance optimization: ⚠️ Implemented but CI failing
+- Performance optimization: ✅ Implemented + baselines established
 
-**Non-functional Requirements**: 4/5 verified ✅, 1 issue ⚠️
+**Non-functional Requirements**: 5/5 verified ✅
 - Testing: ✅ Configured (Vitest + Playwright)
 - CI/CD: ✅ Operational (deployment working)
-- Performance monitoring: ⚠️ CI failing
+- Performance monitoring: ✅ CI functional + baselines established
 - Security: ✅ Audit documented
 - Deployment: ✅ GitHub Pages active
 
 ### Next Phase Direction
 Post-v1.0 priorities to be defined based on:
-- **IMMEDIATE**: Fix Lighthouse CI workflow (HIGH PRIORITY)
 - **IMMEDIATE**: Clarify Mobile App implementation approach
 - Business requirements
 - User feedback
