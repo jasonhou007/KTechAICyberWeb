@@ -137,6 +137,32 @@ export const createApp = ViteSSG(
   {
     routes,
     base: import.meta.env.BASE_URL,
+    scrollBehavior(to, from, savedPosition) {
+      // #434: smooth scroll navigation with three cases
+
+      // Case 1: Browser back/forward button - restore saved position
+      if (savedPosition) {
+        return savedPosition
+      }
+
+      // Respect prefers-reduced-motion
+      const prefersReducedMotion =
+        typeof window !== 'undefined' &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      const behavior = prefersReducedMotion ? 'auto' : 'smooth'
+
+      // Case 2: Hash navigation (#section) with offset for fixed header
+      if (to.hash) {
+        return {
+          el: to.hash,
+          behavior,
+          top: 80, // Offset for fixed header
+        }
+      }
+
+      // Case 3: Regular route change - scroll to top
+      return { top: 0, behavior }
+    },
   },
   ({ app }) => {
     app.use(createPinia())
