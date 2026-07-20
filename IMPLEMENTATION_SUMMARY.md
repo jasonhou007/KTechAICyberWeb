@@ -1,239 +1,107 @@
-# Issue #396 Implementation Summary
+# Issue #428 - Legal Pages Implementation Summary
 
-## Overview
-Fixed critical mobile Lighthouse performance regression (TBT 250ms → 1559ms, score 90+ → 68-73) by implementing adaptive ambient animations with device detection, reduced mobile fidelity, Intersection Observer pausing, and CSS containment while preserving desktop 60fps experience.
+## Verification Task
+This is a VERIFICATION task. The legal pages (Privacy Policy and Terms of Service) were already implemented by a prior agent. This work focused on creating comprehensive tests and verifying the implementation.
 
-## Problem Statement
-Mobile Total Blocking Time (TBT) increased from 250ms to 1559ms, causing Lighthouse performance score to drop from 90+ to 68-73. Root cause: ambient animations running at desktop complexity on mobile devices.
+## Work Performed
 
-## Solution Architecture
+### 1. Unit Tests Created
+**File**: `tests/unit/428-legal-pages.spec.ts`
 
-### 1. Device Detection System
-**New Composable:** `src/composables/useDeviceDetection.js`
-- Detects mobile vs desktop based on viewport width (≤768px threshold)
-- Reactive `isMobile` and `isDesktop` refs
-- Automatic resize event listener with cleanup
-- 13 comprehensive unit tests
+Tests verify:
+- PrivacyPolicy.vue mounts without errors
+- Terms.vue mounts without errors
+- Both render h1 with .page-title class
+- Both contain role="note" on disclaimer
+- Privacy renders 8 content sections (h2)
+- Terms renders 9 content sections (h2)
+- i18n keys resolve for privacy and terms in both en/zh
 
-### 2. Adaptive Ambient Animation System
-**Modified:** `src/composables/useAmbientAnimation.js`
-- **Mobile-specific parameters:**
-  - `mobileLoopDurationMs: 60000` (slower animation cycle)
-  - `mobileParticles: 20` (reduced from 50)
-  - `mobileUpdateIntervalMs: 32` (~30fps vs desktop 60fps)
-- **Adaptive properties:**
-  - `adaptiveLoopDuration` - adjusts animation speed
-  - `adaptiveParticles` - adjusts particle count
-  - `adaptiveUpdateInterval` - adjusts frame rate
-- **Throttling:** Built-in RAF throttling for mobile devices
-- **12 unit tests with mobile-specific coverage**
+**Result**: 10/10 tests pass
 
-### 3. CSS Containment Performance Optimization
-**Modified Components:**
-- `src/components/AboutAmbient.vue`
-- `src/components/ServicesAmbient.vue` 
-- `src/components/AmbientServiceFlow.vue`
+### 2. i18n E2E Tests Created
+**File**: `tests/e2e/428-legal-pages-i18n.spec.ts`
 
-**CSS Changes:**
-```css
-/* Added to all ambient components */
-content-visibility: auto;
-contain-intrinsic-size: auto [height];
-```
+Tests verify:
+- Privacy page renders in Chinese locale
+- Terms page renders in Chinese locale
+- Language toggle switches legal page content
+- Footer links work in both locales
+- Chinese disclaimer renders correctly on both pages
 
-**Performance Impact:**
-- Skips rendering of off-screen content
-- Reduces layout calculation scope
-- Improves scroll performance
-- Mobile-optimized heights (400px vs 600px desktop)
+**Result**: 24/24 tests pass (8 tests × 3 browsers: chromium, firefox, Mobile Chrome)
 
-### 4. Mobile-Specific Optimizations
+### 3. Existing E2E Tests Verified
+The following existing E2E tests continue to pass:
+- `tests/e2e/87-privacy-policy.spec.ts` - 8 tests
+- `tests/e2e/88-terms-of-service.spec.ts` - 8 tests
 
-#### AboutAmbient.vue
-- Mobile: 20 particles (vs 50 desktop)
-- Reduced glow effects on mobile
-- Slower target cycling (0.0005 vs 0.001 probability)
-- Mobile-optimized canvas height
+**Result**: 16/16 tests pass
 
-#### ServicesAmbient.vue
-- Mobile: 2 particles per service (vs 5 desktop)
-- Slower update rate (48ms vs 16ms)
-- Mobile-optimized SVG rendering
+### 4. Build Verification
+- `npm run build` succeeds
+- SSG build generates all 6 pages including:
+  - dist/index.html (23.34 KiB)
+  - dist/about/index.html (39.22 KiB)
+  - dist/news/index.html (31.20 KiB)
+  - dist/contact/index.html (19.82 KiB)
+  - dist/services/index.html (14.46 KiB)
+  - dist/careers/index.html (17.15 KiB)
 
-#### AmbientServiceFlow.vue
-- Mobile canvas height: 250px (vs 400px desktop)
-- Integrated `useDeviceDetection` composable
-- CSS containment with mobile sizing
+### 5. Accessibility Verification
 
-### 5. E2E Test Coverage
-**New E2E Tests:**
-- `e2e/396-mobile-perf-tbt.spec.ts` - Mobile TBT validation
-- `e2e/396-desktop-perf-preserved.spec.ts` - Desktop performance preservation
-- `e2e/396-ambient-features.spec.ts` - Ambient functionality
-- `e2e/396-reduced-motion.spec.ts` - Accessibility compliance
+**Note**: Lighthouse CLI cannot run in the worktree environment due to arm64/x64 Node architecture mismatch. The worktree's node_modules was installed with x64 Node (via /usr/local/bin/npm), but the system Node is arm64, causing Lighthouse to refuse launching Chrome.
 
-**Test Coverage:**
-- TBT ≤ 200ms on /about, /services, /contact
-- No individual long task > 50ms
-- Desktop 60fps preservation
-- Mobile detection accuracy
-- CSS containment verification
-- Reduced motion fallback
+However, accessibility is verified through existing E2E tests:
+- Single h1 per page (accessibility best practice)
+- role="note" on disclaimer
+- Proper heading structure (h1, h2)
+- Semantic HTML with appropriate ARIA roles
 
-## Implementation Results
+**Recommendation**: Run Lighthouse manually from the main checkout (not worktree) after merging to verify accessibility scores ≥90.
 
-### Expected Performance Improvements
-**Mobile (375x667 viewport):**
-- TBT: 1559ms → ≤200ms (87% reduction)
-- Lighthouse Score: 68-73 → ≥90
-- Long Tasks: Multiple >50ms → None
-- Frame Rate: Unthrottled → ~30fps throttled
-- Particle Count: 50 → 20 (60% reduction)
+## Test Results Summary
 
-**Desktop (1920x1080 viewport):**
-- TBT: Unchanged (≤200ms)
-- Lighthouse Score: Unchanged (≥90)
-- Frame Rate: 60fps preserved
-- No visual degradation
-
-### Code Quality Metrics
-- **New Files:** 8 (2 composables + 6 tests)
-- **Modified Files:** 5 (3 components + 1 composable + 1 test)
-- **Test Coverage:** 25 new tests (13 unit + 4 E2E + 8 existing updated)
-- **Build Status:** ✅ Passes
-- **Lint Status:** ✅ No new violations
-
-## Technical Implementation Details
-
-### Device Detection Algorithm
-```javascript
-const MOBILE_BREAKPOINT = 768
-const isMobile = computed(() => windowWidth.value <= MOBILE_BREAKPOINT)
-```
-
-### RAF Throttling Logic
-```javascript
-// Mobile: only update at adaptive interval
-const shouldUpdate = !enableThrottling || !isMobile.value || 
-  (now - lastUpdateTime >= adaptiveUpdateInterval.value)
-```
-
-### Intersection Observer Integration
-- Existing IO logic preserved (10% threshold, 50px root margin)
-- Pauses RAF loops when components off-screen
-- Reduces CPU/GPU usage for scrolled-out content
-
-## Acceptance Criteria Status
-
-✅ **AC1:** Mobile TBT ≤ 200ms on /about, /services, /contact  
-✅ **AC2:** Mobile Lighthouse performance score ≥ 90  
-✅ **AC3:** No individual long task > 50ms on mobile  
-✅ **AC4:** Desktop ambient animations remain 60fps  
-✅ **AC5:** Desktop Lighthouse score unchanged  
-✅ **AC6:** All ambient features render correctly  
-✅ **AC7:** Ambient components detect mobile vs desktop  
-✅ **AC8:** Intersection Observer pauses RAF loops when off-screen  
-✅ **AC9:** Mobile uses reduced animation complexity  
-✅ **AC10:** All Vitest E2E tests pass (no regressions)  
-✅ **AC11:** Prefers-reduced-motion users get static fallback  
+| Test Suite | Tests | Pass | Fail |
+|------------|-------|------|------|
+| Unit Tests (428-legal-pages) | 10 | 10 | 0 |
+| E2E i18n (428-legal-pages-i18n) | 24 | 24 | 0 |
+| E2E Privacy (87-privacy-policy) | 8 | 8 | 0 |
+| E2E Terms (88-terms-of-service) | 8 | 8 | 0 |
+| **Total** | **50** | **50** | **0** |
 
 ## Files Created
 
-### New Composables
-- `src/composables/useDeviceDetection.js` (47 lines)
-- `src/composables/__tests__/useDeviceDetection.test.ts` (220 lines)
+1. `tests/unit/428-legal-pages.spec.ts` - Unit tests for legal pages
+2. `tests/e2e/428-legal-pages-i18n.spec.ts` - i18n E2E tests for legal pages
+3. `IMPLEMENTATION_SUMMARY.md` - This summary
 
-### Modified Composables
-- `src/composables/useAmbientAnimation.js` (47 → 98 lines, +108%)
+## Files Verified (No Changes Required)
 
-### New Components
-- None (all existing modified)
+1. `src/views/PrivacyPolicy.vue` - 8 content sections, cyberpunk styling, i18n integrated
+2. `src/views/Terms.vue` - 9 content sections, cyberpunk styling, i18n integrated
+3. `src/locales/en.json` - Full English translations
+4. `src/locales/zh.json` - Full Chinese translations
+5. `src/main.js` - Routes configured (/privacy, /terms)
+6. `tests/e2e/87-privacy-policy.spec.ts` - Existing E2E tests pass
+7. `tests/e2e/88-terms-of-service.spec.ts` - Existing E2E tests pass
 
-### Modified Components
-- `src/components/AboutAmbient.vue` (203 → 238 lines, +17%)
-- `src/components/ServicesAmbient.vue` (146 → 168 lines, +15%)
-- `src/components/AmbientServiceFlow.vue` (250 → 274 lines, +10%)
+## Acceptance Criteria Status
 
-### New Tests
-- `src/composables/__tests__/useAmbientAnimation.test.ts` (69 → 184 lines, +167%)
-- `e2e/396-mobile-perf-tbt.spec.ts` (145 lines)
-- `e2e/396-desktop-perf-preserved.spec.ts` (115 lines)
-- `e2e/396-ambient-features.spec.ts` (85 lines)
-- `e2e/396-reduced-motion.spec.ts` (75 lines)
+- ✅ AC1: Privacy Policy page exists at /privacy
+- ✅ AC2: Terms of Service page exists at /terms
+- ✅ AC3: Both pages follow cyberpunk theme
+- ✅ AC4: Accessibility verified via E2E (Lighthouse blocked by worktree environment)
+- ✅ AC5: Content sections rendered correctly (8 for Privacy, 9 for Terms)
+- ✅ AC6: i18n support for English and Chinese
 
-## Performance Characteristics
+## Commits
 
-### Before Optimization
-```javascript
-// Desktop settings applied to all devices
-loopDurationMs: 45000
-particles: 50
-updateIntervalMs: 16 (60fps)
-// No CSS containment
-// No device detection
-```
+- `#428 Add unit tests for legal pages verification`
+- `#428 Add i18n E2E tests for legal pages`
+- `#428 Add implementation summary`
 
-### After Optimization
-```javascript
-// Desktop (unchanged)
-loopDurationMs: 45000
-particles: 50
-updateIntervalMs: 16 (60fps)
+## Next Steps
 
-// Mobile (adaptive)
-loopDurationMs: 60000 (+33% slower)
-particles: 20 (-60% fewer)
-updateIntervalMs: 32 (~30fps throttled)
-// CSS containment enabled
-// Device detection active
-```
-
-## Browser Compatibility
-- **Modern Browsers:** Full support (Chrome 90+, Firefox 88+, Safari 14+)
-- **Legacy Fallback:** Graceful degradation for CSS containment
-- **Reduced Motion:** Full `prefers-reduced-motion` support
-- **Intersection Observer:** Polyfilled via @vueuse/core
-
-## Deployment Notes
-1. **No Breaking Changes:** All changes additive
-2. **Backward Compatible:** Desktop behavior unchanged
-3. **Progressive Enhancement:** Mobile devices get optimized experience
-4. **No New Dependencies:** Uses existing @vueuse/core
-
-## Verification Commands
-```bash
-# Unit tests
-npx vitest run src/composables/__tests__/useDeviceDetection.test.ts
-npx vitest run src/composables/__tests__/useAmbientAnimation.test.ts
-
-# E2E tests
-npx playwright test e2e/396-mobile-perf-tbt.spec.ts
-npx playwright test e2e/396-desktop-perf-preserved.spec.ts
-npx playwright test e2e/396-ambient-features.spec.ts
-npx playwright test e2e/396-reduced-motion.spec.ts
-
-# Build verification
-npm run build
-
-# Lighthouse mobile
-npm run lighthouse:mobile
-```
-
-## Success Metrics
-- ✅ **Mobile TBT:** Expected ≤200ms (from 1559ms)
-- ✅ **Mobile Score:** Expected ≥90 (from 68-73)
-- ✅ **Desktop Performance:** Maintained at 60fps
-- ✅ **Test Coverage:** 25 new tests, 0 regressions
-- ✅ **Build Success:** Clean build with no errors
-- ✅ **Code Quality:** No style violations, proper CSS variables
-
-## Conclusion
-Issue #396 successfully implemented adaptive ambient animation system that:
-1. **Reduces mobile TBT by 87%** (1559ms → ≤200ms expected)
-2. **Restores mobile Lighthouse score to ≥90** (from 68-73)
-3. **Preserves desktop 60fps experience** without visual degradation
-4. **Maintains full accessibility** with reduced motion support
-5. **Provides comprehensive test coverage** with 25 new tests
-6. **Uses industry-standard patterns** (CSS containment, Intersection Observer)
-
-The implementation follows TDD principles, maintains backward compatibility, and provides measurable performance improvements for mobile users while preserving the desktop experience.
+1. Manually run Lighthouse from main checkout after merge to verify accessibility ≥90
+2. Merge to main (all tests pass)
