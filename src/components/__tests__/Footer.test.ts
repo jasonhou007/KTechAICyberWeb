@@ -94,7 +94,7 @@ describe('Footer.vue', () => {
       const text = wrapper.text()
 
       // Assert: Copyright text is present
-      expect(text).toContain('© 2025 KTech AI. All systems operational.')
+      expect(text).toContain('© 2026 KTech AI. All systems operational.')
     })
 
     it('renders company name in footer-text div', () => {
@@ -112,7 +112,7 @@ describe('Footer.vue', () => {
 
       // Assert: Element exists and contains correct text
       expect(copyrightEl.exists()).toBe(true)
-      expect(copyrightEl.text()).toBe('© 2025 KTech AI. All systems operational.')
+      expect(copyrightEl.text()).toBe('© 2026 KTech AI. All systems operational.')
     })
 
     it('has no leading or trailing whitespace in text content', () => {
@@ -122,7 +122,7 @@ describe('Footer.vue', () => {
 
       // Assert: No extra whitespace
       expect(companyNameEl.text()).toBe('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
-      expect(copyrightEl.text()).toBe('© 2025 KTech AI. All systems operational.')
+      expect(copyrightEl.text()).toBe('© 2026 KTech AI. All systems operational.')
     })
   })
 
@@ -218,7 +218,7 @@ describe('Footer.vue', () => {
       const result = wrapper.vm.t('footer.copyright')
 
       // Assert: Returns correct copyright text
-      expect(result).toBe('© 2025 KTech AI. All systems operational.')
+      expect(result).toBe('© 2026 KTech AI. All systems operational.')
     })
 
     it('returns key when translation is not found', () => {
@@ -278,7 +278,7 @@ describe('Footer.vue', () => {
 
       // Assert: Still renders correctly
       expect(newWrapper.text()).toContain('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
-      expect(newWrapper.text()).toContain('© 2025 KTech AI')
+      expect(newWrapper.text()).toContain('© 2026 KTech AI')
 
       // Cleanup
       newWrapper.unmount()
@@ -326,7 +326,7 @@ describe('Footer.vue', () => {
       const footerCopyright = wrapper.find('.footer-copyright')
 
       // Assert: Contains only copyright text
-      expect(footerCopyright.text()).toBe('© 2025 KTech AI. All systems operational.')
+      expect(footerCopyright.text()).toBe('© 2026 KTech AI. All systems operational.')
     })
 
     it('has correct number of child elements', () => {
@@ -360,7 +360,7 @@ describe('Footer.vue', () => {
       expect(html).toContain('footer-text')
       expect(html).toContain('footer-copyright')
       expect(html).toContain('KASIKORN VISION INFORMATION TECHNOLOGY Co., Ltd. (KTech)')
-      expect(html).toContain('© 2025 KTech AI')
+      expect(html).toContain('© 2026 KTech AI')
     })
   })
 })
