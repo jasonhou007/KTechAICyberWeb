@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useLanguage } from '@/composables/useLanguage'
+import { useAmbientAnimation } from '@/composables/useAmbientAnimation'
 
 // ========== TYPES ==========
 interface Position {
@@ -34,11 +35,30 @@ const props = defineProps<{
 const { t } = useLanguage()
 
 // ========== STATE ==========
+const ambientRef = ref<HTMLDivElement | null>(null)
 const canvasRef = ref<HTMLCanvasElement | null>(null)
-const isAnimating = ref(false)
 let ctx: CanvasRenderingContext2D | null = null
-let animationFrameId: number | null = null
-let observer: IntersectionObserver | null = null
+
+// ========== AMBIENT ANIMATION COMPOSABLE ==========
+const {
+  target,
+  isPaused,
+  isStatic,
+  isPlaying,
+  progress,
+  isMobile,
+  adaptiveParticles,
+  adaptiveUpdateInterval,
+  startLoop,
+  stopLoop
+} = useAmbientAnimation({
+  particles: 50,
+  mobileParticles: 20,
+  mobileUpdateIntervalMs: 32, // ~30fps on mobile
+  enableThrottling: true
+})
+
+target.value = ambientRef
 
 // ========== CAREER STAGES ==========
 const careerStages = ref<CareerStage[]>([
@@ -52,61 +72,15 @@ const careerStages = ref<CareerStage[]>([
 const skillParticles = ref<SkillParticle[]>([])
 const newHireParticles = ref<Array<{ x: number; y: number; opacity: number }>>([])
 
-// ========== ADAPTIVE SETTINGS ==========
-const isMobile = computed(() => {
-  return typeof window !== 'undefined' && window.innerWidth < 768
-})
-
-const particleCount = computed(() => isMobile.value ? 20 : 50)
-const targetFPS = computed(() => isMobile.value ? 30 : 60)
-
-// ========== REDUCED MOTION DETECTION ==========
-const prefersReducedMotion = computed(() => {
-  if (typeof window === 'undefined') return false
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
-})
-
-// ========== ANIMATION LOOP ==========
-const lastTime = ref(0)
-const frameInterval = computed(() => 1000 / targetFPS.value)
-
-const animate = (timestamp: number) => {
-  if (!ctx || !canvasRef.value) return
-
-  // Issue #404: Performance monitoring for RAF loop
-  if (typeof performance !== 'undefined' && performance.mark) {
-    performance.mark('career-path-raf-start')
-  }
-
-  const elapsed = timestamp - lastTime.value
-
-  if (elapsed < frameInterval.value) {
-    animationFrameId = requestAnimationFrame(animate)
-    return
-  }
-
-  lastTime.value = timestamp - (elapsed % frameInterval.value)
-
-  // Clear canvas
-  ctx.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height)
-
-  // Draw animation
-  drawFrame()
-
-  // Issue #404: Mark RAF end and measure duration
-  if (typeof performance !== 'undefined' && performance.mark) {
-    performance.mark('career-path-raf-end')
-    performance.measure('career-path-raf-duration', 'career-path-raf-start', 'career-path-raf-end')
-  }
-
-  animationFrameId = requestAnimationFrame(animate)
-}
-
+// ========== DRAWING FUNCTIONS ==========
 const drawFrame = () => {
   if (!ctx || !canvasRef.value) return
 
   const width = canvasRef.value.width
   const height = canvasRef.value.height
+
+  // Clear canvas
+  ctx.clearRect(0, 0, width, height)
 
   // Draw grid lines
   drawGrid(width, height)
@@ -252,7 +226,7 @@ const initCanvas = () => {
     ctx.scale(dpr, dpr)
   }
 
-  // Initialize skill particles
+  // Initialize skill particles with adaptive count
   initSkillParticles(rect.width, rect.height)
 
   // Initialize new hire particles
@@ -263,7 +237,10 @@ const initSkillParticles = (width: number, height: number) => {
   const skills = ['AI', 'Blockchain', 'Fintech', 'Web', 'Cloud', 'Data']
   const colors = ['#00ffff', '#ff00ff', '#00ff00', '#ffff00', '#ff6600', '#0099ff']
 
-  skillParticles.value = Array.from({ length: particleCount.value }, () => ({
+  // Use adaptive particle count based on device
+  const count = adaptiveParticles.value
+
+  skillParticles.value = Array.from({ length: count }, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
     targetY: height,
@@ -275,75 +252,47 @@ const initSkillParticles = (width: number, height: number) => {
 }
 
 const initNewHires = (width: number, height: number) => {
-  newHireParticles.value = Array.from({ length: isMobile.value ? 2 : 5 }, () => ({
+  // Fewer new hires on mobile
+  const count = isMobile.value ? 2 : 5
+
+  newHireParticles.value = Array.from({ length: count }, () => ({
     x: Math.random() * width,
     y: height * 0.1,
     opacity: 1
   }))
 }
 
-const startAnimation = () => {
-  if (isAnimating.value || prefersReducedMotion.value) return
-
-  isAnimating.value = true
-  lastTime.value = performance.now()
-  animationFrameId = requestAnimationFrame(animate)
-}
-
-const stopAnimation = () => {
-  isAnimating.value = false
-  if (animationFrameId !== null) {
-    cancelAnimationFrame(animationFrameId)
-    animationFrameId = null
-  }
-}
-
-// ========== INTERSECTION OBSERVER ==========
-const initIntersectionObserver = () => {
-  if (!canvasRef.value || prefersReducedMotion.value) return
-
-  observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          startAnimation()
-        } else {
-          stopAnimation()
-        }
-      })
-    },
-    { threshold: 0.1 }
-  )
-
-  observer.observe(canvasRef.value)
-}
-
-// ========== LIFECYCLE ==========
-onMounted(() => {
-  if (prefersReducedMotion.value) {
-    // Render static frame
-    initCanvas()
-    if (ctx && canvasRef.value) {
-      drawFrame()
-    }
-  } else {
-    initCanvas()
-    initIntersectionObserver()
+// ========== WATCH PROGRESS FOR THROTTLED UPDATES ==========
+watch(progress, () => {
+  if (!isStatic.value && !isPaused.value && ctx) {
+    drawFrame()
   }
 })
 
-onUnmounted(() => {
-  stopAnimation()
+// ========== LIFECYCLE ==========
+onMounted(() => {
+  initCanvas()
 
-  if (observer) {
-    observer.disconnect()
-    observer = null
+  if (!isStatic.value) {
+    // Start the ambient animation loop (pauses when off-screen via Intersection Observer)
+    startLoop()
+
+    // Initial draw
+    if (ctx) {
+      drawFrame()
+    }
   }
 })
 </script>
 
 <template>
-  <div class="career-path-ambient" role="img" :aria-label="t('ambient.careersAriaLabel')">
+  <div
+    ref="ambientRef"
+    class="career-path-ambient"
+    role="img"
+    :aria-label="t('ambient.careersAriaLabel')"
+    :class="{ 'ambient-static': isStatic }"
+  >
     <canvas ref="canvasRef" class="career-path-canvas"></canvas>
   </div>
 </template>
@@ -355,6 +304,9 @@ onUnmounted(() => {
   height: 400px;
   margin: 2rem 0;
   overflow: hidden;
+  /* CSS containment for performance optimization */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
 }
 
 .career-path-canvas {
@@ -366,12 +318,13 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .career-path-ambient {
     height: 300px;
+    contain-intrinsic-size: auto 300px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .career-path-canvas {
-    /* Static fallback for reduced motion */
+    /* Static fallback handled by isStatic from composable */
   }
 }
 </style>

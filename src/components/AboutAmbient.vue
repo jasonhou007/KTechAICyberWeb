@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue'
 import { useLanguage } from '@/composables/useLanguage'
 import { useAmbientAnimation } from '@/composables/useAmbientAnimation'
 
@@ -50,16 +50,17 @@ const ambientRef = ref(null)
 const canvasRef = ref(null)
 const canvasSize = ref({ width: 1920, height: 600 })
 
-const { 
-  target, 
-  isPaused, 
-  isStatic, 
-  isPlaying, 
-  progress, 
-  startLoop, 
+const {
+  target,
+  isPaused,
+  isStatic,
+  isPlaying,
+  progress,
+  startLoop,
   stopLoop,
   isMobile,
-  adaptiveParticles
+  adaptiveParticles,
+  adaptiveUpdateInterval
 } = useAmbientAnimation({
   particles: props.particleCount,
   mobileParticles: 20, // Reduced particles on mobile
@@ -82,7 +83,7 @@ function initParticles() {
   // Use adaptive particle count based on device
   const count = adaptiveParticles.value
   particles.value = []
-  
+
   for (let i = 0; i < count; i++) {
     particles.value.push({
       x: anchors[0].x, // Start at vision
@@ -96,7 +97,10 @@ function initParticles() {
   }
 }
 
-function updateParticles(deltaTime) {
+function updateParticles() {
+  // Use adaptive update interval for consistent speed across devices
+  const deltaTime = adaptiveUpdateInterval.value
+
   particles.value.forEach(p => {
     // Move toward target anchor
     const target = anchors[p.targetIndex]
@@ -106,7 +110,7 @@ function updateParticles(deltaTime) {
     p.x += p.vx + dx
     p.y += p.vy + dy
 
-    // Pulse opacity
+    // Pulse opacity based on progress
     p.phase += deltaTime * 0.001
     p.opacity = 0.3 + Math.sin(p.phase) * 0.2
 
@@ -147,35 +151,35 @@ function drawCanvas() {
   ctx.shadowBlur = 0
 }
 
-let lastFrameTime = null
+// Watch progress changes (throttled by useAmbientAnimation)
+watch(progress, () => {
+  if (isPlaying.value) {
+    // Issue #382: Performance monitoring for throttled update
+    if (typeof performance !== 'undefined' && performance.mark) {
+      performance.mark('about-ambient-update-start')
+    }
 
-function animationLoop(now) {
-  if (!isPlaying.value) return
+    updateParticles()
+    drawCanvas()
 
-  // Issue #404: Performance monitoring for RAF loop
-  if (typeof performance !== 'undefined' && performance.mark) {
-    performance.mark('about-ambient-raf-start')
+    if (typeof performance !== 'undefined' && performance.mark) {
+      performance.mark('about-ambient-update-end')
+      performance.measure('about-ambient-update-duration', 'about-ambient-update-start', 'about-ambient-update-end')
+    }
   }
-
-  const deltaTime = lastFrameTime ? now - lastFrameTime : 0
-  lastFrameTime = now
-
-  updateParticles(deltaTime)
-  drawCanvas()
-
-  // Issue #404: Mark RAF end and measure duration
-  if (typeof performance !== 'undefined' && performance.mark) {
-    performance.mark('about-ambient-raf-end')
-    performance.measure('about-ambient-raf-duration', 'about-ambient-raf-start', 'about-ambient-raf-end')
-  }
-
-  requestAnimationFrame(animationLoop)
-}
+})
 
 onMounted(() => {
   initParticles()
+  // Canvas size initialization
+  if (canvasRef.value) {
+    canvasSize.value = {
+      width: canvasRef.value.offsetWidth || 1920,
+      height: canvasRef.value.offsetHeight || 600
+    }
+  }
+  // Start the composable's throttled loop
   startLoop()
-  requestAnimationFrame(animationLoop)
 })
 
 onUnmounted(() => {
@@ -191,7 +195,16 @@ function resizeCanvas() {
     }
   }
 }
+
+// Make resizeCanvas available globally for window.onresize
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', resizeCanvas)
+  onUnmounted(() => {
+    window.removeEventListener('resize', resizeCanvas)
+  })
+}
 </script>
+
 
 <style scoped>
 .about-ambient {
