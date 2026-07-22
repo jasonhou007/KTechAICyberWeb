@@ -1,0 +1,118 @@
+name: Lighthouse Security CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  security-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Build site
+        run: npm run build
+
+      - name: Start HTTP server
+        run: |
+          npx serve -s dist -l 4175 --no-clipboard &
+          echo $! > server.pid
+          sleep 5
+
+      - name: Verify server is running
+        run: curl --retry 5 --retry-delay 2 http://localhost:4175/
+
+      - name: Run Lighthouse security audit
+        run: npx lhci autorun --config=lighthouserc-security.cjs
+        continue-on-error: true
+
+      - name: Upload Lighthouse results
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-results
+          path: .lighthouseci
+
+      - name: Security audit check
+        run: npm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Check for HIGH/CRITICAL vulnerabilities
+        run: |
+          VULNS=$(npm audit --json | jq -r '.vulnerabilities | to_entries[] | select(.value.severity == "high" or .value.severity == "critical") | .key' | wc -l)
+          if [ "$VULNS" -gt "0" ]; then
+            echo "❌ Found $VULNS high/critical vulnerabilities"
+            npm audit
+            exit 1
+          else
+            echo "✅ No high/critical vulnerabilities found"
+          fi
+
+      - name: Verify security headers in build
+        run: |
+          if [ ! -f dist/_headers ]; then
+            echo "❌ Security headers file not found in dist/"
+            exit 1
+          fi
+          echo "✅ Security headers file found"
+          cat dist/_headers
+
+      - name: Verify CSP hashes
+        run: |
+          # Check that all 4 SHA-256 hashes are present in _headers
+          HASH_COUNT=$(grep -o "sha256-" dist/_headers | wc -l)
+          if [ "$HASH_COUNT" -lt "4" ]; then
+            echo "❌ CSP: Expected 4 SHA-256 hashes, found $HASH_COUNT"
+            exit 1
+          fi
+          echo "✅ CSP: All 4 SHA-256 hashes present"
+
+      - name: Kill HTTP server
+        if: always()
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true
+          fi
+
+  npm-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+
+      - name: Check for HIGH/CRITICAL vulnerabilities
+        run: |
+          HIGH_CRIT=$(npm audit --json | jq -r '.vulnerabilities | to_entries[] | select(.value.severity == "high" or .value.severity == "critical") | .key')
+          if [ -n "$HIGH_CRIT" ]; then
+            echo "❌ High/critical vulnerabilities found:"
+            echo "$HIGH_CRIT"
+            npm audit
+            exit 1
+          fi
+          echo "✅ No high/critical vulnerabilities"

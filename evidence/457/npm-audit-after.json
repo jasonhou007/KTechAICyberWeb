@@ -1,0 +1,128 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@unhead/vue": {
+      "name": "@unhead/vue",
+      "severity": "low",
+      "isDirect": false,
+      "via": [
+        "unhead"
+      ],
+      "effects": [
+        "@vueuse/head"
+      ],
+      "range": "<=0.6.3 || 1.0.22 - 2.1.10",
+      "nodes": [
+        "node_modules/@unhead/vue"
+      ],
+      "fixAvailable": {
+        "name": "@vueuse/head",
+        "version": "0.9.8",
+        "isSemVerMajor": true
+      }
+    },
+    "@vueuse/head": {
+      "name": "@vueuse/head",
+      "severity": "low",
+      "isDirect": true,
+      "via": [
+        "@unhead/vue"
+      ],
+      "effects": [],
+      "range": ">=1.0.0-next.1",
+      "nodes": [
+        "node_modules/@vueuse/head"
+      ],
+      "fixAvailable": {
+        "name": "@vueuse/head",
+        "version": "0.9.8",
+        "isSemVerMajor": true
+      }
+    },
+    "unhead": {
+      "name": "unhead",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1114467,
+          "name": "unhead",
+          "dependency": "unhead",
+          "title": "Unhead Vulnerable to Bypass of URI Scheme Sanitization in makeTagSafe via Case-Sensitivity",
+          "url": "https://github.com/advisories/GHSA-5339-hvwr-7582",
+          "severity": "low",
+          "cwe": [
+            "CWE-79"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N"
+          },
+          "range": "<=2.1.10"
+        },
+        {
+          "source": 1114468,
+          "name": "unhead",
+          "dependency": "unhead",
+          "title": "Unhead has XSS bypass in `useHeadSafe` via attribute name injection and case-sensitive protocol check",
+          "url": "https://github.com/advisories/GHSA-g5xx-pwrp-g3fv",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-79"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<=2.1.10"
+        },
+        {
+          "source": 1116373,
+          "name": "unhead",
+          "dependency": "unhead",
+          "title": "Unhead has a hasDangerousProtocol() bypass via leading-zero padded HTML entities in useHeadSafe()",
+          "url": "https://github.com/advisories/GHSA-95h2-gj7x-gx9w",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-184"
+          ],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": "<2.1.13"
+        }
+      ],
+      "effects": [
+        "@unhead/vue"
+      ],
+      "range": "<=2.1.12",
+      "nodes": [
+        "node_modules/unhead"
+      ],
+      "fixAvailable": {
+        "name": "@vueuse/head",
+        "version": "0.9.8",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 2,
+      "moderate": 1,
+      "high": 0,
+      "critical": 0,
+      "total": 3
+    },
+    "dependencies": {
+      "prod": 52,
+      "dev": 290,
+      "optional": 34,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 341
+    }
+  }
+}

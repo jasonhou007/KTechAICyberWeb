@@ -1,0 +1,45 @@
+# Security Headers for KTechAICyberWeb
+# Deployed to Cloudflare Pages / GitHub Pages
+# Issue #457 - Security Hardening
+
+# 1. Content-Security-Policy (CSP)
+# Restricts resources the browser can load, preventing XSS attacks
+# Includes SHA-256 hashes for 4 inline JSON-LD structured data scripts
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-g9v+MgaRF40zra76ggvvUuURa9K4sqXOzDWQP6cIHTs=' 'sha256-OzdMRKYQB69Gxupj5Dy77CxQS7dym21alwXiQMnxJP4=' 'sha256-y3ZUUnV07cpeGdMLa4RzXX/jPnQBSzlkmg/ZDyVsn40=' 'sha256-Gh+lmYwmvVugv7G0qUT8BFwlNquNb5kFHQdOjuVei2o='; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.github.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests; block-all-mixed-content
+
+# 2. X-Frame-Options
+# Prevents clickjacking attacks by blocking site from being embedded in frames
+/*
+  X-Frame-Options: DENY
+
+# 3. X-Content-Type-Options
+# Prevents MIME sniffing, ensures browser respects declared content type
+/*
+  X-Content-Type-Options: nosniff
+
+# 4. Referrer-Policy
+# Controls how much referrer information is sent with navigation requests
+/*
+  Referrer-Policy: strict-origin-when-cross-origin
+
+# 5. Strict-Transport-Security (HSTS)
+# Forces HTTPS connections for 1 year (31536000 seconds), includes subdomains
+# Note: Only apply this header when HTTPS is properly configured
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# 6. Permissions-Policy
+# Controls which browser features can be used
+/*
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
+
+# 7. Cross-Origin-Opener-Policy
+# Isolates current page from other windows/pages for better security
+/*
+  Cross-Origin-Opener-Policy: same-origin
+
+# 8. Cross-Origin-Resource-Policy
+# Controls how resources can be loaded by cross-origin requests
+/*
+  Cross-Origin-Resource-Policy: same-origin

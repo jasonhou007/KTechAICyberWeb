@@ -1,0 +1,9 @@
+CSP SHA-256 Hashes for Inline Scripts
+Generated: 2026-07-21
+
+Hash 1 (Organization JSON-LD): g9v+MgaRF40zra76ggvvUuURa9K4sqXOzDWQP6cIHTs=
+Hash 2 (WebSite JSON-LD): OzdMRKYQB69Gxupj5Dy77CxQS7dym21alwXiQMnxJP4=
+Hash 3 (WebPage JSON-LD): y3ZUUnV07cpeGdMLa4RzXX/jPnQBSzlkmg/ZDyVsn40=
+Hash 4 (Corporation JSON-LD): Gh+lmYwmvVugv7G0qUT8BFwlNquNb5kFHQdOjuVei2o=
+
+These hashes are for the 4 inline <script type="application/ld+json"> blocks in index.html
