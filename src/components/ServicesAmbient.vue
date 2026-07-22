@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useLanguage } from '@/composables/useLanguage'
 import { useAmbientAnimation } from '@/composables/useAmbientAnimation'
 
@@ -79,6 +79,7 @@ const {
   isPlaying, 
   progress,
   isMobile,
+  adaptiveParticles,
   adaptiveUpdateInterval
 } = useAmbientAnimation({
   mobileUpdateIntervalMs: 48, // Slower update rate on mobile (~20fps)
@@ -86,6 +87,9 @@ const {
 })
 
 target.value = ambientRef
+
+// Store animation offset for smooth particle movement
+const animationOffset = ref(0)
 
 // Current service based on progress (0..1)
 const currentServiceIndex = computed(() => {
@@ -101,7 +105,7 @@ function calculateOpacity(index) {
   return 0.2
 }
 
-// Service particles - fewer on mobile
+// Service particles - fewer on mobile, properly throttled
 function getServiceParticles(serviceIndex) {
   // Only show particles for current/nearby services
   if (Math.abs(serviceIndex - currentServiceIndex.value) > 1) return []
@@ -110,13 +114,25 @@ function getServiceParticles(serviceIndex) {
   // Use adaptive particle count based on device
   const baseParticles = isMobile.value ? 2 : 5
 
-  return Array.from({ length: baseParticles }, (_, i) => ({
-    id: `${serviceIndex}-${i}`,
-    x: service.x + Math.sin(Date.now() * 0.001 + i) * 5,
-    y: service.y + Math.cos(Date.now() * 0.001 + i) * 5,
-    opacity: 0.6
-  }))
+  return Array.from({ length: baseParticles }, (_, i) => {
+    // Use animationOffset for smooth movement instead of Date.now()
+    const angle = animationOffset.value + i * (Math.PI * 2 / baseParticles)
+    return {
+      id: `${serviceIndex}-${i}`,
+      x: service.x + Math.sin(angle) * 5,
+      y: service.y + Math.cos(angle) * 5,
+      opacity: 0.6
+    }
+  })
 }
+
+// Watch progress for throttled animation updates
+watch(progress, () => {
+  if (!isStatic.value && !isPaused.value) {
+    // Update animation offset for smooth particle movement
+    animationOffset.value += 0.1
+  }
+})
 </script>
 
 <style scoped>

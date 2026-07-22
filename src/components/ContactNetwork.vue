@@ -75,7 +75,7 @@ const staticNodes = computed(() => {
   return nodes
 })
 
-const { target, isPaused, isStatic, isPlaying, progress, startLoop, stopLoop } = useAmbientAnimation()
+const { target, isPaused, isStatic, isPlaying, progress, startLoop, stopLoop, adaptiveUpdateInterval } = useAmbientAnimation()
 target.value = networkRef
 
 function generateNodes() {
@@ -100,8 +100,8 @@ function generateNodes() {
       y,
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
-      phase: Math.random() * Math.PI * 2,
-      radius: props.nodeRadius
+      radius: props.nodeRadius,
+      phase: Math.random() * Math.PI * 2
     })
   }
   nodes.value = newNodes
@@ -115,16 +115,15 @@ function calculateConnections() {
     for (let j = i + 1; j < nodes.value.length; j++) {
       const nodeA = nodes.value[i]
       const nodeB = nodes.value[j]
-      const dx = nodeB.x - nodeA.x
-      const dy = nodeB.y - nodeA.y
-      const distance = Math.sqrt(dx * dx + dy * dy)
+      const dx = nodeA.x - nodeB.x
+      const dy = nodeA.y - nodeB.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
 
-      if (distance < maxDist) {
+      if (dist < maxDist) {
         newConnections.push({
           from: i,
           to: j,
-          distance,
-          opacity: 1 - (distance / maxDist)
+          opacity: 1 - dist / maxDist
         })
       }
     }
@@ -134,60 +133,26 @@ function calculateConnections() {
 
 function initDataFlowParticles() {
   const particles = []
-  const particleCount = Math.floor(connections.value.length * 0.5)
+  const count = connections.value.length > 0 ? Math.min(connections.value.length, 5) : 0
 
-  for (let i = 0; i < particleCount; i++) {
-    const connectionIndex = Math.floor(Math.random() * connections.value.length)
+  for (let i = 0; i < count; i++) {
     particles.push({
-      connectionIndex,
+      connectionIndex: i % connections.value.length,
       progress: Math.random(),
-      speed: 0.002 + Math.random() * 0.003,
+      speed: 0.005 + Math.random() * 0.01,
       opacity: 0.6 + Math.random() * 0.4
     })
   }
   dataFlowParticles.value = particles
 }
 
-let animationFrameId = null
-let lastTime = null
+function updateNodes() {
+  // Use adaptive update interval for consistent movement
+  const deltaTime = adaptiveUpdateInterval.value
 
-function animate(timestamp) {
-  if (!ctx.value || isPaused.value || isStatic.value) {
-    animationFrameId = null
-    return
-  }
-
-  // Issue #404: Performance monitoring for RAF loop
-  if (typeof performance !== 'undefined' && performance.mark) {
-    performance.mark('contact-network-raf-start')
-  }
-
-  if (!lastTime) lastTime = timestamp
-  const deltaTime = timestamp - lastTime
-  lastTime = timestamp
-
-  const width = canvasRef.value?.width || 1920
-  const height = canvasRef.value?.height || 1080
-  ctx.value.clearRect(0, 0, width, height)
-
-  updateNodes(deltaTime)
-  drawConnections()
-  drawNodes()
-  drawDataFlow()
-
-  // Issue #404: Mark RAF end and measure duration
-  if (typeof performance !== 'undefined' && performance.mark) {
-    performance.mark('contact-network-raf-end')
-    performance.measure('contact-network-raf-duration', 'contact-network-raf-start', 'contact-network-raf-end')
-  }
-
-  animationFrameId = requestAnimationFrame(animate)
-}
-
-function updateNodes(deltaTime) {
   for (const node of nodes.value) {
-    node.x += node.vx
-    node.y += node.vy
+    node.x += node.vx * (deltaTime / 16)
+    node.y += node.vy * (deltaTime / 16)
     const width = canvasRef.value?.width || 1920
     const height = canvasRef.value?.height || 1080
 
@@ -222,7 +187,7 @@ function drawConnections() {
 function drawNodes() {
   if (!ctx.value) return
 
-  const time = Date.now() / 1000
+  const time = progress.value * Math.PI * 2
 
   for (const node of nodes.value) {
     const pulse = Math.sin(time * 2 + node.phase) * 0.3 + 0.7
@@ -230,7 +195,7 @@ function drawNodes() {
     ctx.value.save()
     ctx.value.shadowColor = '#00ffcc'
     ctx.value.shadowBlur = 15
-    ctx.value.fillStyle = `rgba(0, 255, 204, \${opacity})`
+    ctx.value.fillStyle = `rgba(0, 255, 204, ${opacity})`
     ctx.value.beginPath()
     ctx.value.arc(node.x, node.y, node.radius, 0, Math.PI * 2)
     ctx.value.fill()
@@ -246,7 +211,6 @@ function drawDataFlow() {
     if (particle.progress > 1) {
       particle.progress = 0
     }
-
     const connection = connections.value[particle.connectionIndex]
     if (!connection) continue
 
@@ -258,13 +222,43 @@ function drawDataFlow() {
     ctx.value.save()
     ctx.value.shadowColor = '#ff00aa'
     ctx.value.shadowBlur = 8
-    ctx.value.fillStyle = `rgba(255, 0, 170, \${particle.opacity})`
+    ctx.value.fillStyle = `rgba(255, 0, 170, ${particle.opacity})`
     ctx.value.beginPath()
     ctx.value.arc(x, y, 1.5, 0, Math.PI * 2)
     ctx.value.fill()
     ctx.value.restore()
   }
 }
+
+function render() {
+  if (!ctx.value || isPaused.value || isStatic.value) return
+
+  // Issue #382: Performance monitoring for throttled update
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('contact-network-render-start')
+  }
+
+  const width = canvasRef.value?.width || 1920
+  const height = canvasRef.value?.height || 1080
+  ctx.value.clearRect(0, 0, width, height)
+
+  updateNodes()
+  drawConnections()
+  drawNodes()
+  drawDataFlow()
+
+  if (typeof performance !== 'undefined' && performance.mark) {
+    performance.mark('contact-network-render-end')
+    performance.measure('contact-network-render-duration', 'contact-network-render-start', 'contact-network-render-end')
+  }
+}
+
+// Watch progress changes (throttled by useAmbientAnimation)
+watch(progress, () => {
+  if (isPlaying.value) {
+    render()
+  }
+})
 
 function setupCanvas() {
   if (!canvasRef.value) return
@@ -290,32 +284,18 @@ function handleResize() {
 onMounted(() => {
   // Set up canvas immediately to prevent layout shift
   setupCanvas()
-  if (isPlaying.value) {
-    lastTime = null
-    animationFrameId = requestAnimationFrame(animate)
-  }
+  // Start the composable's throttled loop
+  startLoop()
   emit('ready')
   window.addEventListener('resize', handleResize)
 })
 
 onUnmounted(() => {
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId)
-    animationFrameId = null
-  }
+  stopLoop()
   window.removeEventListener('resize', handleResize)
 })
-
-watch(isPlaying, (playing) => {
-  if (playing && !animationFrameId) {
-    lastTime = null
-    animationFrameId = requestAnimationFrame(animate)
-  } else if (!playing && animationFrameId) {
-    cancelAnimationFrame(animationFrameId)
-    animationFrameId = null
-  }
-})
 </script>
+
 
 <style scoped>
 .contact-network {
