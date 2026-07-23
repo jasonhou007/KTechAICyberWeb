@@ -1,0 +1,31 @@
+# Code Owners for KTechAICyberWeb
+
+# This file defines the code owners for the KTech AI Cyber Web project.
+# See https://help.github.com/articles/about-codeowners/
+
+# Global owner - approves all changes
+* @jasonhou007
+
+# Section-specific owners
+
+# Source code
+/src/ @jasonhou007
+
+# Tests
+/tests/ @jasonhou007
+/e2e/ @jasonhou007
+
+# Documentation
+/docs/ @jasonhou007
+
+# CI/CD configuration
+.github/ @jasonhou007
+
+# i18n files (require review for translation changes)
+/src/locales/ @jasonhou007
+
+# Security policy
+SECURITY.md @jasonhou007
+
+# Emergency owners (can approve emergency changes)
+# * @emergency-contact
