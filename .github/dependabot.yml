@@ -1,0 +1,91 @@
+# Dependabot Configuration for Security Updates
+# Issue #426 - [SEC][ORG] Conduct organization security audit and implement security best practices
+
+version: 2
+updates:
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "github-actions"
+
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "javascript"
+    versioning-strategy: increase
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    ignore:
+      # Major version updates that require manual review
+      - dependency-name: "vite"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "vue"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Group Vue ecosystem updates together
+      vue-ecosystem:
+        patterns:
+          - "vue*"
+          - "@vue/*"
+          - "vite*"
+          - "@vitejs/*"
+      # Group testing dependencies together
+      testing:
+        patterns:
+          - "vitest*"
+          - "@vitest/*"
+          - "playwright*"
+          - "@playwright/*"
+          - "happy-dom"
+      # Group build tools together
+      build-tools:
+        patterns:
+          - "rollup*"
+          - "@rollup/*"
+          - "esbuild*"
+
+  # Enable updates for Docker dependencies (if applicable)
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "security"
+      - "docker"
+
+# Configuration for security alerts
+registries:
+  github:
+    type: git
+    url: https://github.com
+    username: ${{ github.actor }}
+    password: ${{ secrets.GITHUB_TOKEN }}

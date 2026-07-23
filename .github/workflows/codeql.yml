@@ -1,0 +1,83 @@
+# CodeQL Security Analysis Workflow
+# Issue #426 - [SEC][ORG] Conduct organization security audit and implement security best practices
+
+name: "CodeQL Security Analysis"
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run security scan weekly on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+
+# Declare default permissions for all jobs
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['javascript']
+        # CodeQL supports multiple languages, but we only use JavaScript
+        # To add more languages, add to the array: ['javascript', 'typescript', 'python']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          # If you want to specify custom query locations, use:
+          # queries: +./src/.github/code-queries
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{matrix.language}}"
+
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: analyze
+    if: always()
+
+    permissions:
+      contents: read
+      pull-requests: write
+      actions: read
+
+    steps:
+      - name: Generate Security Summary
+        uses: github/security-summary-action@main
+        with:
+          output: summary.md
+
+      - name: Comment Security Results on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('summary.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            });
